@@ -82,29 +82,16 @@ Site-Collection/
 
 `index.html` をダブルクリックしてブラウザで開くだけで動きます。
 
-## 公開する方法（https:// のURLで相手に送る）
+## 公開URL・更新方法
 
-git の準備（init〜コミット）は完了済みです。残りは以下だけです。
+このサイトは GitHub Pages で公開済みです。
 
-### おすすめ：GitHub Pages（無料）
+- **公開URL(共有用)**: <https://hidenobu88.github.io/site-collection/>
+- **リポジトリ**: <https://github.com/hidenobu88/site-collection>
 
-1. <https://github.com/new> で新しいリポジトリを作る
-   - 名前: `site-collection`（自由）／ Public を選択 ／ README等は追加しない
-2. ターミナルでこのフォルダに移動して push:
-   ```bash
-   cd ~/Desktop/Site-Collection
-   git remote add origin https://github.com/hidenobu88/site-collection.git
-   git push -u origin main
-   ```
-   （初回はGitHubのログイン画面が出るので、ブラウザで認証してください）
-3. リポジトリの **Settings → Pages → Branch: `main` / (root)** を選んで Save
-4. 数分後に公開URLが発行されます:
-   **`https://hidenobu88.github.io/site-collection/`**
-   このURLを友達や採用担当者に送ればOKです
+作品を追加・修正したら、ターミナルで以下を実行すると1〜2分で公開URLに反映されます。
 
-以後の更新は `git add -A && git commit -m "作品追加" && git push` だけで反映されます。
-
-### 代替案：Netlify Drop（アカウント作成してドラッグ&ドロップ）
-
-<https://app.netlify.com/drop> にこのフォルダをドラッグするだけでも公開できます
-（`apps/` の中身も一緒にアップロードされる点だけ注意）。
+```bash
+cd ~/Desktop/Site-Collection
+git add -A && git commit -m "作品追加" && git push
+```
