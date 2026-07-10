@@ -58,16 +58,6 @@ const PROJECTS = [
     featured: true,
   },
   {
-    title: "かわいいクイズランド — ○×クイズアプリ",
-    description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
-    url: "works/quiz-claude/app/index.html",
-    category: "webapp",
-    tags: ["Java", "Spring Boot", "PostgreSQL"],
-    emoji: "🍬",
-    image: "images/quiz-claude.png",
-    date: "2026.07",
-  },
-  {
     title: "黒井戸ノ家 ―KUROIDO― お化け屋敷サイト",
     description: "ジャパニーズホラー映画の空気感をまとった架空お化け屋敷の公式サイト。警告ゲート、VHSノイズ、一瞬だけ映る女、乱れる生還者カウンターなど恐怖演出満載。心霊写真・恐怖体験談・7種の料金プランを収録。",
     url: "works/haunted-house/index.html",
@@ -120,6 +110,17 @@ const PROJECTS = [
     tags: ["UEFN", "Verse", "Fortnite"],
     emoji: "⚡",
     image: "images/fortnite.png",
+    date: "2026.07",
+  },
+  {
+    // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
+    title: "かわいいクイズランド — ○×クイズアプリ",
+    description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
+    url: "works/quiz-claude/app/index.html",
+    category: "webapp",
+    tags: ["Java", "Spring Boot", "PostgreSQL"],
+    emoji: "🍬",
+    image: "images/quiz-claude.png",
     date: "2026.07",
   },
 ];
