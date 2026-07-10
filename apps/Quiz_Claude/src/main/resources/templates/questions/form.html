@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${editing} ? '問題を編集' : '問題を登録')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: header}"></header>
+
+    <div class="card">
+        <h2 style="text-align:center; color: var(--color-primary-strong); margin-top:0;"
+            th:text="${editing} ? '✏️ 問題を編集' : '＋ 問題を登録'">問題を登録</h2>
+
+        <!-- 新規は /questions、更新は /questions/{id} に POST -->
+        <form th:action="${editing} ? @{/questions/{id}(id=${questionId})} : @{/questions}"
+              th:object="${questionForm}" method="post">
+
+            <div class="field">
+                <label for="text">問題文</label>
+                <textarea id="text" th:field="*{text}" rows="3"
+                          placeholder="例：うさぎのミミィの好物はにんじんケーキである。"></textarea>
+                <div class="error" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">エラー</div>
+            </div>
+
+            <div class="field">
+                <label>正解はどっち？</label>
+                <div class="choice-row">
+                    <label class="choice">
+                        <input type="radio" th:field="*{answer}" th:value="true">
+                        <span class="maru">○ マル</span>
+                    </label>
+                    <label class="choice">
+                        <input type="radio" th:field="*{answer}" th:value="false">
+                        <span class="batsu">× バツ</span>
+                    </label>
+                </div>
+                <div class="error" th:if="${#fields.hasErrors('answer')}" th:errors="*{answer}">エラー</div>
+            </div>
+
+            <div class="field">
+                <label for="explanation">解説（任意）</label>
+                <textarea id="explanation" th:field="*{explanation}" rows="2"
+                          placeholder="正解の理由など（省略可）"></textarea>
+                <div class="error" th:if="${#fields.hasErrors('explanation')}" th:errors="*{explanation}">エラー</div>
+            </div>
+
+            <div class="btn-row">
+                <a class="btn btn--sub" th:href="@{/questions}">やめる</a>
+                <button type="submit" class="btn" th:text="${editing} ? '更新する' : '登録する'">保存</button>
+            </div>
+        </form>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

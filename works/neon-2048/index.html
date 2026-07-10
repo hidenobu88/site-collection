@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NEON 2048 - 無料パズルゲーム</title>
+<meta name="description" content="タイルをスライドして2048を目指す無料パズルゲーム。スマホ・タブレット対応。">
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --panel: #1a1a2e;
+    --cell: #23233a;
+    --text: #eaeaf2;
+    --sub: #8888a8;
+    --accent: #00e5ff;
+    --accent2: #ff2e88;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    background: radial-gradient(circle at 50% 0%, #1c1c33 0%, var(--bg) 70%);
+    color: var(--text);
+    font-family: "Hiragino Sans", "Yu Gothic UI", "Segoe UI", system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    touch-action: none;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .wrap { width: min(92vw, 62dvh, 480px); }
+  header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: clamp(8px, 2vw, 16px); }
+  h1 {
+    font-size: clamp(1.6rem, 7vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 12px rgba(0,229,255,.35));
+  }
+  h1 small { display: block; font-size: clamp(.6rem, 2.4vw, .8rem); color: var(--sub); -webkit-text-fill-color: var(--sub); font-weight: 600; letter-spacing: .2em; }
+  .scores { display: flex; gap: 8px; }
+  .score-box {
+    background: var(--panel);
+    border: 1px solid #2e2e4d;
+    border-radius: 10px;
+    padding: clamp(4px, 1.5vw, 8px) clamp(10px, 3vw, 16px);
+    text-align: center;
+    min-width: clamp(60px, 18vw, 84px);
+  }
+  .score-box .label { font-size: clamp(.55rem, 2vw, .7rem); color: var(--sub); letter-spacing: .1em; }
+  .score-box .value { font-size: clamp(1rem, 4.5vw, 1.4rem); font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .score-box.best .value { color: var(--accent2); }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: clamp(8px, 2vw, 14px); }
+  .toolbar p { font-size: clamp(.65rem, 2.6vw, .85rem); color: var(--sub); line-height: 1.5; }
+  button {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: clamp(.75rem, 3vw, .95rem);
+    color: #0f0f1a;
+    background: linear-gradient(135deg, var(--accent), #3f8cff);
+    border: none;
+    border-radius: 10px;
+    padding: clamp(8px, 2.2vw, 12px) clamp(14px, 4vw, 22px);
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(0,229,255,.35);
+    transition: transform .12s, box-shadow .12s;
+  }
+  button:active { transform: scale(.94); box-shadow: 0 0 6px rgba(0,229,255,.25); }
+  .board-outer { position: relative; }
+  .board {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--panel);
+    border: 1px solid #2e2e4d;
+    border-radius: 14px;
+    padding: var(--gap);
+    box-shadow: 0 8px 40px rgba(0,0,0,.5), inset 0 0 30px rgba(0,229,255,.04);
+    --gap: clamp(6px, 1.8vw, 12px);
+  }
+  .grid { position: absolute; inset: var(--gap); display: grid; grid-template: repeat(4, 1fr) / repeat(4, 1fr); gap: var(--gap); }
+  .cell-bg { background: var(--cell); border-radius: 10px; }
+  .tiles { position: absolute; inset: var(--gap); }
+  .tile {
+    position: absolute;
+    width: calc((100% - 3 * var(--gap)) / 4);
+    height: calc((100% - 3 * var(--gap)) / 4);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    transition: transform .13s ease-in-out;
+    will-change: transform;
+  }
+  .tile.pop { animation: pop .18s ease-out; }
+  .tile.merged { animation: merge .2s ease-out; }
+  @keyframes pop   { 0% { scale: 0; } 70% { scale: 1.1; } 100% { scale: 1; } }
+  @keyframes merge { 0% { scale: 1; } 50% { scale: 1.22; } 100% { scale: 1; } }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15,15,26,.86);
+    backdrop-filter: blur(4px);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+    z-index: 5;
+    text-align: center;
+    padding: 20px;
+  }
+  .overlay.show { opacity: 1; pointer-events: auto; }
+  .overlay h2 { font-size: clamp(1.4rem, 6.5vw, 2.2rem); }
+  .overlay h2.win { color: var(--accent); text-shadow: 0 0 20px rgba(0,229,255,.6); }
+  .overlay h2.lose { color: var(--accent2); text-shadow: 0 0 20px rgba(255,46,136,.6); }
+  .overlay p { color: var(--sub); font-size: clamp(.8rem, 3.2vw, 1rem); }
+  footer { margin-top: clamp(10px, 2.5vw, 18px); text-align: center; color: var(--sub); font-size: clamp(.6rem, 2.2vw, .75rem); letter-spacing: .06em; }
+  @media (min-width: 768px) and (max-width: 1180px) { /* iPad系: 少し大きめに */
+    .wrap { width: min(70vw, 60dvh, 560px); }
+  }
+  @media (orientation: landscape) and (max-height: 500px) { /* スマホ横向き */
+    .wrap { width: min(46dvh, 340px); }
+    header { margin-bottom: 6px; }
+    .toolbar { margin-bottom: 6px; }
+    footer { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>NEON 2048<small>スライドパズル</small></h1>
+    <div class="scores">
+      <div class="score-box"><div class="label">スコア</div><div class="value" id="score">0</div></div>
+      <div class="score-box best"><div class="label">ベスト</div><div class="value" id="best">0</div></div>
+    </div>
+  </header>
+  <div class="toolbar">
+    <p>スワイプ or 矢印キーでタイルを移動。<br>同じ数字を合体させて <b>2048</b> を作ろう!</p>
+    <button id="newGame">新しいゲーム</button>
+  </div>
+  <div class="board-outer">
+    <div class="board" id="board">
+      <div class="grid" id="grid"></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="overlay" id="overlay">
+        <h2 id="overlayTitle"></h2>
+        <p id="overlayText"></p>
+        <button id="overlayBtn">もう一度あそぶ</button>
+      </div>
+    </div>
+  </div>
+  <footer>NEON 2048 — 無料でずっと遊べます / データは端末内にのみ保存</footer>
+</div>
+
+<script>
+(() => {
+  const SIZE = 4;
+  const COLORS = {
+    2:    ["#2e3a55", "#cfd8ea"], 4:   ["#33507a", "#dbe7ff"],
+    8:    ["#0077b6", "#ffffff"], 16:  ["#0096c7", "#ffffff"],
+    32:   ["#00b4d8", "#04263a"], 64:  ["#00e5ff", "#04263a"],
+    128:  ["#7b2ff7", "#ffffff"], 256: ["#9d4edd", "#ffffff"],
+    512:  ["#d63384", "#ffffff"], 1024:["#ff2e88", "#ffffff"],
+    2048: ["#ffd60a", "#3a2c00"], 4096:["#ff9f1c", "#3a2200"], 8192:["#ff4d00", "#ffffff"]
+  };
+  const $ = id => document.getElementById(id);
+  const gridEl = $("grid"), tilesEl = $("tiles"), scoreEl = $("score"), bestEl = $("best");
+  const overlay = $("overlay"), overlayTitle = $("overlayTitle"), overlayText = $("overlayText");
+
+  for (let i = 0; i < SIZE * SIZE; i++) {
+    const c = document.createElement("div");
+    c.className = "cell-bg";
+    gridEl.appendChild(c);
+  }
+
+  let board, score, best, nextId, won, over;
+  best = +(localStorage.getItem("neon2048-best") || 0);
+  bestEl.textContent = best;
+
+  function posStyle(el, r, c) {
+    el.style.transform = `translate(calc(${c} * (100% + var(--gap))), calc(${r} * (100% + var(--gap)))) translateZ(0)`;
+    // translate% はタイル自身のサイズ基準なので gap を足して格子位置に一致させる
+  }
+  function fontSize(v) {
+    const len = String(v).length;
+    return len <= 2 ? "clamp(1.4rem, 8vw, 2.4rem)" : len === 3 ? "clamp(1.1rem, 6.5vw, 2rem)" : "clamp(.9rem, 5vw, 1.6rem)";
+  }
+  function makeTileEl(t, anim) {
+    const el = document.createElement("div");
+    el.className = "tile" + (anim ? " " + anim : "");
+    el.dataset.id = t.id;
+    const [bg, fg] = COLORS[t.v] || COLORS[8192];
+    el.style.background = bg;
+    el.style.color = fg;
+    el.style.fontSize = fontSize(t.v);
+    if (t.v >= 128) el.style.boxShadow = `0 0 18px ${bg}aa`;
+    el.textContent = t.v;
+    posStyle(el, t.r, t.c);
+    tilesEl.appendChild(el);
+    return el;
+  }
+
+  function spawn() {
+    const empty = [];
+    for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) if (!board[r][c]) empty.push([r, c]);
+    if (!empty.length) return;
+    const [r, c] = empty[Math.random() * empty.length | 0];
+    const t = { id: nextId++, v: Math.random() < 0.9 ? 2 : 4, r, c };
+    board[r][c] = t;
+    makeTileEl(t, "pop");
+  }
+
+  function reset() {
+    board = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
+    score = 0; nextId = 1; won = false; over = false;
+    tilesEl.innerHTML = "";
+    scoreEl.textContent = 0;
+    overlay.classList.remove("show");
+    spawn(); spawn();
+  }
+
+  function lineFor(dir, i) {
+    // dir: 0=左 1=右 2=上 3=下 / 移動先に近い順のセル座標列を返す
+    const line = [];
+    for (let j = 0; j < SIZE; j++) {
+      if (dir === 0) line.push([i, j]);
+      if (dir === 1) line.push([i, SIZE - 1 - j]);
+      if (dir === 2) line.push([j, i]);
+      if (dir === 3) line.push([SIZE - 1 - j, i]);
+    }
+    return line;
+  }
+
+  function move(dir) {
+    if (over) return;
+    let moved = false;
+    const removals = [];
+    for (let i = 0; i < SIZE; i++) {
+      const coords = lineFor(dir, i);
+      const tiles = coords.map(([r, c]) => board[r][c]).filter(Boolean);
+      const result = [];
+      for (let k = 0; k < tiles.length; k++) {
+        const last = result[result.length - 1];
+        if (last && !last.mergedFrom && last.v === tiles[k].v) {
+          last.v *= 2;
+          last.mergedFrom = tiles[k];
+          score += last.v;
+          if (last.v === 2048 && !won) { won = true; setTimeout(() => showOverlay(true), 250); }
+        } else {
+          result.push(tiles[k]);
+        }
+      }
+      coords.forEach(([r, c]) => board[r][c] = null);
+      result.forEach((t, k) => {
+        const [r, c] = coords[k];
+        if (t.r !== r || t.c !== c || t.mergedFrom) moved = true;
+        t.r = r; t.c = c;
+        board[r][c] = t;
+        const el = tilesEl.querySelector(`[data-id="${t.id}"]`);
+        posStyle(el, r, c);
+        if (t.mergedFrom) {
+          const gone = tilesEl.querySelector(`[data-id="${t.mergedFrom.id}"]`);
+          posStyle(gone, r, c);
+          removals.push({ gone, t, el });
+          delete t.mergedFrom;
+        }
+      });
+    }
+    if (!moved) return;
+    setTimeout(() => {
+      removals.forEach(({ gone, t, el }) => {
+        gone.remove();
+        const [bg, fg] = COLORS[t.v] || COLORS[8192];
+        el.style.background = bg;
+        el.style.color = fg;
+        el.style.fontSize = fontSize(t.v);
+        el.style.boxShadow = t.v >= 128 ? `0 0 18px ${bg}aa` : "";
+        el.textContent = t.v;
+        el.classList.remove("merged");
+        void el.offsetWidth;
+        el.classList.add("merged");
+      });
+      scoreEl.textContent = score;
+      if (score > best) { best = score; bestEl.textContent = best; localStorage.setItem("neon2048-best", best); }
+      spawn();
+      if (!canMove()) { over = true; setTimeout(() => showOverlay(false), 350); }
+    }, 140);
+  }
+
+  function canMove() {
+    for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) {
+      const t = board[r][c];
+      if (!t) return true;
+      if (c + 1 < SIZE && board[r][c + 1] && board[r][c + 1].v === t.v) return true;
+      if (r + 1 < SIZE && board[r + 1][c] && board[r + 1][c].v === t.v) return true;
+    }
+    return false;
+  }
+
+  function showOverlay(isWin) {
+    overlayTitle.textContent = isWin ? "🎉 2048 達成!" : "ゲームオーバー";
+    overlayTitle.className = isWin ? "win" : "lose";
+    overlayText.textContent = isWin
+      ? `おめでとうございます! スコア: ${score}。このまま続けてさらに大きな数字を目指せます。`
+      : `スコア: ${score} / ベスト: ${best}。もう一度チャレンジ!`;
+    $("overlayBtn").textContent = isWin ? "つづける" : "もう一度あそぶ";
+    $("overlayBtn").onclick = () => {
+      overlay.classList.remove("show");
+      if (!isWin) reset();
+    };
+    overlay.classList.add("show");
+  }
+
+  // キーボード操作
+  const KEYS = { ArrowLeft: 0, ArrowRight: 1, ArrowUp: 2, ArrowDown: 3, a: 0, d: 1, w: 2, s: 3 };
+  addEventListener("keydown", e => {
+    if (KEYS[e.key] !== undefined) { e.preventDefault(); move(KEYS[e.key]); }
+  });
+
+  // スワイプ操作(スマホ・タブレット)
+  let sx = 0, sy = 0, swiping = false;
+  addEventListener("touchstart", e => {
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = true;
+  }, { passive: true });
+  addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+  addEventListener("touchend", e => {
+    if (!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
+    if (Math.abs(dx) > Math.abs(dy)) move(dx > 0 ? 1 : 0);
+    else move(dy > 0 ? 3 : 2);
+  });
+
+  $("newGame").addEventListener("click", reset);
+  reset();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('かわいいクイズランド')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: header}"></header>
+
+    <!-- ヒーロー -->
+    <div class="card hero">
+        <img class="mascot" th:src="@{/img/mascot.svg}" alt="うさぎのマスコット">
+        <p class="hero-lead">ようこそ！ なにしてあそぶ？</p>
+        <span class="count-pill">🍬 クイズは <b th:text="${questionCount}">0</b> 問あるよ</span>
+    </div>
+
+    <h2 class="section-title">
+        あそびをえらんでね
+        <small>すきなボタンをタップ！</small>
+    </h2>
+
+    <!-- 4つのあそび -->
+    <nav class="menu">
+        <a class="menu-card menu-card--quiz" th:href="@{/game}">
+            <span class="emoji">🎮</span>
+            <span class="label">○×クイズ</span>
+            <span class="desc">マルかバツで答えよう！</span>
+        </a>
+        <a class="menu-card menu-card--puzzle" th:href="@{/puzzle}">
+            <span class="badge-new">NEW!</span>
+            <span class="emoji">🧩</span>
+            <span class="label">パズル</span>
+            <span class="desc">ピースをはめて絵を完成！</span>
+        </a>
+        <a class="menu-card menu-card--timer" th:href="@{/timer}">
+            <span class="badge-new">NEW!</span>
+            <span class="emoji">⏱️</span>
+            <span class="label">ぴったりストップ</span>
+            <span class="desc">きめた秒でピタッと止めろ！</span>
+        </a>
+        <a class="menu-card menu-card--manage" th:href="@{/questions}">
+            <span class="emoji">📝</span>
+            <span class="label">もんだいを管理</span>
+            <span class="desc">とうろく・へんしゅう・さくじょ</span>
+        </a>
+    </nav>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

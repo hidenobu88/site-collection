@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('パズル')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: header}"></header>
+
+    <div class="btn-row game-top-nav">
+        <a class="btn btn--sub btn--small" th:href="@{/}">← あそびをえらぶ</a>
+    </div>
+
+    <div class="card puzzle-wrap">
+        <div class="puzzle-head">
+            <span class="pz-title" id="pzName">パズル</span>
+            <span class="pz-pill"><span id="pzNo">1</span> / <span id="pzTotal">3</span></span>
+        </div>
+        <p class="puzzle-hint">ピースをドラッグして、正しいばしょにはめてね🧩</p>
+
+        <!-- 盤面（3x3スロット） -->
+        <div class="pz-board" id="board" aria-label="パズルの盤面"></div>
+
+        <!-- ピース置き場 -->
+        <div class="pz-tray" id="tray" aria-label="パズルのピース"></div>
+    </div>
+
+    <!-- クリア表示 -->
+    <div class="card pz-clear hidden" id="clear">
+        <div class="pz-clear-title" id="clearTitle">かんせい！</div>
+        <img class="mascot" th:src="@{/img/mascot.svg}" alt="うさぎのマスコット">
+        <div class="comment" id="clearMsg"></div>
+        <div class="btn-row">
+            <a class="btn btn--sub" th:href="@{/}">トップへ</a>
+            <button type="button" class="btn" id="clearNext">つぎのパズルへ →</button>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<script th:inline="none">
+(function () {
+    /* ====== パズルの絵（SVGを文字列で用意 → data URIに変換） ====== */
+    function svg(inner) {
+        return "data:image/svg+xml," + encodeURIComponent(
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'>" + inner + "</svg>");
+    }
+
+    const sun = svg(
+        "<rect width='300' height='300' fill='#8FD3FF'/>" +
+        "<g fill='#FFD54A'>" +
+        "<polygon points='150,10 165,60 135,60'/><polygon points='150,290 165,240 135,240'/>" +
+        "<polygon points='10,150 60,135 60,165'/><polygon points='290,150 240,135 240,165'/>" +
+        "<polygon points='45,45 85,70 70,85'/><polygon points='255,45 215,70 230,85'/>" +
+        "<polygon points='45,255 85,230 70,215'/><polygon points='255,255 215,230 230,215'/>" +
+        "</g>" +
+        "<circle cx='150' cy='150' r='80' fill='#FFC93C'/>" +
+        "<circle cx='150' cy='150' r='68' fill='#FFDD5C'/>" +
+        "<circle cx='118' cy='140' r='9' fill='#5A4A54'/><circle cx='182' cy='140' r='9' fill='#5A4A54'/>" +
+        "<circle cx='112' cy='168' r='11' fill='#FF9EC4'/><circle cx='188' cy='168' r='11' fill='#FF9EC4'/>" +
+        "<path d='M120 172 q30 30 60 0' fill='none' stroke='#5A4A54' stroke-width='6' stroke-linecap='round'/>");
+
+    const cake = svg(
+        "<rect width='300' height='300' fill='#FFE0EF'/>" +
+        "<ellipse cx='150' cy='250' rx='120' ry='22' fill='#F6C6DD'/>" +
+        "<rect x='55' y='150' width='190' height='90' rx='16' fill='#FFB877'/>" +
+        "<rect x='55' y='150' width='190' height='34' rx='16' fill='#7FE0C8'/>" +
+        "<path d='M55 176 q24 26 47 0 q24 26 47 0 q24 26 47 0 q24 26 47 0' fill='#FF9EC4'/>" +
+        "<rect x='140' y='95' width='20' height='60' rx='5' fill='#B79CFF'/>" +
+        "<ellipse cx='150' cy='88' rx='9' ry='14' fill='#FFD54A'/>" +
+        "<circle cx='95' cy='210' r='8' fill='#fff'/><circle cx='150' cy='215' r='8' fill='#fff'/><circle cx='205' cy='210' r='8' fill='#fff'/>" +
+        "<circle cx='150' cy='60' r='7' fill='#FF6FA5'/>");
+
+    const fish = svg(
+        "<rect width='300' height='300' fill='#7FD8E8'/>" +
+        "<circle cx='60' cy='60' r='10' fill='#CDF3FA'/><circle cx='95' cy='40' r='6' fill='#CDF3FA'/>" +
+        "<circle cx='250' cy='230' r='12' fill='#CDF3FA'/><circle cx='220' cy='255' r='7' fill='#CDF3FA'/>" +
+        "<polygon points='210,150 270,110 270,190' fill='#FF9EC4'/>" +
+        "<ellipse cx='150' cy='150' rx='95' ry='68' fill='#FFB877'/>" +
+        "<path d='M150 82 q40 10 40 68 q0 58 -40 68' fill='#FFA24D'/>" +
+        "<circle cx='95' cy='135' r='16' fill='#fff'/><circle cx='95' cy='135' r='8' fill='#5A4A54'/>" +
+        "<path d='M120 175 q25 20 55 8' fill='none' stroke='#5A4A54' stroke-width='5' stroke-linecap='round'/>" +
+        "<path d='M150 120 q30 30 0 60' fill='none' stroke='#FF8A3D' stroke-width='5'/>");
+
+    const PUZZLES = [
+        { name: "☀️ おひさま", img: sun },
+        { name: "🎂 ケーキ",   img: cake },
+        { name: "🐠 おさかな", img: fish },
+    ];
+
+    const board = document.getElementById('board');
+    const tray = document.getElementById('tray');
+    const clearCard = document.getElementById('clear');
+    const els = {
+        name: document.getElementById('pzName'),
+        no: document.getElementById('pzNo'),
+        total: document.getElementById('pzTotal'),
+        clearTitle: document.getElementById('clearTitle'),
+        clearMsg: document.getElementById('clearMsg'),
+        clearNext: document.getElementById('clearNext'),
+    };
+
+    let pIndex = 0;
+    let pieceSize = 100;
+    let boardSize = 300;
+    let placed = 0;
+    let current = null;   // ドラッグ中のピース
+    let offset = { x: 0, y: 0 };
+
+    els.total.textContent = PUZZLES.length;
+
+    /* ---- 効果音（パチッ）: WebAudioで軽く鳴らす ---- */
+    let actx = null;
+    function beep(freq, dur, type) {
+        try {
+            actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+            const o = actx.createOscillator();
+            const g = actx.createGain();
+            o.type = type || 'sine';
+            o.frequency.value = freq;
+            o.connect(g); g.connect(actx.destination);
+            g.gain.setValueAtTime(0.18, actx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+            o.start();
+            o.stop(actx.currentTime + dur);
+        } catch (e) { /* 音が出せない環境は無視 */ }
+    }
+
+    function computeSize() {
+        const maxByW = Math.min(window.innerWidth * 0.82, 330);
+        let s = Math.floor(maxByW);
+        s = s - (s % 3);            // 3で割り切れるように
+        boardSize = s;
+        pieceSize = s / 3;
+        board.style.width = s + 'px';
+        board.style.height = s + 'px';
+    }
+
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function styleAsPiece(el, idx) {
+        const r = Math.floor(idx / 3), c = idx % 3;
+        el.style.width = pieceSize + 'px';
+        el.style.height = pieceSize + 'px';
+        el.style.backgroundImage = 'url("' + PUZZLES[pIndex].img + '")';
+        el.style.backgroundSize = boardSize + 'px ' + boardSize + 'px';
+        el.style.backgroundPosition = (-c * pieceSize) + 'px ' + (-r * pieceSize) + 'px';
+    }
+
+    function loadPuzzle(i) {
+        pIndex = i;
+        placed = 0;
+        computeSize();
+        board.style.setProperty('--pz-image', 'url("' + PUZZLES[i].img + '")');
+        els.name.textContent = PUZZLES[i].name;
+        els.no.textContent = i + 1;
+        clearCard.classList.add('hidden');
+        board.innerHTML = '';
+        tray.innerHTML = '';
+
+        // スロット作成
+        for (let s = 0; s < 9; s++) {
+            const slot = document.createElement('div');
+            slot.className = 'pz-slot';
+            slot.dataset.index = s;
+            board.appendChild(slot);
+        }
+
+        // ピース作成 → シャッフルしてトレイへ
+        const order = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+        order.forEach(idx => {
+            const p = document.createElement('div');
+            p.className = 'pz-piece';
+            p.dataset.index = idx;
+            styleAsPiece(p, idx);
+            p.addEventListener('pointerdown', onDown);
+            tray.appendChild(p);
+        });
+    }
+
+    function onDown(e) {
+        const piece = e.currentTarget;
+        if (piece.dataset.locked === '1' || current) return;
+        e.preventDefault();
+        current = piece;
+        const rect = piece.getBoundingClientRect();
+        offset.x = e.clientX - rect.left;
+        offset.y = e.clientY - rect.top;
+        piece.classList.add('dragging');
+        piece.style.pointerEvents = 'none';
+        document.body.appendChild(piece);
+        moveTo(e.clientX, e.clientY);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+    }
+
+    function moveTo(x, y) {
+        current.style.left = (x - offset.x) + 'px';
+        current.style.top = (y - offset.y) + 'px';
+    }
+
+    function slotUnder(x, y) {
+        const el = document.elementFromPoint(x, y);
+        return el ? el.closest('.pz-slot') : null;
+    }
+
+    function onMove(e) {
+        if (!current) return;
+        moveTo(e.clientX, e.clientY);
+        const slot = slotUnder(e.clientX, e.clientY);
+        document.querySelectorAll('.pz-slot.hot').forEach(s => s.classList.remove('hot'));
+        if (slot && !slot.classList.contains('filled')) slot.classList.add('hot');
+    }
+
+    function onUp(e) {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        if (!current) return;
+        const piece = current;
+        current = null;
+
+        const slot = slotUnder(e.clientX, e.clientY);
+        document.querySelectorAll('.pz-slot.hot').forEach(s => s.classList.remove('hot'));
+        piece.classList.remove('dragging');
+        piece.style.pointerEvents = '';
+        piece.style.left = '';
+        piece.style.top = '';
+
+        const correct = slot && !slot.classList.contains('filled')
+            && slot.dataset.index === piece.dataset.index;
+
+        if (correct) {
+            // パチっとハマる
+            slot.classList.add('filled');
+            slot.appendChild(piece);
+            piece.dataset.locked = '1';
+            piece.classList.add('snapped');
+            beep(660, 0.12, 'triangle');
+            placed++;
+            if (placed === 9) setTimeout(onComplete, 350);
+        } else {
+            // 間違い → トレイへ戻ってプルプル
+            tray.appendChild(piece);
+            piece.classList.add('wrong');
+            beep(200, 0.12, 'sine');
+            setTimeout(() => piece.classList.remove('wrong'), 400);
+        }
+    }
+
+    function onComplete() {
+        confetti();
+        beep(523, 0.15, 'triangle');
+        setTimeout(() => beep(784, 0.25, 'triangle'), 140);
+        const last = pIndex === PUZZLES.length - 1;
+        els.clearTitle.textContent = last ? 'ぜんぶクリア！🏆' : 'かんせい！🎉';
+        els.clearMsg.textContent = last
+            ? 'すごい！ぜんぶのパズルをクリアしたよ✨'
+            : 'じょうず！つぎのパズルにチャレンジ！';
+        els.clearNext.textContent = last ? 'もういちど最初から' : 'つぎのパズルへ →';
+        clearCard.classList.remove('hidden');
+        clearCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    els.clearNext.addEventListener('click', () => {
+        const next = (pIndex + 1) % PUZZLES.length;
+        loadPuzzle(next);
+        board.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // 画面回転・リサイズで盤面サイズが変わったら作り直し（未完成時のみ）
+    let rt;
+    window.addEventListener('resize', () => {
+        clearTimeout(rt);
+        rt = setTimeout(() => { if (placed < 9) loadPuzzle(pIndex); }, 250);
+    });
+
+    function confetti() {
+        const colors = ['#FF9EC4', '#FFE28A', '#9EE6D0', '#8FD3FF', '#B79CFF', '#FFB877'];
+        const box = document.createElement('div');
+        box.className = 'confetti';
+        for (let i = 0; i < 90; i++) {
+            const p = document.createElement('i');
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.background = colors[i % colors.length];
+            p.style.animationDuration = (2 + Math.random() * 2) + 's';
+            p.style.animationDelay = (Math.random() * 0.6) + 's';
+            box.appendChild(p);
+        }
+        document.body.appendChild(box);
+        setTimeout(() => box.remove(), 4500);
+    }
+
+    loadPuzzle(0);
+})();
+</script>
+</body>
+</html>

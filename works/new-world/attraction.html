@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アトラクション | ニューワールド</title>
+  <meta name="description" content="ニューワールドのアトラクション紹介ページ。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Reggae+One&family=DotGothic16&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎢</text></svg>">
+</head>
+<body class="detail-bg">
+
+<!-- ===== ヘッダー ===== -->
+<header class="site-header">
+  <div class="rainbow-strip" aria-hidden="true"></div>
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true">🎪</span>
+      <span class="brand-text">
+        <span class="brand-name"><i>ニ</i><i>ュ</i><i>ー</i><i>ワ</i><i>ー</i><i>ル</i><i>ド</i></span>
+        <span class="brand-sub">NEW WORLD AMUSEMENT PARK</span>
+      </span>
+    </a>
+    <nav class="global-nav" id="globalNav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="index.html#parade" class="nav-link nav-hot">パレード<span class="nav-bang">!!</span></a></li>
+        <li><a href="index.html#attractions" class="nav-link">アトラクション</a></li>
+        <li><a href="index.html#characters" class="nav-link">キャラクター</a></li>
+        <li><a href="index.html#tickets" class="nav-link">チケット</a></li>
+        <li><a href="index.html#shops" class="nav-link">ショップ</a></li>
+        <li><a href="index.html#access" class="nav-link">アクセス</a></li>
+        <li class="nav-cta"><a href="index.html#tickets" class="btn btn-yellow btn-sm">チケット🎫</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="メニューを開閉" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main class="detail-main">
+  <!-- ヒーロー（JSが色とテキストを流し込む） -->
+  <section class="detail-hero" id="detailHero">
+    <p class="breadcrumb"><a href="index.html">🏠 ホーム</a> ▶ <a href="index.html#attractions">アトラクション</a> ▶ <span id="bcName">…</span></p>
+    <span class="detail-emoji" id="dEmoji">🎢</span>
+    <p class="detail-tags" id="dTags"></p>
+    <h1 class="detail-title" id="dName">よみこみ中…</h1>
+    <p class="detail-en" id="dEn"></p>
+    <p class="detail-copy" id="dCopy"></p>
+  </section>
+
+  <!-- 本文 -->
+  <div class="detail-body">
+    <div class="detail-grid">
+      <div>
+        <section class="detail-desc-card">
+          <h2 class="detail-h">🎪 どんなアトラクション？</h2>
+          <div class="thrill-row">
+            <span class="thrill-label">ドキドキ度</span>
+            <span class="thrill-stars" id="dThrill"></span>
+          </div>
+          <p id="dDesc"></p>
+        </section>
+
+        <section class="detail-tips-card">
+          <h2 class="detail-h">💡 たのしむコツ・裏ワザ</h2>
+          <ul class="tips-list" id="dTips"></ul>
+        </section>
+      </div>
+
+      <aside class="detail-spec-card">
+        <h2 class="detail-h">📋 きほんデータ</h2>
+        <table class="spec-table"><tbody id="dSpecs"></tbody></table>
+      </aside>
+    </div>
+  </div>
+
+  <!-- 前へ・次へ -->
+  <nav class="pager" aria-label="ほかのアトラクション">
+    <a href="#" id="pagerPrev"><span class="pager-dir">← まえのアトラクション</span><span class="pager-name" id="prevName"></span></a>
+    <a href="#" id="pagerNext" class="pager-next"><span class="pager-dir">つぎのアトラクション →</span><span class="pager-name" id="nextName"></span></a>
+  </nav>
+
+  <div class="detail-cta">
+    <a href="index.html#attractions" class="btn btn-cyan btn-lg">🎡 アトラクション一覧にもどる</a>
+    <a href="index.html" class="btn btn-pink btn-xl">🏠 ホームにもどる!!</a>
+  </div>
+</main>
+
+<!-- ===== フッター ===== -->
+<footer class="site-footer">
+  <div class="ribbon ribbon-rainbow" aria-hidden="true">
+    <div class="ribbon-track">
+      <span>🎪 NEW WORLD 🎪 また あそぼうね!! 🎪 NEW WORLD 🎪 また あそぼうね!! 🎪 NEW WORLD 🎪 また あそぼうね!! </span>
+      <span>🎪 NEW WORLD 🎪 また あそぼうね!! 🎪 NEW WORLD 🎪 また あそぼうね!! 🎪 NEW WORLD 🎪 また あそぼうね!! </span>
+    </div>
+  </div>
+  <div class="footer-inner">
+    <p class="footer-mark">🎪</p>
+    <p class="footer-name">ニューワールド</p>
+    <p class="footer-en">NEW WORLD AMUSEMENT PARK</p>
+    <nav class="footer-nav" aria-label="フッターメニュー">
+      <a href="index.html#parade">パレード</a>
+      <a href="index.html#attractions">アトラクション</a>
+      <a href="index.html#characters">キャラクター</a>
+      <a href="index.html#tickets">チケット</a>
+      <a href="index.html#shops">ショップ</a>
+      <a href="index.html#access">アクセス</a>
+    </nav>
+    <p class="footer-note">このサイトはデモ用に制作した架空のテーマパークのウェブサイトです。<br>登場する施設・キャラクター・料金はすべてフィクションです。</p>
+    <p class="footer-copy">&copy; 2026 NEW WORLD (Demo Site)</p>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/detail.js"></script>
+</body>
+</html>

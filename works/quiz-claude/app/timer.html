@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ぴったりストップ</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%8D%AC%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="wrap">
+    <header class="site-header">
+        <div class="deco" aria-hidden="true">
+            <span style="left:6%;  animation-duration:15s; animation-delay:0s;">🍬</span>
+            <span style="left:16%; animation-duration:20s; animation-delay:4s;  font-size:1.6rem;">⭐</span>
+            <span style="left:28%; animation-duration:17s; animation-delay:8s;">🍭</span>
+            <span style="left:40%; animation-duration:22s; animation-delay:2s;  font-size:1.4rem;">🎈</span>
+            <span style="left:52%; animation-duration:16s; animation-delay:6s;">🍩</span>
+            <span style="left:64%; animation-duration:19s; animation-delay:1s;  font-size:1.7rem;">🌈</span>
+            <span style="left:74%; animation-duration:21s; animation-delay:9s;">🧁</span>
+            <span style="left:84%; animation-duration:14s; animation-delay:3s;  font-size:1.5rem;">⭐</span>
+            <span style="left:92%; animation-duration:18s; animation-delay:7s;">🍬</span>
+        </div>
+        <h1 class="site-title"><a href="index.html">🍬 かわいいクイズランド 🎡</a></h1>
+        <p class="site-subtitle">クイズ・パズル・タイマー　みんなであそぼう！</p>
+    </header>
+
+    <div class="btn-row game-top-nav">
+        <a class="btn btn--sub btn--small" href="index.html">← あそびをえらぶ</a>
+    </div>
+
+    <div class="card timer-wrap">
+        <p class="timer-target">目標は <b><span id="targetSec">10</span>びょう</b>！</p>
+
+        <!-- 目標秒数のえらび方 -->
+        <div class="sec-select" id="secSelect" aria-label="目標の秒数をえらぶ">
+            <button type="button" class="sec-chip" data-sec="3">3びょう</button>
+            <button type="button" class="sec-chip active" data-sec="5">5びょう</button>
+            <button type="button" class="sec-chip" data-sec="10">10びょう</button>
+            <button type="button" class="sec-chip" data-sec="15">15びょう</button>
+        </div>
+
+        <!-- 大きなストップウォッチ -->
+        <div class="stopwatch" id="stopwatch">
+            <div class="spinner" id="spinner"></div>
+            <div class="face" id="face">0.0</div>
+            <div class="face-sub" id="faceSub">スタートしてね</div>
+        </div>
+
+        <!-- 結果 -->
+        <div class="timer-result hidden" id="result">
+            <div class="diff" id="diff"></div>
+            <div class="yourtime" id="yourtime"></div>
+            <div class="stars" id="stars"></div>
+            <div class="comment" id="comment"></div>
+        </div>
+
+        <div class="btn-row" style="margin-top:16px;">
+            <button type="button" class="btn btn--go" id="startBtn">▶ スタート</button>
+            <button type="button" class="btn btn--danger" id="stopBtn" disabled>■ ストップ</button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>© かわいいクイズランド 🍬🎈🌈</p>
+    </footer>
+</div>
+
+<script>
+(function () {
+    let target = 5;          // 目標秒数
+    let startTime = 0;
+    let running = false;
+
+    const els = {
+        targetSec: document.getElementById('targetSec'),
+        secSelect: document.getElementById('secSelect'),
+        stopwatch: document.getElementById('stopwatch'),
+        spinner: document.getElementById('spinner'),
+        face: document.getElementById('face'),
+        faceSub: document.getElementById('faceSub'),
+        result: document.getElementById('result'),
+        diff: document.getElementById('diff'),
+        yourtime: document.getElementById('yourtime'),
+        stars: document.getElementById('stars'),
+        comment: document.getElementById('comment'),
+        startBtn: document.getElementById('startBtn'),
+        stopBtn: document.getElementById('stopBtn'),
+    };
+
+    /* ---- かんたんな効果音 ---- */
+    let actx = null;
+    function beep(freq, dur, type) {
+        try {
+            actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+            const o = actx.createOscillator();
+            const g = actx.createGain();
+            o.type = type || 'sine';
+            o.frequency.value = freq;
+            o.connect(g); g.connect(actx.destination);
+            g.gain.setValueAtTime(0.18, actx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+            o.start(); o.stop(actx.currentTime + dur);
+        } catch (e) {}
+    }
+
+    // 目標秒数のえらび
+    els.secSelect.addEventListener('click', (e) => {
+        const chip = e.target.closest('.sec-chip');
+        if (!chip || running) return;
+        document.querySelectorAll('.sec-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        target = parseInt(chip.dataset.sec, 10);
+        els.targetSec.textContent = target;
+        reset();
+    });
+
+    function reset() {
+        els.result.classList.add('hidden');
+        els.face.textContent = '0.0';
+        els.faceSub.textContent = 'スタートしてね';
+    }
+
+    function start() {
+        running = true;
+        startTime = performance.now();
+        els.result.classList.add('hidden');
+        els.stopwatch.classList.add('running');
+        // まわる飾りのアニメ時間 = 目標秒
+        els.spinner.style.setProperty('--spin-dur', target + 's');
+        els.face.textContent = '？';         // 数字はかくして「感覚」で当てる！
+        els.faceSub.textContent = 'いまだ！と思ったらストップ';
+        els.startBtn.disabled = true;
+        els.stopBtn.disabled = false;
+        beep(440, 0.12, 'triangle');
+    }
+
+    function stop() {
+        if (!running) return;
+        running = false;
+        const elapsed = (performance.now() - startTime) / 1000;
+        els.stopwatch.classList.remove('running');
+        els.startBtn.disabled = false;
+        els.stopBtn.disabled = true;
+        beep(330, 0.12, 'sine');
+        showResult(elapsed);
+    }
+
+    function showResult(elapsed) {
+        const diff = Math.abs(elapsed - target);
+        els.face.textContent = elapsed.toFixed(2);
+        els.faceSub.textContent = '秒でストップ！';
+        els.result.classList.remove('hidden');
+
+        els.diff.classList.remove('perfect', 'good', 'far');
+        let stars, msg, cls;
+        if (diff <= 0.1) {
+            cls = 'perfect'; stars = '⭐⭐⭐';
+            els.diff.textContent = 'ピッタリ！！🎯';
+            msg = 'かんぺき！すごすぎる✨';
+            confetti();
+            beep(523, 0.15, 'triangle');
+            setTimeout(() => beep(784, 0.25, 'triangle'), 150);
+        } else if (diff <= 0.5) {
+            cls = 'perfect'; stars = '⭐⭐⭐';
+            els.diff.textContent = 'ニアピン！🎉';
+            msg = 'すごい！ほぼピッタリ！';
+            confetti();
+        } else if (diff <= 1.0) {
+            cls = 'good'; stars = '⭐⭐☆';
+            els.diff.textContent = 'おしい！';
+            msg = 'いいかんじ！もう一回ためそう';
+        } else if (diff <= 2.0) {
+            cls = 'good'; stars = '⭐☆☆';
+            els.diff.textContent = 'あと少し！';
+            msg = (elapsed > target ? 'ちょっと おそかったよ' : 'ちょっと はやかったよ');
+        } else {
+            cls = 'far'; stars = '☆☆☆';
+            els.diff.textContent = (elapsed > target ? 'おそすぎ〜！' : 'はやすぎ〜！');
+            msg = 'ドンマイ！もういちどチャレンジ🍬';
+        }
+        els.diff.classList.add(cls);
+        els.stars.textContent = stars;
+        els.yourtime.textContent =
+            '目標 ' + target + '.00秒 → きみは ' + elapsed.toFixed(2) + '秒（さ ' + diff.toFixed(2) + '秒）';
+        els.comment.textContent = msg;
+    }
+
+    els.startBtn.addEventListener('click', () => { running ? null : start(); });
+    els.stopBtn.addEventListener('click', stop);
+
+    function confetti() {
+        const colors = ['#FF9EC4', '#FFE28A', '#9EE6D0', '#8FD3FF', '#B79CFF', '#FFB877'];
+        const box = document.createElement('div');
+        box.className = 'confetti';
+        for (let i = 0; i < 80; i++) {
+            const p = document.createElement('i');
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.background = colors[i % colors.length];
+            p.style.animationDuration = (2 + Math.random() * 2) + 's';
+            p.style.animationDelay = (Math.random() * 0.6) + 's';
+            box.appendChild(p);
+        }
+        document.body.appendChild(box);
+        setTimeout(() => box.remove(), 4500);
+    }
+})();
+</script>
+</body>
+</html>

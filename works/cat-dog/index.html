@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>もふもふパーク｜猫と犬のふれあいカフェ</title>
+<meta name="description" content="かわいい猫と犬にエサをあげたり、撫でたり、おもちゃで遊んだり。時間制で気軽に楽しめるふれあいカフェ「もふもふパーク」の公式サイトです。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#top" class="logo">🐾 もふもふパーク</a>
+  <nav class="global-nav" id="globalNav">
+    <a href="#concept">コンセプト</a>
+    <a href="#price">料金プラン</a>
+    <a href="#cats">ねこスタッフ</a>
+    <a href="#dogs">いぬスタッフ</a>
+    <a href="#guide">ご利用案内</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="メニューを開閉する" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-copy">もふもふに、会いに行こう。</p>
+      <h1 class="hero-title">猫と犬のふれあいカフェ<br><span>もふもふパーク</span></h1>
+      <p class="hero-lead">
+        かわいい猫ちゃん・わんちゃんに、エサをあげたり、撫でたり、<br class="pc-only">
+        おもちゃで一緒に遊んだり。癒やしの時間をお届けします。
+      </p>
+      <div class="hero-buttons">
+        <a href="#price" class="btn btn-primary">料金プランを見る</a>
+        <a href="#cats" class="btn btn-ghost">スタッフに会う</a>
+      </div>
+    </div>
+    <div class="hero-emoji" aria-hidden="true">
+      <span>🐈</span><span>🐕</span><span>🧶</span><span>🦴</span><span>💗</span>
+    </div>
+  </section>
+
+  <!-- コンセプト -->
+  <section class="section" id="concept">
+    <h2 class="section-title"><span class="title-icon">💗</span>コンセプト</h2>
+    <p class="section-lead">
+      もふもふパークは「見るだけ」じゃない、<strong>ふれあい体験型</strong>のカフェです。<br>
+      3つのふれあいを、時間いっぱい楽しめます。
+    </p>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-icon">🍖</div>
+        <h3>エサやり体験</h3>
+        <p>専用のおやつカップで、猫ちゃん・わんちゃんにごはんをあげられます。夢中で食べる姿にきゅん。</p>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🤚</div>
+        <h3>なでなでタイム</h3>
+        <p>ひざの上でうとうとする子、ごろんとお腹を見せる子。それぞれの「気持ちいいところ」をスタッフがご案内します。</p>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🧶</div>
+        <h3>おもちゃで遊ぶ</h3>
+        <p>猫じゃらし・ボール・ロープなどおもちゃは無料貸出。全力で遊ぶ姿を間近でどうぞ。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 料金 -->
+  <section class="section section-alt" id="price">
+    <h2 class="section-title"><span class="title-icon">💰</span>料金プラン</h2>
+    <p class="section-lead">
+      遊びたい時間に合わせて選べる、時間制の料金システムです。<br>
+      すべてのプランで猫エリア・犬エリアの両方をご利用いただけます。
+    </p>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <h3 class="plan-name">おためし30分</h3>
+        <p class="plan-price"><span class="yen">¥</span>900</p>
+        <p class="plan-unit">/ おひとり様</p>
+        <ul class="plan-list">
+          <li>はじめての方におすすめ</li>
+          <li>ちょこっと癒やされたいときに</li>
+          <li>延長は10分ごと +¥250</li>
+        </ul>
+      </div>
+
+      <div class="price-card featured">
+        <div class="plan-badge">人気No.1</div>
+        <h3 class="plan-name">スタンダード1時間</h3>
+        <p class="plan-price"><span class="yen">¥</span>1,500</p>
+        <p class="plan-unit">/ おひとり様</p>
+        <ul class="plan-list">
+          <li>ソフトドリンク1杯付き</li>
+          <li>ゆっくりふれあえる定番プラン</li>
+          <li>延長は10分ごと +¥250</li>
+        </ul>
+      </div>
+
+      <div class="price-card">
+        <h3 class="plan-name">たっぷり3時間セット</h3>
+        <p class="plan-price"><span class="yen">¥</span>3,300</p>
+        <p class="plan-unit">/ おひとり様</p>
+        <ul class="plan-list">
+          <li>ドリンクバー付き</li>
+          <li>1時間あたり¥1,100でおトク</li>
+          <li>途中のエリア移動も自由</li>
+        </ul>
+      </div>
+
+      <div class="price-card">
+        <h3 class="plan-name">平日フリータイム</h3>
+        <p class="plan-price"><span class="yen">¥</span>3,800</p>
+        <p class="plan-unit">/ おひとり様（平日限定）</p>
+        <ul class="plan-list">
+          <li>開店から閉店まで出入り自由</li>
+          <li>ドリンクバー付き</li>
+          <li>お昼寝タイムの猫だんごも見られるかも</li>
+        </ul>
+      </div>
+
+      <div class="price-card">
+        <h3 class="plan-name">休日フリータイム</h3>
+        <p class="plan-price"><span class="yen">¥</span>4,400</p>
+        <p class="plan-unit">/ おひとり様（土日祝）</p>
+        <ul class="plan-list">
+          <li>混雑日でも時間を気にせずゆったり</li>
+          <li>ドリンクバー付き</li>
+          <li>イベントデーの参加もOK</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="price-note">
+      <h3>オプション・割引</h3>
+      <div class="table-scroll">
+        <table class="option-table">
+          <tbody>
+            <tr><th>おやつカップ（エサやり体験）</th><td>¥400 / 1カップ</td></tr>
+            <tr><th>おもちゃ貸出（猫じゃらし・ボールなど）</th><td>無料</td></tr>
+            <tr><th>延長料金（全プラン共通）</th><td>10分ごと +¥250</td></tr>
+            <tr><th>小学生（保護者同伴必須）</th><td>各プラン半額</td></tr>
+            <tr><th>学生割引（中学生以上・学生証提示）</th><td>10% OFF</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note-small">※ 料金はすべて税込です。未就学のお子様のご入店はご遠慮いただいております。</p>
+    </div>
+  </section>
+
+  <!-- 猫スタッフ -->
+  <section class="section" id="cats">
+    <h2 class="section-title"><span class="title-icon">🐱</span>ねこスタッフ紹介</h2>
+    <p class="section-lead">
+      個性ゆたかな12種類・12匹の猫スタッフが待っています。<br>
+      カードのボタンを押すと、なかよし度がアップ！
+    </p>
+    <div class="animal-grid" id="catGrid"></div>
+  </section>
+
+  <!-- 犬スタッフ -->
+  <section class="section section-alt" id="dogs">
+    <h2 class="section-title"><span class="title-icon">🐶</span>いぬスタッフ紹介</h2>
+    <p class="section-lead">
+      小型犬から大型犬まで12種類・12匹の犬スタッフが勢ぞろい。<br>
+      たくさん遊んで「だいすき♥」バッジをゲットしよう。
+    </p>
+    <div class="animal-grid" id="dogGrid"></div>
+  </section>
+
+  <!-- ご利用案内 -->
+  <section class="section" id="guide">
+    <h2 class="section-title"><span class="title-icon">📋</span>ご利用案内</h2>
+
+    <div class="guide-grid">
+      <div class="guide-block">
+        <h3>ご利用の流れ</h3>
+        <ol class="flow-list">
+          <li><span class="flow-num">1</span>受付でプランを選択</li>
+          <li><span class="flow-num">2</span>手洗い・アルコール消毒</li>
+          <li><span class="flow-num">3</span>スタッフから注意事項のご案内</li>
+          <li><span class="flow-num">4</span>ふれあいスタート！</li>
+          <li><span class="flow-num">5</span>退店時にお会計（延長分もこのとき精算）</li>
+        </ol>
+      </div>
+
+      <div class="guide-block">
+        <h3>ふれあいのおやくそく</h3>
+        <ul class="rule-list">
+          <li>抱っこは動物が嫌がらない場合のみ。スタッフにお声がけください</li>
+          <li>フラッシュ撮影・大きな音はNG</li>
+          <li>寝ている子・逃げる子は追いかけないでね</li>
+          <li>おやつは専用カップのもの以外あげないでください</li>
+          <li>体調のすぐれない子はお休みしていることがあります</li>
+        </ul>
+      </div>
+
+      <div class="guide-block">
+        <h3>店舗情報</h3>
+        <div class="table-scroll">
+          <table class="info-table">
+            <tbody>
+              <tr><th>店名</th><td>猫と犬のふれあいカフェ もふもふパーク</td></tr>
+              <tr><th>営業時間</th><td>11:00〜20:00（最終受付 19:00）</td></tr>
+              <tr><th>定休日</th><td>第2・第4 火曜日</td></tr>
+              <tr><th>所在地</th><td>東京都渋谷区もふもふ町1-2-3 パウビル2F</td></tr>
+              <tr><th>アクセス</th><td>もふもふ駅 東口より徒歩3分</td></tr>
+              <tr><th>お問い合わせ</th><td>03-1234-5678</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p class="footer-logo">🐾 もふもふパーク</p>
+  <p class="footer-copy">&copy; 2026 Mofumofu Park. このサイトはデモ用の架空店舗サイトです。</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

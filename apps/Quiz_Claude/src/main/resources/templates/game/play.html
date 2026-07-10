@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('○×クイズ')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: header}"></header>
+
+    <div class="btn-row game-top-nav">
+        <a class="btn btn--sub btn--small" th:href="@{/}">← あそびをえらぶ</a>
+    </div>
+
+    <!-- 問題が0件のとき -->
+    <div th:if="${questionCount == 0}" class="card" style="text-align:center;">
+        <p class="empty">まだ問題がありません。<br>先に問題を登録してね🍬</p>
+        <div class="btn-row">
+            <a class="btn btn--sub" th:href="@{/}">トップへ</a>
+            <a class="btn" th:href="@{/questions/new}">＋ 問題を登録</a>
+        </div>
+    </div>
+
+    <!-- 問題が1件以上あるとき -->
+    <div th:if="${questionCount > 0}">
+        <!-- 出題エリア -->
+        <div id="quiz" class="card">
+            <div class="game-progress"><span id="current">1</span> / <span id="total">0</span> 問</div>
+            <div class="progress-bar"><span id="progress"></span></div>
+            <div id="question" class="game-question">よみこみ中…</div>
+            <div class="ox-row">
+                <button type="button" class="ox-btn maru" data-answer="true" aria-label="マルで回答">○</button>
+                <button type="button" class="ox-btn batsu" data-answer="false" aria-label="バツで回答">×</button>
+            </div>
+        </div>
+
+        <!-- 結果エリア -->
+        <div id="result" class="card result hidden">
+            <img class="mascot" th:src="@{/img/mascot.svg}" alt="うさぎのマスコット">
+            <div class="stars" id="stars"></div>
+            <div class="score"><b id="score">0</b> / <span id="scoreTotal">0</span> 問 正解！</div>
+            <div class="comment" id="comment"></div>
+            <div class="btn-row">
+                <a class="btn btn--sub" th:href="@{/}">トップへ</a>
+                <button type="button" id="retry" class="btn">もう一度あそぶ</button>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+
+<!-- 判定オーバーレイ（正解！ / 残念・・・。） -->
+<div id="overlay" class="overlay" role="status" aria-live="assertive">
+    <div class="verdict" id="verdict"></div>
+    <div class="exp" id="exp"></div>
+    <div style="margin-top:20px;">
+        <button type="button" id="next" class="btn">つぎへ →</button>
+    </div>
+</div>
+
+<script th:if="${questionCount > 0}" th:inline="none">
+(function () {
+    const api = /*[[@{/api/game/questions}]]*/ '/api/game/questions';
+
+    const els = {
+        quiz: document.getElementById('quiz'),
+        result: document.getElementById('result'),
+        question: document.getElementById('question'),
+        current: document.getElementById('current'),
+        total: document.getElementById('total'),
+        progress: document.getElementById('progress'),
+        overlay: document.getElementById('overlay'),
+        verdict: document.getElementById('verdict'),
+        exp: document.getElementById('exp'),
+        next: document.getElementById('next'),
+        score: document.getElementById('score'),
+        scoreTotal: document.getElementById('scoreTotal'),
+        comment: document.getElementById('comment'),
+        stars: document.getElementById('stars'),
+        retry: document.getElementById('retry'),
+    };
+    const oxButtons = document.querySelectorAll('.ox-btn');
+
+    let questions = [];
+    let index = 0;
+    let score = 0;
+
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function render() {
+        const q = questions[index];
+        els.question.textContent = q.text;
+        els.current.textContent = index + 1;
+        els.progress.style.width = (index / questions.length * 100) + '%';
+        setButtonsEnabled(true);
+    }
+
+    function setButtonsEnabled(enabled) {
+        oxButtons.forEach(b => b.disabled = !enabled);
+    }
+
+    function answer(choice) {
+        setButtonsEnabled(false);
+        const q = questions[index];
+        const correct = (choice === q.answer);
+        if (correct) score++;
+
+        els.overlay.classList.remove('correct', 'wrong');
+        els.overlay.classList.add(correct ? 'correct' : 'wrong');
+        els.verdict.textContent = correct ? '正解！' : '残念・・・。';
+        els.exp.textContent = q.explanation ? ('💡 ' + q.explanation) : '';
+        els.next.textContent = (index === questions.length - 1) ? 'けっかを見る →' : 'つぎへ →';
+        els.overlay.classList.add('show');
+    }
+
+    function nextQuestion() {
+        els.overlay.classList.remove('show');
+        index++;
+        if (index < questions.length) {
+            render();
+        } else {
+            els.progress.style.width = '100%';
+            showResult();
+        }
+    }
+
+    function showResult() {
+        els.quiz.classList.add('hidden');
+        els.result.classList.remove('hidden');
+        els.score.textContent = score;
+        els.scoreTotal.textContent = questions.length;
+        const rate = questions.length ? score / questions.length : 0;
+        const filled = Math.max(1, Math.round(rate * 3));
+        els.stars.textContent = '⭐'.repeat(filled) + '☆'.repeat(3 - filled);
+        els.comment.textContent = comment(rate);
+        if (rate === 1) confetti();
+    }
+
+    function comment(rate) {
+        if (rate === 1) return 'ぜんぶ正解！すごい🎉';
+        if (rate >= 0.7) return 'いいちょうし！✨';
+        if (rate >= 0.4) return 'もう少し！がんばれ〜🍀';
+        return 'ドンマイ！またチャレンジしてね🍬';
+    }
+
+    function confetti() {
+        const colors = ['#FF9EC4', '#FFE28A', '#9EE6D0', '#8FD3FF', '#B79CFF', '#FFB877'];
+        const box = document.createElement('div');
+        box.className = 'confetti';
+        for (let i = 0; i < 80; i++) {
+            const p = document.createElement('i');
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.background = colors[i % colors.length];
+            p.style.animationDuration = (2 + Math.random() * 2) + 's';
+            p.style.animationDelay = (Math.random() * 0.6) + 's';
+            box.appendChild(p);
+        }
+        document.body.appendChild(box);
+        setTimeout(() => box.remove(), 4500);
+    }
+
+    function start(data) {
+        questions = shuffle(data.slice());
+        index = 0;
+        score = 0;
+        els.total.textContent = questions.length;
+        els.quiz.classList.remove('hidden');
+        els.result.classList.add('hidden');
+        render();
+    }
+
+    oxButtons.forEach(b => b.addEventListener('click', () => answer(b.dataset.answer === 'true')));
+    els.next.addEventListener('click', nextQuestion);
+    els.retry.addEventListener('click', () => start(questions));
+
+    fetch(api)
+        .then(r => r.json())
+        .then(start)
+        .catch(() => { els.question.textContent = '問題の読み込みに失敗しました。'; });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "sumika-estate",
+  "version": "1.0.0",
+  "private": true,
+  "description": "架空の賃貸物件紹介サイト「スミカ不動産」",
+  "scripts": {
+    "start": "node server.js",
+    "db:start": "LC_ALL=C /usr/local/opt/postgresql@18/bin/pg_ctl -D /usr/local/var/postgresql@18 -l /usr/local/var/log/postgresql@18.log -o '-p 5434' start",
+    "db:stop": "/usr/local/opt/postgresql@18/bin/pg_ctl -D /usr/local/var/postgresql@18 stop",
+    "db:setup": "createdb -p 5434 sumika_estate 2>/dev/null; psql -p 5434 -d sumika_estate -f db/schema.sql -f db/seed.sql",
+    "seed:export": "node tools/export-seed.js",
+    "images": "node tools/generate-images.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0",
+    "pg": "^8.12.0"
+  }
+}

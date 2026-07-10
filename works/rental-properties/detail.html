@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>物件詳細 | スミカ不動産</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">スミカ不動産</span>
+        <span class="logo-sub">SUMIKA ESTATE</span>
+      </a>
+      <nav class="header-nav">
+        <a href="index.html">ホーム</a>
+        <a href="index.html?type=apartment">アパート</a>
+        <a href="index.html?type=mansion">マンション</a>
+        <a href="index.html?type=tower">タワーマンション</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <nav class="breadcrumb" id="breadcrumb"></nav>
+    <div class="detail-nav-bar">
+      <a class="btn-back" id="backBtn" href="index.html">← 検索一覧へ戻る</a>
+      <div class="room-pager" id="roomPager"></div>
+    </div>
+    <div class="detail-title-block" id="titleBlock"></div>
+
+    <div class="detail-layout">
+      <div class="detail-main">
+        <div class="gallery" id="gallery"></div>
+
+        <section class="section-card">
+          <h2>物件のポイント</h2>
+          <p class="description-text" id="description"></p>
+        </section>
+
+        <section class="section-card">
+          <h2>部屋の情報</h2>
+          <table class="info-table" id="roomTable"></table>
+        </section>
+
+        <section class="section-card">
+          <h2>設備・条件</h2>
+          <div class="feature-tags" id="featureTags"></div>
+        </section>
+
+        <section class="section-card">
+          <h2>建物の情報</h2>
+          <table class="info-table" id="buildingTable"></table>
+        </section>
+
+        <section class="section-card">
+          <h2>この建物のほかの部屋</h2>
+          <div class="other-rooms" id="otherRooms"></div>
+        </section>
+
+        <section class="section-card">
+          <h2>ほかの物件をさがす</h2>
+          <div class="quick-nav">
+            <a href="index.html" class="quick-link home">🏠 ホーム(すべての物件)</a>
+            <a href="index.html?type=apartment" class="quick-link">アパートをさがす</a>
+            <a href="index.html?type=mansion" class="quick-link">マンションをさがす</a>
+            <a href="index.html?type=tower" class="quick-link">タワーマンションをさがす</a>
+          </div>
+        </section>
+      </div>
+
+      <aside class="detail-side">
+        <div class="price-card" id="priceCard"></div>
+        <div class="agent-card">
+          <div class="agent-name">スミカ不動産 中央本店</div>
+          営業時間 10:00〜18:30(水曜定休)<br />
+          TEL 03-0000-0000(架空)<br />
+          宅地建物取引業 東京都知事(1)第00000号(架空)
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="f-logo">スミカ不動産</div>
+      <div>本サイトはデモ用の架空の賃貸紹介サイトです。掲載物件・住所・鉄道路線はすべて実在しません。</div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/detail.js"></script>
+</body>
+</html>

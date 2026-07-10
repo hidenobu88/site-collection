@@ -1,0 +1,43 @@
+/*
+ * デザイントークン — テーマ「パステルキャンディ 🍬」
+ *
+ * これは DESIGN.md から生成した変数定義です。
+ * 別テーマに差し替えるときは DESIGN.md の「トークン対応表」に従って
+ * この値だけを書き換えれば、アプリ全体の見た目が入れ替わります。
+ */
+:root {
+    /* カラー */
+    --color-bg: #FFF5FA;
+    --color-surface: #FFFFFF;
+    --color-primary: #FF9EC4;
+    --color-primary-strong: #FF6FA5;
+    --color-accent: #9EE6D0;
+    --color-accent-2: #FFE28A;
+    --color-text: #5A4A54;
+    --color-text-muted: #9B8791;
+    --color-correct: #5BC8A0;
+    --color-wrong: #FF8FA3;
+
+    /* にぎやか差し色（子ども向けのポップな彩り） */
+    --color-grape: #B79CFF;   /* ぶどう（むらさき） */
+    --color-sky: #8FD3FF;     /* そら（みずいろ） */
+    --color-orange: #FFB877;  /* みかん（オレンジ） */
+    --color-cream: #FFFDF6;   /* クリーム（うすい面色） */
+
+    /* 角丸 */
+    --radius-lg: 28px;
+    --radius-md: 18px;
+    --radius-sm: 12px;
+
+    /* 影（ぷっくり: ソリッド影 + やわらかいドロップシャドウ） */
+    --shadow-soft: 0 8px 0 rgba(255, 111, 165, .18), 0 12px 24px rgba(255, 111, 165, .20);
+    --shadow-btn: 0 5px 0 var(--color-primary-strong);
+    --shadow-btn-press: 0 2px 0 var(--color-primary-strong);
+
+    /* フォント */
+    --font-base: "Hiragino Maru Gothic ProN", "ヒラギノ丸ゴ ProN", "Rounded Mplus 1c",
+        "Zen Maru Gothic", "Segoe UI", system-ui, sans-serif;
+
+    /* 余白の基準 */
+    --space: 16px;
+}

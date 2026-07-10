@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<title>メニュー詳細｜ソウル横丁 서울골목</title>
+<meta name="description" content="ソウル横丁のメニュー詳細。料理の由来や本場の街の話とともにどうぞ。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌶️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-lang="ja">
+
+<!-- ===== 上部チケットバー ===== -->
+<div class="topbar">
+  <span class="t-ja">本日も元気に営業中 ｜ 11:30–15:00 / 17:00–23:00 ｜ 水曜定休</span>
+  <span class="t-ko">오늘도 정상 영업 ｜ 11:30–15:00 / 17:00–23:00 ｜ 수요일 휴무</span>
+</div>
+
+<!-- ===== ナビ ===== -->
+<header class="nav" id="top">
+  <a class="nav__logo" href="index.html">
+    <span class="nav__logo-ko">서울골목</span>
+    <span class="nav__logo-ja">ソウル横丁</span>
+  </a>
+  <nav class="nav__links" id="navLinks">
+    <a href="index.html#about"><span class="t-ja">お店のこと</span><span class="t-ko">가게 소개</span></a>
+    <a href="index.html#menu"><span class="t-ja">メニュー</span><span class="t-ko">메뉴</span></a>
+    <a href="index.html#takeout"><span class="t-ja">テイクアウト</span><span class="t-ko">포장 주문</span></a>
+    <a href="index.html#access"><span class="t-ja">アクセス</span><span class="t-ko">오시는 길</span></a>
+  </nav>
+  <div class="nav__right">
+    <button class="lang-toggle" id="langToggle" aria-label="言語切替 / 언어 전환">
+      <span class="lang-toggle__opt" data-l="ja">日本語</span>
+      <span class="lang-toggle__opt" data-l="ko">한국어</span>
+      <span class="lang-toggle__slider" aria-hidden="true"></span>
+    </button>
+    <button class="nav__burger" id="burger" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== 詳細（JSで描画） ===== -->
+<main class="detail" id="detailRoot">
+  <p class="detail__loading">Loading…</p>
+</main>
+
+<!-- ===== フッター ===== -->
+<footer class="footer">
+  <div class="footer__marquee" aria-hidden="true">
+    <div class="marquee__track marquee__track--slow">
+      <span>또 오세요 ・ また来てね ・ 잘 먹었습니다 ・ ごちそうさま ・ 맛있게 드세요 ・ めしあがれ ・&nbsp;</span>
+      <span>또 오세요 ・ また来てね ・ 잘 먹었습니다 ・ ごちそうさま ・ 맛있게 드세요 ・ めしあがれ ・&nbsp;</span>
+    </div>
+  </div>
+  <div class="footer__inner">
+    <p class="footer__logo">서울골목 <small>ソウル横丁</small></p>
+    <p class="footer__note">
+      <span class="t-ja">※このサイトは架空の店舗のデモサイトです。</span>
+      <span class="t-ko">※이 사이트는 가상의 가게 데모 사이트입니다.</span>
+    </p>
+    <p class="footer__copy">© 2026 Seoul Golmok — Fictional Restaurant Demo</p>
+  </div>
+</footer>
+
+<script src="js/menu-data.js"></script>
+<script src="js/item.js"></script>
+<script src="js/common.js"></script>
+</body>
+</html>

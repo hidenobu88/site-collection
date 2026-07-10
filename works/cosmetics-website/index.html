@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belle Éclat — あなたの毎日に、輝きを。</title>
+  <meta name="description" content="Belle Éclat(ベル・エクラ)は、リップ・ベースメイク・アイメイク・スキンケアまで、毎日のキレイがすべて揃うコスメティックストアです。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ══════════ トップバー ══════════ -->
+  <div class="topbar">
+    <p>🎁 ¥5,500以上のご購入で全国送料無料 ｜ 新規会員登録で500ポイントプレゼント</p>
+  </div>
+
+  <!-- ══════════ ヘッダー ══════════ -->
+  <header class="header" id="top">
+    <a class="logo" href="#top">
+      <span class="logo-main">Belle Éclat</span>
+      <span class="logo-sub">BEAUTY &amp; COSMETICS</span>
+    </a>
+    <nav class="nav">
+      <a href="#lip">リップ</a>
+      <a href="#base">ベースメイク</a>
+      <a href="#eye">アイメイク</a>
+      <a href="#cheek">チーク</a>
+      <a href="#skincare">スキンケア</a>
+      <a href="#tools">ツール</a>
+      <a href="#lifestyle">ファッション・ダイエット</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="searchBtn" aria-label="検索">🔍</button>
+      <button class="icon-btn cart-btn" id="cartBtn" aria-label="カートを開く">
+        🛍️<span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════ ヒーロー(abc_18.jpg を全体表示) ══════════ -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">TOTAL BEAUTY STORE</p>
+      <h1>あなたの毎日に、<br /><em>輝き</em>を。</h1>
+      <p class="hero-lead">
+        リップもファンデも、まつ毛の先まで。<br />
+        毎日使う「キレイの必需品」が、ここにすべて揃います。<br />
+        世界中の女性に愛される、とっておきの一品を見つけて。
+      </p>
+      <div class="hero-cta">
+        <a href="#lip" class="btn btn-primary">アイテムを見る</a>
+        <a href="#ranking" class="btn btn-ghost">人気ランキング</a>
+      </div>
+      <ul class="hero-stats">
+        <li><strong>200+</strong><span>取扱アイテム</span></li>
+        <li><strong>98%</strong><span>お客様満足度</span></li>
+        <li><strong>48h</strong><span>スピード配送</span></li>
+      </ul>
+    </div>
+    <div class="hero-photo">
+      <img src="image/abc_18.jpg" alt="華やかなパーティーメイクで乾杯する3人の女性" />
+      <div class="hero-badge hero-badge-1">💄 新色リップ<br /><small>2026 Summer Collection</small></div>
+      <div class="hero-badge hero-badge-2">⭐ 4.8 / 5.0<br /><small>レビュー 12,400件</small></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 特長 ══════════ -->
+  <section class="features">
+    <div class="feature"><span>🚚</span><h3>最短翌日お届け</h3><p>15時までのご注文で当日発送</p></div>
+    <div class="feature"><span>💝</span><h3>無料ギフトラッピング</h3><p>大切な人への贈り物にも</p></div>
+    <div class="feature"><span>🌿</span><h3>肌にやさしい処方</h3><p>敏感肌向けアイテムも充実</p></div>
+    <div class="feature"><span>↩️</span><h3>30日間返品保証</h3><p>色味が合わなくても安心</p></div>
+  </section>
+
+  <!-- ══════════ 中間バナー(abc_02.jpg 全体表示) ══════════ -->
+  <section class="photo-banner">
+    <div class="photo-banner-img">
+      <img src="image/abc_02.jpg" alt="草原に寝転んで笑い合う2人の女性" />
+    </div>
+    <div class="photo-banner-text">
+      <p class="section-eyebrow">SMILE IS THE BEST MAKEUP</p>
+      <h2>笑顔が、いちばんのメイクアップ。</h2>
+      <p>その笑顔をもっと輝かせるアイテムを、Belle Éclat がお届けします。</p>
+      <a href="#ranking" class="btn btn-primary">人気アイテムを見る</a>
+    </div>
+  </section>
+
+  <!-- ══════════ 人気ランキング ══════════ -->
+  <section class="section ranking-section" id="ranking">
+    <div class="section-head">
+      <p class="section-eyebrow">WEEKLY RANKING</p>
+      <h2>今週の人気ランキング</h2>
+      <p class="section-lead">世界中の女性に選ばれている、いま一番売れているアイテム。</p>
+    </div>
+    <div class="product-grid ranking-grid" id="rankingGrid"></div>
+  </section>
+
+  <!-- ══════════ 商品セクション(JSで描画) ══════════ -->
+  <main id="catalog"></main>
+
+  <!-- ══════════ ブランドメッセージ(spps.top_03.jpg) ══════════ -->
+  <section class="brand-message">
+    <div class="brand-message-inner">
+      <div class="brand-message-text">
+        <h2>“これひとつで、ぜんぶ揃う。”</h2>
+        <p>
+          朝のスキンケアから、仕上げのマスカラひと塗りまで。<br />
+          Belle Éclat は、あなたの「毎日のキレイ」に寄り添う<br />
+          トータルビューティーストアです。
+        </p>
+        <a href="#lip" class="btn btn-primary">お買い物をはじめる</a>
+      </div>
+      <figure class="brand-message-photo">
+        <img src="image/spps.top_03.jpg" alt="草原で微笑む2人の女性" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- ══════════ フッター ══════════ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <p class="logo-main footer-logo">Belle Éclat</p>
+        <p class="footer-note">あなたの毎日に、輝きを。<br />世界中の女性のためのコスメティックストア。</p>
+      </div>
+      <div>
+        <h4>カテゴリー</h4>
+        <a href="#lip">リップ</a><a href="#base">ベースメイク</a><a href="#eye">アイメイク</a><a href="#skincare">スキンケア</a>
+      </div>
+      <div>
+        <h4>サポート</h4>
+        <a href="#">配送について</a><a href="#">返品・交換</a><a href="#">よくあるご質問</a><a href="#">お問い合わせ</a>
+      </div>
+      <div>
+        <h4>ニュースレター</h4>
+        <p class="footer-note">新商品・限定セール情報をお届けします。</p>
+        <form class="newsletter" id="newsletterForm">
+          <input type="email" placeholder="メールアドレス" required />
+          <button type="submit">登録</button>
+        </form>
+      </div>
+    </div>
+    <p class="copyright">© 2026 Belle Éclat Beauty &amp; Cosmetics. All rights reserved.</p>
+  </footer>
+
+  <!-- ══════════ カートドロワー ══════════ -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="ショッピングカート">
+    <div class="drawer-head">
+      <h3>🛍️ ショッピングカート</h3>
+      <button class="close-btn" id="closeCart" aria-label="カートを閉じる">✕</button>
+    </div>
+    <div class="drawer-items" id="cartItems"></div>
+    <div class="drawer-foot">
+      <p class="drawer-total">合計 <strong id="cartTotal">¥0</strong> <small>(税込)</small></p>
+      <button class="btn btn-primary checkout-btn" id="checkoutBtn">レジに進む</button>
+      <p class="drawer-note">¥5,500以上のご購入で送料無料</p>
+    </div>
+  </aside>
+
+  <!-- ══════════ 検索オーバーレイ ══════════ -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-panel">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="アイテム名・ブランド名で検索" autocomplete="off" />
+        <button class="close-btn" id="closeSearch" aria-label="検索を閉じる">✕</button>
+      </div>
+      <p class="search-hint" id="searchHint">キーワードを入力すると、商品がここに表示されます。(例:リップ、マスカラ、化粧水)</p>
+      <div class="product-grid search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- カート追加トースト -->
+  <div class="toast" id="toast">カートに追加しました 🛍️</div>
+
+  <script src="js/products.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

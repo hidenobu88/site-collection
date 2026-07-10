@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お問い合わせ | STELLA PRODUCTION</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo">STELLA<span>PRODUCTION</span></a>
+  <button class="hamburger" aria-label="メニュー"><span></span><span></span><span></span></button>
+  <nav class="gnav">
+    <ul>
+      <li><a href="index.html">TOP</a></li>
+      <li><a href="company.html">会社情報</a></li>
+      <li><a href="talent.html">所属タレント</a></li>
+      <li><a href="sns.html">SNS</a></li>
+      <li><a href="news.html">最新情報</a></li>
+      <li><a href="audition.html">オーディション</a></li>
+      <li><a href="contact.html" class="current">お問い合わせ</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h1>CONTACT</h1>
+  <p>お問い合わせ</p>
+</div>
+
+<section class="section">
+  <div class="inner">
+    <p class="sns-note">
+      出演のご依頼・取材のお申し込み・その他のお問い合わせは、下記フォームよりご連絡ください。<br>
+      担当者より3営業日以内にご返信いたします。（サンプルフォームのため送信は実際には行われません）<br>ファンレターの宛先などは<a href="faq.html" style="color:var(--gold);text-decoration:underline">よくある質問</a>もご覧ください。
+    </p>
+
+    <!-- 送信完了メッセージ -->
+    <div class="form-result">
+      <p>お問い合わせを受け付けました。<br>担当者より折り返しご連絡いたしますので、今しばらくお待ちください。</p>
+      <p style="font-size:12px;color:#9a97a0;margin-top:10px">※これはサンプル表示です。実際の送信は行われていません。</p>
+    </div>
+
+    <!-- 実運用時は action にフォーム送信先（formrun / Googleフォーム / 自社API等）を設定してください -->
+    <form class="contact-form demo-form" id="contact-form">
+      <div class="form-row">
+        <label for="type">お問い合わせ種別<span class="req">必須</span></label>
+        <select id="type" name="type" required>
+          <option value="">選択してください</option>
+          <option>出演のご依頼（TV・映画・舞台・CM等）</option>
+          <option>取材・メディア掲載のお申し込み</option>
+          <option>イベント出演のご依頼</option>
+          <option>オーディション・所属希望について</option>
+          <option>ファンレター・プレゼントについて</option>
+          <option>その他</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="company">会社名・団体名</label>
+        <input type="text" id="company" name="company" placeholder="株式会社サンプル">
+      </div>
+      <div class="form-row">
+        <label for="name">お名前<span class="req">必須</span></label>
+        <input type="text" id="name" name="name" placeholder="山田 太郎" required>
+      </div>
+      <div class="form-row">
+        <label for="email">メールアドレス<span class="req">必須</span></label>
+        <input type="email" id="email" name="email" placeholder="sample@example.com" required>
+      </div>
+      <div class="form-row">
+        <label for="tel">電話番号</label>
+        <input type="tel" id="tel" name="tel" placeholder="00-0000-0000">
+      </div>
+      <div class="form-row">
+        <label for="talent">対象タレント名（出演依頼の場合）</label>
+        <input type="text" id="talent" name="talent" placeholder="例：蒼井 隼人">
+      </div>
+      <div class="form-row">
+        <label for="message">お問い合わせ内容<span class="req">必須</span></label>
+        <textarea id="message" name="message" placeholder="お問い合わせ内容をご記入ください" required></textarea>
+      </div>
+      <p class="form-agree">
+        <label><input type="checkbox" required style="width:auto;margin-right:8px;vertical-align:middle">
+        <a href="privacy.html" target="_blank">プライバシーポリシー</a>に同意する</label>
+      </p>
+      <div class="form-submit">
+        <button type="submit">送信する</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <p class="logo">STELLA<span>PRODUCTION</span></p>
+      <p class="footer-desc">株式会社ステラプロダクション（サンプル）<br>〒000-0000 東京都サンプル区サンプル町1-2-3<br>TEL：00-0000-0000（平日 10:00〜18:00）</p>
+      <div class="footer-sns">
+        <a href="#" aria-label="X（公式）"><svg viewBox="0 0 24 24"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.2l7.3-8.4L1.2 2h6.4L12 7.9 18.9 2zm-1.1 18.1h1.7L6.7 3.8H4.9l12.9 16.3z"/></svg></a>
+        <a href="#" aria-label="Instagram（公式）"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8C2.4 4 4 2.4 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zm0 3.6a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/></svg></a>
+        <a href="#" aria-label="YouTube（公式）"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>MENU</h4>
+      <ul class="footer-nav">
+        <li><a href="index.html">TOP</a></li>
+        <li><a href="company.html">会社情報</a></li>
+        <li><a href="talent.html">所属タレント</a></li>
+        <li><a href="sns.html">SNS</a></li>
+        <li><a href="news.html">最新情報</a></li>
+        <li><a href="audition.html">オーディション</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>LEGAL</h4>
+      <ul class="footer-nav">
+        <li><a href="privacy.html">プライバシーポリシー</a></li>
+        <li><a href="disclaimer.html">免責事項</a></li>
+        <li><a href="terms.html">サイトご利用規約</a></li>
+        <li><a href="faq.html">よくある質問</a></li>
+        <li><a href="contact.html">肖像権・取材に関するお問い合わせ</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="copyright">© 2026 STELLA PRODUCTION Inc. All Rights Reserved.</p>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+.DS_Store
+*.log
+# アプリのビルド成果物は公開しない
+apps/Quiz_Claude/target/
+apps/*/node_modules/
+apps/*/build/

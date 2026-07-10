@@ -1,0 +1,125 @@
+/* =========================================================
+ * projects.js — 作品・プロフィールのデータファイル
+ *
+ * ★ このファイルだけ編集すればサイトが更新されます ★
+ *
+ * 作品を追加する手順：
+ *   1. 下の PROJECTS の配列に、既存のブロックをコピーして貼り付ける
+ *   2. title / description / url などを書き換える
+ *   3. 保存してブラウザを再読み込み → カードが自動で増えます
+ * ========================================================= */
+
+/* ---------- 基本設定 ---------- */
+const PROFILE = {
+  name: "Hidenobu Kimura",        // ← お名前（フッターの © 表記に使用）
+  siteName: "Site Collection",    // ← サイト名（ヘッダー・フッターに表示）
+};
+
+/* 1ページに表示する作品数。
+ * ページ数は作品数に応じて自動で増えます（作品100件なら25ページ）。
+ * 上限はないので、各カテゴリに20ページ分(80作品)以上入れても大丈夫です */
+const ITEMS_PER_PAGE = 4;
+
+/* ---------- カテゴリ定義 ----------
+ * id      : PROJECTS 側の category と対応させる英語ID
+ * label   : 画面に表示される日本語名
+ * 新しいジャンルを作りたければ、ここに1行追加してください
+ */
+const CATEGORIES = [
+  { id: "webapp",  label: "Webアプリ" },
+  { id: "website", label: "Webサイト" },
+  { id: "game",    label: "ゲーム" },
+];
+
+/* ---------- 作品一覧 ----------
+ * 各項目の説明：
+ *   title       : 作品名
+ *   description : 1〜2文の紹介文（カードに表示）
+ *   url         : クリックで開くリンク（公開URL）
+ *   category    : 上の CATEGORIES の id のどれか
+ *   tags        : 使用技術など（3つ前後がきれいに収まります）
+ *   emoji       : カードのサムネイルに大きく表示される絵文字
+ *   image       : スクリーンショット画像のパス（例: "images/app1.png"）
+ *                 指定すると絵文字の代わりに画像が表示されます。省略可
+ *   date        : 制作時期（表示用。形式は自由）
+ *   featured    : true にすると一覧の先頭で大きく表示（1つだけ推奨）
+ *   sample      : true のものはサンプル表示。実物と差し替えたら削除してください
+ */
+const PROJECTS = [
+  {
+    title: "STELLA PRODUCTION — 芸能事務所サイト",
+    description: "架空の芸能事務所の公式サイト。所属タレント40名の一覧・プロフィール、ピックアップスライダー、月別の出演情報、SNS投稿、オーディション応募フォームまで備えた全14ページ構成。データは1ファイルで一括管理できる設計です。",
+    url: "works/entertainment-website/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "✨",
+    image: "images/entertainment-website.png",
+    date: "2026.07",
+    featured: true,
+  },
+  {
+    title: "かわいいクイズランド — ○×クイズアプリ",
+    description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
+    url: "works/quiz-claude/app/index.html",
+    category: "webapp",
+    tags: ["Java", "Spring Boot", "PostgreSQL"],
+    emoji: "🍬",
+    image: "images/quiz-claude.png",
+    date: "2026.07",
+  },
+  {
+    title: "黒井戸ノ家 ―KUROIDO― お化け屋敷サイト",
+    description: "ジャパニーズホラー映画の空気感をまとった架空お化け屋敷の公式サイト。警告ゲート、VHSノイズ、一瞬だけ映る女、乱れる生還者カウンターなど恐怖演出満載。心霊写真・恐怖体験談・7種の料金プランを収録。",
+    url: "works/haunted-house/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "👻",
+    date: "2026.07",
+  },
+  {
+    title: "もふもふパーク — 猫と犬のふれあいカフェ",
+    description: "かわいい猫と犬にエサをあげたり、撫でたり、おもちゃで遊んだり。時間制で気軽に楽しめるふれあいカフェの公式サイトです。",
+    url: "works/cat-dog/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🐾",
+    date: "2026.07",
+  },
+  {
+    title: "Belle Éclat — コスメティックストア",
+    description: "リップ・ベースメイク・アイメイク・スキンケアまで、毎日のキレイがすべて揃う架空コスメブランドのECサイト。",
+    url: "works/cosmetics-website/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "💄",
+    date: "2026.07",
+  },
+  {
+    title: "ソウル横丁 서울골목 — ネオレトロ韓国食堂",
+    description: "路地裏のネオレトロな架空韓国料理店。サムギョプサルからスンドゥブ、チーズハットグまで50品超のメニューページ付き。テイクアウトOK。",
+    url: "works/korea-site/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🌶️",
+    date: "2026.07",
+  },
+  {
+    title: "スミカ不動産 — 賃貸物件検索",
+    description: "架空の不動産会社の賃貸物件検索サイト。条件を指定して物件を絞り込めます。",
+    url: "works/rental-properties/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🏠",
+    date: "2026.07",
+  },
+  {
+    title: "TORANOBU GAMES — フォートナイト制作マップ",
+    description: "UEFN / Verse を使って開発したフォートナイトのオリジナルマップ。公式クリエイターページから実際にプレイできます。",
+    url: "works/fortnite/index.html",
+    category: "game",
+    tags: ["UEFN", "Verse", "Fortnite"],
+    emoji: "⚡",
+    image: "images/fortnite.png",
+    date: "2026.07",
+  },
+];

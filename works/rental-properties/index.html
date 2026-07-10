@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>スミカ不動産 | 賃貸物件検索</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">スミカ不動産</span>
+        <span class="logo-sub">SUMIKA ESTATE</span>
+      </a>
+      <nav class="header-nav">
+        <a href="index.html">ホーム</a>
+        <a href="index.html?type=apartment">アパート</a>
+        <a href="index.html?type=mansion">マンション</a>
+        <a href="index.html?type=tower">タワーマンション</a>
+        <button type="button" id="favFilterBtn" class="fav-btn">♥ お気に入り <span id="favCount">0</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>理想の住まい、きっと見つかる。</h1>
+      <p>アパートからタワーマンションまで、こだわり条件でぴったりのお部屋を検索できます。</p>
+      <div class="type-shortcuts">
+        <button type="button" class="type-shortcut" data-type="apartment">
+          <span class="t-name">アパート</span>
+          <span class="t-desc">家賃重視・掘り出し物件</span>
+        </button>
+        <button type="button" class="type-shortcut" data-type="mansion">
+          <span class="t-name">マンション</span>
+          <span class="t-desc">設備と暮らしやすさのバランス</span>
+        </button>
+        <button type="button" class="type-shortcut" data-type="tower">
+          <span class="t-name">タワーマンション</span>
+          <span class="t-desc">眺望とホテルライクな暮らし</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="container main-layout">
+    <!-- ======== 検索パネル ======== -->
+    <aside class="search-panel">
+      <h2>条件をしぼり込む</h2>
+      <form id="searchForm">
+
+        <div class="filter-group">
+          <span class="group-label">建物の種類</span>
+          <label class="check-row"><input type="checkbox" name="type" value="apartment" />アパート</label>
+          <label class="check-row"><input type="checkbox" name="type" value="mansion" />マンション</label>
+          <label class="check-row"><input type="checkbox" name="type" value="tower" />タワーマンション</label>
+        </div>
+
+        <div class="filter-group">
+          <span class="group-label">賃料(管理費除く)</span>
+          <div class="range-row">
+            <select name="rentMin" id="rentMin"></select>
+            <span>〜</span>
+            <select name="rentMax" id="rentMax"></select>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="group-label">間取り</span>
+          <div class="check-grid">
+            <label class="check-row"><input type="checkbox" name="layout" value="1R/1K" />1R / 1K</label>
+            <label class="check-row"><input type="checkbox" name="layout" value="1DK" />1DK</label>
+            <label class="check-row"><input type="checkbox" name="layout" value="1LDK" />1LDK</label>
+            <label class="check-row"><input type="checkbox" name="layout" value="2K/2DK" />2K / 2DK</label>
+            <label class="check-row"><input type="checkbox" name="layout" value="2LDK" />2LDK</label>
+            <label class="check-row"><input type="checkbox" name="layout" value="3+" />3DK以上</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="group-label">築年数</span>
+          <div class="range-row">
+            <select name="maxAge" id="maxAge">
+              <option value="">指定なし</option>
+              <option value="3">3年以内(築浅)</option>
+              <option value="5">5年以内</option>
+              <option value="10">10年以内</option>
+              <option value="15">15年以内</option>
+              <option value="20">20年以内</option>
+              <option value="30">30年以内</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="group-label">駅からの徒歩</span>
+          <div class="range-row">
+            <select name="maxWalk" id="maxWalk">
+              <option value="">指定なし</option>
+              <option value="5">5分以内</option>
+              <option value="10">10分以内</option>
+              <option value="15">15分以内</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="group-label">専有面積</span>
+          <div class="range-row">
+            <select name="minArea" id="minArea">
+              <option value="">指定なし</option>
+              <option value="20">20㎡以上</option>
+              <option value="30">30㎡以上</option>
+              <option value="40">40㎡以上</option>
+              <option value="60">60㎡以上</option>
+              <option value="80">80㎡以上</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="group-label">こだわり条件</span>
+          <label class="check-row"><input type="checkbox" name="cond" value="pet" />ペット可・相談可</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="parking" />駐車場あり</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="noDeposit" />敷金なし</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="noKeyMoney" />礼金なし</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="autolock" />オートロック</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="separateBath" />バス・トイレ別</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="deliveryBox" />宅配ボックス</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="reheating" />追い焚き</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="floorHeating" />床暖房</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="freeInternet" />インターネット無料</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="upperFloor" />2階以上</label>
+          <label class="check-row"><input type="checkbox" name="cond" value="concierge" />コンシェルジュ</label>
+        </div>
+
+        <div class="filter-group">
+          <span class="group-label">キーワード</span>
+          <input type="text" name="keyword" id="keyword" placeholder="例: 桜ヶ丘、角部屋、庭" />
+        </div>
+
+        <button type="submit" class="btn-primary">この条件で検索</button>
+        <button type="button" class="btn-clear" id="clearBtn">条件をクリア</button>
+      </form>
+    </aside>
+
+    <!-- ======== 検索結果 ======== -->
+    <main>
+      <div class="result-header">
+        <div class="result-count">検索結果 <strong id="resultCount">0</strong>件</div>
+        <select class="sort-select" id="sortSelect">
+          <option value="recommended">おすすめ順</option>
+          <option value="rentAsc">賃料が安い順</option>
+          <option value="rentDesc">賃料が高い順</option>
+          <option value="ageAsc">築年数が新しい順</option>
+          <option value="areaDesc">広い順</option>
+        </select>
+      </div>
+      <div class="room-grid" id="roomGrid"></div>
+      <nav class="pager" id="pager" aria-label="ページ切り替え"></nav>
+      <div class="empty-result" id="emptyResult" hidden>
+        <strong>条件に合うお部屋が見つかりませんでした</strong>
+        条件を少しゆるめて、もう一度検索してみてください。
+      </div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="f-logo">スミカ不動産</div>
+      <div>宅地建物取引業 東京都知事(1)第00000号(架空) / 本サイトはデモ用の架空の賃貸紹介サイトです。掲載物件・住所・鉄道路線はすべて実在しません。</div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

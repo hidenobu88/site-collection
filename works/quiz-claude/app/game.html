@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>○×クイズ</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%8D%AC%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="wrap">
+    <header class="site-header">
+        <div class="deco" aria-hidden="true">
+            <span style="left:6%;  animation-duration:15s; animation-delay:0s;">🍬</span>
+            <span style="left:16%; animation-duration:20s; animation-delay:4s;  font-size:1.6rem;">⭐</span>
+            <span style="left:28%; animation-duration:17s; animation-delay:8s;">🍭</span>
+            <span style="left:40%; animation-duration:22s; animation-delay:2s;  font-size:1.4rem;">🎈</span>
+            <span style="left:52%; animation-duration:16s; animation-delay:6s;">🍩</span>
+            <span style="left:64%; animation-duration:19s; animation-delay:1s;  font-size:1.7rem;">🌈</span>
+            <span style="left:74%; animation-duration:21s; animation-delay:9s;">🧁</span>
+            <span style="left:84%; animation-duration:14s; animation-delay:3s;  font-size:1.5rem;">⭐</span>
+            <span style="left:92%; animation-duration:18s; animation-delay:7s;">🍬</span>
+        </div>
+        <h1 class="site-title"><a href="index.html">🍬 かわいいクイズランド 🎡</a></h1>
+        <p class="site-subtitle">クイズ・パズル・タイマー　みんなであそぼう！</p>
+    </header>
+
+    <div class="btn-row game-top-nav">
+        <a class="btn btn--sub btn--small" href="index.html">← あそびをえらぶ</a>
+    </div>
+
+    <!-- 出題エリア -->
+    <div id="quiz" class="card">
+        <div class="game-progress"><span id="current">1</span> / <span id="total">0</span> 問</div>
+        <div class="progress-bar"><span id="progress"></span></div>
+        <div id="question" class="game-question">よみこみ中…</div>
+        <div class="ox-row">
+            <button type="button" class="ox-btn maru" data-answer="true" aria-label="マルで回答">○</button>
+            <button type="button" class="ox-btn batsu" data-answer="false" aria-label="バツで回答">×</button>
+        </div>
+    </div>
+
+    <!-- 結果エリア -->
+    <div id="result" class="card result hidden">
+        <img class="mascot" src="img/mascot.svg" alt="うさぎのマスコット">
+        <div class="stars" id="stars"></div>
+        <div class="score"><b id="score">0</b> / <span id="scoreTotal">0</span> 問 正解！</div>
+        <div class="comment" id="comment"></div>
+        <div class="btn-row">
+            <a class="btn btn--sub" href="index.html">トップへ</a>
+            <button type="button" id="retry" class="btn">もう一度あそぶ</button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>© かわいいクイズランド 🍬🎈🌈</p>
+    </footer>
+</div>
+
+<!-- 判定オーバーレイ（正解！ / 残念・・・。） -->
+<div id="overlay" class="overlay" role="status" aria-live="assertive">
+    <div class="verdict" id="verdict"></div>
+    <div class="exp" id="exp"></div>
+    <div style="margin-top:20px;">
+        <button type="button" id="next" class="btn">つぎへ →</button>
+    </div>
+</div>
+
+<script>
+(function () {
+    /* デモ版：本体アプリではこの問題データをPostgreSQLからAPI経由で取得します。
+       出題は毎回シャッフルされ、20問すべて答えると
+       「もう一度あそぶ」で再びランダムな順に出題されます。 */
+    const QUESTIONS = [
+        { text: 'ミッキーマウスのスクリーンデビュー作は、1928年公開の『蒸気船ウィリー』である。', answer: true,  explanation: '1928年11月18日公開。この日はミッキーの誕生日とされています。' },
+        { text: 'ミッキーマウスの飼い犬の名前はプルートである。', answer: true,  explanation: 'プルートはミッキーの愛犬です。' },
+        { text: 'ミッキーマウスの恋人はデイジーダックである。', answer: false, explanation: 'ミッキーの恋人はミニーマウス。デイジーはドナルドの恋人です。' },
+        { text: 'ドナルドダックのミドルネームは「フォントルロイ」である。', answer: true,  explanation: 'フルネームはドナルド・フォントルロイ・ダックです。' },
+        { text: 'グーフィーはネコをモデルにしたキャラクターである。', answer: false, explanation: 'グーフィーは犬がモデルのキャラクターです。' },
+        { text: '東京ディズニーランドは東京都内にある。', answer: false, explanation: '実は千葉県浦安市にあります。' },
+        { text: '東京ディズニーランドが開園したのは1983年である。', answer: true,  explanation: '1983年4月15日に開園しました。' },
+        { text: '東京ディズニーランドのシンボルはシンデレラ城である。', answer: true,  explanation: 'ちなみに東京ディズニーシーのシンボルはプロメテウス火山です。' },
+        { text: '『アナと雪の女王』の雪だるまオラフは、夏が大きらいである。', answer: false, explanation: 'オラフは夏に強いあこがれを持っています。' },
+        { text: '『リトル・マーメイド』のセバスチャンはカニである。', answer: true,  explanation: 'トリトン王に仕える宮廷音楽家のカニです。' },
+        { text: '『アラジン』に登場するランプの魔人の名前はジーニーである。', answer: true,  explanation: '3つの願いをかなえてくれる陽気な魔人です。' },
+        { text: '『美女と野獣』のヒロインの名前はオーロラである。', answer: false, explanation: 'ヒロインはベル。オーロラ姫は『眠れる森の美女』です。' },
+        { text: '『ライオン・キング』の主人公シンバはトラの子どもである。', answer: false, explanation: 'シンバはライオンの子どもです。' },
+        { text: 'くまのプーさんの大好物ははちみつである。', answer: true,  explanation: 'プーさんははちみつが大好きです。' },
+        { text: 'プーさんの友だちのピグレットはウサギである。', answer: false, explanation: 'ピグレットは小さな子ブタです。ウサギの友だちはラビットです。' },
+        { text: '『トイ・ストーリー』のウッディはカウボーイの人形である。', answer: true,  explanation: 'アンディのお気に入りのカウボーイ人形です。' },
+        { text: '『モンスターズ・インク』の世界では、子どもの悲鳴より笑い声の方が大きなエネルギーを生む。', answer: true, explanation: '映画の終盤で、笑い声の方がずっと強力だと分かります。' },
+        { text: 'チップとデールは2匹ともシマリスである。', answer: true,  explanation: '鼻の色(チップ=黒、デール=赤茶)で見分けられます。' },
+        { text: '『ピーター・パン』に登場する妖精の名前はティンカー・ベルである。', answer: true,  explanation: 'ピーター・パンの相棒の小さな妖精です。' },
+        { text: 'スティッチはハワイ生まれの犬である。', answer: false, explanation: '宇宙で作られた試作品626号のエイリアンで、犬のふりをしています。' },
+    ];
+
+    const els = {
+        quiz: document.getElementById('quiz'),
+        result: document.getElementById('result'),
+        question: document.getElementById('question'),
+        current: document.getElementById('current'),
+        total: document.getElementById('total'),
+        progress: document.getElementById('progress'),
+        overlay: document.getElementById('overlay'),
+        verdict: document.getElementById('verdict'),
+        exp: document.getElementById('exp'),
+        next: document.getElementById('next'),
+        score: document.getElementById('score'),
+        scoreTotal: document.getElementById('scoreTotal'),
+        comment: document.getElementById('comment'),
+        stars: document.getElementById('stars'),
+        retry: document.getElementById('retry'),
+    };
+    const oxButtons = document.querySelectorAll('.ox-btn');
+
+    let questions = [];
+    let index = 0;
+    let score = 0;
+
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function render() {
+        const q = questions[index];
+        els.question.textContent = q.text;
+        els.current.textContent = index + 1;
+        els.progress.style.width = (index / questions.length * 100) + '%';
+        setButtonsEnabled(true);
+    }
+
+    function setButtonsEnabled(enabled) {
+        oxButtons.forEach(b => b.disabled = !enabled);
+    }
+
+    function answer(choice) {
+        setButtonsEnabled(false);
+        const q = questions[index];
+        const correct = (choice === q.answer);
+        if (correct) score++;
+
+        els.overlay.classList.remove('correct', 'wrong');
+        els.overlay.classList.add(correct ? 'correct' : 'wrong');
+        els.verdict.textContent = correct ? '正解！' : '残念・・・。';
+        els.exp.textContent = q.explanation ? ('💡 ' + q.explanation) : '';
+        els.next.textContent = (index === questions.length - 1) ? 'けっかを見る →' : 'つぎへ →';
+        els.overlay.classList.add('show');
+    }
+
+    function nextQuestion() {
+        els.overlay.classList.remove('show');
+        index++;
+        if (index < questions.length) {
+            render();
+        } else {
+            els.progress.style.width = '100%';
+            showResult();
+        }
+    }
+
+    function showResult() {
+        els.quiz.classList.add('hidden');
+        els.result.classList.remove('hidden');
+        els.score.textContent = score;
+        els.scoreTotal.textContent = questions.length;
+        const rate = questions.length ? score / questions.length : 0;
+        const filled = Math.max(1, Math.round(rate * 3));
+        els.stars.textContent = '⭐'.repeat(filled) + '☆'.repeat(3 - filled);
+        els.comment.textContent = comment(rate);
+        if (rate === 1) confetti();
+    }
+
+    function comment(rate) {
+        if (rate === 1) return 'ぜんぶ正解！すごい🎉';
+        if (rate >= 0.7) return 'いいちょうし！✨';
+        if (rate >= 0.4) return 'もう少し！がんばれ〜🍀';
+        return 'ドンマイ！またチャレンジしてね🍬';
+    }
+
+    function confetti() {
+        const colors = ['#FF9EC4', '#FFE28A', '#9EE6D0', '#8FD3FF', '#B79CFF', '#FFB877'];
+        const box = document.createElement('div');
+        box.className = 'confetti';
+        for (let i = 0; i < 80; i++) {
+            const p = document.createElement('i');
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.background = colors[i % colors.length];
+            p.style.animationDuration = (2 + Math.random() * 2) + 's';
+            p.style.animationDelay = (Math.random() * 0.6) + 's';
+            box.appendChild(p);
+        }
+        document.body.appendChild(box);
+        setTimeout(() => box.remove(), 4500);
+    }
+
+    function start(data) {
+        questions = shuffle(data.slice());
+        index = 0;
+        score = 0;
+        els.total.textContent = questions.length;
+        els.quiz.classList.remove('hidden');
+        els.result.classList.add('hidden');
+        render();
+    }
+
+    oxButtons.forEach(b => b.addEventListener('click', () => answer(b.dataset.answer === 'true')));
+    els.next.addEventListener('click', nextQuestion);
+    els.retry.addEventListener('click', () => start(questions));
+
+    start(QUESTIONS);
+})();
+</script>
+</body>
+</html>
