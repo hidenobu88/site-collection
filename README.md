@@ -37,7 +37,7 @@ Site-Collection/
 ├── works/            … ★ Webサイト（静的）をフォルダごと置く場所
 │   ├── entertainment-website/ … STELLA PRODUCTION（芸能事務所サイト）
 │   ├── quiz-claude/  … かわいいクイズランド（紹介ページ＋遊べるデモ）
-│   ├── fortnite/     … TORANOBU GAMES（フォートナイト風の紹介ページ）
+│   ├── fortnite/     … TORANOBU_GAME（フォートナイト風の紹介ページ）
 │   ├── reoma-website/ … ※準備中（中身が入ったらカード追加）
 │   └── …            … そのほかの作品サイト
 ├── apps/             … ★ Webアプリ（サーバー型）の開発プロジェクト置き場
@@ -65,7 +65,7 @@ Site-Collection/
 ```
 
 - カテゴリは「Webアプリ・Webサイト・ゲーム」の3つ。**ゲームカテゴリはフォートナイト
-  （TORANOBU GAMES）専用**で、カードは `works/fortnite/` の紹介ページ経由で
+  （TORANOBU_GAME）専用**で、カードは `works/fortnite/` の紹介ページ経由で
   公式クリエイターページ（fortnite.com/@toranobu_game）へリンクしています
 - 一覧は4件ごとのページネーション付き。ページ数は作品数に応じて自動で増えます
   （1ページの件数は `projects.js` の `ITEMS_PER_PAGE` で変更可）

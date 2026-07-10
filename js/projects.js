@@ -85,7 +85,7 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
-    title: "TORANOBU GAMES — フォートナイト制作マップ",
+    title: "TORANOBU_GAME — フォートナイト制作マップ",
     description: "UEFN / Verse を使って開発したフォートナイトのオリジナルマップ。公式クリエイターページから実際にプレイできます。",
     url: "works/fortnite/index.html",
     category: "game",
