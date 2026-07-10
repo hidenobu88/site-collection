@@ -135,6 +135,50 @@ let BUILDINGS = [
     totalUnits: 480,
     note: "駅直結52階建て。コンシェルジュ・ゲストルーム・プール併設の最高級レジデンス。"
   }
+  ,
+  // ===== 新着物件(2026年追加) =====
+  {
+    id: "b10",
+    name: "サニーコート青葉台",
+    type: "apartment",
+    address: "東京都青葉川区青葉台4-6-2",
+    access: [{ line: "東都線", station: "青葉台", walk: 7 }],
+    builtYear: 2015,
+    structure: "軽量鉄骨造",
+    totalFloors: 2,
+    totalUnits: 10,
+    note: "築浅めで室内キレイなアパート。単身・学生さんに人気のエリアです。"
+  },
+  {
+    id: "b11",
+    name: "グランレジデンス桜ヶ丘",
+    type: "mansion",
+    address: "東京都桜ヶ丘区桜通り5-12-3",
+    access: [
+      { line: "都心環状線", station: "桜ヶ丘", walk: 6 },
+      { line: "東都線", station: "桜通り", walk: 9 }
+    ],
+    builtYear: 2021,
+    structure: "RC(鉄筋コンクリート)造",
+    totalFloors: 9,
+    totalUnits: 45,
+    note: "オートロック・宅配ボックス完備の築浅マンション。桜並木沿いの静かな住環境。"
+  },
+  {
+    id: "b12",
+    name: "アズールタワー天空橋",
+    type: "tower",
+    address: "東京都湾岸区天空橋3-2-1",
+    access: [
+      { line: "湾岸線", station: "天空橋", walk: 4 },
+      { line: "モノレール", station: "天空橋東", walk: 6 }
+    ],
+    builtYear: 2025,
+    structure: "SRC(鉄骨鉄筋コンクリート)造",
+    totalFloors: 44,
+    totalUnits: 380,
+    note: "2025年竣工の最新タワー。空港アクセス良好、スカイデッキ・ラウンジ・ジム完備。"
+  }
 ];
 
 // ---------------- 部屋データ ----------------
@@ -469,6 +513,58 @@ let ROOMS = [
     parking: "専用2台(平置き) 無料", pet: true,
     tags: ["タワーマンション", "駅直結", "ペントハウス", "ペット可", "駐車場あり", "コンシェルジュ", "追い焚き", "浴室乾燥機", "床暖房", "眺望良好", "高層階", "フィットネス", "プール", "ルーフバルコニー", "エアコン付"],
     description: "最上階52階・ワンフロア半分を占めるペントハウス。165㎡+50㎡のルーフバルコニー、天井高3.2m。専用エレベーターで玄関前まで直行できます。都心の全景を独り占めする、東京で数少ない賃貸最高峰の住まい。内見は事前審査制です。"
+  }
+  ,
+  // ========== サニーコート青葉台(新着・築浅アパート) ==========
+  {
+    id: "r1001", buildingId: "b10", roomNo: "102", floor: 1,
+    layout: "1K", area: 22.4, direction: "南",
+    rent: 68000, managementFee: 3000, deposit: 1, keyMoney: 0,
+    parking: "", pet: false,
+    tags: ["新着", "礼金なし", "築浅", "独立洗面台", "室内洗濯機置場", "エアコン付", "都市ガス"],
+    description: "2015年築のキレイな1K。白基調の室内に独立洗面台付きで、この賃料はお得です。駅徒歩7分・コンビニ1分の好立地。女性の一人暮らしにもおすすめです。"
+  },
+  {
+    id: "r1002", buildingId: "b10", roomNo: "201", floor: 2,
+    layout: "1LDK", area: 33.6, direction: "南東",
+    rent: 89000, managementFee: 3000, deposit: 1, keyMoney: 1,
+    parking: "近隣月極 12,000円", pet: true,
+    tags: ["新着", "築浅", "ペット相談可", "2人入居可", "対面キッチン", "エアコン付", "日当たり良好"],
+    description: "角部屋の1LDK。対面キッチンとゆとりのリビングで、カップル・新婚さんにも。小型犬・猫1匹まで相談可能です。"
+  },
+  // ========== グランレジデンス桜ヶ丘(新着・築浅マンション) ==========
+  {
+    id: "r1101", buildingId: "b11", roomNo: "305", floor: 3,
+    layout: "1LDK", area: 40.2, direction: "南",
+    rent: 138000, managementFee: 8000, deposit: 1, keyMoney: 1,
+    parking: "敷地内 18,000円", pet: false,
+    tags: ["新着", "築浅", "オートロック", "宅配ボックス", "浴室乾燥機", "追い焚き", "システムキッチン", "エアコン付"],
+    description: "2021年築・設備充実の1LDK。浴室乾燥機と追い焚き付きで、忙しい社会人の毎日を快適に。窓の外には桜並木が広がり、春の眺めは格別です。"
+  },
+  {
+    id: "r1102", buildingId: "b11", roomNo: "801", floor: 8,
+    layout: "2LDK", area: 58.7, direction: "南西",
+    rent: 198000, managementFee: 10000, deposit: 2, keyMoney: 1,
+    parking: "敷地内 18,000円", pet: true,
+    tags: ["新着", "築浅", "角部屋", "ペット可", "オートロック", "宅配ボックス", "床暖房", "カウンターキッチン", "眺望良好"],
+    description: "8階角部屋の2LDK。リビング床暖房・ワイドバルコニー付きで、ファミリーにぴったり。ペット可(小型犬・猫2匹まで)の希少物件です。"
+  },
+  // ========== アズールタワー天空橋(新着・最新タワー) ==========
+  {
+    id: "r1201", buildingId: "b12", roomNo: "1508", floor: 15,
+    layout: "1LDK", area: 45.8, direction: "東",
+    rent: 225000, managementFee: 15000, deposit: 1, keyMoney: 1,
+    parking: "機械式 25,000円", pet: false,
+    tags: ["新着", "タワーマンション", "築浅", "コンシェルジュ", "ディスポーザー", "浴室乾燥機", "床暖房", "眺望良好", "フィットネス"],
+    description: "2025年竣工・15階東向きの1LDK。朝日と運河の眺めが自慢です。共用部にはコワーキングラウンジとジムを完備。空港へも好アクセスで出張の多い方に。"
+  },
+  {
+    id: "r1202", buildingId: "b12", roomNo: "3902", floor: 39,
+    layout: "3LDK", area: 85.3, direction: "南",
+    rent: 420000, managementFee: 25000, deposit: 2, keyMoney: 1,
+    parking: "機械式 25,000円", pet: true,
+    tags: ["新着", "タワーマンション", "高層階", "ペット可", "コンシェルジュ", "ゲストルーム", "床暖房", "ウォークインクローゼット", "眺望良好", "スカイデッキ"],
+    description: "39階南向きの3LDK。リビングから東京湾を一望できる特等席です。全居室収納付き+WIC、キッチンはディスポーザー・食洗機標準装備。最上級の暮らしをどうぞ。"
   }
 ];
 

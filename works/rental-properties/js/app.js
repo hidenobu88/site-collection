@@ -241,6 +241,9 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   currentPage = 1;
   render();
+  // 押したことが分かるように、検索結果の先頭までスクロールする
+  const results = document.getElementById("roomGrid");
+  if (results) results.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 form.addEventListener("change", () => {

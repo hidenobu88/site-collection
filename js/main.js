@@ -156,8 +156,8 @@
     const filtered = PROJECTS
       .map((p, i) => ({ ...p, _index: i }))
       .filter((p) => activeCategory === "all" || p.category === activeCategory)
-      .filter((p) => matchesSearch(p, searchQuery))
-      .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+      .filter((p) => matchesSearch(p, searchQuery));
+    // 表示順は projects.js の配列順のまま。featured はその位置で大きく表示される
 
     // ページ数は作品数から自動計算（4件区切り）
     const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
