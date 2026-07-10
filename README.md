@@ -93,13 +93,13 @@ git の準備（init〜コミット）は完了済みです。残りは以下だ
 2. ターミナルでこのフォルダに移動して push:
    ```bash
    cd ~/Desktop/Site-Collection
-   git remote add origin https://github.com/TORA-NOBU/site-collection.git
+   git remote add origin https://github.com/hidenobu88/site-collection.git
    git push -u origin main
    ```
    （初回はGitHubのログイン画面が出るので、ブラウザで認証してください）
 3. リポジトリの **Settings → Pages → Branch: `main` / (root)** を選んで Save
 4. 数分後に公開URLが発行されます:
-   **`https://tora-nobu.github.io/site-collection/`**
+   **`https://hidenobu88.github.io/site-collection/`**
    このURLを友達や採用担当者に送ればOKです
 
 以後の更新は `git add -A && git commit -m "作品追加" && git push` だけで反映されます。
