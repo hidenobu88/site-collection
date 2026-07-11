@@ -128,9 +128,6 @@
           <h3 class="card-title">${escapeHtml(p.title)}</h3>
           <p class="card-desc">${escapeHtml(p.description)}</p>
           <div class="card-foot">
-            <div class="card-tags">
-              ${(p.tags || []).map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join("")}
-            </div>
             <span class="card-open" aria-hidden="true">
               見る
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
