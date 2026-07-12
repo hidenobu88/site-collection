@@ -33,11 +33,11 @@ const LIFESTYLE_SUBS = [
   },
 ];
 
-// ベースメイクの後に差し込む全幅バナー(Beautiful_A.png)
+// ベースメイクの後に差し込む全幅バナー(Beauty_A.jpg)
 const BEAUTIFUL_A_BANNER = `
   <section class="photo-banner photo-banner--light">
     <div class="photo-banner-img">
-      <img src="image/Beautiful_A.png" alt="鏡の前でチークをのせて微笑む女性" loading="lazy" />
+      <img src="image/Beauty_A.jpg" alt="鏡の前でチークをのせて微笑む女性" loading="lazy" />
     </div>
     <div class="photo-banner-text">
       <p class="section-eyebrow">MAKEUP TIME IS HAPPY TIME</p>
@@ -47,7 +47,7 @@ const BEAUTIFUL_A_BANNER = `
     </div>
   </section>`;
 
-// メイクツールの後に差し込むビューティーレッスンバナー(Beautiful_B.png)
+// メイクツールの後に差し込むビューティーレッスンバナー(Beauty_B.jpg)
 const BEAUTIFUL_B_BANNER = `
   <section class="lesson-banner">
     <div class="lesson-text">
@@ -61,7 +61,7 @@ const BEAUTIFUL_B_BANNER = `
       <a href="#newsletterForm" class="btn btn-ghost" onclick="document.querySelector('.newsletter input').focus()">開催情報を受け取る</a>
     </div>
     <figure class="lesson-photo">
-      <img src="image/Beautiful_B.png" alt="ドレッサーでチークを塗る女性" loading="lazy" />
+      <img src="image/Beauty_B.jpg" alt="ドレッサーでチークを塗る女性" loading="lazy" />
     </figure>
   </section>`;
 

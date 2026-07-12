@@ -67,7 +67,8 @@ body {
 }
 
 .site-title {
-    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    font-size: clamp(1.2rem, 5.4vw, 2.8rem);
+    white-space: nowrap;
     margin: 8px 0 0;
     letter-spacing: .04em;
     line-height: 1.25;
@@ -144,14 +145,15 @@ body {
 }
 
 .hero .count-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: inline-block;
+    max-width: 92%;
+    line-height: 1.7;
+    text-align: center;
     background: var(--color-accent-2);
     color: #7a5b12;
     font-weight: 800;
-    padding: 6px 16px;
-    border-radius: 999px;
+    padding: 8px 20px;
+    border-radius: 22px;
     box-shadow: 0 4px 0 rgba(255, 111, 165, .18);
     margin-top: 6px;
 }
@@ -274,6 +276,9 @@ body {
 }
 
 @media (max-width: 520px) {
+    .hero .count-pill { font-size: .88rem; padding: 7px 14px; }
+    .hero .count-pill b { font-size: 1.05rem; }
+
     .menu {
         grid-template-columns: 1fr;
     }
@@ -323,6 +328,7 @@ body {
 }
 
 .menu-card .label {
+    display: block;
     font-size: 1.25rem;
     font-weight: 800;
     color: var(--color-primary-strong);
@@ -330,6 +336,8 @@ body {
 }
 
 .menu-card .desc {
+    display: block;
+    margin-top: 4px;
     font-size: .85rem;
     color: var(--color-text-muted);
     font-weight: 700;

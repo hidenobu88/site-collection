@@ -273,7 +273,7 @@ button { font-family: inherit; cursor: pointer; }
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
 }
 
-/* 明るい写真用のバナー(Beautiful_A.png):暗幕をかけず濃色テキストで */
+/* 明るい写真用のバナー(Beauty_A.jpg):暗幕をかけず濃色テキストで */
 .photo-banner--light .photo-banner-img::after { display: none; }
 .photo-banner--light .photo-banner-text {
   color: var(--ink);
@@ -289,7 +289,7 @@ button { font-family: inherit; cursor: pointer; }
   text-shadow: 0 1px 12px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 255, 0.7);
 }
 
-/* ── ビューティーレッスンバナー(Beautiful_B.png) ── */
+/* ── ビューティーレッスンバナー(Beauty_B.jpg) ── */
 .lesson-banner {
   max-width: 1180px;
   margin: 70px auto 0;

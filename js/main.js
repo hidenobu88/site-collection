@@ -123,7 +123,6 @@
         <div class="card-body">
           <div class="card-top">
             <span class="card-category">${escapeHtml(categoryLabel(p.category))}</span>
-            ${p.date ? `<span class="card-date">${escapeHtml(p.date)}</span>` : ""}
           </div>
           <h3 class="card-title">${escapeHtml(p.title)}</h3>
           <p class="card-desc">${escapeHtml(p.description)}</p>
