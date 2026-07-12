@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奇想美術館 | MUSEUM OF CURIOSITIES</title>
+<meta name="description" content="ピカソ風の絵、少し怖い絵、名画の超訳、哲学者の名言絵画。一度見たら、なぜかまた来たくなる架空の美術館です。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%91%81%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wall: #16131a;
+  --wall-2: #1f1a24;
+  --ink: #efe8da;
+  --muted: #9c93a6;
+  --gold: #c9a24b;
+  --gold-soft: #8a6f33;
+  --accent: #d84f68;
+  --frame-w: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,162,75,.10), transparent 70%),
+    linear-gradient(180deg, var(--wall) 0%, var(--wall-2) 100%);
+  color: var(--ink);
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img, svg { max-width: 100%; display: block; }
+
+/* ---------- ティッカー ---------- */
+.ticker {
+  overflow: hidden;
+  background: #0d0b10;
+  border-bottom: 1px solid #2c2434;
+  font-family: "DotGothic16", monospace;
+  font-size: 13px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.ticker span {
+  display: inline-block;
+  padding: 8px 0;
+  animation: tick 38s linear infinite;
+}
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ---------- ヘッダー ---------- */
+header.site {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px;
+  background: color-mix(in srgb, var(--wall) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #2c2434;
+}
+.logo { display: flex; align-items: center; gap: 10px; font-family: "Shippori Mincho B1", serif; font-weight: 800; font-size: 1.1rem; letter-spacing: .12em; }
+.logo .eye { width: 30px; height: 30px; }
+nav.g { display: flex; gap: 18px; font-size: .82rem; color: var(--muted); }
+nav.g a:hover { color: var(--gold); }
+@media (max-width: 640px) { nav.g { display: none; } }
+
+/* ---------- ヒーロー ---------- */
+.hero { text-align: center; padding: clamp(60px,10vw,110px) 20px 30px; position: relative; }
+.hero-en {
+  font-family: "DotGothic16", monospace;
+  letter-spacing: .5em; font-size: clamp(.65rem,1.8vw,.8rem); color: var(--muted);
+}
+.hero h1 {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: clamp(2.6rem, 9vw, 5.2rem);
+  font-weight: 800; letter-spacing: .08em; line-height: 1.25;
+  margin: 12px 0 4px;
+  text-shadow: 0 0 60px rgba(201,162,75,.35);
+}
+.hero h1 .tilt { display: inline-block; transform: rotate(-6deg) translateY(-6px); color: var(--gold); }
+.hero p.lead { color: var(--muted); font-size: clamp(.85rem,2.4vw,1rem); margin-top: 18px; }
+.hero .open-info {
+  display: inline-block; margin-top: 26px; padding: 10px 26px;
+  border: 1px solid var(--gold-soft); border-radius: 999px;
+  font-size: .8rem; color: var(--gold); letter-spacing: .1em;
+}
+
+/* ---------- セクション ---------- */
+section { max-width: 1080px; margin: 0 auto; padding: clamp(50px,8vw,90px) 20px 0; }
+.sec-head { text-align: center; margin-bottom: clamp(30px,5vw,50px); }
+.sec-head .en { font-family: "DotGothic16", monospace; font-size: .7rem; letter-spacing: .4em; color: var(--muted); }
+.sec-head h2 { font-family: "Shippori Mincho B1", serif; font-size: clamp(1.5rem,4.5vw,2.2rem); letter-spacing: .12em; margin-top: 6px; }
+.sec-head .rule { width: 60px; height: 2px; background: var(--gold); margin: 16px auto 0; }
+
+/* ---------- ギャラリー ---------- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px,100%), 1fr));
+  gap: clamp(26px,4vw,44px);
+}
+.piece { text-align: center; cursor: pointer; opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+.piece.in { opacity: 1; transform: translateY(0); }
+.frame {
+  position: relative;
+  background: linear-gradient(145deg, #d8b45e, #8a6f33 60%, #b89448);
+  padding: var(--frame-w);
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 2px #4a3b1d inset,
+    0 24px 44px rgba(0,0,0,.55),
+    0 0 90px rgba(201,162,75,.07);
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease;
+}
+.piece:hover .frame {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 0 0 2px #4a3b1d inset, 0 30px 60px rgba(0,0,0,.6), 0 0 120px rgba(201,162,75,.22);
+}
+.frame .art { background: #111; display: block; width: 100%; height: auto; }
+.plaque {
+  display: inline-block; margin-top: 16px; padding: 7px 18px;
+  background: #241f2b; border: 1px solid #352e40; border-radius: 4px;
+  font-size: .78rem; color: var(--ink); letter-spacing: .05em;
+}
+.plaque small { display: block; color: var(--muted); font-size: .68rem; letter-spacing: .1em; }
+
+/* ---------- 名言の間 ---------- */
+.quotes { background: transparent; }
+.quote-note { text-align: center; color: var(--muted); font-size: .8rem; margin-top: 26px; }
+
+/* ---------- モーダル ---------- */
+.modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(8,6,10,.88); backdrop-filter: blur(6px);
+  padding: 22px;
+}
+.modal.show { display: flex; }
+.modal-inner {
+  max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto;
+  background: var(--wall-2); border: 1px solid #352e40; border-radius: 10px;
+  padding: clamp(20px,4vw,34px); text-align: center;
+}
+.modal-inner .frame { max-width: 380px; margin: 0 auto; --tilt: 0deg; }
+.modal-inner h3 { font-family: "Shippori Mincho B1", serif; font-size: 1.2rem; letter-spacing: .08em; margin-top: 20px; }
+.modal-inner .meta { color: var(--gold); font-size: .74rem; letter-spacing: .14em; margin-top: 2px; }
+.modal-inner p.desc { text-align: left; color: #cfc6bb; font-size: .88rem; margin-top: 14px; }
+.modal-close {
+  margin-top: 22px; padding: 10px 34px; border-radius: 999px;
+  border: 1px solid var(--gold-soft); background: transparent; color: var(--gold);
+  font-family: inherit; font-size: .82rem; letter-spacing: .1em; cursor: pointer;
+}
+.modal-close:hover { background: rgba(201,162,75,.12); }
+
+/* ---------- 料金 ---------- */
+.price-wrap {
+  max-width: 720px; margin: 0 auto;
+  background: #1c1722; border: 1px solid #352e40; border-radius: 12px;
+  padding: clamp(22px,4vw,36px);
+}
+table.price { width: 100%; border-collapse: collapse; font-size: .9rem; }
+table.price th, table.price td { padding: 13px 8px; border-bottom: 1px dashed #3a3145; text-align: left; }
+table.price td { text-align: right; font-family: "Shippori Mincho B1", serif; color: var(--gold); font-size: 1rem; white-space: nowrap; }
+table.price small { color: var(--muted); display: block; font-size: .72rem; }
+.price-notes { margin-top: 16px; color: var(--muted); font-size: .76rem; line-height: 2; }
+
+/* ---------- 利用案内 ---------- */
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px,100%),1fr)); gap: 16px; max-width: 860px; margin: 0 auto; }
+.info-card { background: #1c1722; border: 1px solid #352e40; border-radius: 12px; padding: 22px; font-size: .85rem; }
+.info-card h3 { font-family: "Shippori Mincho B1", serif; color: var(--gold); font-size: .95rem; letter-spacing: .12em; margin-bottom: 8px; }
+.info-card p { color: #cfc6bb; }
+.info-card .sub { color: var(--muted); font-size: .76rem; }
+
+/* ---------- フッター ---------- */
+footer.site {
+  margin-top: clamp(60px,9vw,100px); padding: 36px 20px 46px;
+  border-top: 1px solid #2c2434; text-align: center; color: var(--muted); font-size: .76rem;
+}
+footer.site .fin { font-family: "Shippori Mincho B1", serif; color: var(--ink); font-size: 1rem; letter-spacing: .3em; margin-bottom: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .piece { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="ticker"><span id="ticker"></span></div>
+
+<header class="site">
+  <a class="logo" href="#top">
+    <svg class="eye" viewBox="0 0 40 40" aria-hidden="true">
+      <ellipse cx="20" cy="20" rx="18" ry="11" fill="none" stroke="#c9a24b" stroke-width="2"/>
+      <circle id="pupil" cx="20" cy="20" r="6" fill="#c9a24b"/>
+    </svg>
+    奇想美術館
+  </a>
+  <nav class="g">
+    <a href="#collection">常設展</a>
+    <a href="#quotes">名言の間</a>
+    <a href="#price">料金</a>
+    <a href="#guide">利用案内</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <p class="hero-en">MUSEUM OF CURIOSITIES — EST. 1889(自称)</p>
+    <h1>奇想<span class="tilt">美</span>術館</h1>
+    <p class="lead">ここは、少しだけ変わった絵ばかりを集めた美術館。<br>
+    一度見たら忘れられない。忘れられないから、また来てしまう。</p>
+    <span class="open-info">開館 10:00–18:00(金・土は20:00まで)|月曜休館</span>
+  </div>
+
+  <!-- 常設展 -->
+  <section id="collection">
+    <div class="sec-head">
+      <p class="en">PERMANENT COLLECTION</p>
+      <h2>常設展「歪んだ名画たち」</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <!-- 名言の間 -->
+  <section id="quotes" class="quotes">
+    <div class="sec-head">
+      <p class="en">HALL OF PHILOSOPHY</p>
+      <h2>名言の間 — 哲学者たちの絵</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="gallery" id="quoteGallery"></div>
+    <p class="quote-note">※ 額の前で3分立ち止まると、人生について考え始めます。当館は責任を負いません。</p>
+  </section>
+
+  <!-- 料金 -->
+  <section id="price">
+    <div class="sec-head">
+      <p class="en">ADMISSION</p>
+      <h2>観覧料金</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="price-wrap">
+      <table class="price">
+        <tr><th>一般</th><td>2,100円</td></tr>
+        <tr><th>大学生・専門学校生 <small>学生証をご提示ください</small></th><td>1,500円</td></tr>
+        <tr><th>高校生</th><td>900円</td></tr>
+        <tr><th>中学生以下</th><td>無料</td></tr>
+        <tr><th>ナイト割 <small>金・土 17:00以降の入館</small></th><td>1,600円</td></tr>
+        <tr><th>年間パスポート <small>何度でも。むしろ何度も来てしまいます</small></th><td>6,000円</td></tr>
+      </table>
+      <p class="price-notes">
+        ・障がい者手帳をお持ちの方と付添者1名は無料です<br>
+        ・20名以上の団体は各200円引き<br>
+        ・雨の日は「なんとなく寂しいので」全員100円引き
+      </p>
+    </div>
+  </section>
+
+  <!-- 利用案内 -->
+  <section id="guide">
+    <div class="sec-head">
+      <p class="en">INFORMATION</p>
+      <h2>ご利用案内</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>開館時間</h3>
+        <p>10:00 – 18:00<br>金・土曜は 20:00 まで</p>
+        <p class="sub">最終入館は閉館30分前。月曜休館(祝日の場合は翌火曜)。</p>
+      </div>
+      <div class="info-card">
+        <h3>アクセス</h3>
+        <p>幻想線「奇想前」駅 徒歩4分<br>東京都どこか区不思議町1-8-89</p>
+        <p class="sub">駐車場はありません。夢でお越しの方は入口が異なります。</p>
+      </div>
+      <div class="info-card">
+        <h3>館内のお願い</h3>
+        <p>写真撮影OK(フラッシュ不可)<br>模写・スケッチ歓迎</p>
+        <p class="sub">絵と目が合っても、先にそらさないでください。負けます。</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <p class="fin">奇想美術館</p>
+  <p>© 2026 Museum of Curiosities. このサイトはデモ用の架空美術館サイトです。実在の作品・団体とは関係ありません。</p>
+</footer>
+
+<!-- 作品モーダル -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-inner">
+    <div class="frame"><div id="modalArt"></div></div>
+    <h3 id="modalTitle"></h3>
+    <p class="meta" id="modalMeta"></p>
+    <p class="desc" id="modalDesc"></p>
+    <button class="modal-close" id="modalClose">閉じる</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+ * 作品データ(絵はすべてSVGで描いたオリジナルのオマージュです)
+ * ============================================================ */
+const svgWrap = (inner, ratio) =>
+  `<svg class="art" viewBox="0 0 300 ${ratio || 360}" xmlns="http://www.w3.org/2000/svg" role="img">${inner}</svg>`;
+
+const ARTWORKS = [
+  {
+    title: "泣きすぎた女",
+    meta: "油彩・キャンバス|1937年ごろ(たぶん)",
+    desc: "キュビスムの巨匠に強く影響を受けた作者が、玉ねぎを刻みながら描いた自画像。左右の目の高さが合っていないのは「涙で世界が歪んで見えたから」と本人は主張している。よく見ると口が2つあるが、片方は笑っている。",
+    art: svgWrap(`
+      <rect width="300" height="360" fill="#e8b93d"/>
+      <polygon points="0,0 160,0 110,360 0,360" fill="#d84f68"/>
+      <polygon points="160,0 300,0 300,200 140,180" fill="#2e6e8e"/>
+      <path d="M150 40 L95 120 L120 210 L90 300 L170 330 L210 220 L185 130 L215 60 Z" fill="#f3e4c8" stroke="#221d16" stroke-width="5"/>
+      <ellipse cx="128" cy="140" rx="24" ry="14" fill="#fff" stroke="#221d16" stroke-width="4" transform="rotate(-15 128 140)"/>
+      <circle cx="128" cy="140" r="6" fill="#221d16"/>
+      <ellipse cx="185" cy="175" rx="20" ry="12" fill="#fff" stroke="#221d16" stroke-width="4" transform="rotate(18 185 175)"/>
+      <circle cx="185" cy="175" r="5" fill="#221d16"/>
+      <path d="M120 165 q-14 40 6 78" fill="none" stroke="#2e6e8e" stroke-width="7" stroke-linecap="round"/>
+      <path d="M196 195 q10 42 -6 70" fill="none" stroke="#2e6e8e" stroke-width="7" stroke-linecap="round"/>
+      <path d="M130 265 q22 18 46 2" fill="none" stroke="#221d16" stroke-width="6" stroke-linecap="round"/>
+      <path d="M138 288 q16 -14 34 -2" fill="none" stroke="#221d16" stroke-width="5" stroke-linecap="round"/>
+      <path d="M150 40 L165 90 L185 130" fill="none" stroke="#221d16" stroke-width="5"/>
+    `)
+  },
+  {
+    title: "まばたきを忘れた男",
+    meta: "油彩・板|制作年不詳(本人も不詳)",
+    desc: "閉館後の見回りで、警備員が「昨日と目の位置が違う」と報告し続けている問題作。X線調査の結果、下層からさらに大きな目が見つかったため、調査は中止された。長く見つめないことを推奨します。",
+    art: svgWrap(`
+      <rect width="300" height="360" fill="#12100e"/>
+      <ellipse cx="150" cy="205" rx="95" ry="125" fill="#241f1a"/>
+      <path d="M150 80 q70 10 62 120 q-6 100 -62 110 q-56 -10 -62 -110 q-8 -110 62 -120" fill="#3a322a"/>
+      <ellipse cx="150" cy="330" rx="110" ry="40" fill="#0c0a08"/>
+      <ellipse cx="118" cy="185" rx="21" ry="26" fill="#efe8da"/>
+      <circle cx="118" cy="188" r="7" fill="#0c0a08"/>
+      <ellipse cx="182" cy="185" rx="21" ry="26" fill="#efe8da"/>
+      <circle cx="182" cy="182" r="7" fill="#0c0a08"/>
+      <path d="M138 262 h24" stroke="#0c0a08" stroke-width="5" stroke-linecap="round"/>
+      <path d="M96 150 q22 -18 44 -6 M160 144 q22 -12 44 6" fill="none" stroke="#0c0a08" stroke-width="6"/>
+      <circle cx="150" cy="60" r="3" fill="#c9a24b"/>
+    `)
+  },
+  {
+    title: "最後の晩餐(超訳)",
+    meta: "テンペラ・漆喰|1498年 → 2026年 再解釈",
+    desc: "「全員がスマホを見ていたら、誰も裏切りに気づかないのでは」という着想から再構成された問題作。中央の人物だけが皿を見ている。原作と同じく、この絵も少しずつ剥がれ続けているが、修復のたびに人が1人増えている。",
+    art: svgWrap(`
+      <rect width="300" height="200" fill="#4a3b2a"/>
+      <rect x="20" y="20" width="260" height="110" fill="#6b5638"/>
+      <rect x="130" y="30" width="40" height="70" fill="#efe8da" opacity=".85"/>
+      <rect x="30" y="130" width="240" height="16" fill="#efe8da"/>
+      <rect x="34" y="146" width="232" height="34" fill="#8a6f33"/>
+      ${[46,76,106,150,194,224,254].map((x,i)=>`
+        <circle cx="${x}" cy="${i===3?112:118}" r="12" fill="${i===3?"#e8b93d":"#d9c9a8"}"/>
+        <rect x="${x-10}" y="${i===3?122:128}" width="20" height="26" rx="6" fill="${["#8e3b46","#2e6e8e","#556b2f","#e8b93d","#5a4a7a","#a0522d","#2f4f4f"][i]}"/>
+      `).join("")}
+      <circle cx="150" cy="137" r="5" fill="#c9a24b"/>
+    `, 200)
+  },
+  {
+    title: "牛乳を注ぐ女(無限)",
+    meta: "油彩・キャンバス|1658年 → 現在も注いでいる",
+    desc: "オランダ絵画の静謐な名作へのオマージュ。ただしこの絵の牛乳は368年間、一度も途切れたことがない。器はとっくに満タンのはずだが、床は濡れていない。牛乳がどこへ行くのかは、当館の七不思議のひとつ。",
+    art: svgWrap(`
+      <rect width="300" height="360" fill="#d9cfae"/>
+      <rect x="0" y="0" width="300" height="360" fill="#c8bd97"/>
+      <rect x="20" y="30" width="90" height="120" fill="#e9e2c8"/>
+      <rect x="26" y="36" width="78" height="108" fill="#f4efdd"/>
+      <path d="M120 130 q40 -55 95 -12 l18 82 q-60 26 -118 6 Z" fill="#2e6e8e"/>
+      <path d="M150 96 q30 -26 58 4 l6 34 q-36 14 -66 2 Z" fill="#e8b93d"/>
+      <circle cx="185" cy="78" r="26" fill="#e7c9a4"/>
+      <path d="M162 66 q22 -20 46 2 l-4 -18 q-20 -14 -38 0 Z" fill="#fff" opacity=".9"/>
+      <path d="M148 176 l30 10 q10 4 16 -2" fill="none" stroke="#e7c9a4" stroke-width="12" stroke-linecap="round"/>
+      <path d="M196 186 q4 0 8 -4 l6 6 q-6 8 -14 6 Z" fill="#b56a3c"/>
+      <path d="M205 192 q3 36 0 74" stroke="#fffdf4" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="206" cy="278" rx="34" ry="16" fill="#8a5a30"/>
+      <ellipse cx="206" cy="272" rx="34" ry="14" fill="#a06a3a"/>
+      <ellipse cx="206" cy="270" rx="26" ry="9" fill="#fffdf4"/>
+      <rect x="40" y="300" width="230" height="60" fill="#7a6a4a"/>
+      <text x="150" y="345" text-anchor="middle" font-size="13" fill="#efe8da" font-family="serif" letter-spacing="2">∞</text>
+    `)
+  },
+  {
+    title: "舟遊びをする人々の昼食(声だけ)",
+    meta: "油彩・キャンバス|1881年 → 音声のみ現存",
+    desc: "印象派の傑作へのオマージュ。楽しげな昼食の場面を描いたはずが、完成後に人物が全員どこかへ遊びに行ってしまい、現在は「気配」だけが残っている。耳を澄ますと、グラスの音と笑い声が聞こえるらしい。帽子だけは律儀に残っている。",
+    art: svgWrap(`
+      <rect width="300" height="240" fill="#bcd4e0"/>
+      <rect x="0" y="150" width="300" height="90" fill="#8fb8c9"/>
+      <path d="M0 0 h300 v60 q-150 30 -300 0 Z" fill="#f0e2b8" opacity=".9"/>
+      <rect x="30" y="150" width="240" height="26" rx="6" fill="#fffdf4"/>
+      <ellipse cx="80" cy="150" rx="16" ry="6" fill="#e8b93d"/>
+      <ellipse cx="150" cy="148" rx="14" ry="6" fill="#d84f68"/>
+      <ellipse cx="222" cy="150" rx="16" ry="6" fill="#556b2f"/>
+      <path d="M60 130 q10 -14 24 -6 M140 126 q10 -12 22 -4 M208 128 q12 -12 24 -4" stroke="#9c93a6" stroke-width="3" fill="none" opacity=".8"/>
+      <circle cx="100" cy="163" r="7" fill="#bcd4e0" stroke="#8fb8c9" stroke-width="2"/>
+      <circle cx="185" cy="161" r="6" fill="#bcd4e0" stroke="#8fb8c9" stroke-width="2"/>
+      <text x="150" y="205" text-anchor="middle" font-size="12" fill="#3f5a66" font-family="serif" letter-spacing="3">・・・ハハハ・・・</text>
+      <text x="90" y="222" text-anchor="middle" font-size="9" fill="#3f5a66" opacity=".7" font-family="serif">(グラスの音)</text>
+    `, 240)
+  },
+  {
+    title: "月曜日の自画像",
+    meta: "ミクストメディア|毎週月曜に更新",
+    desc: "作者が毎週月曜の朝の気分を描き足し続けている現在進行形の作品。顔が溶けているのは技法ではなく実感。不思議なことに、金曜の夕方になるとほんの少しだけ輪郭が戻る。当館でもっとも共感を集める一枚。",
+    art: svgWrap(`
+      <rect width="300" height="360" fill="#5a4a7a"/>
+      <circle cx="150" cy="120" r="70" fill="#e7c9a4"/>
+      <path d="M80 120 q0 90 18 150 q8 26 -10 30 q30 10 34 -24 q4 40 28 40 q24 0 28 -40 q4 34 34 24 q-18 -4 -10 -30 q18 -60 18 -150 Z" fill="#e7c9a4"/>
+      <ellipse cx="122" cy="112" rx="10" ry="16" fill="#221d16"/>
+      <ellipse cx="178" cy="120" rx="10" ry="12" fill="#221d16"/>
+      <path d="M122 150 q28 26 56 -6" stroke="#221d16" stroke-width="6" fill="none" stroke-linecap="round" transform="rotate(180 150 160)"/>
+      <path d="M96 60 q54 -30 108 0 q-8 -44 -54 -44 q-46 0 -54 44" fill="#221d16"/>
+      <text x="150" y="330" text-anchor="middle" font-size="15" fill="#efe8da" font-family="serif" letter-spacing="4">MON.</text>
+    `)
+  }
+];
+
+const QUOTES = [
+  {
+    title: "洞窟の囚人たち",
+    meta: "プラトン『国家』より|影絵・光",
+    desc: "「われわれが見ているものは、真実の影にすぎない」——プラトンの洞窟の比喩を絵にしたもの。壁に映る影だけを見て育った囚人は、影こそが世界のすべてだと信じてしまう。スマホの画面を見ているあなたへ、2400年前からのメッセージ。",
+    art: svgWrap(`
+      <rect width="300" height="240" fill="#0c0a08"/>
+      <path d="M0 0 h300 v240 h-300 Z" fill="#171310"/>
+      <ellipse cx="250" cy="120" rx="70" ry="120" fill="#e8b93d" opacity=".18"/>
+      <circle cx="262" cy="60" r="18" fill="#e8b93d"/>
+      <path d="M60 190 l-14 40 M60 190 l16 40 M60 190 v-36 q0 -14 12 -14" stroke="#39302a" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <circle cx="78" cy="132" r="13" fill="#39302a"/>
+      <path d="M40 90 q18 44 6 96 l-8 0 q8 -50 -6 -92 Z" fill="#000" opacity=".85"/>
+      <circle cx="34" cy="78" r="11" fill="#000" opacity=".85"/>
+      <text x="150" y="222" text-anchor="middle" font-size="11" fill="#9c93a6" font-family="serif" letter-spacing="2">君が見ているのは、影かもしれない。</text>
+    `, 240)
+  },
+  {
+    title: "習慣という名の彫像",
+    meta: "アリストテレス『ニコマコス倫理学』より|大理石(のつもり)",
+    desc: "「人は、繰り返し行うことの集大成である。ゆえに卓越とは行為ではなく、習慣である」——アリストテレスの言葉を彫像にしたもの。毎日少しずつ姿勢が良くなっており、10年後には完全に立ち上がる予定。あなたの毎日も、こうして形になっていく。",
+    art: svgWrap(`
+      <rect width="300" height="240" fill="#241f2b"/>
+      <rect x="90" y="180" width="120" height="34" fill="#8a8194"/>
+      <rect x="100" y="170" width="100" height="12" fill="#a89fb3"/>
+      <path d="M150 60 q34 4 36 44 q2 34 -18 46 l8 20 h-52 l8 -20 q-20 -12 -18 -46 q2 -40 36 -44" fill="#cfc6d8"/>
+      <circle cx="150" cy="52" r="22" fill="#cfc6d8"/>
+      <path d="M136 50 q14 12 28 0" stroke="#241f2b" stroke-width="3" fill="none"/>
+      <circle cx="141" cy="44" r="2.6" fill="#241f2b"/><circle cx="159" cy="44" r="2.6" fill="#241f2b"/>
+      <text x="150" y="230" text-anchor="middle" font-size="11" fill="#9c93a6" font-family="serif" letter-spacing="1">卓越とは、行為ではなく習慣である。</text>
+    `, 240)
+  }
+];
+
+/* ---------- 描画 ---------- */
+function renderGallery(list, el) {
+  list.forEach((a, i) => {
+    const d = document.createElement("div");
+    d.className = "piece";
+    d.style.setProperty("--tilt", ((i % 2 ? 1 : -1) * (1.2 + (i % 3))) + "deg");
+    d.innerHTML = `<div class="frame">${a.art}</div>
+      <span class="plaque">${a.title}<small>${a.meta}</small></span>`;
+    d.addEventListener("click", () => openModal(a));
+    el.appendChild(d);
+  });
+}
+renderGallery(ARTWORKS, document.getElementById("gallery"));
+renderGallery(QUOTES, document.getElementById("quoteGallery"));
+
+/* ---------- スクロールで浮かび上がる ---------- */
+const io = new IntersectionObserver((es) => {
+  es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+}, { threshold: .12 });
+document.querySelectorAll(".piece").forEach((p, i) => {
+  p.style.transitionDelay = (i % 3) * 90 + "ms";
+  io.observe(p);
+});
+
+/* ---------- モーダル ---------- */
+const modal = document.getElementById("modal");
+function openModal(a) {
+  document.getElementById("modalArt").innerHTML = a.art;
+  document.getElementById("modalTitle").textContent = a.title;
+  document.getElementById("modalMeta").textContent = a.meta;
+  document.getElementById("modalDesc").textContent = a.desc;
+  modal.classList.add("show");
+}
+document.getElementById("modalClose").addEventListener("click", () => modal.classList.remove("show"));
+modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") modal.classList.remove("show"); });
+
+/* ---------- ロゴの目がカーソルを追う ---------- */
+const pupil = document.getElementById("pupil");
+document.addEventListener("pointermove", (e) => {
+  const dx = (e.clientX / innerWidth - .5) * 10;
+  const dy = (e.clientY / innerHeight - .5) * 6;
+  pupil.setAttribute("cx", 20 + dx);
+  pupil.setAttribute("cy", 20 + dy);
+});
+
+/* ---------- ティッカー ---------- */
+const NEWS = [
+  "本日、モナリザは欠勤です(当館に所蔵はありませんが)",
+  "『まばたきを忘れた男』と目が合った方は、お近くのスタッフまで",
+  "雨の日割引、実施中。傘の忘れ物は絵の中にあります",
+  "夜間開館(金・土)では、絵が少しだけ元気です",
+  "年間パスポート発売中。3回で元が取れます。3回来てしまいます",
+  "『牛乳を注ぐ女(無限)』の牛乳、本日も途切れておりません(368年目)",
+];
+const line = NEWS.map((n) => `◆ ${n}`).join("　　") + "　　";
+document.getElementById("ticker").textContent = line + line;
+</script>
+</body>
+</html>

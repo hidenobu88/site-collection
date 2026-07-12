@@ -114,6 +114,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "奇想美術館 — MUSEUM OF CURIOSITIES",
+    description: "少し変な絵ばかりを集めた架空の美術館。キュビスム風の肖像、少し怖い絵、名画の超訳、プラトンやアリストテレスの名言絵画などをSVGで描き起こした常設展。絵をクリックすると学芸員の解説が読めます。",
+    url: "works/kiso-museum/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript", "SVG"],
+    emoji: "👁️",
+    image: "images/kiso-museum.png",
+    date: "2026.07",
+  },
+  {
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
