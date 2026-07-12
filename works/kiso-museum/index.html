@@ -90,7 +90,9 @@ nav.g a:hover { color: var(--gold); }
 section { max-width: 1080px; margin: 0 auto; padding: clamp(50px,8vw,90px) 20px 0; }
 .sec-head { text-align: center; margin-bottom: clamp(30px,5vw,50px); }
 .sec-head .en { font-family: "DotGothic16", monospace; font-size: .7rem; letter-spacing: .4em; color: var(--muted); }
-.sec-head h2 { font-family: "Shippori Mincho B1", serif; font-size: clamp(1.5rem,4.5vw,2.2rem); letter-spacing: .12em; margin-top: 6px; }
+.sec-head h2 { font-family: "Shippori Mincho B1", serif; font-size: clamp(1.3rem,5.4vw,2.2rem); letter-spacing: .08em; margin-top: 6px; white-space: nowrap; }
+.lead-1 { white-space: nowrap; }
+@media (max-width: 400px) { .sec-head h2 { letter-spacing: .02em; } }
 .sec-head .rule { width: 60px; height: 2px; background: var(--gold); margin: 16px auto 0; }
 
 /* ---------- ギャラリー ---------- */
@@ -210,7 +212,7 @@ footer.site .fin { font-family: "Shippori Mincho B1", serif; color: var(--ink); 
   <div class="hero">
     <p class="hero-en">MUSEUM OF CURIOSITIES — EST. 1889(自称)</p>
     <h1>奇想<span class="tilt">美</span>術館</h1>
-    <p class="lead"><span class="lead-1">ここは、少しだけ変わった絵ばかりを集めた美術館。</span><br>
+    <p class="lead"><span class="lead-1">ここは、少し変わった絵ばかりを集めた美術館。</span><br>
     一度見たら忘れられない。忘れられないから、また来てしまう。</p>
     <span class="open-info">開館 10:00–18:00(金・土は20:00まで)<br>月曜休館</span>
   </div>
@@ -290,7 +292,7 @@ footer.site .fin { font-family: "Shippori Mincho B1", serif; color: var(--ink); 
 
 <footer class="site">
   <p class="fin">奇想美術館</p>
-  <p>© 2026 Museum of Curiosities. このサイトはデモ用の架空美術館サイトです。実在の作品・団体とは関係ありません。</p>
+  <p>© 2026 Museum of Curiosities.<br>このサイトはデモ用の架空美術館サイトです。</p>
 </footer>
 
 <!-- 作品モーダル -->
