@@ -134,6 +134,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "STRIDE FITNESS CLUB — スポーツジムサイト",
+    description: "24時間ジム・25mプール・スタジオを備えた架空の総合フィットネスクラブ。施設紹介、週間レッスン表、4つの料金プラン、入会キャンペーン、FAQまで実在するかのような情報量でまとめたモダンなサイトです。",
+    url: "works/stride-fitness/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "💪",
+    image: "images/stride-fitness.png",
+    date: "2026.07",
+  },
+  {
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
