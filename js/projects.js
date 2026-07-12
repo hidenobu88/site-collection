@@ -11,7 +11,7 @@
 
 /* ---------- 基本設定 ---------- */
 const PROFILE = {
-  name: "Hidenobu Kimura",        // ← お名前（フッターの © 表記に使用）
+  name: "Hidenobu/Toranobu",      // ← お名前（フッターの © 表記に使用）
   siteName: "Site Collection",    // ← サイト名（ヘッダー・フッターに表示）
 };
 
