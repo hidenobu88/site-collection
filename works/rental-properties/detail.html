@@ -19,6 +19,9 @@
         <a href="index.html?type=mansion">マンション</a>
         <a href="index.html?type=tower">タワーマンション</a>
       </nav>
+      <button type="button" id="navToggle" class="nav-toggle" aria-label="メニューを開閉する" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
 
@@ -92,5 +95,25 @@
   <script src="js/data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/detail.js"></script>
+
+<script>
+  (function () {
+    var toggle = document.getElementById("navToggle");
+    var nav = document.querySelector(".header-nav");
+    if (!toggle || !nav) return;
+    toggle.addEventListener("click", function () {
+      var open = nav.classList.toggle("open");
+      toggle.classList.toggle("open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+    });
+    nav.querySelectorAll("a, button").forEach(function (el) {
+      el.addEventListener("click", function () {
+        nav.classList.remove("open");
+        toggle.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  })();
+</script>
 </body>
 </html>

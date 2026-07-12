@@ -92,6 +92,57 @@ button { font-family: inherit; cursor: pointer; }
   color: #e11d48;
 }
 
+/* ---------- ハンバーガーメニュー(スマホ・タブレット) ---------- */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 840px) {
+  .nav-toggle { display: flex; }
+  .header-nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    font-size: 14px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 14px 24px rgba(15, 23, 42, 0.12);
+  }
+  .header-nav.open { display: flex; }
+  .header-nav a, .header-nav button {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    text-align: center;
+    font-size: 14px;
+  }
+}
+
 /* ---------- ヒーロー ---------- */
 .hero {
   background: linear-gradient(135deg, var(--primary) 0%, #0d9488 60%, #14b8a6 100%);
@@ -682,6 +733,4 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 520px) {
   .hero h1 { font-size: 20px; }
   .room-grid { grid-template-columns: 1fr; }
-  .header-nav { font-size: 11px; }
-  .header-nav a, .header-nav button { padding: 6px 10px; }
 }
