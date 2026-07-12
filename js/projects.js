@@ -124,6 +124,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "NEON 2048 — スライドパズル",
+    description: "ネオンデザインの2048風パズルゲーム。タイルをスライドして同じ数字を合体させ、2048を目指します。スマホはスワイプ、PCは矢印キーで操作。ベストスコアは端末に自動保存されます。",
+    url: "works/neon-2048/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🎯",
+    image: "images/neon-2048.png",
+    date: "2026.07",
+  },
+  {
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
