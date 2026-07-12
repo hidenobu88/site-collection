@@ -168,6 +168,11 @@
       text-transform: uppercase;
     }
     .info-card p { font-size: 0.8rem; font-weight: 700; color: #c9d4f5; line-height: 1.8; }
+    .cards { display: flex; justify-content: center; }
+    .info-card.solo { max-width: 420px; width: 100%; padding: 30px 26px; }
+    .info-card.solo .ico { font-size: 2.3rem; }
+    .info-card.solo h2 { font-size: 1.25rem; }
+    .info-card.solo p { font-size: 0.9rem; }
 
     footer { margin-top: 64px; font-size: 0.75rem; font-weight: 700; color: #8792c9; position: relative; z-index: 1; }
   </style>
@@ -180,15 +185,8 @@
     <h1>Toranobu<span class="accent">Game</span></h1>
 
     <p class="lead">
-      UEFN(Unreal Editor for Fortnite)とプログラミング言語 Verse を使って開発した、フォートナイトのオリジナルマップです。下のボタンから公式クリエイターページに移動して、実際にプレイできます。
+      下のボタンから公式クリエイターページに移動して、実際にプレイできます。
     </p>
-
-    <div class="tags">
-      <span class="tag">UEFN</span>
-      <span class="tag">VERSE</span>
-      <span class="tag">FORTNITE</span>
-      <span class="tag">GAME DESIGN</span>
-    </div>
 
     <a class="play" href="https://www.fortnite.com/@toranobu_game" target="_blank" rel="noopener noreferrer">
       <span>🎮 マップで あそぶ！</span>
@@ -196,17 +194,7 @@
     <p class="sub-note">fortnite.com の公式クリエイターページ(@toranobu_game)が開きます</p>
 
     <div class="cards">
-      <div class="info-card">
-        <span class="ico">🛠️</span>
-        <h2>UEFN</h2>
-        <p>Unreal Engine ベースの公式エディタでマップの地形・仕掛け・演出を制作</p>
-      </div>
-      <div class="info-card">
-        <span class="ico">📜</span>
-        <h2>Verse</h2>
-        <p>Epic Games 開発のプログラミング言語でゲームロジックを実装</p>
-      </div>
-      <div class="info-card">
+      <div class="info-card solo">
         <span class="ico">🏝️</span>
         <h2>Play Now</h2>
         <p>フォートナイト内でマップコードを入力、またはクリエイターページから直接プレイ</p>
