@@ -139,6 +139,7 @@ table.schedule td span { display: block; font-size: .66rem; color: var(--muted);
 .fee-box h3 { font-size: .95rem; font-weight: 900; margin-bottom: 10px; }
 table.fee { width: 100%; border-collapse: collapse; font-size: .86rem; }
 table.fee th, table.fee td { text-align: left; padding: 10px 6px; border-bottom: 1px dashed var(--line); }
+table.fee th { line-height: 1.5; }
 table.fee td { text-align: right; font-family: "Oswald", sans-serif; font-size: 1rem; white-space: nowrap; }
 table.fee td.zero { color: var(--lime-dark); font-weight: 700; }
 table.fee td .strike { text-decoration: line-through; color: #b3bab5; font-size: .8rem; margin-right: 8px; }
@@ -186,6 +187,11 @@ table.fee td .strike { text-decoration: line-through; color: #b3bab5; font-size:
 footer.site { background: var(--dark); color: #9fb0a6; text-align: center; padding: 30px 20px 40px; font-size: .74rem; }
 footer.site .flogo { font-family: "Oswald", sans-serif; color: #fff; font-size: 1rem; letter-spacing: .1em; margin-bottom: 6px; }
 
+
+/* スマホで1行維持したい見出し・要素 */
+@media (max-width: 480px) {
+  .nowrap-title { font-size: clamp(1.15rem, 6.4vw, 1.6rem); white-space: nowrap; }
+}
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
@@ -239,7 +245,7 @@ footer.site .flogo { font-family: "Oswald", sans-serif; color: #fff; font-size: 
       <p class="sec-lead">フィットネスは、はじめることより続けることのほうが難しい。STRIDEは「通いたくなる仕掛け」を空間・プログラム・サポートのすべてに込めました。</p>
       <div class="concept-grid">
         <div class="concept-card reveal"><p class="no en">01</p><h3>いつでも、あなたの時間で</h3><p>ジムエリアは24時間365日オープン。仕事前の朝活も、終電後のリフレッシュも。専用アプリのQRコードでスムーズに入退館できます。</p></div>
-        <div class="concept-card reveal"><p class="no en">02</p><h3>プロがつくる、あなたのメニュー</h3><p>入会時に体組成測定+カウンセリングを無料で実施。経験豊富なトレーナーが、目的と体力に合わせたプランを設計します。</p></div>
+        <div class="concept-card reveal"><p class="no en">02</p><h3>プロが作る、あなたのメニュー</h3><p>入会時に体組成測定+カウンセリングを無料で実施。経験豊富なトレーナーが、目的と体力に合わせたプランを設計します。</p></div>
         <div class="concept-card reveal"><p class="no en">03</p><h3>鍛えたあとまで、心地よく</h3><p>サウナ・スパ・パウダールームを完備。トレーニング後はプロテインバー併設のラウンジでひと息。「ジムなのに長居したくなる」と好評です。</p></div>
       </div>
     </div>
@@ -284,7 +290,7 @@ footer.site .flogo { font-family: "Oswald", sans-serif; color: #fff; font-size: 
   <section id="lesson">
     <div class="container">
       <p class="sec-label en">LESSON</p>
-      <h2 class="sec-title">スタジオ&プールレッスン</h2>
+      <h2 class="sec-title nowrap-title">スタジオ&プールレッスン</h2>
       <p class="sec-lead">初心者向けから上級者向けまで、週40本以上。すべて月会費内で参加できます(パーソナルを除く)。気になるレッスンをクリックすると詳細がご覧いただけます。</p>
       <div class="photo-grid">
         <a class="p-card reveal" href="lesson-yoga.html">
@@ -361,8 +367,8 @@ footer.site .flogo { font-family: "Oswald", sans-serif; color: #fff; font-size: 
         <h3>初期費用(全プラン共通)</h3>
         <table class="fee">
           <tr><th>入会金</th><td class="zero"><span class="strike">¥5,500</span>キャンペーン中 ¥0</td></tr>
-          <tr><th>事務手数料</th><td>¥3,300</td></tr>
-          <tr><th>会員カード発行(アプリ利用なら不要)</th><td>¥0</td></tr>
+          <tr><th style="white-space:nowrap">事務手数料</th><td>¥3,300</td></tr>
+          <tr><th>会員カード発行<br><small style="color:var(--muted);font-weight:500;font-size:.78rem">(アプリ利用なら不要)</small></th><td>¥0</td></tr>
         </table>
         <p class="fee-note">・お支払いは口座振替またはクレジットカードに対応しています<br>・パーソナルトレーニングは30分 ¥3,850 / 60分 ¥6,600(会員価格)で追加できます<br>・ビジター(1日利用)は ¥3,300。見学・体験(60分)は無料です</p>
       </div>
@@ -377,7 +383,7 @@ footer.site .flogo { font-family: "Oswald", sans-serif; color: #fff; font-size: 
         <span class="period">2026.3.1(日) – 4.30(木) 期間限定</span>
         <h3>春のスタートキャンペーン<br><b>入会金 ¥5,500 → ¥0</b> + <b>初月会費 半額</b></h3>
         <p>さらにWEB入会の方には、パーソナルトレーニング(60分)1回分を無料プレゼント。<br>新生活と一緒に、新しい習慣をはじめませんか?</p>
-        <a class="btn" href="#access">無料見学・体験を予約する →</a>
+        <a class="btn" href="#access" style="white-space:nowrap">無料見学・体験を予約する →</a>
         <p class="campaign-small">※ 6ヶ月以上の継続利用が条件です。ほかの割引との併用はできません。見学・体験はデモサイトのためダミーです。</p>
       </div>
     </div>

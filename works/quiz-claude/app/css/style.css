@@ -146,14 +146,14 @@ body {
 
 .hero .count-pill {
     display: inline-block;
-    max-width: 92%;
-    line-height: 1.7;
+    max-width: 96vw;
+    white-space: nowrap;
     text-align: center;
     background: var(--color-accent-2);
     color: #7a5b12;
     font-weight: 800;
     padding: 8px 20px;
-    border-radius: 22px;
+    border-radius: 999px;
     box-shadow: 0 4px 0 rgba(255, 111, 165, .18);
     margin-top: 6px;
 }
@@ -619,9 +619,10 @@ body {
 }
 
 .overlay .verdict {
-    font-size: clamp(3rem, 16vw, 7rem);
+    font-size: clamp(2.6rem, 14vw, 7rem);
     font-weight: 900;
     letter-spacing: .05em;
+    white-space: nowrap;
     text-shadow: 0 4px 0 #fff, 0 6px 12px rgba(0, 0, 0, .12);
 }
 

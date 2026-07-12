@@ -964,6 +964,9 @@ button { font-family: inherit; cursor: pointer; }
   .topbar { font-size: 0.68rem; }
   .logo-main { font-size: 1.4rem; }
 
+  /* 「これひとつで、ぜんぶ揃う。」を1行に収める(はみ出さない大きさに) */
+  .brand-message-text h2 { font-size: clamp(1.25rem, 5.6vw, 1.8rem); }
+
   .hero h1 { font-size: 2rem; }
   .hero-lead br { display: none; }
   .hero-stats { gap: 24px; }

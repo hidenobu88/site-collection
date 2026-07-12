@@ -116,6 +116,11 @@ header{
 nav{display:flex;gap:1.6rem;flex-wrap:wrap;justify-content:flex-end}
 nav a{font-size:.78rem;letter-spacing:.22em;color:var(--bone-dim);transition:.3s;position:relative}
 nav a:hover{color:var(--blood-bright);text-shadow:0 0 12px rgba(212,20,20,.8)}
+.nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,20,20,.5);border-radius:6px;cursor:pointer;z-index:60}
+.nav-toggle span{height:2px;background:var(--bone);border-radius:2px;transition:transform .25s,opacity .2s}
+.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--blood-bright)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--blood-bright)}
 
 /* ========================================
    hero
@@ -444,9 +449,22 @@ footer .copy .r{color:var(--blood-deep)}
   .info-grid{grid-template-columns:1fr}
 }
 @media (max-width:600px){
-  header{flex-direction:column;gap:.5rem;padding:.8rem 4vw}
-  nav{gap:1rem;justify-content:center}
-  nav a{font-size:.7rem}
+  header{padding:.8rem 5vw}
+  .nav-toggle{display:flex}
+  header nav{
+    position:fixed;top:0;right:0;
+    width:min(74vw,300px);height:100vh;
+    flex-direction:column;justify-content:center;gap:2rem;
+    padding:2rem;background:rgba(6,5,5,.97);
+    border-left:1px solid rgba(212,20,20,.4);
+    box-shadow:-20px 0 50px rgba(0,0,0,.7);
+    transform:translateX(100%);transition:transform .35s ease;
+  }
+  header nav.open{transform:translateX(0)}
+  header nav a{font-size:.95rem;letter-spacing:.3em}
+  /* フッターのメニューは1つずつ縦並びに */
+  footer nav{position:static;width:auto;height:auto;transform:none;background:none;border:none;box-shadow:none;flex-direction:column;gap:1.2rem;padding:0}
+  footer nav a{font-size:.82rem}
   section{padding:4.5rem 6vw}
   .stories,.gallery,.tickets{grid-template-columns:1fr}
   .tk.special{grid-column:span 1;grid-template-columns:1fr;text-align:center}
@@ -499,7 +517,8 @@ footer .copy .r{color:var(--blood-deep)}
 <!-- ======== header ======== -->
 <header>
   <a class="logo" href="#top">黒井戸ノ家 <b>―KUROIDO―</b></a>
-  <nav>
+  <button class="nav-toggle" id="navToggle" aria-label="メニューを開閉する" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav id="gnav">
     <a href="#about">呪いの起源</a>
     <a href="#stories">恐怖体験</a>
     <a href="#photos">心霊写真</a>
@@ -931,6 +950,24 @@ footer .copy .r{color:var(--blood-deep)}
       osc1.start(); osc2.start();
       gain.gain.linearRampToValueAtTime(.035, ctx.currentTime + 6);
     }catch(e){ /* 音が出せない環境では沈黙のまま */ }
+  }
+
+  /* ---- ハンバーガーメニュー ---- */
+  var navToggle = document.getElementById("navToggle");
+  var gnav = document.getElementById("gnav");
+  if(navToggle && gnav){
+    navToggle.addEventListener("click", function(){
+      var open = gnav.classList.toggle("open");
+      navToggle.classList.toggle("open", open);
+      navToggle.setAttribute("aria-expanded", String(open));
+    });
+    gnav.querySelectorAll("a").forEach(function(a){
+      a.addEventListener("click", function(){
+        gnav.classList.remove("open");
+        navToggle.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
   }
 })();
 </script>

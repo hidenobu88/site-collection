@@ -20,6 +20,15 @@
 .profile-table { width:100%; border-collapse: collapse; font-size:.92rem; }
 .profile-table th, .profile-table td { border-bottom:1px solid #ffe3ec; padding: 9px 8px; text-align:left; }
 .profile-table th { color:#e0607e; white-space:nowrap; }
+@media (max-width: 620px) {
+  .profile-table thead { display:none; }
+  .profile-table, .profile-table tbody { display:block; }
+  .profile-table tr { display:block; background:#fff; border:1px solid #ffe0ea; border-radius:14px; padding:6px 14px; margin-bottom:14px; box-shadow:0 4px 12px rgba(255,143,171,.1); }
+  .profile-table td { display:flex; justify-content:space-between; gap:14px; border:none; border-bottom:1px dashed #ffe3ec; padding:9px 0; text-align:right; font-size:.9rem; }
+  .profile-table tr td:last-child { border-bottom:none; }
+  .profile-table td::before { content:attr(data-label); font-weight:700; color:#e0607e; text-align:left; white-space:nowrap; }
+  .profile-table td:first-child { font-weight:800; font-size:1rem; }
+}
 </style>
 </head>
 <body>
@@ -70,10 +79,14 @@
 <script>
 (function(){
   var tbody = document.getElementById("profileBody");
+  var LABELS = ["なまえ","種類","原産国","サイズ","性格","好きなあそび"];
   CATS.forEach(function(a){
     var tr = document.createElement("tr");
-    [a.name, a.breed, a.origin, a.size, a.personality, a.like].forEach(function(v){
-      var td = document.createElement("td"); td.textContent = v; tr.appendChild(td);
+    [a.name, a.breed, a.origin, a.size, a.personality, a.like].forEach(function(v, i){
+      var td = document.createElement("td");
+      td.textContent = v;
+      td.setAttribute("data-label", LABELS[i]);
+      tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });

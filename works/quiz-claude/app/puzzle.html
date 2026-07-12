@@ -147,12 +147,20 @@
         } catch (e) { /* 音が出せない環境は無視 */ }
     }
 
+    let trayPieceSize = 64;
     function computeSize() {
-        const maxByW = Math.min(window.innerWidth * 0.82, 330);
-        let s = Math.floor(maxByW);
-        s = s - (s % 3);            // 3で割り切れるように
+        // 盤面 + トレイ(小さめピース9個)が縦スクロールなしで収まるように、
+        // 画面の高さも考慮してサイズを決める
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const maxByW = Math.min(vw * 0.84, 330);
+        const maxByH = vh * 0.42;          // 盤面は画面高さの4割まで
+        let s = Math.floor(Math.min(maxByW, maxByH));
+        s = Math.max(180, s - (s % 3));    // 3で割り切れ・最小180px
         boardSize = s;
         pieceSize = s / 3;
+        // トレイのピースは一回り小さいサムネイル(全9個が2〜3行で見渡せる)
+        trayPieceSize = Math.max(46, Math.floor(pieceSize * 0.62));
         board.style.width = s + 'px';
         board.style.height = s + 'px';
     }
@@ -165,13 +173,15 @@
         return arr;
     }
 
-    function styleAsPiece(el, idx) {
+    // size を指定するとその大きさで(トレイ用の小さいサムネイルにも)描画できる
+    function styleAsPiece(el, idx, size) {
+        size = size || pieceSize;
         const r = Math.floor(idx / 3), c = idx % 3;
-        el.style.width = pieceSize + 'px';
-        el.style.height = pieceSize + 'px';
+        el.style.width = size + 'px';
+        el.style.height = size + 'px';
         el.style.backgroundImage = 'url("' + PUZZLES[pIndex].img + '")';
-        el.style.backgroundSize = boardSize + 'px ' + boardSize + 'px';
-        el.style.backgroundPosition = (-c * pieceSize) + 'px ' + (-r * pieceSize) + 'px';
+        el.style.backgroundSize = (size * 3) + 'px ' + (size * 3) + 'px';
+        el.style.backgroundPosition = (-c * size) + 'px ' + (-r * size) + 'px';
     }
 
     function loadPuzzle(i) {
@@ -199,7 +209,7 @@
             const p = document.createElement('div');
             p.className = 'pz-piece';
             p.dataset.index = idx;
-            styleAsPiece(p, idx);
+            styleAsPiece(p, idx, trayPieceSize);   // トレイでは小さいサムネイル表示
             p.addEventListener('pointerdown', onDown);
             tray.appendChild(p);
         });
@@ -210,12 +220,14 @@
         if (piece.dataset.locked === '1' || current) return;
         e.preventDefault();
         current = piece;
-        const rect = piece.getBoundingClientRect();
-        offset.x = e.clientX - rect.left;
-        offset.y = e.clientY - rect.top;
+        // つかんだら実寸(スロットと同じ大きさ)に拡大してからドラッグ
+        styleAsPiece(piece, parseInt(piece.dataset.index, 10), pieceSize);
         piece.classList.add('dragging');
         piece.style.pointerEvents = 'none';
         document.body.appendChild(piece);
+        // 指の位置がピース中央にくるようにして操作しやすく
+        offset.x = pieceSize / 2;
+        offset.y = pieceSize / 2;
         moveTo(e.clientX, e.clientY);
         window.addEventListener('pointermove', onMove);
         window.addEventListener('pointerup', onUp);
@@ -257,7 +269,7 @@
             && slot.dataset.index === piece.dataset.index;
 
         if (correct) {
-            // パチっとハマる
+            // パチっとハマる(実寸のままスロットにフィット)
             slot.classList.add('filled');
             slot.appendChild(piece);
             piece.dataset.locked = '1';
@@ -266,7 +278,8 @@
             placed++;
             if (placed === 9) setTimeout(onComplete, 350);
         } else {
-            // 間違い → トレイへ戻ってプルプル
+            // 間違い → トレイへ戻す。小さいサムネイルサイズに戻してプルプル
+            styleAsPiece(piece, parseInt(piece.dataset.index, 10), trayPieceSize);
             tray.appendChild(piece);
             piece.classList.add('wrong');
             beep(200, 0.12, 'sine');
@@ -294,9 +307,16 @@
         board.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
-    // 画面回転・リサイズで盤面サイズが変わったら作り直し（未完成時のみ）
+    // 画面回転などで横幅が変わったときだけ作り直す。
+    // ※ スマホのスクロールでアドレスバーが伸縮すると resize が発火するが、
+    //   そのとき盤面が作り直されて操作中のピースが消えるのを防ぐため、
+    //   「ドラッグ中でない」かつ「横幅が実際に変わった」ときのみ再構築する。
     let rt;
+    let lastW = window.innerWidth;
     window.addEventListener('resize', () => {
+        if (current) return;                     // ドラッグ中は何もしない
+        if (window.innerWidth === lastW) return; // 高さだけの変化(スクロール)は無視
+        lastW = window.innerWidth;
         clearTimeout(rt);
         rt = setTimeout(() => { if (placed < 9) loadPuzzle(pIndex); }, 250);
     });
