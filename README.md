@@ -44,9 +44,9 @@ Site-Collection/
 │   ├── reoma-website/ … ※準備中（中身が入ったらカード追加）
 │   └── …            … そのほかの作品サイト
 ├── apps/             … ★ Webアプリ（ゲーム・ツール類）を置く場所
+│   ├── history-quiz/ … 日本史クイズ（4択・旧石器〜江戸・そのまま遊べる）
 │   ├── othello/      … パンダオセロ（1人用リバーシ・そのまま遊べる）
 │   ├── neon-2048/    … NEON 2048（スライドパズル・そのまま遊べる）
-│   ├── Quiz_Claude/  … ○×クイズアプリ本体（Java / Spring Boot / PostgreSQL）
 │   └── Web-Appli-A/  … ※準備中
 └── README.md         … このファイル
 ```

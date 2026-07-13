@@ -144,6 +144,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "日本史クイズ 〜いにしえの偉人〜",
+    description: "旧石器時代から江戸時代までの有名な人物を出題する4択の日本史クイズ。全24問を「簡単・普通・難しい・激ムズ」の4難易度で用意し、各問に難易度と時代、解説つき。和紙風のやさしいデザインで1人でも楽しめます。",
+    url: "apps/history-quiz/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🏯",
+    image: "images/history-quiz.png",
+    date: "2026.07",
+  },
+  {
     title: "パンダオセロ — 1人用リバーシ",
     description: "かわいいパンダとあそぶ1人用オセロ(リバーシ)。黒石がパンダ、CPUと対戦できます。強さは3段階(よわい・ふつう・つよい)から選べ、つよいはαβ法の先読みAI。竹林グリーンのやさしいデザインでスマホでも快適に遊べます。",
     url: "apps/othello/index.html",

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本史クイズ 〜いにしえの偉人〜 | HISTORY QUIZ</title>
+<meta name="description" content="旧石器時代から江戸時代までの有名な人物を4択で出題。簡単から激ムズまで、全24問の日本史クイズ。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%8F%AF%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --washi: #f3ece0;
+  --washi-2: #ece2d2;
+  --sumi: #2a2620;
+  --sumi-soft: #514a3f;
+  --gold: #b6892f;
+  --gold-light: #d8b25a;
+  --vermilion: #c0392b;
+  --indigo: #2c5069;
+  --green: #4a7c59;
+  --line: #ddd0bb;
+  --card: #fffdf8;
+  --shadow: 0 10px 30px rgba(60,45,25,.14);
+  --easy: #4a7c59;
+  --normal: #2c5069;
+  --hard: #b6892f;
+  --extreme: #c0392b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  color: var(--sumi);
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -5%, rgba(182,137,47,.10), transparent 60%),
+    linear-gradient(175deg, var(--washi) 0%, var(--washi-2) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.9;
+  padding: 18px 16px 50px;
+  /* 和紙のかすれ */
+  position: relative;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .5; z-index: 0;
+  background-image: radial-gradient(rgba(120,95,55,.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+a { color: inherit; text-decoration: none; }
+.wrap { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+.serif { font-family: "Shippori Mincho B1", serif; }
+
+/* ---------- ヘッダー ---------- */
+.back { display: inline-block; font-size: .78rem; font-weight: 700; color: var(--sumi-soft);
+  background: rgba(255,255,255,.7); border-radius: 999px; padding: 6px 16px; margin-bottom: 14px; }
+.back:hover { background: #fff; }
+header.top { text-align: center; margin-bottom: 22px; }
+header.top .en { font-size: .68rem; letter-spacing: .4em; color: var(--gold); font-weight: 700; }
+header.top h1 { font-family: "Shippori Mincho B1", serif; font-weight: 800;
+  font-size: clamp(1.7rem, 6vw, 2.5rem); letter-spacing: .08em; margin-top: 6px;
+  color: var(--sumi); }
+header.top h1 .brush { color: var(--vermilion); }
+header.top .sub { font-size: .82rem; color: var(--sumi-soft); margin-top: 6px; font-weight: 500; }
+
+/* ---------- カード共通 ---------- */
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: var(--shadow); padding: clamp(22px, 5vw, 34px); }
+
+/* ---------- スタート画面 ---------- */
+.start .seal { width: 90px; height: 90px; margin: 0 auto 12px; display: block; }
+.start h2 { font-family: "Shippori Mincho B1", serif; text-align: center; font-size: 1.3rem; letter-spacing: .06em; }
+.start p.lead { text-align: center; color: var(--sumi-soft); font-size: .9rem; margin-top: 10px; }
+.diff-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0 6px; }
+.diff-badge { font-size: .74rem; font-weight: 700; padding: 4px 14px; border-radius: 999px; color: #fff; }
+.b-easy { background: var(--easy); } .b-normal { background: var(--normal); }
+.b-hard { background: var(--hard); } .b-extreme { background: var(--extreme); }
+.start-info { text-align: center; color: var(--sumi-soft); font-size: .82rem; margin-top: 14px; }
+.start-info b { color: var(--vermilion); font-size: 1.1rem; }
+
+.btn { font-family: inherit; font-weight: 700; border: none; cursor: pointer; border-radius: 999px;
+  transition: transform .15s, box-shadow .15s, background .2s; }
+.btn:active { transform: translateY(2px); }
+.btn-main { display: block; width: 100%; max-width: 320px; margin: 22px auto 0;
+  padding: 16px; font-size: 1.05rem; background: var(--vermilion); color: #fff;
+  box-shadow: 0 6px 0 #93261a; letter-spacing: .08em; }
+.btn-main:active { box-shadow: 0 2px 0 #93261a; }
+
+/* ---------- クイズ画面 ---------- */
+.quiz-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.qcount { font-family: "Shippori Mincho B1", serif; font-size: .92rem; color: var(--sumi-soft); }
+.qcount b { font-size: 1.3rem; color: var(--sumi); }
+.qscore { font-size: .82rem; color: var(--sumi-soft); font-weight: 700; }
+.qscore b { color: var(--vermilion); font-size: 1.1rem; }
+.progress { height: 8px; background: var(--washi-2); border-radius: 999px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--line); }
+.progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); width: 0; transition: width .4s ease; }
+
+.q-badges { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.era-badge { font-size: .72rem; font-weight: 700; padding: 3px 12px; border-radius: 6px;
+  background: var(--washi-2); color: var(--sumi-soft); border: 1px solid var(--line); }
+.question { font-family: "Shippori Mincho B1", serif; font-size: clamp(1.05rem, 3.6vw, 1.3rem);
+  font-weight: 700; line-height: 1.7; margin-bottom: 20px; }
+
+.choices { display: grid; gap: 12px; }
+.choice { text-align: left; padding: 15px 18px; font-size: .95rem; font-weight: 500;
+  background: #fff; border: 2px solid var(--line); border-radius: 12px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px; transition: border-color .18s, background .18s, transform .1s; }
+.choice:hover:not(:disabled) { border-color: var(--gold); transform: translateX(2px); }
+.choice .mark { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--washi-2); color: var(--sumi-soft); font-weight: 700; font-size: .82rem;
+  display: grid; place-items: center; font-family: "Shippori Mincho B1", serif; }
+.choice.correct { border-color: var(--green); background: #eef6ef; }
+.choice.correct .mark { background: var(--green); color: #fff; }
+.choice.wrong { border-color: var(--vermilion); background: #fbeeec; }
+.choice.wrong .mark { background: var(--vermilion); color: #fff; }
+.choice:disabled { cursor: default; }
+
+.explain { margin-top: 18px; padding: 16px 18px; border-radius: 12px; background: var(--washi);
+  border: 1px dashed var(--line); font-size: .86rem; color: var(--sumi-soft); display: none; }
+.explain.show { display: block; animation: fade .3s ease; }
+@keyframes fade { from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none;} }
+.explain .verdict { font-family: "Shippori Mincho B1", serif; font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+.explain .verdict.ok { color: var(--green); } .explain .verdict.ng { color: var(--vermilion); }
+.next-btn { display: block; width: 100%; max-width: 260px; margin: 16px auto 0; padding: 13px;
+  background: var(--sumi); color: var(--washi); font-size: .95rem; box-shadow: 0 5px 0 #171410; }
+.next-btn:active { box-shadow: 0 2px 0 #171410; }
+
+/* ---------- 結果画面 ---------- */
+.result { text-align: center; }
+.result .rank { font-family: "Shippori Mincho B1", serif; font-size: 2.4rem; font-weight: 800; color: var(--vermilion); }
+.result .rank-title { font-family: "Shippori Mincho B1", serif; font-size: 1.2rem; margin-top: 4px; }
+.result .score-big { font-size: 1rem; color: var(--sumi-soft); margin-top: 12px; }
+.result .score-big b { font-size: 2.6rem; font-family: "Shippori Mincho B1", serif; color: var(--sumi); }
+.result .comment { font-size: .88rem; color: var(--sumi-soft); margin: 12px 0 6px; }
+.breakdown { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 18px 0; }
+.bd { font-size: .76rem; font-weight: 700; padding: 6px 14px; border-radius: 10px; background: var(--washi); border: 1px solid var(--line); }
+
+footer { text-align: center; font-size: .72rem; color: var(--sumi-soft); margin-top: 26px; font-weight: 500; }
+
+@media (max-width: 380px) {
+  .choice { padding: 13px 14px; font-size: .9rem; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← 戻る</a>
+  <header class="top">
+    <p class="en">JAPANESE HISTORY QUIZ</p>
+    <h1 class="serif">日本史クイズ<span class="brush">・</span>いにしえの偉人</h1>
+    <p class="sub">旧石器時代 〜 江戸時代 ／ 4択・全24問</p>
+  </header>
+
+  <!-- スタート -->
+  <section class="panel start" id="startScreen">
+    <svg class="seal" viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="8" width="84" height="84" rx="12" fill="none" stroke="#c0392b" stroke-width="4"/>
+      <text x="50" y="40" text-anchor="middle" font-family="'Shippori Mincho B1',serif" font-size="30" font-weight="800" fill="#c0392b">歴史</text>
+      <text x="50" y="76" text-anchor="middle" font-family="'Shippori Mincho B1',serif" font-size="26" font-weight="800" fill="#c0392b">検定</text>
+    </svg>
+    <h2 class="serif">あなたは何問わかるかな？</h2>
+    <p class="lead">旧石器時代から江戸時代までの有名な人物にまつわる4択クイズです。<br>問題ごとに難易度がついています。</p>
+    <div class="diff-legend">
+      <span class="diff-badge b-easy">簡単</span>
+      <span class="diff-badge b-normal">普通</span>
+      <span class="diff-badge b-hard">難しい</span>
+      <span class="diff-badge b-extreme">激ムズ</span>
+    </div>
+    <p class="start-info">全 <b>24</b> 問｜やさしい順に出題されます</p>
+    <button class="btn btn-main" id="startBtn">はじめる</button>
+  </section>
+
+  <!-- クイズ -->
+  <section class="panel" id="quizScreen" style="display:none">
+    <div class="quiz-head">
+      <span class="qcount"><b id="qNow">1</b> <span style="font-size:.8rem">/ 24 問</span></span>
+      <span class="qscore">正解 <b id="qScore">0</b></span>
+    </div>
+    <div class="progress"><span id="progressBar"></span></div>
+    <div class="q-badges">
+      <span class="diff-badge" id="qDiff">簡単</span>
+      <span class="era-badge" id="qEra">時代</span>
+    </div>
+    <p class="question serif" id="qText">問題文</p>
+    <div class="choices" id="choices"></div>
+    <div class="explain" id="explain">
+      <p class="verdict" id="verdict"></p>
+      <p id="explainText"></p>
+      <button class="btn next-btn" id="nextBtn">つぎの問題へ →</button>
+    </div>
+  </section>
+
+  <!-- 結果 -->
+  <section class="panel result" id="resultScreen" style="display:none">
+    <p class="rank" id="rankLabel">◯◯</p>
+    <p class="rank-title serif" id="rankTitle"></p>
+    <p class="score-big"><b id="finalScore">0</b> / 24 問 正解</p>
+    <p class="comment" id="resultComment"></p>
+    <div class="breakdown" id="breakdown"></div>
+    <button class="btn btn-main" id="retryBtn">もう一度挑戦する</button>
+  </section>
+
+  <footer>© 2026 日本史クイズ 🏯 このアプリはデモ用のオリジナル作品です。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  /* 難易度: 1=簡単 2=普通 3=難しい 4=激ムズ / answer は choices の 0-3 */
+  const D = { EASY:1, NORMAL:2, HARD:3, EXTREME:4 };
+  const DIFF = {
+    1:{label:"簡単",  cls:"b-easy"},
+    2:{label:"普通",  cls:"b-normal"},
+    3:{label:"難しい", cls:"b-hard"},
+    4:{label:"激ムズ", cls:"b-extreme"},
+  };
+
+  const QUESTIONS = [
+    // ===== 簡単 =====
+    { d:1, era:"安土桃山時代", q:"「本能寺の変」でたおれた、天下統一を目前にした戦国武将は誰？",
+      choices:["織田信長","豊臣秀吉","徳川家康","武田信玄"], answer:0,
+      exp:"1582年、家臣の明智光秀にそむかれ本能寺で自害しました。楽市・楽座など革新的な政策で知られます。" },
+    { d:1, era:"江戸時代", q:"江戸幕府を開き、初代将軍となった人物は誰？",
+      choices:["徳川家康","徳川家光","豊臣秀吉","石田三成"], answer:0,
+      exp:"1600年の関ヶ原の戦いに勝利し、1603年に征夷大将軍となって江戸幕府を開きました。" },
+    { d:1, era:"飛鳥時代", q:"十七条の憲法を定め、法隆寺を建てたとされる人物は誰？",
+      choices:["聖徳太子","中大兄皇子","蘇我馬子","天武天皇"], answer:0,
+      exp:"厩戸皇子(うまやどのおうじ)とも。冠位十二階や遣隋使の派遣でも知られます。" },
+    { d:1, era:"弥生時代", q:"「魏志倭人伝」に記された、邪馬台国を治めた女王は誰？",
+      choices:["卑弥呼","推古天皇","持統天皇","神功皇后"], answer:0,
+      exp:"呪術(まじない)で人々を従えたとされ、魏に使いを送って「親魏倭王」の称号を得ました。" },
+    { d:1, era:"鎌倉時代", q:"鎌倉幕府を開き、初代将軍となった武将は誰？",
+      choices:["源頼朝","源義経","平清盛","北条時政"], answer:0,
+      exp:"1185年に守護・地頭を設置し、武士による政権の基礎を築きました。弟に源義経がいます。" },
+    { d:1, era:"江戸時代", q:"『東海道五十三次』などの浮世絵で有名な、江戸時代の絵師は誰？",
+      choices:["歌川広重","葛飾北斎","雪舟","狩野永徳"], answer:0,
+      exp:"風景画の名手。なお『富嶽三十六景』は葛飾北斎の作品で、こちらも有名です。" },
+
+    // ===== 普通 =====
+    { d:2, era:"平安時代", q:"「この世をば わが世とぞ思ふ…」と詠み、摂関政治の全盛を築いた貴族は誰？",
+      choices:["藤原道長","藤原鎌足","菅原道真","平将門"], answer:0,
+      exp:"娘を次々と天皇のきさきにして権力を握りました。子の頼通は平等院鳳凰堂を建てています。" },
+    { d:2, era:"平安時代", q:"武士として初めて太政大臣となり、平氏の全盛を築いた人物は誰？",
+      choices:["平清盛","源頼朝","平将門","藤原純友"], answer:0,
+      exp:"日宋貿易を進め「平氏にあらずんば人にあらず」と言われるほど栄えましたが、後に源氏に敗れます。" },
+    { d:2, era:"室町時代", q:"金閣(鹿苑寺)を建て、勘合貿易(日明貿易)を始めた3代将軍は誰？",
+      choices:["足利義満","足利尊氏","足利義政","足利義昭"], answer:0,
+      exp:"南北朝を統一し、室町幕府の全盛期を築きました。孫の義政は銀閣を建てています。" },
+    { d:2, era:"戦国時代", q:"「風林火山」の旗印で知られ、上杉謙信と川中島で戦った甲斐の武将は誰？",
+      choices:["武田信玄","今川義元","北条氏康","伊達政宗"], answer:0,
+      exp:"甲斐(山梨県)の戦国大名。騎馬隊で名を馳せましたが、天下統一の前に病死しました。" },
+    { d:2, era:"安土桃山時代", q:"わび茶を大成し、織田信長・豊臣秀吉に仕えた茶人は誰？",
+      choices:["千利休","雪舟","世阿弥","狩野永徳"], answer:0,
+      exp:"簡素なものに美を見出す「わび」の茶を確立。のちに秀吉の怒りをかい切腹させられました。" },
+    { d:2, era:"江戸時代", q:"『奥の細道』を著した、江戸時代を代表する俳人は誰？",
+      choices:["松尾芭蕉","与謝蕪村","小林一茶","井原西鶴"], answer:0,
+      exp:"俳諧(はいかい)を芸術の域に高めました。「古池や 蛙飛びこむ 水の音」の句が有名です。" },
+
+    // ===== 難しい =====
+    { d:3, era:"飛鳥時代", q:"中臣鎌足とともに蘇我氏をたおし「大化の改新」を進めた皇子は誰？",
+      choices:["中大兄皇子","聖徳太子","大海人皇子","蘇我入鹿"], answer:0,
+      exp:"645年に蘇我入鹿を暗殺(乙巳の変)。のちに即位して天智天皇となりました。" },
+    { d:3, era:"鎌倉時代", q:"元寇(蒙古襲来)のとき、幕府の執権として元軍を退けた人物は誰？",
+      choices:["北条時宗","北条泰時","北条義時","足利尊氏"], answer:0,
+      exp:"文永の役・弘安の役の2度の元軍の襲来を、御家人と暴風雨(神風)によって退けました。" },
+    { d:3, era:"室町時代", q:"水墨画を大成し、『秋冬山水図』などを描いた画僧は誰？",
+      choices:["雪舟","運慶","狩野永徳","尾形光琳"], answer:0,
+      exp:"明(中国)に渡って絵を学び、日本独自の水墨画の様式を確立した室町時代の禅僧です。" },
+    { d:3, era:"室町時代", q:"父・観阿弥とともに能を大成し、『風姿花伝』を著した人物は誰？",
+      choices:["世阿弥","千利休","出雲阿国","近松門左衛門"], answer:0,
+      exp:"足利義満の保護を受け、猿楽能を芸術へと高めました。「秘すれば花」の言葉で知られます。" },
+    { d:3, era:"平安時代", q:"遣唐使の停止を提案し、のちに大宰府に左遷されて「学問の神」となった人物は誰？",
+      choices:["菅原道真","藤原道長","阿倍仲麻呂","空海"], answer:0,
+      exp:"894年に遣唐使を停止。死後、天満宮にまつられ「天神様」として親しまれています。" },
+    { d:3, era:"江戸時代", q:"『解体新書』を杉田玄白らとともに翻訳・出版した蘭学者は誰？",
+      choices:["前野良沢","本居宣長","伊能忠敬","平賀源内"], answer:0,
+      exp:"オランダ語の解剖書『ターヘル・アナトミア』を苦心の末に翻訳し、蘭学発展の礎を築きました。" },
+
+    // ===== 激ムズ =====
+    { d:4, era:"古墳時代", q:"埼玉県の稲荷山古墳出土の鉄剣に刻まれた「ワカタケル大王」に比定される天皇は誰？",
+      choices:["雄略天皇","仁徳天皇","応神天皇","継体天皇"], answer:0,
+      exp:"「獲加多支鹵(ワカタケル)大王」の銘文から、5世紀の雄略天皇とされ、大和政権の勢力範囲を示す史料です。" },
+    { d:4, era:"奈良時代", q:"遣唐使として唐に渡り、皇帝に仕え「天の原 ふりさけ見れば…」の歌を詠んだ人物は誰？",
+      choices:["阿倍仲麻呂","吉備真備","行基","鑑真"], answer:0,
+      exp:"帰国できず唐で生涯を終えました。李白ら唐の詩人とも親交がありました。" },
+    { d:4, era:"奈良時代", q:"称徳天皇に重用され、天皇の位をうかがったとされる僧は誰？",
+      choices:["道鏡","行基","最澄","玄昉"], answer:0,
+      exp:"「宇佐八幡宮神託事件」で和気清麻呂に阻まれ、天皇即位はなりませんでした。" },
+    { d:4, era:"鎌倉時代", q:"東大寺南大門の金剛力士像を、快慶とともに造ったとされる仏師は誰？",
+      choices:["運慶","雪舟","定朝","世阿弥"], answer:0,
+      exp:"力強く写実的な作風で鎌倉彫刻を代表します。父は康慶、快慶は同門の仏師です。" },
+    { d:4, era:"江戸時代", q:"株仲間を奨励するなど商業重視の政治を行い、賄賂政治とも批判された江戸中期の老中は誰？",
+      choices:["田沼意次","松平定信","水野忠邦","新井白石"], answer:0,
+      exp:"重商主義的な政策で幕府財政の立て直しをはかりましたが、天明の飢饉などもあり失脚しました。" },
+    { d:4, era:"旧石器時代", q:"1946年、群馬県岩宿で関東ローム層から石器を発見し、日本の旧石器時代の存在を証明した人物は誰？",
+      choices:["相沢忠洋","モース","ナウマン","杉原荘介"], answer:0,
+      exp:"在野の考古学研究者。岩宿遺跡の発見により、縄文時代より前の旧石器文化の存在が明らかになりました。" },
+  ];
+
+  const el = (id) => document.getElementById(id);
+  let idx = 0, score = 0, locked = false;
+  let byDiff = { 1:{c:0,t:0}, 2:{c:0,t:0}, 3:{c:0,t:0}, 4:{c:0,t:0} };
+
+  function show(screen) {
+    ["startScreen","quizScreen","resultScreen"].forEach(s => el(s).style.display = "none");
+    el(screen).style.display = "block";
+  }
+
+  function start() {
+    idx = 0; score = 0; locked = false;
+    byDiff = { 1:{c:0,t:0}, 2:{c:0,t:0}, 3:{c:0,t:0}, 4:{c:0,t:0} };
+    show("quizScreen");
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    locked = false;
+    const item = QUESTIONS[idx];
+    el("qNow").textContent = idx + 1;
+    el("qScore").textContent = score;
+    el("progressBar").style.width = (idx / QUESTIONS.length * 100) + "%";
+    const d = DIFF[item.d];
+    const diffEl = el("qDiff");
+    diffEl.textContent = d.label;
+    diffEl.className = "diff-badge " + d.cls;
+    el("qEra").textContent = item.era;
+    el("qText").textContent = item.q;
+    const marks = ["一","二","三","四"];
+    const box = el("choices");
+    box.innerHTML = "";
+    item.choices.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.className = "choice";
+      b.innerHTML = '<span class="mark">' + marks[i] + '</span><span>' + c + '</span>';
+      b.addEventListener("click", () => answer(i));
+      box.appendChild(b);
+    });
+    el("explain").classList.remove("show");
+  }
+
+  function answer(choice) {
+    if (locked) return;
+    locked = true;
+    const item = QUESTIONS[idx];
+    const correct = choice === item.answer;
+    const buttons = el("choices").querySelectorAll(".choice");
+    buttons.forEach((b, i) => {
+      b.disabled = true;
+      if (i === item.answer) b.classList.add("correct");
+      else if (i === choice) b.classList.add("wrong");
+    });
+    byDiff[item.d].t++;
+    if (correct) { score++; byDiff[item.d].c++; el("qScore").textContent = score; }
+    const v = el("verdict");
+    v.textContent = correct ? "正解！" : ("残念…正解は「" + item.choices[item.answer] + "」");
+    v.className = "verdict " + (correct ? "ok" : "ng");
+    el("explainText").textContent = item.exp;
+    el("nextBtn").textContent = (idx === QUESTIONS.length - 1) ? "結果を見る →" : "つぎの問題へ →";
+    el("explain").classList.add("show");
+    el("explain").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function next() {
+    idx++;
+    if (idx < QUESTIONS.length) renderQuestion();
+    else showResult();
+  }
+
+  function showResult() {
+    el("progressBar").style.width = "100%";
+    const total = QUESTIONS.length;
+    const rate = score / total;
+    let rank, title, comment;
+    if (rate === 1)        { rank="天下人"; title="パーフェクト！"; comment="全問正解！あなたはまさに歴史の達人です。"; }
+    else if (rate >= 0.83) { rank="大名級"; title="お見事！";       comment="かなりの歴史通。細かい人物までよく知っていますね。"; }
+    else if (rate >= 0.66) { rank="武将級"; title="なかなか！";     comment="基礎はばっちり。あと一歩で歴史マスターです。"; }
+    else if (rate >= 0.45) { rank="足軽級"; title="その調子！";     comment="有名どころは押さえています。難問に再挑戦しよう。"; }
+    else                   { rank="見習い"; title="これから！";     comment="ここからが伸びしろ。解説を読んでまた挑戦してみて。"; }
+    el("rankLabel").textContent = rank;
+    el("rankTitle").textContent = title;
+    el("finalScore").textContent = score;
+    el("resultComment").textContent = comment;
+    const bd = el("breakdown");
+    bd.innerHTML = "";
+    [1,2,3,4].forEach(d => {
+      const o = byDiff[d];
+      const s = document.createElement("span");
+      s.className = "bd";
+      s.textContent = DIFF[d].label + " " + o.c + "/" + o.t;
+      bd.appendChild(s);
+    });
+    show("resultScreen");
+  }
+
+  el("startBtn").addEventListener("click", start);
+  el("retryBtn").addEventListener("click", start);
+  el("nextBtn").addEventListener("click", next);
+})();
+</script>
+</body>
+</html>
