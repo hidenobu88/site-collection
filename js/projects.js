@@ -167,7 +167,7 @@ const PROJECTS = [
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
-    url: "works/quiz-claude/app/index.html",
+    url: "apps/quiz-claude/app/index.html",
     category: "webapp",
     tags: ["Java", "Spring Boot", "PostgreSQL"],
     emoji: "🍬",
