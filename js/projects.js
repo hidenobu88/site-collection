@@ -86,7 +86,7 @@ const PROJECTS = [
   },
   {
     title: "TORANOBU_GAME — フォートナイト制作マップ",
-    description: "UEFN / Verse を使って開発したフォートナイトのオリジナルマップ。公式クリエイターページから実際にプレイできます。",
+    description: "公式クリエイターページから実際にプレイできます。フォローも是非よろしくお願いします♪",
     url: "works/fortnite/index.html",
     category: "game",
     tags: ["UEFN", "Verse", "Fortnite"],
