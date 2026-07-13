@@ -126,7 +126,7 @@ const PROJECTS = [
   {
     title: "NEON 2048 — スライドパズル",
     description: "ネオンデザインの2048風パズルゲーム。タイルをスライドして同じ数字を合体させ、2048を目指します。スマホはスワイプ、PCは矢印キーで操作。ベストスコアは端末に自動保存されます。",
-    url: "works/neon-2048/index.html",
+    url: "apps/neon-2048/index.html",
     category: "webapp",
     tags: ["HTML", "CSS", "JavaScript"],
     emoji: "🎯",
@@ -141,6 +141,16 @@ const PROJECTS = [
     tags: ["HTML", "CSS", "JavaScript"],
     emoji: "💪",
     image: "images/stride-fitness.png",
+    date: "2026.07",
+  },
+  {
+    title: "パンダオセロ — 1人用リバーシ",
+    description: "かわいいパンダとあそぶ1人用オセロ(リバーシ)。黒石がパンダ、CPUと対戦できます。強さは3段階(よわい・ふつう・つよい)から選べ、つよいはαβ法の先読みAI。竹林グリーンのやさしいデザインでスマホでも快適に遊べます。",
+    url: "apps/othello/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🐼",
+    image: "images/othello.png",
     date: "2026.07",
   },
   {

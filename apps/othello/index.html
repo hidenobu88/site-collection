@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>パンダオセロ | PANDA REVERSI</title>
+<meta name="description" content="かわいいパンダとあそぶ1人用オセロ(リバーシ)。CPU対戦・3段階の強さ・スマホ対応。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%90%BC%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bamboo: #4c8a4a;
+  --bamboo-dark: #3a6d38;
+  --bamboo-deep: #2c5a2b;
+  --wood: #6b4a2f;
+  --wood-light: #8a6340;
+  --cream: #fdfaf2;
+  --ink: #33302b;
+  --panda: #2b2622;
+  --pink: #ff9ab0;
+  --accent: #f4b23e;
+  --shadow: 0 10px 30px rgba(30,50,25,.22);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: "Zen Maru Gothic", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,255,255,.5), transparent 60%),
+    linear-gradient(170deg, #cfeecb 0%, #a8dba3 45%, #8fce8a 100%);
+  min-height: 100vh;
+  padding: 16px 14px 40px;
+  display: flex; flex-direction: column; align-items: center;
+  overflow-x: hidden;
+}
+.bamboo-deco { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+  background:
+    repeating-linear-gradient(93deg, transparent 0 60px, rgba(76,138,74,.06) 60px 64px);
+}
+.wrap { position: relative; z-index: 1; width: 100%; max-width: 520px; }
+
+/* ---------- ヘッダー ---------- */
+header { text-align: center; margin-bottom: 14px; }
+.title { font-family: "Baloo 2", "Zen Maru Gothic", cursive; font-weight: 800;
+  font-size: clamp(1.8rem, 7vw, 2.6rem); color: var(--bamboo-deep); letter-spacing: .02em;
+  display: inline-flex; align-items: center; gap: 10px; }
+.title .pandaface { width: 1.2em; height: 1.2em; }
+.subtitle { font-size: .82rem; font-weight: 700; color: var(--bamboo-dark); margin-top: 2px; }
+
+.back { position: absolute; top: 2px; left: 0; font-size: .78rem; font-weight: 700;
+  color: var(--bamboo-dark); background: rgba(255,255,255,.7); border-radius: 999px;
+  padding: 6px 14px; text-decoration: none; }
+.back:hover { background: #fff; }
+
+/* ---------- スコアバー ---------- */
+.scores { display: flex; gap: 10px; justify-content: center; margin: 14px 0; }
+.score {
+  flex: 1; max-width: 180px; background: var(--cream); border-radius: 16px; padding: 10px 8px;
+  box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; justify-content: center;
+  border: 3px solid transparent; transition: border-color .25s, transform .25s;
+}
+.score.turn { border-color: var(--accent); transform: translateY(-3px); }
+.score .disc-mini { width: 34px; height: 34px; flex-shrink: 0; }
+.score .stxt { text-align: left; line-height: 1.2; }
+.score .who { font-size: .72rem; font-weight: 700; color: var(--ink); }
+.score .num { font-family: "Baloo 2", sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--bamboo-deep); }
+
+/* ---------- ステータス ---------- */
+.status { text-align: center; min-height: 30px; font-weight: 900; font-size: 1rem;
+  color: var(--bamboo-deep); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.status .mascot { width: 30px; height: 30px; }
+
+/* ---------- 盤面 ---------- */
+.board-frame {
+  background: linear-gradient(160deg, var(--wood-light), var(--wood));
+  padding: min(3.2vw, 16px); border-radius: 20px; box-shadow: var(--shadow), inset 0 2px 6px rgba(255,255,255,.2);
+  margin: 0 auto; width: min(94vw, 480px);
+}
+.board {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 0;
+  background: var(--bamboo-dark); border-radius: 8px; overflow: hidden;
+  aspect-ratio: 1 / 1; box-shadow: inset 0 0 0 2px rgba(0,0,0,.25);
+}
+.cell {
+  position: relative; aspect-ratio: 1 / 1;
+  background: var(--bamboo);
+  box-shadow: inset 0 0 0 1px var(--bamboo-dark);
+  display: grid; place-items: center; cursor: pointer;
+  transition: background .15s;
+}
+.cell:nth-child(odd) { background: #519150; }
+.cell.playable::after {
+  content: ""; width: 26%; height: 26%; border-radius: 50%;
+  background: rgba(255,255,255,.45); box-shadow: 0 0 0 3px rgba(255,255,255,.18);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.cell.playable:hover { background: #62a860; }
+@keyframes pulse { 0%,100%{ transform: scale(.8); opacity:.6 } 50%{ transform: scale(1.1); opacity:1 } }
+
+/* ---------- 石(パンダ / 白石) ---------- */
+.disc { width: 82%; height: 82%; border-radius: 50%; position: relative;
+  transform: scale(0); animation: drop .28s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes drop { to { transform: scale(1); } }
+.disc.flip { animation: flipAnim .4s ease; }
+@keyframes flipAnim { 0%{ transform: rotateY(0) scale(1);} 50%{ transform: rotateY(90deg) scale(.9);} 100%{ transform: rotateY(0) scale(1);} }
+
+/* パンダ石(黒番) */
+.disc.black {
+  background: radial-gradient(circle at 35% 30%, #4a433c, var(--panda) 70%);
+  box-shadow: 0 3px 5px rgba(0,0,0,.4), inset 0 2px 3px rgba(255,255,255,.15);
+}
+.disc.black .ear { position: absolute; top: -6%; width: 34%; height: 34%; border-radius: 50%;
+  background: var(--panda); box-shadow: 0 2px 3px rgba(0,0,0,.35); }
+.disc.black .ear.l { left: 2%; } .disc.black .ear.r { right: 2%; }
+.disc.black .face { position: absolute; inset: 14% 8% 8%; }
+.disc.black .eye { position: absolute; top: 28%; width: 34%; height: 44%; background: #fff; border-radius: 50%; }
+.disc.black .eye.l { left: 6%; transform: rotate(-12deg); } .disc.black .eye.r { right: 6%; transform: rotate(12deg); }
+.disc.black .pupil { position: absolute; top: 44%; width: 15%; height: 18%; background: #17130f; border-radius: 50%; }
+.disc.black .pupil.l { left: 20%; } .disc.black .pupil.r { right: 20%; }
+.disc.black .nose { position: absolute; top: 62%; left: 50%; transform: translateX(-50%); width: 14%; height: 10%; background: #17130f; border-radius: 50%; }
+
+/* 白石(CPU) — ほんのりパンダの耳付き */
+.disc.white {
+  background: radial-gradient(circle at 35% 30%, #ffffff, #eae3d2 78%);
+  box-shadow: 0 3px 5px rgba(0,0,0,.28), inset 0 2px 3px rgba(255,255,255,.7);
+}
+.disc.white .ear { position: absolute; top: -4%; width: 30%; height: 30%; border-radius: 50%;
+  background: #d9cfba; box-shadow: 0 2px 3px rgba(0,0,0,.15); }
+.disc.white .ear.l { left: 6%; } .disc.white .ear.r { right: 6%; }
+.disc.white .eye { position: absolute; top: 40%; width: 15%; height: 18%; background: #b7ac95; border-radius: 50%; }
+.disc.white .eye.l { left: 28%; } .disc.white .eye.r { right: 28%; }
+.disc.white .nose { position: absolute; top: 60%; left: 50%; transform: translateX(-50%); width: 12%; height: 8%; background: #cabfa6; border-radius: 50%; }
+.disc.white .pupil, .disc.white .face { display: none; }
+.disc.white .eye.r, .disc.white .eye.l { }
+
+/* mini disc(スコア用) */
+.disc-mini { position: relative; border-radius: 50%; }
+.disc-mini.black { background: radial-gradient(circle at 35% 30%, #4a433c, var(--panda) 70%); }
+.disc-mini.white { background: radial-gradient(circle at 35% 30%, #fff, #e5ddcb 78%); box-shadow: inset 0 0 0 1px #d5cbb4; }
+
+/* ---------- コントロール ---------- */
+.controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; }
+.btn { font-family: inherit; font-weight: 800; font-size: .9rem; border: none; cursor: pointer;
+  padding: 12px 24px; border-radius: 999px; transition: transform .15s, box-shadow .15s; }
+.btn:active { transform: translateY(2px); }
+.btn-main { background: var(--bamboo-deep); color: #fff; box-shadow: 0 5px 0 #234a22; }
+.btn-main:active { box-shadow: 0 2px 0 #234a22; }
+.btn-sub { background: var(--cream); color: var(--bamboo-deep); box-shadow: 0 5px 0 #cfc6b0; }
+.btn-sub:active { box-shadow: 0 2px 0 #cfc6b0; }
+
+.level-row { display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+.level-row .lbl { font-size: .8rem; font-weight: 700; color: var(--bamboo-dark); }
+.level-chip { font-family: inherit; font-weight: 700; font-size: .8rem; cursor: pointer;
+  padding: 7px 16px; border-radius: 999px; border: 2px solid var(--bamboo); background: rgba(255,255,255,.7); color: var(--bamboo-dark); }
+.level-chip.active { background: var(--bamboo-deep); color: #fff; border-color: var(--bamboo-deep); }
+
+.hint { text-align: center; font-size: .76rem; color: var(--bamboo-dark); margin-top: 18px; line-height: 1.9; }
+
+/* ---------- 結果モーダル ---------- */
+.modal { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center;
+  background: rgba(30,50,25,.55); backdrop-filter: blur(4px); padding: 22px; }
+.modal.show { display: flex; }
+.modal-card { background: var(--cream); border-radius: 24px; padding: 34px 28px; text-align: center;
+  max-width: 340px; width: 100%; box-shadow: var(--shadow); animation: pop .35s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pop { from{ transform: scale(.7); opacity:0 } to{ transform: scale(1); opacity:1 } }
+.modal-card .big-panda { width: 90px; height: 90px; margin: 0 auto 10px; }
+.modal-card h2 { font-family: "Baloo 2", sans-serif; font-size: 1.6rem; color: var(--bamboo-deep); }
+.modal-card .final { font-weight: 900; margin: 8px 0 4px; font-size: 1.1rem; }
+.modal-card p { font-size: .86rem; color: var(--ink); margin-bottom: 20px; }
+
+footer { margin-top: 30px; font-size: .72rem; color: var(--bamboo-dark); text-align: center; font-weight: 700; }
+
+@media (max-width: 380px) {
+  .score { gap: 6px; padding: 8px 6px; }
+  .score .num { font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+<div class="bamboo-deco" aria-hidden="true"></div>
+
+<div class="wrap">
+  <a class="back" href="../../index.html">← 戻る</a>
+  <header>
+    <div class="title">
+      <svg class="pandaface" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="9" cy="9" r="7" fill="#2b2622"/><circle cx="31" cy="9" r="7" fill="#2b2622"/>
+        <circle cx="20" cy="21" r="16" fill="#fff" stroke="#2b2622" stroke-width="1.5"/>
+        <ellipse cx="13" cy="20" rx="4.5" ry="6" fill="#2b2622"/><ellipse cx="27" cy="20" rx="4.5" ry="6" fill="#2b2622"/>
+        <circle cx="13" cy="21" r="1.8" fill="#fff"/><circle cx="27" cy="21" r="1.8" fill="#fff"/>
+        <ellipse cx="20" cy="28" rx="2.4" ry="1.8" fill="#2b2622"/>
+      </svg>
+      パンダオセロ
+    </div>
+    <p class="subtitle">PANDA REVERSI — きみ(パンダ)VS コンピュータ</p>
+  </header>
+
+  <div class="scores">
+    <div class="score" id="scoreBlack">
+      <span class="disc-mini black"></span>
+      <span class="stxt"><span class="who">あなた 🐼</span><br><span class="num" id="numBlack">2</span></span>
+    </div>
+    <div class="score" id="scoreWhite">
+      <span class="disc-mini white"></span>
+      <span class="stxt"><span class="who">CPU</span><br><span class="num" id="numWhite">2</span></span>
+    </div>
+  </div>
+
+  <div class="status" id="status">あなたの番です！</div>
+
+  <div class="board-frame">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="level-row">
+    <span class="lbl">CPUの強さ:</span>
+    <button class="level-chip" data-lv="1">よわい</button>
+    <button class="level-chip active" data-lv="2">ふつう</button>
+    <button class="level-chip" data-lv="3">つよい</button>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-main" id="resetBtn">🐾 さいしょから</button>
+    <button class="btn btn-sub" id="passBtn" style="display:none">パスする</button>
+  </div>
+
+  <p class="hint">白いマルのマスにパンダを置けるよ。はさんだ白石をパンダに変えて、<br>最後にたくさん置けたほうが勝ち!角(かど)を取るのがコツだよ🎍</p>
+
+  <footer>© 2026 パンダオセロ 🐼🎋 このゲームはデモ用のオリジナル作品です。</footer>
+</div>
+
+<!-- 結果 -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <svg class="big-panda" id="bigPanda" viewBox="0 0 40 40" aria-hidden="true">
+      <circle cx="9" cy="9" r="7" fill="#2b2622"/><circle cx="31" cy="9" r="7" fill="#2b2622"/>
+      <circle cx="20" cy="21" r="16" fill="#fff" stroke="#2b2622" stroke-width="1.5"/>
+      <ellipse cx="13" cy="20" rx="4.5" ry="6" fill="#2b2622"/><ellipse cx="27" cy="20" rx="4.5" ry="6" fill="#2b2622"/>
+      <circle cx="13" cy="21" r="1.8" fill="#fff"/><circle cx="27" cy="21" r="1.8" fill="#fff"/>
+      <ellipse cx="20" cy="28" rx="2.4" ry="1.8" fill="#2b2622"/>
+    </svg>
+    <h2 id="modalTitle">ゲームしゅうりょう</h2>
+    <p class="final" id="modalFinal"></p>
+    <p id="modalMsg"></p>
+    <button class="btn btn-main" id="modalReset">🐾 もういちど</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  const SIZE = 8;
+  const EMPTY = 0, BLACK = 1, WHITE = 2;   // BLACK = プレイヤー(パンダ)
+  const DIRS = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+  // マスの価値(角が高く、角の隣は低い) — CPUの評価に使用
+  const WEIGHTS = [
+    [120,-20, 20,  5,  5, 20,-20,120],
+    [-20,-40, -5, -5, -5, -5,-40,-20],
+    [ 20, -5, 15,  3,  3, 15, -5, 20],
+    [  5, -5,  3,  3,  3,  3, -5,  5],
+    [  5, -5,  3,  3,  3,  3, -5,  5],
+    [ 20, -5, 15,  3,  3, 15, -5, 20],
+    [-20,-40, -5, -5, -5, -5,-40,-20],
+    [120,-20, 20,  5,  5, 20,-20,120],
+  ];
+
+  let board, turn, level = 2, busy = false;
+  const boardEl = document.getElementById("board");
+  const statusEl = document.getElementById("status");
+
+  function newBoard() {
+    const b = Array.from({length: SIZE}, () => new Array(SIZE).fill(EMPTY));
+    b[3][3] = WHITE; b[4][4] = WHITE; b[3][4] = BLACK; b[4][3] = BLACK;
+    return b;
+  }
+  const inside = (r,c) => r>=0 && r<SIZE && c>=0 && c<SIZE;
+  const opp = (p) => p === BLACK ? WHITE : BLACK;
+
+  // (r,c)にpを置いたとき裏返る石のリスト
+  function flips(b, r, c, p) {
+    if (b[r][c] !== EMPTY) return [];
+    const res = [];
+    for (const [dr,dc] of DIRS) {
+      const line = []; let rr = r+dr, cc = c+dc;
+      while (inside(rr,cc) && b[rr][cc] === opp(p)) { line.push([rr,cc]); rr+=dr; cc+=dc; }
+      if (line.length && inside(rr,cc) && b[rr][cc] === p) res.push(...line);
+    }
+    return res;
+  }
+  function legalMoves(b, p) {
+    const moves = [];
+    for (let r=0;r<SIZE;r++) for (let c=0;c<SIZE;c++) {
+      if (b[r][c] === EMPTY && flips(b,r,c,p).length) moves.push([r,c]);
+    }
+    return moves;
+  }
+  function applyMove(b, r, c, p) {
+    const f = flips(b,r,c,p);
+    b[r][c] = p; for (const [rr,cc] of f) b[rr][cc] = p;
+    return f;
+  }
+  function count(b) {
+    let bl=0, wh=0;
+    for (let r=0;r<SIZE;r++) for (let c=0;c<SIZE;c++){ if(b[r][c]===BLACK)bl++; else if(b[r][c]===WHITE)wh++; }
+    return {bl, wh};
+  }
+
+  /* ---------- 描画 ---------- */
+  function discHTML(p) {
+    if (p === BLACK) {
+      return '<div class="disc black"><span class="ear l"></span><span class="ear r"></span>' +
+        '<span class="eye l"></span><span class="eye r"></span>' +
+        '<span class="pupil l"></span><span class="pupil r"></span><span class="nose"></span></div>';
+    }
+    return '<div class="disc white"><span class="ear l"></span><span class="ear r"></span>' +
+      '<span class="eye l"></span><span class="eye r"></span><span class="nose"></span></div>';
+  }
+
+  function render(showHints) {
+    boardEl.innerHTML = "";
+    const moves = showHints ? legalMoves(board, BLACK).map(m => m[0]*8+m[1]) : [];
+    for (let r=0;r<SIZE;r++) for (let c=0;c<SIZE;c++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      if (moves.includes(r*8+c)) cell.classList.add("playable");
+      if (board[r][c] !== EMPTY) cell.innerHTML = discHTML(board[r][c]);
+      cell.addEventListener("click", () => onCellClick(r,c));
+      boardEl.appendChild(cell);
+    }
+    const {bl, wh} = count(board);
+    document.getElementById("numBlack").textContent = bl;
+    document.getElementById("numWhite").textContent = wh;
+    document.getElementById("scoreBlack").classList.toggle("turn", turn===BLACK && !busy);
+    document.getElementById("scoreWhite").classList.toggle("turn", turn===WHITE || busy);
+  }
+
+  /* ---------- 手番の進行 ---------- */
+  function onCellClick(r,c) {
+    if (busy || turn !== BLACK) return;
+    if (!flips(board,r,c,BLACK).length) return;
+    applyMove(board, r, c, BLACK);
+    turn = WHITE;
+    render(false);
+    setStatus("パンダが考え中…🐾", true);
+    busy = true;
+    setTimeout(cpuTurn, 620);
+  }
+
+  function cpuTurn() {
+    // CPUに合法手がなければパンダに戻す/終了
+    if (!legalMoves(board, WHITE).length) {
+      busy = false;
+      if (!legalMoves(board, BLACK).length) return endGame();
+      turn = BLACK; render(true); setStatus("CPUはパス！あなたの番です");
+      return;
+    }
+    const mv = chooseCpuMove();
+    applyMove(board, mv[0], mv[1], WHITE);
+    turn = BLACK;
+    busy = false;
+    // プレイヤーが置けない場合はパス/終了
+    if (!legalMoves(board, BLACK).length) {
+      if (!legalMoves(board, WHITE).length) { render(false); return endGame(); }
+      render(false); setStatus("あなたは置けません…パスします"); turn = WHITE; busy = true;
+      setTimeout(cpuTurn, 900); return;
+    }
+    render(true); setStatus("あなたの番です！");
+  }
+
+  /* ---------- CPU 思考 ---------- */
+  function chooseCpuMove() {
+    const moves = legalMoves(board, WHITE);
+    if (level === 1) {
+      // よわい: ランダム(たまに角を選ぶ)
+      const corners = moves.filter(m => isCorner(m[0],m[1]));
+      if (corners.length && Math.random()<0.7) return pick(corners);
+      return pick(moves);
+    }
+    if (level === 2) {
+      // ふつう: マスの価値で1手評価(角の隣は避ける)
+      let best = moves[0], bestV = -1e9;
+      for (const [r,c] of moves) {
+        let v = WEIGHTS[r][c] + flips(board,r,c,WHITE).length*2;
+        if (v > bestV) { bestV = v; best = [r,c]; }
+      }
+      return best;
+    }
+    // つよい: ミニマックス(3手先読み・α-β)
+    let best = moves[0], bestV = -1e9;
+    for (const [r,c] of moves) {
+      const nb = clone(board); applyMove(nb, r, c, WHITE);
+      const v = minimax(nb, 2, false, -1e9, 1e9);
+      if (v > bestV) { bestV = v; best = [r,c]; }
+    }
+    return best;
+  }
+  function minimax(b, depth, cpuTurnFlag, alpha, beta) {
+    const player = cpuTurnFlag ? WHITE : BLACK;
+    const moves = legalMoves(b, player);
+    if (depth === 0 || (!moves.length && !legalMoves(b, opp(player)).length)) return evaluate(b);
+    if (!moves.length) return minimax(b, depth-1, !cpuTurnFlag, alpha, beta);
+    if (cpuTurnFlag) {
+      let v = -1e9;
+      for (const [r,c] of moves) { const nb=clone(b); applyMove(nb,r,c,WHITE);
+        v = Math.max(v, minimax(nb, depth-1, false, alpha, beta)); alpha = Math.max(alpha,v); if (beta<=alpha) break; }
+      return v;
+    } else {
+      let v = 1e9;
+      for (const [r,c] of moves) { const nb=clone(b); applyMove(nb,r,c,BLACK);
+        v = Math.min(v, minimax(nb, depth-1, true, alpha, beta)); beta = Math.min(beta,v); if (beta<=alpha) break; }
+      return v;
+    }
+  }
+  function evaluate(b) {
+    let score = 0;
+    for (let r=0;r<SIZE;r++) for (let c=0;c<SIZE;c++) {
+      if (b[r][c]===WHITE) score += WEIGHTS[r][c];
+      else if (b[r][c]===BLACK) score -= WEIGHTS[r][c];
+    }
+    // 着手可能数(機動力)も少し加味
+    score += (legalMoves(b,WHITE).length - legalMoves(b,BLACK).length) * 3;
+    return score;
+  }
+  const isCorner = (r,c) => (r===0||r===7) && (c===0||c===7);
+  const pick = (a) => a[Math.floor(Math.random()*a.length)];
+  const clone = (b) => b.map(row => row.slice());
+
+  /* ---------- ステータス/終了 ---------- */
+  function setStatus(txt, thinking) {
+    statusEl.innerHTML = (thinking ? '<svg class="mascot" viewBox="0 0 40 40"><circle cx="9" cy="9" r="7" fill="#2b2622"/><circle cx="31" cy="9" r="7" fill="#2b2622"/><circle cx="20" cy="21" r="16" fill="#fff" stroke="#2b2622" stroke-width="1.5"/><ellipse cx="13" cy="20" rx="4.5" ry="6" fill="#2b2622"/><ellipse cx="27" cy="20" rx="4.5" ry="6" fill="#2b2622"/><circle cx="13" cy="21" r="1.8" fill="#fff"/><circle cx="27" cy="21" r="1.8" fill="#fff"/><ellipse cx="20" cy="28" rx="2.4" ry="1.8" fill="#2b2622"/></svg>' : "") + txt;
+  }
+
+  function endGame() {
+    const {bl, wh} = count(board);
+    const modal = document.getElementById("modal");
+    let title, msg;
+    if (bl > wh) { title = "あなたの勝ち！🎉"; msg = "パンダがいっぱい！おめでとう🐼"; }
+    else if (wh > bl) { title = "CPUの勝ち…"; msg = "つぎはリベンジしよう！角をねらってみて🎍"; }
+    else { title = "ひきわけ！"; msg = "まったくの互角！すごい勝負だったね🐾"; }
+    document.getElementById("modalTitle").textContent = title;
+    document.getElementById("modalFinal").textContent = "あなた " + bl + " ー " + wh + " CPU";
+    document.getElementById("modalMsg").textContent = msg;
+    setStatus("ゲームしゅうりょう！");
+    modal.classList.add("show");
+  }
+
+  /* ---------- 起動/リセット ---------- */
+  function reset() {
+    board = newBoard(); turn = BLACK; busy = false;
+    document.getElementById("modal").classList.remove("show");
+    render(true); setStatus("あなたの番です！");
+  }
+  document.getElementById("resetBtn").addEventListener("click", reset);
+  document.getElementById("modalReset").addEventListener("click", reset);
+  document.querySelectorAll(".level-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".level-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      level = parseInt(chip.dataset.lv, 10);
+    });
+  });
+
+  reset();
+})();
+</script>
+</body>
+</html>
