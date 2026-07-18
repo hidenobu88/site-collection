@@ -1,5 +1,5 @@
 /* ============================================
-   STELLA PRODUCTION - 共通スタイルシート
+   TORALUCE PRODUCTION - 共通スタイルシート
    画像・テキストを差し替えるだけで完成します
    ============================================ */
 
@@ -144,7 +144,7 @@ ul { list-style: none; }
     radial-gradient(ellipse at 80% 80%, rgba(120,90,200,.10), transparent 50%),
     var(--black);
 }
-/* 星の瞬きエフェクト（STELLA＝星の世界観） */
+/* 星の瞬きエフェクト（TORALUCE＝虎と光の世界観） */
 .hero::before, .hero::after {
   content: "";
   position: absolute;

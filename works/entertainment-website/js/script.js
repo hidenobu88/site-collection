@@ -1,5 +1,5 @@
 /* ============================================
-   STELLA PRODUCTION - 共通スクリプト
+   TORALUCE PRODUCTION - 共通スクリプト
    （データは js/data.js で管理しています）
    ============================================ */
 
@@ -229,7 +229,7 @@ const profileRoot = document.getElementById('profile-root');
 if (profileRoot) {
   const t = talentById(urlParam('id')) || TALENTS[0];
   const [role, birth] = t.info.split(' / ');
-  document.title = `${t.name} | STELLA PRODUCTION`;
+  document.title = `${t.name} | TORALUCE PRODUCTION`;
   document.getElementById('page-title').textContent = t.kana;
   document.getElementById('page-sub').textContent = t.name;
 
@@ -272,7 +272,7 @@ if (profileRoot) {
 const newsDetailRoot = document.getElementById('news-detail-root');
 if (newsDetailRoot) {
   const n = NEWS_ITEMS.find(x => x.id === urlParam('id')) || NEWS_ITEMS[0];
-  document.title = `${n.title} | STELLA PRODUCTION`;
+  document.title = `${n.title} | TORALUCE PRODUCTION`;
   const t = n.talentId ? talentById(n.talentId) : null;
 
   newsDetailRoot.innerHTML = `
@@ -292,7 +292,7 @@ const snsDetailRoot = document.getElementById('sns-detail-root');
 if (snsDetailRoot) {
   const p = SNS_POSTS.find(x => x.id === urlParam('id')) || SNS_POSTS[0];
   const t = talentById(p.talentId);
-  document.title = `${t.name}のSNS投稿 | STELLA PRODUCTION`;
+  document.title = `${t.name}のSNS投稿 | TORALUCE PRODUCTION`;
 
   snsDetailRoot.innerHTML = `
     <div class="sns-card sns-detail fade-in visible">

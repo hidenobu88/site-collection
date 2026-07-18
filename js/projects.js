@@ -47,7 +47,7 @@ const CATEGORIES = [
  */
 const PROJECTS = [
   {
-    title: "STELLA PRODUCTION — 芸能事務所サイト",
+    title: "TORALUCE PRODUCTION — 芸能事務所サイト",
     description: "架空の芸能事務所の公式サイト。所属タレント40名の一覧・プロフィール、ピックアップスライダー、月別の出演情報、SNS投稿、オーディション応募フォームまで備えた全14ページ構成。データは1ファイルで一括管理できる設計です。",
     url: "works/entertainment-website/index.html",
     category: "website",
