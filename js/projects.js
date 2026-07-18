@@ -105,6 +105,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "麻雀 虎の間 — 本格四人打ち麻雀",
+    description: "CPU3人と対戦できる1人用の本格麻雀。強さは弱・中・強の3段階、東風戦/半荘戦を選択可能。リーチ・鳴き・赤ドラ・裏ドラ・符計算までフルルールで、役と点数もきちんと計算します。スマホ・タブレット対応。",
+    url: "apps/mahjong/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🀄",
+    image: "images/mahjong.png",
+    date: "2026.07",
+  },
+  {
     title: "スミカ不動産 — 賃貸物件検索",
     description: "架空の不動産会社の賃貸物件検索サイト。条件を指定して物件を絞り込めます。",
     url: "works/rental-properties/index.html",
@@ -161,16 +171,6 @@ const PROJECTS = [
     tags: ["HTML", "CSS", "JavaScript"],
     emoji: "🐼",
     image: "images/othello.png",
-    date: "2026.07",
-  },
-  {
-    title: "麻雀 虎の間 — 本格四人打ち麻雀",
-    description: "CPU3人と対戦できる1人用の本格麻雀。強さは弱・中・強の3段階、東風戦/半荘戦を選択可能。リーチ・鳴き・赤ドラ・裏ドラ・符計算までフルルールで、役と点数もきちんと計算します。スマホ・タブレット対応。",
-    url: "apps/mahjong/index.html",
-    category: "webapp",
-    tags: ["HTML", "CSS", "JavaScript"],
-    emoji: "🀄",
-    image: "images/mahjong.png",
     date: "2026.07",
   },
   {
