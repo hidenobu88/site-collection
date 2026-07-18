@@ -1,0 +1,763 @@
+/* =========================================================
+ * style.css — 麻雀 虎の間
+ * ========================================================= */
+
+:root {
+  --felt-1: #1e6b4e;
+  --felt-2: #0d4231;
+  --wood-1: #4a3527;
+  --wood-2: #2c1f16;
+  --gold: #d9b45c;
+  --gold-soft: #b89a52;
+  --ivory: #f6f1e3;
+  --ivory-dim: #e7e0cd;
+  --ink: #232323;
+  --red: #c22f2f;
+  --bg: #10100e;
+  --panel: #1c1b17;
+  --panel-2: #262420;
+  --text: #efeadb;
+  --text-dim: #b6ad97;
+
+  /* 卓のサイズ（正方形）。ヘッダー+手牌バー+余白ぶんを引いた高さと幅の小さい方 */
+  --S: min(96vw, calc(100dvh - 236px), 660px);
+  --tw: calc(var(--S) * 0.0445);          /* 河の牌の幅 */
+  --th: calc(var(--tw) * 1.36);
+  --hw: min(calc((100vw - 28px) / 15.2), 46px);  /* 自分の手牌の幅 */
+  --hh: calc(var(--hw) * 1.36);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -200px, #2a2820 0%, transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- ヘッダー ---------- */
+.ghead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  height: 52px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 7px 12px;
+  border: 1px solid #3a372e;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.back:hover { color: var(--gold); border-color: var(--gold-soft); }
+
+.ghead-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 800;
+  line-height: 1;
+}
+.t-kanji { font-size: 20px; color: var(--text); letter-spacing: 0.15em; }
+.t-sub {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  border-left: 1px solid #4a463a;
+  padding-left: 8px;
+}
+
+.ghead-btns { display: flex; gap: 6px; }
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #3a372e;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.icon-btn:hover { color: var(--gold); border-color: var(--gold-soft); }
+.icon-btn.off { opacity: 0.4; }
+
+/* ---------- ステージ ---------- */
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px calc(10px + env(safe-area-inset-bottom));
+}
+
+/* ---------- 卓 ---------- */
+.board {
+  position: relative;
+  width: var(--S);
+  height: var(--S);
+  border-radius: calc(var(--S) * 0.045);
+  background:
+    radial-gradient(circle at 50% 42%, var(--felt-1) 0%, var(--felt-2) 78%);
+  box-shadow:
+    inset 0 0 0 calc(var(--S) * 0.012) var(--wood-1),
+    inset 0 0 0 calc(var(--S) * 0.016) var(--wood-2),
+    inset 0 calc(var(--S) * 0.02) calc(var(--S) * 0.06) rgba(0, 0, 0, 0.45),
+    0 14px 40px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+/* 各家のエリア（自分視点のレイアウトを回転させて配置） */
+.seat { position: absolute; inset: 0; pointer-events: none; }
+.seat.s1 { transform: rotate(-90deg); }
+.seat.s2 { transform: rotate(180deg); }
+.seat.s3 { transform: rotate(90deg); }
+
+/* 河 */
+.river {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--S) * 0.68);
+  transform: translateX(-50%);
+  width: calc(var(--tw) * 6 + 14px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5px;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+
+/* CPU の手牌（裏向き） */
+.oppo-hand {
+  position: absolute;
+  bottom: calc(var(--S) * 0.012);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.5px;
+}
+
+/* 副露 */
+.melds {
+  position: absolute;
+  right: calc(var(--S) * 0.02);
+  bottom: calc(var(--S) * 0.012);
+  display: flex;
+  gap: 5px;
+  flex-direction: row-reverse;
+}
+.meld { display: flex; gap: 1px; align-items: flex-end; }
+.melds .tile { width: calc(var(--tw) * 0.8); height: calc(var(--tw) * 0.8 * 1.36); border-radius: 3px; }
+.oppo-hand .tile { width: calc(var(--tw) * 0.82); height: calc(var(--tw) * 0.82 * 1.36); border-radius: 3px; }
+
+/* ---------- 牌 ---------- */
+.tile {
+  position: relative;
+  width: var(--tw);
+  height: var(--th);
+  border-radius: 14%/10%;
+  background: linear-gradient(160deg, #fdfaf1 0%, var(--ivory) 55%, var(--ivory-dim) 100%);
+  box-shadow:
+    inset 0 -2px 0 rgba(148, 130, 92, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1.5px 3px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+.tile svg { position: absolute; inset: 6% 5%; width: 90%; height: 88%; }
+
+.tile.t-back {
+  background: linear-gradient(160deg, #2f7a5c 0%, #1d5540 60%, #143c2d 100%);
+  box-shadow:
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1.5px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* リーチ宣言牌（横向き）：横倒しにした分だけ枠を広くする */
+.rv-slot { width: var(--tw); height: var(--th); position: relative; flex-shrink: 0; }
+.rv-slot.rot { width: var(--th); }
+.rv-slot .tile { position: absolute; left: 0; top: 0; }
+.rv-slot.rot .tile {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.tile.last { outline: 2px solid rgba(255, 235, 170, 0.95); outline-offset: 1px; }
+
+.tile.pop { animation: tilePop 0.22s ease-out; }
+@keyframes tilePop {
+  from { transform: translateY(-5px) scale(1.12); opacity: 0.4; }
+  to { transform: none; opacity: 1; }
+}
+.rv-slot.rot .tile.pop { animation: none; }
+
+/* ---------- 中央パネル ---------- */
+.center {
+  position: absolute;
+  inset: 33.5%;
+  overflow: hidden;
+  border-radius: 10%;
+  background: linear-gradient(160deg, #17352a 0%, #0e2820 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(217, 180, 92, 0.35),
+    inset 0 2px 10px rgba(0, 0, 0, 0.5),
+    0 2px 10px rgba(0, 0, 0, 0.3);
+  display: grid;
+  grid-template-rows: 20% minmax(0, 1fr) 20%;
+  grid-template-columns: 22% minmax(0, 1fr) 22%;
+  grid-template-areas:
+    "top top top"
+    "left mid right"
+    "bottom bottom bottom";
+  padding: 2.5%;
+  pointer-events: none;
+}
+
+.seatinfo { display: flex; align-items: center; justify-content: center; gap: 5px; }
+.seatinfo.pos-top { grid-area: top; }
+.seatinfo.pos-bottom { grid-area: bottom; }
+.seatinfo.pos-left { grid-area: left; flex-direction: column; }
+.seatinfo.pos-right { grid-area: right; flex-direction: column; }
+
+.si-wind {
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 800;
+  font-size: calc(var(--S) * 0.026);
+  width: calc(var(--S) * 0.042);
+  height: calc(var(--S) * 0.042);
+  display: grid;
+  place-items: center;
+  border-radius: 20%;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.05);
+  line-height: 1;
+  transition: all 0.25s;
+}
+.seatinfo.dealer .si-wind { color: #ffe9b0; background: rgba(194, 47, 47, 0.85); }
+.seatinfo.active .si-wind {
+  box-shadow: 0 0 0 2px rgba(255, 226, 140, 0.85), 0 0 14px rgba(255, 210, 100, 0.55);
+}
+
+.si-body { display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
+.si-name { white-space: nowrap; font-size: calc(var(--S) * 0.016); color: var(--text-dim); letter-spacing: 0.06em; }
+.si-score {
+  font-size: calc(var(--S) * 0.018);
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.si-score.minus { color: #ff9d8a; }
+.si-riichi {
+  width: calc(var(--S) * 0.055);
+  height: calc(var(--S) * 0.008);
+  border-radius: 99px;
+  background: #efeadb;
+  position: relative;
+  margin-top: 2px;
+  display: none;
+}
+.si-riichi::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--S) * 0.007);
+  height: calc(var(--S) * 0.007);
+  border-radius: 50%;
+  background: var(--red);
+  transform: translate(-50%, -50%);
+}
+.seatinfo.riichi .si-riichi { display: block; }
+
+.c-mid {
+  grid-area: mid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--S) * 0.008);
+}
+.round-label {
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 700;
+  font-size: calc(var(--S) * 0.032);
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+.round-sub {
+  font-size: calc(var(--S) * 0.016);
+  white-space: nowrap;
+  color: var(--text-dim);
+  display: flex;
+  gap: 0.8em;
+  align-items: center;
+}
+.dora-row { display: flex; gap: 2px; margin-top: calc(var(--S) * 0.004); }
+.dora-row .tile { width: calc(var(--S) * 0.028); height: calc(var(--S) * 0.038); border-radius: 3px; }
+.dora-label {
+  font-size: calc(var(--S) * 0.018);
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+}
+
+/* ---------- テンパイ表示行 ---------- */
+.hintrow {
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.chip {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.chip.tenpai { background: rgba(217, 180, 92, 0.16); color: var(--gold); border: 1px solid rgba(217, 180, 92, 0.4); }
+.chip.furiten { background: rgba(194, 47, 47, 0.16); color: #ff9d8a; border: 1px solid rgba(194, 47, 47, 0.45); }
+.wait-tiles { display: flex; gap: 2px; align-items: center; }
+.wait-tiles .tile { width: 19px; height: 26px; border-radius: 3px; }
+.wait-label { font-size: 11px; color: var(--text-dim); }
+
+/* ---------- 手牌バー ---------- */
+.handbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  min-height: calc(var(--hh) + 16px);
+  width: 100%;
+}
+.hand-tiles { display: flex; gap: 2.5px; align-items: flex-end; }
+.hand-tiles .tile {
+  width: var(--hw);
+  height: var(--hh);
+  cursor: pointer;
+  transition: transform 0.12s ease-out, box-shadow 0.12s;
+}
+.hand-tiles .tile.tsumogiri-gap { margin-left: calc(var(--hw) * 0.4); }
+.hand-tiles .tile.sel {
+  transform: translateY(calc(var(--hh) * -0.22));
+  box-shadow:
+    inset 0 -2px 0 rgba(148, 130, 92, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 6px 14px rgba(0, 0, 0, 0.5),
+    0 0 0 2px rgba(255, 226, 140, 0.9);
+}
+.hand-tiles .tile.dim { filter: brightness(0.45) saturate(0.6); cursor: default; }
+@media (hover: hover) {
+  .hand-tiles .tile:not(.dim):hover { transform: translateY(calc(var(--hh) * -0.12)); }
+  .hand-tiles .tile.sel:hover { transform: translateY(calc(var(--hh) * -0.22)); }
+}
+
+.hand-melds { display: flex; gap: 6px; align-items: flex-end; }
+.hand-melds .meld .tile { width: calc(var(--hw) * 0.62); height: calc(var(--hw) * 0.62 * 1.36); }
+
+/* ---------- アクションボタン ---------- */
+.actionbar {
+  min-height: 46px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.abtn {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid #4a463a;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.2s;
+  animation: btnIn 0.18s ease-out;
+}
+@keyframes btnIn { from { transform: translateY(6px); opacity: 0; } }
+.abtn:hover { transform: translateY(-1px); border-color: var(--gold-soft); }
+.abtn:active { transform: translateY(1px); }
+.abtn.primary {
+  background: linear-gradient(180deg, #e7c268, #c39a3e);
+  color: #241b07;
+  border-color: #e7c268;
+  box-shadow: 0 3px 14px rgba(217, 180, 92, 0.35);
+}
+.abtn.danger {
+  background: linear-gradient(180deg, #d8493a, #a72a20);
+  color: #fff;
+  border-color: #d8493a;
+}
+.abtn.ghost { opacity: 0.85; font-size: 12px; padding: 9px 16px; }
+
+/* チー候補などのミニ牌ボタン */
+.abtn.variant { display: inline-flex; gap: 3px; padding: 7px 12px; align-items: center; }
+.abtn.variant .tile { width: 22px; height: 30px; border-radius: 3px; }
+
+/* ---------- 宣言バナー（リーチ！ ロン！ など） ---------- */
+.banner {
+  position: fixed;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%, -50%);
+  z-index: 70;
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 800;
+  font-size: clamp(38px, 9vw, 64px);
+  letter-spacing: 0.2em;
+  padding: 0.15em 0.6em 0.15em 0.8em;
+  color: #fff7e3;
+  background: linear-gradient(100deg, rgba(140, 20, 20, 0.94), rgba(90, 8, 8, 0.94));
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  animation: bannerIn 0.9s ease-out forwards;
+}
+.banner.blue { background: linear-gradient(100deg, rgba(20, 60, 120, 0.94), rgba(10, 34, 72, 0.94)); }
+.banner .b-who {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  font-family: "Zen Kaku Gothic New", sans-serif;
+}
+@keyframes bannerIn {
+  0% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+  18% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---------- オーバーレイ共通 ---------- */
+.ovl {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(8, 8, 6, 0.78);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: ovlIn 0.25s ease-out;
+  overflow-y: auto;
+}
+@keyframes ovlIn { from { opacity: 0; } }
+
+.panel {
+  width: min(560px, 100%);
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+  background: linear-gradient(170deg, #24221c 0%, #191813 100%);
+  border: 1px solid #3d392e;
+  border-radius: 18px;
+  padding: 26px 22px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  animation: panelIn 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+@keyframes panelIn { from { transform: translateY(18px) scale(0.97); opacity: 0; } }
+
+.panel h2 {
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  text-align: center;
+  color: var(--text);
+}
+.panel .p-en {
+  display: block;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* ---------- スタート画面 ---------- */
+.start-logo {
+  text-align: center;
+  font-family: "Shippori Mincho B1", serif;
+  margin-bottom: 4px;
+}
+.start-logo .sl-main {
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  color: var(--text);
+  display: block;
+  line-height: 1.15;
+  text-shadow: 0 4px 24px rgba(217, 180, 92, 0.25);
+}
+.start-logo .sl-sub {
+  font-size: 14px;
+  letter-spacing: 0.55em;
+  color: var(--gold);
+  display: block;
+  margin-top: 2px;
+}
+.start-tiles { display: flex; justify-content: center; gap: 4px; margin: 14px 0 4px; }
+.start-tiles .tile { width: 34px; height: 46px; animation: tilePop 0.4s ease-out backwards; }
+.start-tiles .tile:nth-child(2) { animation-delay: 0.06s; }
+.start-tiles .tile:nth-child(3) { animation-delay: 0.12s; }
+.start-tiles .tile:nth-child(4) { animation-delay: 0.18s; }
+.start-tiles .tile:nth-child(5) { animation-delay: 0.24s; }
+
+.opt-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--text-dim);
+  margin: 20px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.opt-label::after { content: ""; flex: 1; height: 1px; background: #3a372e; }
+
+.diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.diffcard {
+  border: 1.5px solid #3a372e;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 12px 6px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.12s;
+  font-family: inherit;
+  color: var(--text);
+}
+.diffcard:hover { transform: translateY(-2px); }
+.diffcard .d-kanji {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 26px;
+  font-weight: 800;
+  display: block;
+  line-height: 1.2;
+}
+.diffcard .d-name { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; display: block; margin-top: 3px; }
+.diffcard .d-desc { font-size: 10px; color: var(--text-dim); display: block; margin-top: 3px; line-height: 1.5; }
+.diffcard.sel {
+  border-color: var(--gold);
+  background: rgba(217, 180, 92, 0.1);
+  box-shadow: 0 0 0 1px var(--gold), 0 6px 18px rgba(217, 180, 92, 0.15);
+}
+.diffcard.sel .d-kanji { color: var(--gold); }
+
+.len-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+.start-btn-row { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+.big-btn {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  padding: 15px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(180deg, #e7c268, #bd943a);
+  color: #241b07;
+  box-shadow: 0 6px 22px rgba(217, 180, 92, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.big-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(217, 180, 92, 0.4); }
+.big-btn:active { transform: translateY(1px); }
+.big-btn.sub {
+  background: none;
+  border: 1px solid #4a463a;
+  color: var(--text-dim);
+  box-shadow: none;
+  font-size: 13px;
+  padding: 12px;
+}
+.big-btn.sub:hover { color: var(--gold); border-color: var(--gold-soft); }
+
+/* ---------- 結果画面 ---------- */
+.res-head { text-align: center; margin-bottom: 14px; }
+.res-type {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+}
+.res-winner { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+.res-hand {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin: 12px 0;
+}
+.res-hand .tile { width: min(30px, 5.6vw); height: calc(min(30px, 5.6vw) * 1.36); }
+.res-hand .tile.win-tile { outline: 2px solid var(--gold); outline-offset: 1px; }
+.res-hand .meld-sep { width: 8px; }
+
+.res-doras { display: flex; justify-content: center; gap: 14px; margin: 8px 0 2px; }
+.res-doras .grp { display: flex; align-items: center; gap: 4px; }
+.res-doras .grp .lbl { font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; }
+.res-doras .grp .tile { width: 20px; height: 27px; border-radius: 3px; }
+
+.yaku-list { margin: 14px 0; border-top: 1px solid #35322a; }
+.yaku-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 6px;
+  border-bottom: 1px solid #35322a;
+  font-size: 14px;
+  animation: yakuIn 0.35s ease-out backwards;
+}
+@keyframes yakuIn { from { transform: translateX(-10px); opacity: 0; } }
+.yaku-row .y-han { color: var(--gold); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.res-total {
+  text-align: center;
+  margin: 16px 0 4px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.res-total strong {
+  display: block;
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+.res-total .r-title { color: var(--red); font-weight: 700; letter-spacing: 0.2em; }
+
+.score-diff { margin: 14px 0; display: grid; gap: 4px; }
+.sd-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 13px;
+}
+.sd-row .sd-delta { font-weight: 700; font-variant-numeric: tabular-nums; }
+.sd-row .plus { color: #8fd8a0; }
+.sd-row .minus { color: #ff9d8a; }
+.sd-row.me { outline: 1px solid rgba(217, 180, 92, 0.4); }
+
+/* 流局時のテンパイ表示 */
+.ryu-grid { display: grid; gap: 8px; margin: 14px 0; }
+.ryu-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 12px;
+}
+.ryu-row .r-state { font-weight: 700; letter-spacing: 0.1em; width: 64px; flex-shrink: 0; }
+.ryu-row .r-state.ten { color: var(--gold); }
+.ryu-row .r-state.noten { color: var(--text-dim); }
+.ryu-row .r-tiles { display: flex; gap: 1.5px; flex-wrap: wrap; }
+.ryu-row .r-tiles .tile { width: 17px; height: 23px; border-radius: 2.5px; }
+
+/* ---------- 最終結果 ---------- */
+.final-rows { margin: 18px 0; display: grid; gap: 8px; }
+.fr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #35322a;
+  animation: yakuIn 0.4s ease-out backwards;
+}
+.fr .f-rank {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 20px;
+  font-weight: 800;
+  width: 42px;
+  color: var(--text-dim);
+}
+.fr .f-name { flex: 1; font-weight: 700; font-size: 14px; }
+.fr .f-score { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 16px; }
+.fr.first {
+  border-color: var(--gold);
+  background: linear-gradient(100deg, rgba(217, 180, 92, 0.14), rgba(217, 180, 92, 0.04));
+}
+.fr.first .f-rank { color: var(--gold); }
+.fr.me .f-name::after { content: "（あなた）"; font-size: 10px; color: var(--gold); margin-left: 4px; }
+
+/* ---------- ヘルプ ---------- */
+.help-body { font-size: 13px; line-height: 1.9; color: var(--text-dim); margin-top: 14px; }
+.help-body h3 {
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  margin: 16px 0 4px;
+  font-weight: 700;
+}
+.help-body p { margin: 4px 0; }
+.help-body strong { color: var(--text); }
+
+/* ---------- レスポンシブ微調整 ---------- */
+@media (max-width: 560px) {
+  .t-sub { display: none; }
+  .ghead { height: 46px; padding: 6px 10px; }
+  :root { --S: min(97vw, calc(100dvh - 218px), 660px); }
+  .panel { padding: 22px 16px; }
+  .start-logo .sl-main { font-size: 40px; }
+}
+
+@media (min-width: 900px) {
+  .stage { gap: 10px; }
+}
+
+/* 横向きスマホ：卓を左、手牌を下に維持しつつ縮む */
+@media (max-height: 480px) and (orientation: landscape) {
+  :root { --S: min(58vw, calc(100dvh - 60px)); --hw: min(6.2vh, 40px); }
+  .ghead { height: 40px; }
+  .stage { flex-direction: row; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .hintrow { width: 34vw; }
+  .handbar { width: 36vw; }
+  .hand-tiles { flex-wrap: wrap; justify-content: center; }
+  .actionbar { width: 36vw; }
+}

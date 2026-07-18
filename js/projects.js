@@ -164,6 +164,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "麻雀 虎の間 — 本格四人打ち麻雀",
+    description: "CPU3人と対戦できる1人用の本格麻雀。強さは弱・中・強の3段階、東風戦/半荘戦を選択可能。リーチ・鳴き・赤ドラ・裏ドラ・符計算までフルルールで、役と点数もきちんと計算します。スマホ・タブレット対応。",
+    url: "apps/mahjong/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🀄",
+    image: "images/mahjong.png",
+    date: "2026.07",
+  },
+  {
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
