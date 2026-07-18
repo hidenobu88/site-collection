@@ -58,6 +58,16 @@ const PROJECTS = [
     featured: true,
   },
   {
+    title: "NAGI hair atelier — 表参道の美容室サイト",
+    description: "東京・表参道の架空プライベートヘアサロンの公式サイト。相場に沿った料金メニュー、スタイリスト4名のプロフィール、ヘアカタログ、口コミ、WEB予約フォームまで実在するかのような情報量。上品なミニマルデザインでスマホ・タブレット完全対応。",
+    url: "works/nagi-hair-salon/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "✂️",
+    image: "images/nagi-hair-salon.png",
+    date: "2026.07",
+  },
+  {
     title: "黒井戸ノ家 ―KUROIDO― お化け屋敷サイト",
     description: "ジャパニーズホラー映画の空気感をまとった架空お化け屋敷の公式サイト。警告ゲート、VHSノイズ、一瞬だけ映る女、乱れる生還者カウンターなど恐怖演出満載。心霊写真・恐怖体験談・7種の料金プランを収録。",
     url: "works/haunted-house/index.html",
