@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>古着屋ラクガキ堂 — RAKUGAKI DEPT. 下北沢</title>
+<meta name="description" content="下北沢の路地裏にある架空の古着屋『ラクガキ堂』。春夏秋冬で選べる古着・帽子・アクセサリーがぎっしり。半額セールもやってます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Hachi+Maru+Pop&family=Permanent+Marker&family=Rock+Salt&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   古着屋ラクガキ堂 — 落書きノート風デザイン
+   ============================================= */
+:root{
+  --paper:#fdf8ec;
+  --ink:#1d1d1b;
+  --pink:#ff4d8d;
+  --yellow:#ffd21f;
+  --cyan:#19c3e6;
+  --orange:#ff7b24;
+  --green:#3ec463;
+  --purple:#9b5de5;
+  --red:#e63946;
+  /* 手描き風のガタガタ角丸 */
+  --wobble:255px 15px 225px 15px / 15px 225px 15px 255px;
+  --wobble2:15px 225px 15px 255px / 225px 15px 255px 15px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Yomogi","Hachi Maru Pop",sans-serif;
+  background-color:var(--paper);
+  /* 方眼ノート風の下地 */
+  background-image:
+    linear-gradient(rgba(29,29,27,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,29,27,.05) 1px, transparent 1px);
+  background-size:28px 28px;
+  color:var(--ink);
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+
+/* ---------- 落書きパーツ(共通) ---------- */
+.doodle{position:absolute;pointer-events:none;user-select:none;z-index:0;}
+.marker{font-family:"Permanent Marker",cursive;}
+.scribble-underline{
+  background-image:linear-gradient(104deg, rgba(255,210,31,0) 1%, var(--yellow) 2%, rgba(255,210,31,.6) 96%, rgba(255,210,31,0) 98%);
+  background-repeat:no-repeat;
+  background-size:100% 42%;
+  background-position:0 75%;
+  padding:0 .15em;
+}
+
+/* ---------- ヘッダー ---------- */
+header{
+  position:sticky;top:0;z-index:100;
+  background:var(--ink);
+  color:#fff;
+  border-bottom:4px dashed var(--yellow);
+}
+.header-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;gap:12px;flex-wrap:wrap;
+}
+.logo{
+  font-family:"Hachi Maru Pop",cursive;
+  font-size:1.35rem;font-weight:700;
+  text-decoration:none;line-height:1.2;
+  display:flex;align-items:center;gap:10px;
+}
+.logo .logo-mark{
+  display:inline-grid;place-items:center;
+  width:44px;height:44px;flex:0 0 44px;
+  background:var(--yellow);color:var(--ink);
+  border:3px solid #fff;border-radius:var(--wobble);
+  font-size:1.5rem;transform:rotate(-8deg);
+}
+.logo small{
+  display:block;font-family:"Permanent Marker",cursive;
+  font-size:.62rem;font-weight:400;color:var(--yellow);letter-spacing:.18em;
+}
+nav ul{display:flex;list-style:none;gap:4px;flex-wrap:wrap;}
+nav a{
+  text-decoration:none;font-size:.86rem;font-weight:700;
+  padding:7px 13px;border-radius:var(--wobble);
+  border:2px solid transparent;display:inline-block;
+  transition:transform .15s;
+}
+nav a:hover{border-color:var(--yellow);color:var(--yellow);transform:rotate(-3deg) scale(1.08);}
+
+/* ---------- ヒーロー ---------- */
+.hero{
+  position:relative;
+  max-width:1200px;margin:0 auto;
+  padding:56px 18px 80px;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;
+}
+.hero-copy{position:relative;z-index:2;}
+.hero-copy .en{
+  font-family:"Rock Salt",cursive;
+  font-size:clamp(.8rem,2vw,1rem);
+  color:var(--pink);
+  transform:rotate(-2deg);display:inline-block;margin-bottom:14px;
+}
+.hero-copy h1{
+  font-family:"Hachi Maru Pop",cursive;
+  font-size:clamp(2rem,5.4vw,3.6rem);
+  line-height:1.35;letter-spacing:.02em;
+}
+.hero-copy h1 .wild{
+  display:inline-block;
+  color:#fff;background:var(--ink);
+  padding:.02em .22em;border-radius:var(--wobble);
+  transform:rotate(-2.5deg);
+}
+.hero-copy p{
+  margin-top:20px;font-size:1rem;line-height:2;max-width:34em;
+}
+.hero-cta{
+  display:inline-block;margin-top:26px;
+  font-family:"Hachi Maru Pop",cursive;font-size:1.05rem;font-weight:700;
+  background:var(--yellow);color:var(--ink);
+  border:3px solid var(--ink);border-radius:var(--wobble);
+  padding:14px 30px;text-decoration:none;
+  box-shadow:5px 5px 0 var(--ink);
+  transition:transform .15s, box-shadow .15s;
+}
+.hero-cta:hover{transform:translate(3px,3px) rotate(-1deg);box-shadow:1px 1px 0 var(--ink);}
+.hero-photo{position:relative;z-index:1;}
+.hero-photo .main-ph{
+  border:4px solid var(--ink);
+  border-radius:var(--wobble2);
+  transform:rotate(2.5deg);
+  box-shadow:10px 12px 0 rgba(29,29,27,.15);
+  overflow:hidden;
+}
+.hero-photo .main-ph img{width:100%;height:420px;object-fit:cover;}
+.hero-photo .sub-ph{
+  position:absolute;right:-14px;bottom:-38px;width:46%;
+  border:4px solid var(--ink);border-radius:var(--wobble);
+  transform:rotate(-6deg);overflow:hidden;
+  box-shadow:6px 8px 0 rgba(29,29,27,.2);
+}
+.hero-photo .sub-ph img{width:100%;height:170px;object-fit:cover;}
+.hero-badge{
+  position:absolute;left:-10px;top:-24px;z-index:3;
+  width:112px;height:112px;
+  background:var(--pink);color:#fff;
+  display:grid;place-items:center;text-align:center;
+  font-family:"Hachi Maru Pop",cursive;font-size:.92rem;font-weight:700;line-height:1.3;
+  border-radius:50%;
+  border:3px dashed #fff;outline:4px solid var(--pink);
+  transform:rotate(-12deg);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:rotate(-12deg) scale(1);}50%{transform:rotate(-12deg) scale(1.07);}}
+
+/* ヒーロー背景の落書き */
+.hero .doodle{opacity:.85;}
+.doodle svg{width:100%;height:100%;}
+
+/* ---------- 流れるテロップ ---------- */
+.ticker{
+  background:var(--pink);color:#fff;
+  border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);
+  overflow:hidden;white-space:nowrap;
+  transform:rotate(-1.2deg) scale(1.02);
+  margin:6px -10px;
+}
+.ticker-track{
+  display:inline-block;
+  padding:10px 0;
+  font-family:"Hachi Maru Pop",cursive;font-size:1rem;font-weight:700;letter-spacing:.06em;
+  animation:ticker 22s linear infinite;
+}
+.ticker-track span{margin:0 26px;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ---------- セールバナー ---------- */
+.sale-banner{
+  max-width:1080px;margin:64px auto 0;padding:0 18px;
+  position:relative;
+}
+.sale-inner{
+  position:relative;
+  background:var(--ink);color:#fff;
+  border-radius:var(--wobble);
+  padding:38px 30px;text-align:center;
+  border:4px solid var(--ink);
+  background-image:radial-gradient(rgba(255,255,255,.08) 2px, transparent 2px);
+  background-size:22px 22px;
+}
+.sale-inner .en{font-family:"Rock Salt",cursive;color:var(--cyan);font-size:.85rem;}
+.sale-inner h2{
+  font-family:"Hachi Maru Pop",cursive;
+  font-size:clamp(1.5rem,4.4vw,2.6rem);margin:12px 0 8px;
+}
+.sale-inner h2 em{font-style:normal;color:var(--yellow);font-size:1.35em;}
+.sale-inner p{font-size:.95rem;opacity:.85;}
+.sale-sticker{
+  position:absolute;
+  font-family:"Hachi Maru Pop",cursive;font-weight:700;
+  display:grid;place-items:center;text-align:center;
+  border-radius:50%;color:var(--ink);
+  z-index:2;
+}
+.sale-sticker.s1{
+  width:104px;height:104px;background:var(--yellow);
+  right:-6px;top:-34px;transform:rotate(10deg);
+  font-size:1.15rem;line-height:1.25;
+  box-shadow:3px 4px 0 rgba(0,0,0,.25);
+  clip-path:polygon(50% 0%, 61% 12%, 76% 5%, 81% 21%, 97% 20%, 94% 36%, 100% 45%, 92% 56%, 100% 68%, 86% 74%, 88% 90%, 72% 87%, 65% 100%, 50% 91%, 35% 100%, 28% 87%, 12% 90%, 14% 74%, 0% 68%, 8% 56%, 0% 45%, 6% 36%, 3% 20%, 19% 21%, 24% 5%, 39% 12%);
+}
+.sale-sticker.s2{
+  width:88px;height:88px;background:var(--cyan);color:#fff;
+  left:-4px;bottom:-26px;transform:rotate(-12deg);
+  font-size:.85rem;line-height:1.3;
+  border:3px dashed #fff;outline:4px solid var(--cyan);
+}
+
+/* ---------- セクション共通 ---------- */
+section{position:relative;}
+.section-inner{max-width:1200px;margin:0 auto;padding:84px 18px 30px;}
+.section-head{position:relative;text-align:center;margin-bottom:40px;}
+.section-head .en{
+  font-family:"Rock Salt",cursive;font-size:.85rem;color:var(--purple);
+  display:inline-block;transform:rotate(-2deg);
+}
+.section-head h2{
+  font-family:"Hachi Maru Pop",cursive;
+  font-size:clamp(1.6rem,4.2vw,2.4rem);
+  margin-top:10px;
+}
+.section-head p{margin-top:12px;font-size:.95rem;line-height:1.9;}
+
+/* ---------- 季節タブ ---------- */
+.season-tabs{
+  display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+  margin-bottom:44px;position:relative;z-index:2;
+}
+.season-tab{
+  font-family:"Hachi Maru Pop",cursive;
+  font-size:1.02rem;font-weight:700;
+  padding:12px 26px;cursor:pointer;
+  background:#fff;color:var(--ink);
+  border:3px solid var(--ink);border-radius:var(--wobble);
+  box-shadow:4px 4px 0 var(--ink);
+  transition:transform .15s, box-shadow .15s;
+}
+.season-tab:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
+.season-tab.active{transform:translate(4px,4px) rotate(-2deg);box-shadow:0 0 0 var(--ink);color:#fff;}
+.season-tab[data-season="spring"].active{background:var(--pink);}
+.season-tab[data-season="summer"].active{background:var(--cyan);}
+.season-tab[data-season="autumn"].active{background:var(--orange);}
+.season-tab[data-season="winter"].active{background:var(--purple);}
+
+.season-note{
+  text-align:center;font-size:.92rem;margin:-26px auto 34px;
+  font-family:"Yomogi",cursive;
+}
+
+/* ---------- 商品グリッド ---------- */
+.items{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:34px 26px;
+}
+.season-panel{display:none;animation:pop .35s ease;}
+.season-panel.active{display:grid;}
+@keyframes pop{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+.item{
+  position:relative;
+  background:#fff;
+  border:3px solid var(--ink);
+  border-radius:var(--wobble);
+  padding:12px 12px 18px;
+  box-shadow:6px 6px 0 rgba(29,29,27,.12);
+  transition:transform .18s, box-shadow .18s;
+}
+.item:nth-child(odd){transform:rotate(-1.1deg);}
+.item:nth-child(even){transform:rotate(1.1deg);}
+.item:hover{transform:rotate(0) translateY(-6px);box-shadow:8px 10px 0 rgba(29,29,27,.18);z-index:3;}
+/* マスキングテープ */
+.item::before{
+  content:"";
+  position:absolute;top:-12px;left:50%;
+  width:92px;height:24px;
+  transform:translateX(-50%) rotate(-3deg);
+  background:rgba(255,210,31,.75);
+  border-left:2px dashed rgba(29,29,27,.25);
+  border-right:2px dashed rgba(29,29,27,.25);
+  z-index:2;
+}
+.item:nth-child(3n)::before{background:rgba(25,195,230,.6);}
+.item:nth-child(3n+1)::before{background:rgba(255,77,141,.55);}
+.item .ph{
+  position:relative;overflow:hidden;
+  border:2px solid var(--ink);border-radius:var(--wobble2);
+  aspect-ratio:4/4.6;
+}
+.item .ph img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.item:hover .ph img{transform:scale(1.06) rotate(1deg);}
+.item h3{
+  font-family:"Hachi Maru Pop",cursive;
+  font-size:1rem;margin:14px 2px 4px;line-height:1.5;
+}
+.item .meta{font-size:.8rem;color:#777;margin:0 2px 8px;}
+.item .price{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  margin:0 2px;font-family:"Hachi Maru Pop",cursive;
+}
+.item .price .now{font-size:1.3rem;font-weight:700;}
+.item .price .was{
+  font-size:.85rem;color:#999;
+  text-decoration:line-through var(--red) 2px;
+}
+.item.on-sale .price .now{color:var(--red);}
+.item .tagline{
+  display:block;text-align:right;margin:8px 4px 0;
+  font-family:"Yomogi",cursive;font-size:.78rem;
+  color:var(--purple);transform:rotate(-2deg);
+}
+/* セールバッジ */
+.badge{
+  position:absolute;z-index:2;
+  display:grid;place-items:center;text-align:center;
+  font-family:"Hachi Maru Pop",cursive;font-weight:700;
+}
+.badge.half{
+  top:8px;right:8px;width:76px;height:76px;
+  background:var(--red);color:#fff;
+  font-size:1.05rem;line-height:1.15;
+  transform:rotate(12deg);
+  clip-path:polygon(50% 0%, 61% 12%, 76% 5%, 81% 21%, 97% 20%, 94% 36%, 100% 45%, 92% 56%, 100% 68%, 86% 74%, 88% 90%, 72% 87%, 65% 100%, 50% 91%, 35% 100%, 28% 87%, 12% 90%, 14% 74%, 0% 68%, 8% 56%, 0% 45%, 6% 36%, 3% 20%, 19% 21%, 24% 5%, 39% 12%);
+}
+.badge.off{
+  top:10px;right:10px;
+  background:var(--yellow);color:var(--ink);
+  font-size:.85rem;padding:7px 11px;
+  border:2px solid var(--ink);border-radius:var(--wobble);
+  transform:rotate(6deg);
+  box-shadow:2px 3px 0 rgba(0,0,0,.2);
+}
+.badge.newin{
+  top:10px;left:10px;
+  background:var(--green);color:#fff;
+  font-size:.78rem;padding:6px 10px;
+  border-radius:var(--wobble2);
+  transform:rotate(-6deg);
+}
+
+/* ---------- アクセサリーの棚(帯) ---------- */
+.acc-strip{
+  margin-top:70px;
+  background:var(--ink);
+  border-top:4px dashed var(--yellow);
+  border-bottom:4px dashed var(--yellow);
+  padding:56px 0 64px;
+  color:#fff;position:relative;overflow:hidden;
+}
+.acc-strip .section-head h2{color:#fff;}
+.acc-strip .section-head .en{color:var(--yellow);}
+.acc-strip .section-head p{color:#ccc;}
+.acc-grid{
+  max-width:1200px;margin:0 auto;padding:0 18px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:24px;
+}
+.acc-card{
+  background:var(--paper);color:var(--ink);
+  border-radius:var(--wobble2);
+  border:3px solid #fff;
+  padding:10px 10px 14px;
+  transform:rotate(-1.4deg);
+  transition:transform .18s;
+}
+.acc-card:nth-child(even){transform:rotate(1.6deg);}
+.acc-card:hover{transform:rotate(0) scale(1.04);}
+.acc-card .ph{overflow:hidden;border:2px solid var(--ink);border-radius:var(--wobble);aspect-ratio:4/3;}
+.acc-card .ph img{width:100%;height:100%;object-fit:cover;}
+.acc-card h3{font-family:"Hachi Maru Pop",cursive;font-size:.92rem;margin:10px 2px 2px;}
+.acc-card .price{font-family:"Hachi Maru Pop",cursive;font-size:1.05rem;font-weight:700;}
+.acc-card .price .was{font-size:.78rem;color:#999;text-decoration:line-through var(--red) 2px;margin-right:8px;}
+
+/* ---------- 店について ---------- */
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+}
+.about-photo{position:relative;}
+.about-photo img{
+  border:4px solid var(--ink);border-radius:var(--wobble);
+  transform:rotate(-2deg);width:100%;height:380px;object-fit:cover;
+  box-shadow:8px 10px 0 rgba(29,29,27,.15);
+}
+.about-copy h3{
+  font-family:"Hachi Maru Pop",cursive;font-size:1.4rem;margin-bottom:16px;line-height:1.6;
+}
+.about-copy p{line-height:2.1;font-size:.98rem;margin-bottom:14px;}
+.rule-list{list-style:none;margin-top:18px;}
+.rule-list li{
+  position:relative;padding:10px 14px 10px 44px;margin-bottom:10px;
+  background:#fff;border:2px solid var(--ink);border-radius:var(--wobble);
+  font-size:.92rem;
+}
+.rule-list li::before{
+  content:"✍️";position:absolute;left:12px;top:50%;transform:translateY(-50%);
+}
+
+/* ---------- 店舗情報 ---------- */
+.info-wrap{
+  display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:stretch;
+}
+.info-card{
+  background:#fff;border:3px solid var(--ink);border-radius:var(--wobble);
+  padding:30px 28px;box-shadow:6px 6px 0 rgba(29,29,27,.12);
+}
+.info-card h3{
+  font-family:"Hachi Maru Pop",cursive;font-size:1.2rem;margin-bottom:18px;
+}
+.info-card table{width:100%;border-collapse:collapse;font-size:.94rem;}
+.info-card th,.info-card td{
+  text-align:left;padding:10px 6px;vertical-align:top;
+  border-bottom:2px dashed rgba(29,29,27,.2);
+}
+.info-card th{white-space:nowrap;width:7em;font-weight:700;}
+.map-doodle{
+  background:#fff;border:3px solid var(--ink);border-radius:var(--wobble2);
+  padding:18px;box-shadow:6px 6px 0 rgba(29,29,27,.12);
+  display:flex;flex-direction:column;
+}
+.map-doodle h3{font-family:"Hachi Maru Pop",cursive;font-size:1.2rem;margin-bottom:12px;}
+.map-doodle .map-area{flex:1;min-height:260px;border:2px dashed rgba(29,29,27,.35);border-radius:12px;position:relative;overflow:hidden;background:#fdfbf3;}
+.map-doodle .map-area svg{position:absolute;inset:0;width:100%;height:100%;}
+.map-note{font-size:.82rem;margin-top:10px;color:#777;}
+
+/* ---------- フッター ---------- */
+footer{
+  margin-top:90px;background:var(--ink);color:#fff;
+  border-top:4px dashed var(--pink);
+  padding:46px 18px 90px;text-align:center;position:relative;overflow:hidden;
+}
+footer .f-logo{font-family:"Hachi Maru Pop",cursive;font-size:1.5rem;}
+footer .f-en{font-family:"Rock Salt",cursive;color:var(--yellow);font-size:.8rem;margin-top:8px;}
+footer p.copy{margin-top:22px;font-size:.8rem;color:#aaa;}
+footer .sns{margin-top:18px;display:flex;justify-content:center;gap:14px;}
+footer .sns a{
+  display:inline-grid;place-items:center;width:44px;height:44px;
+  background:#fff;color:var(--ink);border-radius:var(--wobble);
+  text-decoration:none;font-weight:700;font-family:"Permanent Marker",cursive;
+  transition:transform .15s;
+}
+footer .sns a:hover{transform:rotate(-8deg) scale(1.1);background:var(--yellow);}
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:40px;}
+  .hero-photo{margin-top:8px;}
+  .hero-photo .main-ph img{height:320px;}
+  .about-grid{grid-template-columns:1fr;}
+  .info-wrap{grid-template-columns:1fr;}
+}
+@media (max-width:600px){
+  .header-inner{justify-content:center;}
+  nav a{font-size:.78rem;padding:6px 9px;}
+  .hero-copy p{font-size:.92rem;}
+  .hero-photo .main-ph img{height:250px;}
+  .hero-photo .sub-ph img{height:120px;}
+  .hero-badge{width:92px;height:92px;font-size:.8rem;left:auto;right:-6px;top:-18px;}
+  .items{grid-template-columns:repeat(2,1fr);gap:26px 14px;}
+  .item{padding:8px 8px 14px;}
+  .item h3{font-size:.85rem;}
+  .item .price .now{font-size:1.1rem;}
+  .item .tagline{display:none;}
+  .badge.half{width:60px;height:60px;font-size:.85rem;}
+  .badge.off{font-size:.72rem;padding:5px 8px;}
+  .acc-grid{grid-template-columns:repeat(2,1fr);gap:16px;}
+  .about-photo img{height:260px;}
+  .season-tab{padding:10px 16px;font-size:.9rem;}
+  .doodle{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== ヘッダー ===== -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#top">
+      <span class="logo-mark">👕</span>
+      <span>古着屋ラクガキ堂<small>RAKUGAKI DEPT. — SHIMOKITAZAWA</small></span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#sale">セール</a></li>
+        <li><a href="#items">アイテム</a></li>
+        <li><a href="#acc">小物・アクセ</a></li>
+        <li><a href="#about">お店のこと</a></li>
+        <li><a href="#info">アクセス</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===== ヒーロー ===== -->
+<section class="hero">
+  <!-- 背景の落書き -->
+  <div class="doodle" style="left:2%;top:6%;width:90px;height:90px;">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M15 60 Q30 10 55 35 T90 30" stroke="#ff4d8d" stroke-width="5" stroke-linecap="round"/><path d="M78 18 L90 30 L74 38" stroke="#ff4d8d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="doodle" style="right:4%;top:2%;width:70px;height:70px;">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M50 8 L59 38 L91 38 L65 56 L75 88 L50 68 L25 88 L35 56 L9 38 L41 38 Z" stroke="#ffd21f" stroke-width="6" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="doodle" style="left:44%;bottom:4%;width:110px;height:56px;">
+    <svg viewBox="0 0 120 60" fill="none"><path d="M6 32 Q18 10 30 32 T54 32 T78 32 T102 32" stroke="#19c3e6" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+
+  <div class="hero-copy">
+    <span class="en">Vintage &amp; Doodle Clothing Store</span>
+    <h1>ダサいとか言うな。<br><span class="wild">一点モノ</span>って言え。</h1>
+    <p>
+      下北沢の路地裏、シャッターの落書きが目印の古着屋「ラクガキ堂」。
+      店主が世界中から拾い集めた古着・帽子・アクセサリーが、
+      壁いっぱいの落書きと一緒にぎゅうぎゅうに並んでます。
+      春・夏・秋・冬、季節ごとに探せるから今日着たい一枚がすぐ見つかる。
+    </p>
+    <a class="hero-cta" href="#items">🖊 アイテムをあさる →</a>
+  </div>
+
+  <div class="hero-photo">
+    <span class="hero-badge">全品<br>一点モノ!</span>
+    <div class="main-ph">
+      <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="落書きだらけの壁の前で履かれた黒のスニーカー">
+    </div>
+    <div class="sub-ph">
+      <img src="https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?auto=compress&cs=tinysrgb&w=700" alt="木製ハンガーに掛かった古着のラック">
+    </div>
+  </div>
+</section>
+
+<!-- ===== 流れるテロップ ===== -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>🔥 夏物ぜんぶ対象! MAX半額セール開催中</span><span>👖 ヴィンテージデニム大量入荷</span><span>🧢 帽子2点目 30%OFF</span><span>✌️ 試着し放題・撮影OK</span><span>🔥 夏物ぜんぶ対象! MAX半額セール開催中</span><span>👖 ヴィンテージデニム大量入荷</span><span>🧢 帽子2点目 30%OFF</span><span>✌️ 試着し放題・撮影OK</span>
+  </div>
+</div>
+
+<!-- ===== セールバナー ===== -->
+<section id="sale" class="sale-banner">
+  <div class="sale-inner">
+    <span class="sale-sticker s1">最大<br>半額</span>
+    <span class="sale-sticker s2">7/31<br>まで!</span>
+    <span class="en">Summer Doodle Sale!!</span>
+    <h2>真夏のラクガキ大セール <em>MAX 50%OFF</em></h2>
+    <p>赤いバッジ付きのアイテムがぜんぶ値下げ中。半額の星マークは早いもの勝ち。迷ったら負けです。</p>
+  </div>
+</section>
+
+<!-- ===== 季節のアイテム ===== -->
+<section id="items">
+  <div class="section-inner">
+    <div class="doodle" style="right:3%;top:40px;width:80px;height:80px;">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="38" stroke="#9b5de5" stroke-width="5" stroke-dasharray="10 8"/><path d="M35 52 L47 63 L68 38" stroke="#9b5de5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-head">
+      <span class="en">Pick Your Season!</span>
+      <h2>季節で選ぶ、<span class="scribble-underline">きょうの一点モノ</span></h2>
+      <p>着たい季節のタブを押してね。値段は古着相場。赤札はセール中!</p>
+    </div>
+
+    <div class="season-tabs" role="tablist">
+      <button class="season-tab active" data-season="spring" role="tab" aria-selected="true">🌸 春</button>
+      <button class="season-tab" data-season="summer" role="tab" aria-selected="false">🌻 夏</button>
+      <button class="season-tab" data-season="autumn" role="tab" aria-selected="false">🍁 秋</button>
+      <button class="season-tab" data-season="winter" role="tab" aria-selected="false">⛄ 冬</button>
+    </div>
+    <p class="season-note" id="season-note">🌸 春 — 花見もデートも、軽めの一枚でラクに決める。</p>
+
+    <!-- ---------- 春 ---------- -->
+    <div class="items season-panel active" data-season="spring">
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">20%OFF</span>
+          <img src="https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=700" alt="オーバーサイズシャツとサテンスカートのセットアップを着た女性" loading="lazy">
+        </div>
+        <h3>シャツ×サテンスカート セットアップ</h3>
+        <p class="meta">レディース / サイズF / 状態A</p>
+        <div class="price"><span class="was">¥9,800</span><span class="now">¥7,800</span></div>
+        <span class="tagline">サングラス似合う</span>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <span class="badge newin">NEW</span>
+          <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=700" alt="白シャツと黒スラックスのセットアップを着た男性" loading="lazy">
+        </div>
+        <h3>白シャツ×スラックス きれいめセットアップ</h3>
+        <p class="meta">メンズ / M〜L / 状態A</p>
+        <div class="price"><span class="now">¥6,900</span></div>
+        <span class="tagline">入学式もイケる</span>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/2065195/pexels-photo-2065195.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ピンクのフリルワンピースを着た女性" loading="lazy">
+        </div>
+        <h3>フリル袖ワンピース(ピンク)</h3>
+        <p class="meta">レディース / S〜M / 状態A</p>
+        <div class="price"><span class="now">¥5,900</span></div>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">30%OFF</span>
+          <img src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=700" alt="マスタードイエローのパーカーを着た男性" loading="lazy">
+        </div>
+        <h3>90s ビッグシルエットパーカー(黄)</h3>
+        <p class="meta">ユニセックス / L / 状態B</p>
+        <div class="price"><span class="was">¥6,000</span><span class="now">¥4,200</span></div>
+        <span class="tagline">壁の前で撮って</span>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/2048548/pexels-photo-2048548.jpeg?auto=compress&cs=tinysrgb&w=700" alt="キャラクターアートがペイントされた白いスニーカー" loading="lazy">
+        </div>
+        <h3>手描きアート スニーカー</h3>
+        <p class="meta">27.0cm / 状態B / 世界に一足</p>
+        <div class="price"><span class="now">¥6,800</span></div>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge half">半額!</span>
+          <img src="https://images.pexels.com/photos/267320/pexels-photo-267320.jpeg?auto=compress&cs=tinysrgb&w=700" alt="青・グレー・赤の3色のスエードローファー" loading="lazy">
+        </div>
+        <h3>スエードローファー(各色)</h3>
+        <p class="meta">25.5〜27.0cm / 状態B</p>
+        <div class="price"><span class="was">¥7,800</span><span class="now">¥3,900</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg?auto=compress&cs=tinysrgb&w=700" alt="箱に入ったチェック柄のドレスシャツ" loading="lazy">
+        </div>
+        <h3>デッドストック ドレスシャツ</h3>
+        <p class="meta">メンズ / M / 箱付き未使用</p>
+        <div class="price"><span class="now">¥2,900</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/1082528/pexels-photo-1082528.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ハンガーに掛けられた2本のブルージーンズ" loading="lazy">
+        </div>
+        <h3>ライトブルー デニムパンツ</h3>
+        <p class="meta">W28〜34 / 状態B</p>
+        <div class="price"><span class="now">¥4,500</span></div>
+        <span class="tagline">春は薄い色!</span>
+      </article>
+    </div>
+
+    <!-- ---------- 夏 ---------- -->
+    <div class="items season-panel" data-season="summer">
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">25%OFF</span>
+          <img src="https://images.pexels.com/photos/1936854/pexels-photo-1936854.jpeg?auto=compress&cs=tinysrgb&w=700" alt="黄色のフリルワンピースを着て赤いヒールを履いた女性" loading="lazy">
+        </div>
+        <h3>サンフラワーイエロー ワンピース</h3>
+        <p class="meta">レディース / M / 状態A</p>
+        <div class="price"><span class="was">¥8,300</span><span class="now">¥6,200</span></div>
+        <span class="tagline">夏の主役</span>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <span class="badge newin">NEW</span>
+          <img src="https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ラックに並んだ白いサマーワンピース" loading="lazy">
+        </div>
+        <h3>ボヘミアン サマーワンピ(白系いろいろ)</h3>
+        <p class="meta">レディース / F / 状態A〜B</p>
+        <div class="price"><span class="now">¥4,800</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=700" alt="白い無地Tシャツを着た男性" loading="lazy">
+        </div>
+        <h3>USコットン 無地Tシャツ(白)</h3>
+        <p class="meta">ユニセックス / S〜XL / 状態A</p>
+        <div class="price"><span class="now">¥1,800</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/1656684/pexels-photo-1656684.jpeg?auto=compress&cs=tinysrgb&w=700" alt="黒いTシャツと黒いハットを合わせた男性" loading="lazy">
+        </div>
+        <h3>ビッグシルエットT(黒)×ハットコーデ</h3>
+        <p class="meta">メンズ / L / 状態A</p>
+        <div class="price"><span class="now">¥2,400</span></div>
+        <span class="tagline">全身黒はズルい</span>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge half">半額!</span>
+          <img src="https://images.pexels.com/photos/984619/pexels-photo-984619.jpeg?auto=compress&cs=tinysrgb&w=700" alt="プールサイドに置かれたパナマハット" loading="lazy">
+        </div>
+        <h3>パナマハット(リボン付き)</h3>
+        <p class="meta">58cm / 状態A</p>
+        <div class="price"><span class="was">¥7,200</span><span class="now">¥3,600</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=700" alt="レンガの上に置かれた赤いスナップバックキャップ" loading="lazy">
+        </div>
+        <h3>90s スナップバックキャップ(赤)</h3>
+        <p class="meta">フリーサイズ / 状態B</p>
+        <div class="price"><span class="now">¥2,800</span></div>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">30%OFF</span>
+          <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?auto=compress&cs=tinysrgb&w=700" alt="夕暮れの砂浜に置かれたオレンジレンズのサングラス" loading="lazy">
+        </div>
+        <h3>ティアドロップ サングラス</h3>
+        <p class="meta">ユニセックス / 状態A</p>
+        <div class="price"><span class="was">¥3,100</span><span class="now">¥2,200</span></div>
+        <span class="tagline">夕日が似合う</span>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=700" alt="グレーとイエローのランニングスニーカー" loading="lazy">
+        </div>
+        <h3>テック系ランニングスニーカー</h3>
+        <p class="meta">26.5cm / 状態A</p>
+        <div class="price"><span class="now">¥7,400</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/1413420/pexels-photo-1413420.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ターコイズブルーのタッセルピアス" loading="lazy">
+        </div>
+        <h3>ターコイズ タッセルピアス</h3>
+        <p class="meta">ハンドメイド / 未使用</p>
+        <div class="price"><span class="now">¥1,500</span></div>
+      </article>
+    </div>
+
+    <!-- ---------- 秋 ---------- -->
+    <div class="items season-panel" data-season="autumn">
+      <article class="item">
+        <div class="ph">
+          <span class="badge newin">NEW</span>
+          <img src="https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=700" alt="デニムジャケットとキャップを合わせた男性" loading="lazy">
+        </div>
+        <h3>80s デニムジャケット</h3>
+        <p class="meta">メンズ / M〜L / 状態B</p>
+        <div class="price"><span class="now">¥8,900</span></div>
+        <span class="tagline">育てる系デニム</span>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">20%OFF</span>
+          <img src="https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?auto=compress&cs=tinysrgb&w=700" alt="黒のレザーライダースジャケットを着てサングラスをかけた男性" loading="lazy">
+        </div>
+        <h3>レザー ダブルライダース(黒)</h3>
+        <p class="meta">メンズ / L / 状態A</p>
+        <div class="price"><span class="was">¥18,500</span><span class="now">¥14,800</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/794064/pexels-photo-794064.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ピンクのニットとチェックスカートを合わせた女性" loading="lazy">
+        </div>
+        <h3>ピンクニット×チェックスカート セット</h3>
+        <p class="meta">レディース / M / 状態A</p>
+        <div class="price"><span class="now">¥6,600</span></div>
+        <span class="tagline">秋のガーリー</span>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge half">半額!</span>
+          <img src="https://images.pexels.com/photos/322207/pexels-photo-322207.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ボーダーTシャツ・レザーバッグ・ブーツ・時計を並べた秋コーデ一式" loading="lazy">
+        </div>
+        <h3>秋の全身まるごとコーデセット</h3>
+        <p class="meta">Tシャツ+バッグ+ブーツ+ベルト+時計</p>
+        <div class="price"><span class="was">¥25,600</span><span class="now">¥12,800</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/603022/pexels-photo-603022.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ラックに並んだ色の濃さが違うヴィンテージジーンズ" loading="lazy">
+        </div>
+        <h3>ヴィンテージデニム(色いろいろ)</h3>
+        <p class="meta">W26〜36 / 状態B〜C</p>
+        <div class="price"><span class="now">¥5,400</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/1878821/pexels-photo-1878821.jpeg?auto=compress&cs=tinysrgb&w=700" alt="黒いメッシュのトラッカーキャップ" loading="lazy">
+        </div>
+        <h3>トラッカーキャップ(黒)</h3>
+        <p class="meta">フリーサイズ / 状態A</p>
+        <div class="price"><span class="now">¥2,600</span></div>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">40%OFF</span>
+          <img src="https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&w=700" alt="キャメル色のレザーサッチェルバッグ" loading="lazy">
+        </div>
+        <h3>レザー サッチェルバッグ(キャメル)</h3>
+        <p class="meta">ショルダー2way / 状態B</p>
+        <div class="price"><span class="was">¥12,000</span><span class="now">¥7,200</span></div>
+        <span class="tagline">通学にどうぞ</span>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/1103833/pexels-photo-1103833.jpeg?auto=compress&cs=tinysrgb&w=700" alt="グレーのツイードスーツと革ベルトの腕時計" loading="lazy">
+        </div>
+        <h3>英国調ツイード セットアップ</h3>
+        <p class="meta">メンズ / M / 状態A</p>
+        <div class="price"><span class="now">¥11,800</span></div>
+      </article>
+    </div>
+
+    <!-- ---------- 冬 ---------- -->
+    <div class="items season-panel" data-season="winter">
+      <article class="item">
+        <div class="ph">
+          <span class="badge newin">NEW</span>
+          <img src="https://images.pexels.com/photos/837140/pexels-photo-837140.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ベージュのチェスターコートと黒タートルネックを着た男性" loading="lazy">
+        </div>
+        <h3>チェスターコート(キャメル)</h3>
+        <p class="meta">メンズ / L / 状態A</p>
+        <div class="price"><span class="now">¥12,600</span></div>
+        <span class="tagline">タートル合わせて</span>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">30%OFF</span>
+          <img src="https://images.pexels.com/photos/1381556/pexels-photo-1381556.jpeg?auto=compress&cs=tinysrgb&w=700" alt="グレーのウールコートとベレー帽、チェックスカートを合わせた女性" loading="lazy">
+        </div>
+        <h3>ウールコート×ベレー帽コーデ</h3>
+        <p class="meta">レディース / M / 状態A</p>
+        <div class="price"><span class="was">¥14,000</span><span class="now">¥9,800</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&w=700" alt="雪の中でフード付きの黒いコートを着た女性" loading="lazy">
+        </div>
+        <h3>フーデッド ロングコート(黒)</h3>
+        <p class="meta">レディース / M〜L / 状態B</p>
+        <div class="price"><span class="now">¥8,400</span></div>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge half">半額!</span>
+          <img src="https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=700" alt="白いケーブルニットとデニム、眼鏡を並べた冬コーデセット" loading="lazy">
+        </div>
+        <h3>白ニット×デニム 冬コーデセット</h3>
+        <p class="meta">レディース / M / 状態A</p>
+        <div class="price"><span class="was">¥13,800</span><span class="now">¥6,900</span></div>
+        <span class="tagline">雪の日これで</span>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/45982/pexels-photo-45982.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ネイビーとグレーのボーダーニットセーター" loading="lazy">
+        </div>
+        <h3>ローゲージ ボーダーニット</h3>
+        <p class="meta">ユニセックス / M / 状態B</p>
+        <div class="price"><span class="now">¥3,800</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&w=700" alt="ブラウンのファーハットをかぶった女性" loading="lazy">
+        </div>
+        <h3>ロシアン ファーハット</h3>
+        <p class="meta">57〜58cm / 状態A</p>
+        <div class="price"><span class="now">¥4,600</span></div>
+        <span class="tagline">あったかい!</span>
+      </article>
+      <article class="item on-sale">
+        <div class="ph">
+          <span class="badge off">25%OFF</span>
+          <img src="https://images.pexels.com/photos/1159670/pexels-photo-1159670.jpeg?auto=compress&cs=tinysrgb&w=700" alt="青い壁に掛けられた黄色の8ホールブーツ" loading="lazy">
+        </div>
+        <h3>イエロー 8ホールブーツ</h3>
+        <p class="meta">26.0cm / 状態B</p>
+        <div class="price"><span class="was">¥12,300</span><span class="now">¥9,200</span></div>
+      </article>
+      <article class="item">
+        <div class="ph">
+          <img src="https://images.pexels.com/photos/1035685/pexels-photo-1035685.jpeg?auto=compress&cs=tinysrgb&w=700" alt="スタッズ付きの黒いレザージャケットを着た紫髪の女性" loading="lazy">
+        </div>
+        <h3>スタッズ&amp;ワッペン パンクレザー</h3>
+        <p class="meta">レディース / M / 状態B / 前オーナーの魂入り</p>
+        <div class="price"><span class="now">¥13,500</span></div>
+        <span class="tagline">ロックしてる</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 小物・アクセサリーの棚 ===== -->
+<section id="acc" class="acc-strip">
+  <div class="section-inner" style="padding-top:0;padding-bottom:34px;">
+    <div class="section-head">
+      <span class="en">Small Treasures</span>
+      <h2>ちいさな宝もの棚(小物・アクセ)</h2>
+      <p>レジ横のガラスケースの中身。ぜんぶ一点モノなので早い者勝ち。</p>
+    </div>
+  </div>
+  <div class="acc-grid">
+    <div class="acc-card">
+      <div class="ph"><img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=600" alt="シルバーのクロノグラフ腕時計" loading="lazy"></div>
+      <h3>クロノグラフ腕時計(シルバー)</h3>
+      <p class="price">¥15,800</p>
+    </div>
+    <div class="acc-card">
+      <div class="ph"><img src="https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?auto=compress&cs=tinysrgb&w=600" alt="黒文字盤のミニマルな腕時計" loading="lazy"></div>
+      <h3>ミニマル腕時計(黒文字盤)</h3>
+      <p class="price"><span class="was">¥9,000</span>¥6,300</p>
+    </div>
+    <div class="acc-card">
+      <div class="ph"><img src="https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?auto=compress&cs=tinysrgb&w=600" alt="重ね付けされたシルバーリング" loading="lazy"></div>
+      <h3>シルバーリング 3連セット</h3>
+      <p class="price">¥2,900</p>
+    </div>
+    <div class="acc-card">
+      <div class="ph"><img src="https://images.pexels.com/photos/45055/pexels-photo-45055.jpeg?auto=compress&cs=tinysrgb&w=600" alt="小紋柄のブルーのネクタイ" loading="lazy"></div>
+      <h3>レトロ小紋ネクタイ(青)</h3>
+      <p class="price">¥1,200</p>
+    </div>
+    <div class="acc-card">
+      <div class="ph"><img src="https://images.pexels.com/photos/293405/pexels-photo-293405.jpeg?auto=compress&cs=tinysrgb&w=600" alt="ブラウンのレザードレスシューズ" loading="lazy"></div>
+      <h3>レザードレスシューズ(茶)</h3>
+      <p class="price"><span class="was">¥8,600</span>¥4,300</p>
+    </div>
+    <div class="acc-card">
+      <div class="ph"><img src="https://images.pexels.com/photos/1204464/pexels-photo-1204464.jpeg?auto=compress&cs=tinysrgb&w=600" alt="黒のミニサッチェルバッグを持つ女性" loading="lazy"></div>
+      <h3>ミニサッチェルバッグ(黒)</h3>
+      <p class="price">¥3,400</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== お店のこと ===== -->
+<section id="about">
+  <div class="section-inner">
+    <div class="doodle" style="left:2%;top:60px;width:70px;height:70px;">
+      <svg viewBox="0 0 100 100" fill="none"><path d="M50 85 C20 60 8 40 20 26 C30 15 45 20 50 32 C55 20 70 15 80 26 C92 40 80 60 50 85 Z" stroke="#ff4d8d" stroke-width="5"/></svg>
+    </div>
+    <div class="section-head">
+      <span class="en">About Us</span>
+      <h2>ラクガキ堂って<span class="scribble-underline">こんな店</span></h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-photo">
+        <img src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="服がぎっしり並んだ店内の様子">
+      </div>
+      <div class="about-copy">
+        <h3>「誰かのお下がり」じゃなくて、<br>「誰かの物語のつづき」を売る店。</h3>
+        <p>
+          2013年、店主が旅先で集めすぎた古着を自宅で売り始めたのがきっかけ。
+          気づけば下北沢に店を構えて、壁もシャッターも常連さんの落書きでいっぱいになりました。
+          並んでいるのは店主が実際に見て、触って、「これは誰かに着てほしい」と思った服だけ。
+        </p>
+        <ul class="rule-list">
+          <li>試着はし放題。鏡の前で30分悩んでもOK</li>
+          <li>店内は撮影OK。落書き壁の前が人気スポット</li>
+          <li>お直し(裾上げ・ボタン付け)は無料でやります</li>
+          <li>着なくなった服の買い取り・物々交換もどうぞ</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 店舗情報・アクセス ===== -->
+<section id="info">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="en">Shop Info &amp; Access</span>
+      <h2>お店の場所と営業時間</h2>
+    </div>
+    <div class="info-wrap">
+      <div class="info-card">
+        <h3>📋 店舗情報</h3>
+        <table>
+          <tr><th>店名</th><td>古着屋ラクガキ堂(RAKUGAKI DEPT.)</td></tr>
+          <tr><th>住所</th><td>〒155-0031 東京都世田谷区北沢2-XX-X ラクガキビル1F<br><small>※このお店は架空です</small></td></tr>
+          <tr><th>アクセス</th><td>小田急線・京王井の頭線「下北沢駅」東口から徒歩4分</td></tr>
+          <tr><th>営業時間</th><td>12:00 〜 20:00</td></tr>
+          <tr><th>定休日</th><td>水曜日(気分で臨時休業あり。SNSを見てね)</td></tr>
+          <tr><th>支払い</th><td>現金 / 各種キャッシュレス対応</td></tr>
+        </table>
+      </div>
+      <div class="map-doodle">
+        <h3>🖍 店主の手描きマップ</h3>
+        <div class="map-area">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="下北沢駅からラクガキ堂までの手描き風地図">
+            <path d="M60 300 L60 190 Q60 170 80 170 L340 170" stroke="#bbb" stroke-width="26" fill="none"/>
+            <path d="M0 60 L400 100" stroke="#bbb" stroke-width="20" fill="none"/>
+            <path d="M60 300 L60 190 Q60 170 80 170 L340 170" stroke="#fff" stroke-width="3" stroke-dasharray="12 10" fill="none"/>
+            <rect x="20" y="30" width="110" height="52" rx="10" fill="#1d1d1b" transform="rotate(6 75 56)"/>
+            <text x="75" y="62" text-anchor="middle" fill="#fff" font-size="17" font-family="'Hachi Maru Pop',cursive" transform="rotate(6 75 56)">下北沢駅</text>
+            <path d="M95 95 Q120 130 95 160 Q80 180 100 195" stroke="#ff4d8d" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 10"/>
+            <path d="M100 195 Q140 230 200 225 Q260 220 285 225" stroke="#ff4d8d" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 10"/>
+            <text x="150" y="270" font-size="14" fill="#ff4d8d" font-family="'Yomogi',cursive" transform="rotate(-3 150 270)">← 徒歩4分らしい</text>
+            <circle cx="310" cy="222" r="34" fill="#ffd21f" stroke="#1d1d1b" stroke-width="3"/>
+            <text x="310" y="218" text-anchor="middle" font-size="13" font-family="'Hachi Maru Pop',cursive">ラクガキ堂</text>
+            <text x="310" y="236" text-anchor="middle" font-size="15">👕</text>
+            <text x="230" y="150" font-size="12" fill="#999" font-family="'Yomogi',cursive">茶沢通り(てきとう)</text>
+            <text x="330" y="60" font-size="18" transform="rotate(10 330 60)">☕</text>
+            <text x="180" y="60" font-size="18">🍜</text>
+          </svg>
+        </div>
+        <p class="map-note">※店主の記憶で描いた地図なので、だいたいの雰囲気です。迷ったら電話してね。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== フッター ===== -->
+<footer>
+  <div class="doodle" style="left:6%;top:20px;width:60px;height:60px;opacity:.5;">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M50 8 L59 38 L91 38 L65 56 L75 88 L50 68 L25 88 L35 56 L9 38 L41 38 Z" stroke="#ffd21f" stroke-width="6" stroke-linejoin="round"/></svg>
+  </div>
+  <p class="f-logo">古着屋ラクガキ堂</p>
+  <p class="f-en">RAKUGAKI DEPT. — Vintage Clothing, Shimokitazawa</p>
+  <div class="sns">
+    <a href="#top" aria-label="Instagram(ダミー)">Ig</a>
+    <a href="#top" aria-label="X(ダミー)">X</a>
+    <a href="#top" aria-label="TikTok(ダミー)">Tt</a>
+  </div>
+  <p class="copy">© 2026 RAKUGAKI DEPT. — このサイトはポートフォリオ用の架空の古着屋です。<br>写真: Pexels / 商品・価格はすべてフィクションです。</p>
+</footer>
+
+<!-- TOPページへ戻るボタン -->
+<a href="../../index.html" data-topbtn style="position:fixed;left:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:5px;background:rgba(25,25,25,.82);color:#fff;font-family:system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;padding:9px 16px;border-radius:999px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);">↑ TOPページへ</a>
+
+<script>
+// ===== 季節タブの切り替え =====
+const tabs = document.querySelectorAll(".season-tab");
+const panels = document.querySelectorAll(".season-panel");
+const note = document.getElementById("season-note");
+const NOTES = {
+  spring: "🌸 春 — 花見もデートも、軽めの一枚でラクに決める。",
+  summer: "🌻 夏 — Tシャツ・帽子・サングラス。セール品もいちばん多い季節!",
+  autumn: "🍁 秋 — レザーとデニムの季節。重ね着の相棒を探そう。",
+  winter: "⛄ 冬 — コートもニットも一点モノ。あったかくて誰ともかぶらない。",
+};
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    const season = tab.dataset.season;
+    tabs.forEach(t => {
+      t.classList.toggle("active", t === tab);
+      t.setAttribute("aria-selected", t === tab ? "true" : "false");
+    });
+    panels.forEach(p => p.classList.toggle("active", p.dataset.season === season));
+    note.textContent = NOTES[season];
+  });
+});
+</script>
+</body>
+</html>

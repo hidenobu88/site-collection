@@ -68,6 +68,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "古着屋ラクガキ堂 — 下北沢のヴィンテージショップ",
+    description: "落書きノート風のちょっと奇抜なデザインでつくった架空の古着屋サイト。春・夏・秋・冬のタブで商品を切り替えられ、セットアップ・帽子・アクセなど35点以上を古着相場の値段で掲載。半額や〇〇%OFFのセールバッジ、手描き風マップ付き。スマホ・タブレット対応。",
+    url: "works/rakugaki-vintage/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "👕",
+    image: "images/rakugaki-vintage.png",
+    date: "2026.07",
+  },
+  {
     title: "黒井戸ノ家 ―KUROIDO― お化け屋敷サイト",
     description: "ジャパニーズホラー映画の空気感をまとった架空お化け屋敷の公式サイト。警告ゲート、VHSノイズ、一瞬だけ映る女、乱れる生還者カウンターなど恐怖演出満載。心霊写真・恐怖体験談・7種の料金プランを収録。",
     url: "works/haunted-house/index.html",
