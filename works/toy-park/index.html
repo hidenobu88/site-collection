@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トイトイパーク TOYTOY PARK — おもちゃがいっぱい!夢のおもちゃやさん</title>
+<meta name="description" content="ラジコン・プラモデル・ゲーム・おままごと・お人形・パズルまで、子どもが大すきなおもちゃがぜんぶそろう架空のおもちゃ屋さん「トイトイパーク」。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   トイトイパーク — 子ども向けおもちゃ屋サイト
+   トイ・ストーリーの空(青空+白い雲)をイメージした世界観
+   ============================================================ */
+:root{
+  --sky:#7ec8f7;
+  --sky-deep:#4aa8ee;
+  --red:#ff4b4b;
+  --red-deep:#e02f2f;
+  --yellow:#ffd23f;
+  --yellow-deep:#f5b800;
+  --green:#4cc36b;
+  --blue:#2d7ff0;
+  --pink:#ff7bb0;
+  --pink-soft:#ffe3ef;
+  --blue-soft:#dcefff;
+  --cream:#fffbea;
+  --ink:#26356b;
+  --white:#ffffff;
+  --radius:22px;
+  --shadow:0 6px 0 rgba(38,53,107,.18);
+  --font-round:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",sans-serif;
+  --font-pop:"Baloo 2","M PLUS Rounded 1c",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:90px;}
+body{
+  font-family:var(--font-round);
+  color:var(--ink);
+  background:var(--sky);
+  overflow-x:hidden;
+  font-weight:500;
+}
+img,svg{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:none;}
+
+/* ---------- 雲もようの背景 ---------- */
+.sky-bg{
+  background:
+    radial-gradient(circle at 18% 22%, #fff 0 34px, transparent 35px),
+    radial-gradient(circle at 24% 20%, #fff 0 44px, transparent 45px),
+    radial-gradient(circle at 31% 23%, #fff 0 32px, transparent 33px),
+    radial-gradient(circle at 72% 64%, #fff 0 30px, transparent 31px),
+    radial-gradient(circle at 78% 61%, #fff 0 42px, transparent 43px),
+    radial-gradient(circle at 85% 65%, #fff 0 28px, transparent 29px),
+    linear-gradient(180deg,#8fd2ff 0%,#6fbdf4 100%);
+  background-size:520px 420px,520px 420px,520px 420px,520px 420px,520px 420px,520px 420px,100% 100%;
+}
+
+/* ---------- おしらせテープ(赤白ストライプ) ---------- */
+.tape{
+  background:repeating-linear-gradient(45deg,var(--red) 0 26px,#fff 26px 52px);
+  padding:6px 0;
+  border-bottom:4px solid var(--ink);
+}
+.tape p{
+  text-align:center;
+  font-weight:800;
+  font-size:.85rem;
+  color:var(--ink);
+  background:rgba(255,255,255,.85);
+  display:table;
+  margin:0 auto;
+  padding:2px 18px;
+  border-radius:999px;
+}
+
+/* ---------- ヘッダー ---------- */
+header.site-header{
+  position:sticky;top:0;z-index:1000;
+  background:var(--white);
+  border-bottom:4px solid var(--ink);
+  box-shadow:0 4px 0 rgba(38,53,107,.15);
+}
+.header-inner{
+  max-width:1180px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;padding:10px 18px;
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{
+  width:52px;height:52px;flex:none;
+  background:var(--yellow);
+  border:3px solid var(--ink);
+  border-radius:14px;
+  display:grid;place-items:center;
+  box-shadow:0 4px 0 rgba(38,53,107,.2);
+  transform:rotate(-6deg);
+  font-size:1.6rem;
+}
+.logo-text{line-height:1.05;}
+.logo-text .en{
+  font-family:var(--font-pop);
+  font-weight:800;font-size:1.5rem;letter-spacing:.02em;
+  display:flex;
+}
+.logo-text .en span{ text-shadow:2px 2px 0 rgba(38,53,107,.15); }
+.logo-text .jp{font-size:.7rem;font-weight:800;letter-spacing:.28em;color:var(--ink);}
+.c-r{color:var(--red);} .c-y{color:var(--yellow-deep);} .c-b{color:var(--blue);}
+.c-g{color:var(--green);} .c-p{color:var(--pink);}
+
+nav.main-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+.nav-btn{
+  font-weight:800;font-size:.86rem;
+  padding:9px 16px;border-radius:999px;
+  border:3px solid var(--ink);
+  background:var(--white);
+  box-shadow:0 3px 0 rgba(38,53,107,.2);
+  transition:transform .12s, box-shadow .12s;
+  white-space:nowrap;
+}
+.nav-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(38,53,107,.2);}
+.nav-btn.boy{background:var(--blue-soft);}
+.nav-btn.girl{background:var(--pink-soft);}
+.cart-btn{
+  position:relative;
+  background:var(--yellow);
+  font-size:1.05rem;
+  padding:8px 14px;
+}
+.cart-count{
+  position:absolute;top:-8px;right:-8px;
+  min-width:24px;height:24px;padding:0 5px;
+  background:var(--red);color:#fff;
+  border:2px solid var(--ink);
+  border-radius:999px;
+  font-size:.75rem;font-weight:800;
+  display:grid;place-items:center;
+}
+.cart-count.pop{animation:pop .35s;}
+@keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.6) rotate(-8deg);}100%{transform:scale(1);}}
+
+/* ---------- ヒーロー ---------- */
+.hero{
+  position:relative;
+  padding:64px 18px 110px;
+  text-align:center;
+  overflow:hidden;
+}
+.cloud{
+  position:absolute;
+  background:#fff;
+  border-radius:999px;
+  opacity:.95;
+}
+.cloud::before,.cloud::after{
+  content:"";position:absolute;background:#fff;border-radius:50%;
+}
+.cloud.c1{width:150px;height:52px;top:40px;left:4%;animation:float 9s ease-in-out infinite;}
+.cloud.c1::before{width:64px;height:64px;top:-30px;left:24px;}
+.cloud.c1::after{width:46px;height:46px;top:-20px;left:76px;}
+.cloud.c2{width:200px;height:64px;top:130px;right:2%;animation:float 11s ease-in-out infinite reverse;}
+.cloud.c2::before{width:84px;height:84px;top:-40px;left:34px;}
+.cloud.c2::after{width:60px;height:60px;top:-26px;left:106px;}
+.cloud.c3{width:120px;height:44px;bottom:150px;left:12%;animation:float 13s ease-in-out infinite;}
+.cloud.c3::before{width:52px;height:52px;top:-24px;left:20px;}
+.cloud.c3::after{width:38px;height:38px;top:-16px;left:62px;}
+@keyframes float{0%,100%{transform:translateX(0);}50%{transform:translateX(26px);}}
+
+.hero-star{
+  position:absolute;font-size:2rem;
+  animation:twinkle 2.6s ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0deg);opacity:1;}50%{transform:scale(1.35) rotate(18deg);opacity:.7;}}
+
+.hero-badge{
+  position:relative;z-index:2;
+  display:inline-block;
+  background:var(--red);color:#fff;
+  font-weight:800;font-size:.9rem;
+  padding:7px 22px;border-radius:999px;
+  border:3px solid var(--ink);
+  box-shadow:0 4px 0 rgba(38,53,107,.25);
+  transform:rotate(-2deg);
+  margin-bottom:20px;
+}
+.hero h1{
+  position:relative;z-index:2;
+  font-family:var(--font-pop);
+  font-size:clamp(2.6rem,8vw,5.2rem);
+  line-height:1;
+  letter-spacing:.01em;
+  margin-bottom:6px;
+}
+.hero h1 .bounce-letter{
+  display:inline-block;
+  -webkit-text-stroke:2.5px var(--ink);
+  paint-order:stroke fill;
+  text-shadow:4px 5px 0 rgba(38,53,107,.22);
+  animation:bounce 2.4s ease-in-out infinite;
+}
+.hero h1 .bounce-letter:nth-child(2n){animation-delay:.15s;}
+.hero h1 .bounce-letter:nth-child(3n){animation-delay:.3s;}
+.hero h1 .bounce-letter:nth-child(5n){animation-delay:.45s;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+.hero .hero-jp{
+  position:relative;z-index:2;
+  font-size:clamp(1.05rem,3vw,1.5rem);
+  font-weight:800;color:#fff;
+  text-shadow:0 2px 0 rgba(38,53,107,.35);
+  margin-bottom:26px;
+}
+.hero-lead{
+  position:relative;z-index:2;
+  max-width:640px;margin:0 auto 34px;
+  background:rgba(255,255,255,.92);
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px 22px;
+  font-weight:700;font-size:.98rem;
+  line-height:1.9;
+}
+.hero-cta{
+  position:relative;z-index:2;
+  display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
+}
+.cta-btn{
+  font-family:inherit;
+  font-weight:800;font-size:1.05rem;
+  padding:16px 30px;
+  border-radius:999px;
+  border:3px solid var(--ink);
+  box-shadow:0 6px 0 rgba(38,53,107,.28);
+  transition:transform .12s, box-shadow .12s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 9px 0 rgba(38,53,107,.28);}
+.cta-btn:active{transform:translateY(2px);box-shadow:0 3px 0 rgba(38,53,107,.28);}
+.cta-boy{background:var(--blue);color:#fff;}
+.cta-girl{background:var(--pink);color:#fff;}
+
+/* 丘(緑の地面) */
+.hero-hill{
+  position:absolute;left:-10%;right:-10%;bottom:-70px;height:150px;
+  background:var(--green);
+  border-radius:50% 50% 0 0;
+  border-top:4px solid var(--ink);
+}
+
+/* ---------- あんしんポイント ---------- */
+.points{
+  background:var(--green);
+  padding:34px 18px 44px;
+  border-bottom:4px solid var(--ink);
+}
+.points-inner{
+  max-width:1080px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+}
+.point-card{
+  background:#fff;
+  border:3px solid var(--ink);
+  border-radius:18px;
+  box-shadow:0 4px 0 rgba(38,53,107,.22);
+  padding:16px 12px;
+  text-align:center;
+}
+.point-card .pt-emoji{font-size:1.9rem;}
+.point-card h3{font-size:.92rem;font-weight:800;margin:6px 0 3px;}
+.point-card p{font-size:.74rem;font-weight:700;color:#5b678f;line-height:1.6;}
+
+/* ---------- セクション共通 ---------- */
+.toy-section{padding:64px 18px 80px;position:relative;}
+.toy-section.boy{background:var(--blue-soft);}
+.toy-section.girl{background:var(--pink-soft);border-top:4px solid var(--ink);}
+.section-inner{max-width:1180px;margin:0 auto;}
+.section-head{text-align:center;margin-bottom:30px;}
+.section-tag{
+  display:inline-block;
+  font-family:var(--font-pop);
+  font-weight:800;font-size:1rem;
+  color:#fff;
+  padding:6px 20px;border-radius:999px;
+  border:3px solid var(--ink);
+  box-shadow:0 3px 0 rgba(38,53,107,.25);
+  margin-bottom:12px;
+  transform:rotate(-2deg);
+}
+.boy .section-tag{background:var(--blue);}
+.girl .section-tag{background:var(--pink);}
+.section-head h2{
+  font-size:clamp(1.7rem,5vw,2.6rem);
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.section-head h2 .big{
+  font-size:1.25em;
+  -webkit-text-stroke:1.5px var(--ink);
+  paint-order:stroke fill;
+}
+.boy .section-head h2 .big{color:var(--blue);}
+.girl .section-head h2 .big{color:var(--pink);}
+.section-head p.sub{font-weight:700;color:#5b678f;margin-top:8px;font-size:.92rem;}
+
+/* フィルターチップ */
+.chips{
+  display:flex;gap:9px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:34px;
+}
+.chip{
+  font-weight:800;font-size:.86rem;
+  padding:9px 18px;border-radius:999px;
+  border:3px solid var(--ink);
+  background:#fff;color:var(--ink);
+  box-shadow:0 3px 0 rgba(38,53,107,.2);
+  transition:transform .12s, background .12s;
+}
+.chip:hover{transform:translateY(-2px);}
+.boy .chip.active{background:var(--blue);color:#fff;}
+.girl .chip.active{background:var(--pink);color:#fff;}
+
+/* ---------- おもちゃカード ---------- */
+.toy-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:22px;
+}
+.toy-card{
+  background:#fff;
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  position:relative;
+  transition:transform .15s, box-shadow .15s;
+  animation:cardin .4s ease both;
+}
+@keyframes cardin{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.toy-card:hover{transform:translateY(-5px) rotate(-.6deg);box-shadow:0 11px 0 rgba(38,53,107,.18);}
+.toy-card.hidden{display:none;}
+.toy-badge{
+  position:absolute;top:10px;left:10px;z-index:3;
+  background:var(--red);color:#fff;
+  font-size:.68rem;font-weight:800;
+  padding:4px 10px;border-radius:999px;
+  border:2px solid var(--ink);
+  transform:rotate(-6deg);
+  box-shadow:0 2px 0 rgba(38,53,107,.25);
+}
+.toy-badge.new{background:var(--green);}
+.toy-badge.sale{background:var(--yellow);color:var(--ink);}
+.toy-img{
+  padding:18px 18px 6px;
+  display:grid;place-items:center;
+}
+.toy-img svg{
+  width:100%;max-width:170px;height:auto;
+  filter:drop-shadow(0 4px 0 rgba(38,53,107,.12));
+  transition:transform .2s;
+}
+.toy-card:hover .toy-img svg{transform:scale(1.07) rotate(2deg);}
+.toy-body{
+  padding:6px 16px 16px;
+  display:flex;flex-direction:column;gap:7px;flex:1;
+}
+.toy-meta{display:flex;gap:6px;flex-wrap:wrap;}
+.toy-cat,.toy-age{
+  font-size:.66rem;font-weight:800;
+  padding:3px 10px;border-radius:999px;
+  border:2px solid var(--ink);
+}
+.boy .toy-cat{background:var(--blue-soft);}
+.girl .toy-cat{background:var(--pink-soft);}
+.toy-age{background:var(--cream);}
+.toy-name{font-size:1rem;font-weight:800;line-height:1.45;flex:1;}
+.toy-price{
+  font-family:var(--font-pop);
+  font-weight:800;font-size:1.35rem;
+  color:var(--red-deep);
+  line-height:1;
+}
+.toy-price small{font-size:.62rem;font-family:var(--font-round);font-weight:800;color:#5b678f;margin-left:4px;}
+.buy-btn{
+  margin-top:4px;
+  background:var(--yellow);
+  border:3px solid var(--ink);
+  border-radius:999px;
+  font-weight:800;font-size:.88rem;
+  padding:10px 12px;
+  box-shadow:0 4px 0 rgba(38,53,107,.22);
+  transition:transform .1s, box-shadow .1s, background .15s;
+}
+.buy-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,53,107,.22);}
+.buy-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(38,53,107,.22);}
+.buy-btn.added{background:var(--green);color:#fff;}
+
+.empty-msg{
+  text-align:center;font-weight:800;color:#5b678f;
+  padding:40px 0;display:none;
+}
+
+/* ---------- トースト ---------- */
+#toast{
+  position:fixed;left:50%;bottom:84px;z-index:9999;
+  transform:translateX(-50%) translateY(30px);
+  background:var(--ink);color:#fff;
+  font-weight:800;font-size:.9rem;
+  padding:12px 26px;border-radius:999px;
+  border:3px solid #fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s, transform .25s;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ---------- フッター ---------- */
+footer.site-footer{
+  background:var(--ink);
+  color:#fff;
+  padding:50px 18px 90px;
+  position:relative;
+}
+.footer-stripe{
+  height:14px;
+  background:repeating-linear-gradient(45deg,var(--yellow) 0 22px,var(--red) 22px 44px,#fff 44px 66px,var(--blue) 66px 88px);
+  border-top:4px solid var(--ink);
+  border-bottom:4px solid var(--ink);
+}
+.footer-inner{
+  max-width:1080px;margin:0 auto;
+  display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:30px;
+}
+.footer-inner h3{
+  font-family:var(--font-pop);
+  font-size:1.3rem;margin-bottom:10px;
+}
+.footer-inner p,.footer-inner li{
+  font-size:.84rem;line-height:2;color:#c8d2f0;font-weight:700;
+  list-style:none;
+}
+.footer-inner h4{
+  font-size:.95rem;margin-bottom:8px;color:var(--yellow);
+}
+.copyright{
+  text-align:center;margin-top:36px;
+  font-size:.76rem;color:#8d9ac4;font-weight:700;
+}
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width:900px){
+  .points-inner{grid-template-columns:repeat(2,1fr);}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:640px){
+  .header-inner{flex-wrap:wrap;justify-content:center;padding:8px 10px;}
+  nav.main-nav{width:100%;justify-content:center;}
+  .nav-btn{font-size:.78rem;padding:8px 12px;}
+  .hero{padding:44px 14px 100px;}
+  .toy-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .toy-body{padding:4px 10px 12px;}
+  .toy-name{font-size:.85rem;}
+  .toy-price{font-size:1.15rem;}
+  .buy-btn{font-size:.78rem;padding:9px 8px;}
+  .toy-img{padding:12px 12px 2px;}
+  .footer-inner{grid-template-columns:1fr;}
+  .points{padding:26px 12px 34px;}
+  .point-card p{font-size:.68rem;}
+}
+@media (max-width:380px){
+  .toy-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- おしらせテープ -->
+<div class="tape">
+  <p>🎉 ただいま おもちゃまつり かいさいちゅう! 5,500円(税込)いじょうのおかいもので そうりょう むりょう!</p>
+</div>
+
+<!-- ヘッダー -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="#top">
+      <span class="logo-mark">🧸</span>
+      <span class="logo-text">
+        <span class="en"><span class="c-r">T</span><span class="c-y">O</span><span class="c-b">Y</span><span class="c-g">T</span><span class="c-p">O</span><span class="c-r">Y</span>&nbsp;<span class="c-b">P</span><span class="c-y">A</span><span class="c-g">R</span><span class="c-p">K</span></span>
+        <span class="jp">トイトイパーク</span>
+      </span>
+    </a>
+    <nav class="main-nav">
+      <a class="nav-btn boy" href="#boys">🚗 男の子のおもちゃ</a>
+      <a class="nav-btn girl" href="#girls">🎀 女の子のおもちゃ</a>
+      <button class="nav-btn cart-btn" id="cartBtn" type="button">🛒<span class="cart-count" id="cartCount">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero sky-bg" id="top">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <span class="hero-star" style="top:16%;left:16%;">⭐</span>
+  <span class="hero-star" style="top:10%;right:20%;animation-delay:.7s;">✨</span>
+  <span class="hero-star" style="bottom:34%;right:9%;animation-delay:1.2s;">⭐</span>
+  <span class="hero-star" style="bottom:40%;left:7%;animation-delay:.4s;">🌟</span>
+
+  <span class="hero-badge">ゆめと ぼうけんが まってるよ!</span>
+  <h1>
+    <span class="bounce-letter c-r">T</span><span class="bounce-letter c-y">O</span><span class="bounce-letter c-b">Y</span><span class="bounce-letter c-g">T</span><span class="bounce-letter c-p">O</span><span class="bounce-letter c-r">Y</span><span class="bounce-letter" style="color:transparent;-webkit-text-stroke:0;">&nbsp;</span><span class="bounce-letter c-b">P</span><span class="bounce-letter c-y">A</span><span class="bounce-letter c-g">R</span><span class="bounce-letter c-p">K</span>
+  </h1>
+  <p class="hero-jp">おもちゃの もりの ゆうえんち 🎡 トイトイパーク</p>
+  <div class="hero-lead">
+    ラジコンに プラモデル、おままごとに おにんぎょう。<br>
+    ここは えらべないくらい おもちゃがいっぱいの ゆめのお店。<br>
+    きみの「だいすき!」が きっとみつかるよ。
+  </div>
+  <div class="hero-cta">
+    <a class="cta-btn cta-boy" href="#boys">🚀 男の子のおもちゃをみる</a>
+    <a class="cta-btn cta-girl" href="#girls">🦄 女の子のおもちゃをみる</a>
+  </div>
+  <div class="hero-hill"></div>
+</section>
+
+<!-- あんしんポイント -->
+<section class="points">
+  <div class="points-inner">
+    <div class="point-card">
+      <div class="pt-emoji">🎁</div>
+      <h3>ラッピングむりょう</h3>
+      <p>おたんじょうび用・クリスマス用えらべます</p>
+    </div>
+    <div class="point-card">
+      <div class="pt-emoji">🚚</div>
+      <h3>そうりょうむりょう</h3>
+      <p>5,500円(税込)いじょうのおかいもので</p>
+    </div>
+    <div class="point-card">
+      <div class="pt-emoji">🔰</div>
+      <h3>たいしょう年れい表示</h3>
+      <p>すべてのおもちゃに「なんさいから」を表示</p>
+    </div>
+    <div class="point-card">
+      <div class="pt-emoji">🛡️</div>
+      <h3>あんぜんきじゅん合格</h3>
+      <p>おもちゃ安全基準(ST)合格品だけをはんばい</p>
+    </div>
+  </div>
+</section>
+
+<!-- 男の子セクション -->
+<section class="toy-section boy" id="boys">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-tag">FOR BOYS</span>
+      <h2>【<span class="big">男の子用</span>】のおもちゃ</h2>
+      <p class="sub">ラジコン・プラモデル・ゲーム・そとあそび、ぜんぶあるよ!</p>
+    </div>
+    <div class="chips" id="boyChips" role="tablist"></div>
+    <div class="toy-grid" id="boyGrid"></div>
+    <p class="empty-msg" id="boyEmpty">このカテゴリのおもちゃは じゅんびちゅうだよ!</p>
+  </div>
+</section>
+
+<!-- 女の子セクション -->
+<section class="toy-section girl" id="girls">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-tag">FOR GIRLS</span>
+      <h2>【<span class="big">女の子用</span>】のおもちゃ</h2>
+      <p class="sub">おままごと・おにんぎょう・パズル・てづくり、かわいいがいっぱい!</p>
+    </div>
+    <div class="chips" id="girlChips" role="tablist"></div>
+    <div class="toy-grid" id="girlGrid"></div>
+    <p class="empty-msg" id="girlEmpty">このカテゴリのおもちゃは じゅんびちゅうだよ!</p>
+  </div>
+</section>
+
+<!-- フッター -->
+<div class="footer-stripe"></div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <h3>🧸 TOYTOY PARK</h3>
+      <p>トイトイパークは「えらべないほど おもちゃがいっぱい」がじまんの、架空のおもちゃ屋さんです。<br>このサイトはポートフォリオ用のサンプルサイトで、実在の店舗・商品ではありません。</p>
+    </div>
+    <div>
+      <h4>お店のごあんない</h4>
+      <ul>
+        <li>📍 〒000-0000 ゆめの国トイタウン1-2-3(サンプル表記)</li>
+        <li>🕙 えいぎょう時間 10:00〜19:00</li>
+        <li>📅 ていきゅうび 水よう日</li>
+      </ul>
+    </div>
+    <div>
+      <h4>おかいものガイド</h4>
+      <ul>
+        <li>💳 各種キャッシュレスOK</li>
+        <li>🎁 ラッピングむりょう</li>
+        <li>🚚 5,500円いじょうで そうりょうむりょう</li>
+        <li>↩️ 8日いない へんぴんOK(未開封にかぎる)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="copyright">© 2026 TOYTOY PARK — Portfolio sample site. すべての商品・価格は架空のものです。</p>
+</footer>
+
+<div id="toast">🛒 カートにいれたよ!</div>
+
+<a href="../../index.html" data-topbtn style="position:fixed;left:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:5px;background:rgba(25,25,25,.82);color:#fff;font-family:system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;padding:9px 16px;border-radius:999px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);">↑ TOPページへ</a>
+
+<script>
+/* ============================================================
+   おもちゃデータ(すべて架空の商品・相場に沿った税込価格)
+   svg: 手描きのオリジナルイラスト(viewBox 0 0 100 100)
+   ============================================================ */
+const BOY_CATS = [
+  { id:"all",     label:"ぜんぶみる" },
+  { id:"rc",      label:"🚗 ラジコン・のりもの" },
+  { id:"build",   label:"🤖 プラモデル・ブロック" },
+  { id:"game",    label:"🎮 ゲーム" },
+  { id:"outdoor", label:"⚽ そとあそび" },
+  { id:"other",   label:"🦖 その他" },
+];
+const GIRL_CATS = [
+  { id:"all",   label:"ぜんぶみる" },
+  { id:"mama",  label:"🍳 おままごと" },
+  { id:"doll",  label:"🧸 おにんぎょう" },
+  { id:"puzzle",label:"🧩 パズル・ちいく" },
+  { id:"craft", label:"💍 てづくり・アクセ" },
+  { id:"other", label:"👑 その他" },
+];
+
+const BOY_TOYS = [
+  { name:"ビュンビュン ラジコンカー RX", cat:"rc", price:4378, age:"6さい〜", badge:"人気No.1",
+    svg:`<circle cx="50" cy="50" r="47" fill="#dff1ff"/><rect x="70" y="14" width="15" height="20" rx="4" fill="#ffd23f" stroke="#26356b" stroke-width="3"/><line x1="77" y1="14" x2="77" y2="4" stroke="#26356b" stroke-width="3" stroke-linecap="round"/><circle cx="74" cy="22" r="2" fill="#26356b"/><circle cx="81" cy="22" r="2" fill="#e02f2f"/><rect x="28" y="40" width="34" height="18" rx="8" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/><rect x="12" y="52" width="72" height="17" rx="8" fill="#ff4b4b" stroke="#26356b" stroke-width="3"/><rect x="34" y="44" width="10" height="9" rx="3" fill="#dff1ff" stroke="#26356b" stroke-width="2.5"/><rect x="20" y="57" width="44" height="5" rx="2.5" fill="#ffd23f"/><circle cx="30" cy="72" r="10" fill="#26356b"/><circle cx="30" cy="72" r="4.5" fill="#aab6d8"/><circle cx="68" cy="72" r="10" fill="#26356b"/><circle cx="68" cy="72" r="4.5" fill="#aab6d8"/>`},
+  { name:"モンスターバギー 4WDラジコン", cat:"rc", price:5478, age:"6さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#e7f7e9"/><rect x="26" y="34" width="46" height="20" rx="9" fill="#4cc36b" stroke="#26356b" stroke-width="3"/><rect x="36" y="38" width="12" height="9" rx="3" fill="#dff1ff" stroke="#26356b" stroke-width="2.5"/><line x1="30" y1="34" x2="24" y2="18" stroke="#26356b" stroke-width="3" stroke-linecap="round"/><path d="M24 18 L38 21 L24 26 Z" fill="#ff4b4b" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><rect x="18" y="50" width="62" height="12" rx="6" fill="#26356b"/><circle cx="31" cy="66" r="14" fill="#26356b"/><circle cx="31" cy="66" r="6.5" fill="#ffd23f"/><circle cx="69" cy="66" r="14" fill="#26356b"/><circle cx="69" cy="66" r="6.5" fill="#ffd23f"/>`},
+  { name:"ドリームサーキット レースセット", cat:"rc", price:5940, age:"5さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff3f3"/><ellipse cx="50" cy="58" rx="36" ry="22" fill="none" stroke="#6b7280" stroke-width="13"/><ellipse cx="50" cy="58" rx="36" ry="22" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="7 7"/><rect x="40" y="10" width="4" height="18" fill="#26356b"/><path d="M44 10 h20 v13 h-20 z" fill="#fff" stroke="#26356b" stroke-width="2.5"/><path d="M44 10 h5 v4.3 h5 v4.3 h-5 v4.4 h-5 zM54 10 h5 v4.3 h5 v4.3 h-5 v4.4 h-5 z" fill="#26356b"/><rect x="24" y="72" width="17" height="9" rx="4.5" fill="#ff4b4b" stroke="#26356b" stroke-width="2.5"/><circle cx="29" cy="82" r="3.4" fill="#26356b"/><circle cx="37" cy="82" r="3.4" fill="#26356b"/>`},
+  { name:"でんしゃだいすき! レールセット", cat:"rc", price:3850, age:"3さい〜", badge:"NEW",
+    svg:`<circle cx="50" cy="50" r="47" fill="#e8f0ff"/><rect x="12" y="40" width="42" height="26" rx="7" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/><rect x="18" y="46" width="11" height="10" rx="3" fill="#dff1ff" stroke="#26356b" stroke-width="2.5"/><rect x="35" y="46" width="11" height="10" rx="3" fill="#dff1ff" stroke="#26356b" stroke-width="2.5"/><rect x="20" y="30" width="10" height="10" rx="3" fill="#26356b"/><rect x="58" y="46" width="30" height="20" rx="5" fill="#ffd23f" stroke="#26356b" stroke-width="3"/><rect x="64" y="51" width="8" height="8" rx="2.5" fill="#fff" stroke="#26356b" stroke-width="2"/><rect x="76" y="51" width="8" height="8" rx="2.5" fill="#fff" stroke="#26356b" stroke-width="2"/><circle cx="22" cy="70" r="5.5" fill="#26356b"/><circle cx="42" cy="70" r="5.5" fill="#26356b"/><circle cx="66" cy="70" r="5.5" fill="#26356b"/><circle cx="80" cy="70" r="5.5" fill="#26356b"/><line x1="8" y1="80" x2="92" y2="80" stroke="#8a93b5" stroke-width="3" stroke-dasharray="8 5"/>`},
+  { name:"ミニカー 10だいセット", cat:"rc", price:2750, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fffbe6"/><rect x="18" y="26" width="42" height="12" rx="6" fill="#ff4b4b" stroke="#26356b" stroke-width="3"/><rect x="28" y="19" width="16" height="9" rx="4" fill="#ffb3b3" stroke="#26356b" stroke-width="2.5"/><circle cx="28" cy="40" r="6" fill="#26356b"/><circle cx="50" cy="40" r="6" fill="#26356b"/><rect x="40" y="56" width="42" height="12" rx="6" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/><rect x="50" y="49" width="16" height="9" rx="4" fill="#a9cdfb" stroke="#26356b" stroke-width="2.5"/><circle cx="50" cy="70" r="6" fill="#26356b"/><circle cx="72" cy="70" r="6" fill="#26356b"/><text x="76" y="34" font-size="15" font-weight="bold" fill="#26356b">×10</text>`},
+  { name:"そらとぶドローン キッズ", cat:"rc", price:4980, age:"8さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#eef6ff"/><ellipse cx="24" cy="30" rx="14" ry="4.5" fill="#aab6d8" stroke="#26356b" stroke-width="2.5"/><ellipse cx="76" cy="30" rx="14" ry="4.5" fill="#aab6d8" stroke="#26356b" stroke-width="2.5"/><line x1="30" y1="34" x2="42" y2="45" stroke="#26356b" stroke-width="3.5" stroke-linecap="round"/><line x1="70" y1="34" x2="58" y2="45" stroke="#26356b" stroke-width="3.5" stroke-linecap="round"/><rect x="34" y="43" width="32" height="20" rx="9" fill="#ffd23f" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="53" r="6" fill="#26356b"/><circle cx="50" cy="53" r="2.5" fill="#7ec8f7"/><line x1="40" y1="65" x2="36" y2="74" stroke="#26356b" stroke-width="3.5" stroke-linecap="round"/><line x1="60" y1="65" x2="64" y2="74" stroke="#26356b" stroke-width="3.5" stroke-linecap="round"/><path d="M20 78 q4 -5 8 0 q4 5 8 0" fill="none" stroke="#7ec8f7" stroke-width="3" stroke-linecap="round"/>`},
+  { name:"ロボットプラモデル ギガファイター", cat:"build", price:2860, age:"8さい〜", badge:"人気No.2",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f0f0ff"/><rect x="36" y="16" width="28" height="22" rx="6" fill="#e8e9f5" stroke="#26356b" stroke-width="3"/><line x1="50" y1="16" x2="50" y2="7" stroke="#26356b" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="6" r="3" fill="#ff4b4b"/><rect x="42" y="24" width="6" height="6" rx="2" fill="#2d7ff0"/><rect x="53" y="24" width="6" height="6" rx="2" fill="#2d7ff0"/><rect x="32" y="42" width="36" height="26" rx="6" fill="#ff4b4b" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="54" r="6.5" fill="#ffd23f" stroke="#26356b" stroke-width="2.5"/><rect x="18" y="44" width="11" height="20" rx="5" fill="#e8e9f5" stroke="#26356b" stroke-width="3"/><rect x="71" y="44" width="11" height="20" rx="5" fill="#e8e9f5" stroke="#26356b" stroke-width="3"/><rect x="35" y="70" width="11" height="17" rx="5" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/><rect x="54" y="70" width="11" height="17" rx="5" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/>`},
+  { name:"きょうりゅうプラモデル ティラノ", cat:"build", price:1980, age:"6さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#eaf7e6"/><ellipse cx="46" cy="58" rx="24" ry="16" fill="#4cc36b" stroke="#26356b" stroke-width="3"/><path d="M64 50 q14 -4 20 4 q-8 2 -12 8 z" fill="#4cc36b" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><rect x="24" y="30" width="24" height="17" rx="8" fill="#4cc36b" stroke="#26356b" stroke-width="3"/><path d="M24 42 h16 l-3.5 5 l-4 -3 l-4 3 z" fill="#fff" stroke="#26356b" stroke-width="2"/><circle cx="40" cy="37" r="3" fill="#26356b"/><rect x="36" y="70" width="9" height="14" rx="4" fill="#3da55a" stroke="#26356b" stroke-width="3"/><rect x="52" y="70" width="9" height="14" rx="4" fill="#3da55a" stroke="#26356b" stroke-width="3"/><line x1="40" y1="55" x2="46" y2="58" stroke="#26356b" stroke-width="3" stroke-linecap="round"/>`},
+  { name:"カラフルブロック 500ピース", cat:"build", price:4980, age:"4さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff6e6"/><rect x="20" y="58" width="34" height="18" rx="3" fill="#ff4b4b" stroke="#26356b" stroke-width="3"/><circle cx="29" cy="58" r="4" fill="#ffb3b3" stroke="#26356b" stroke-width="2"/><circle cx="45" cy="58" r="4" fill="#ffb3b3" stroke="#26356b" stroke-width="2"/><rect x="46" y="58" width="34" height="18" rx="3" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/><circle cx="55" cy="58" r="4" fill="#a9cdfb" stroke="#26356b" stroke-width="2"/><circle cx="71" cy="58" r="4" fill="#a9cdfb" stroke="#26356b" stroke-width="2"/><rect x="33" y="36" width="34" height="18" rx="3" fill="#ffd23f" stroke="#26356b" stroke-width="3"/><circle cx="42" cy="36" r="4" fill="#ffe9a0" stroke="#26356b" stroke-width="2"/><circle cx="58" cy="36" r="4" fill="#ffe9a0" stroke="#26356b" stroke-width="2"/><rect x="40" y="15" width="20" height="17" rx="3" fill="#4cc36b" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="15" r="4" fill="#a5e2b5" stroke="#26356b" stroke-width="2"/>`},
+  { name:"うちゅうロケット くみたてセット", cat:"build", price:3280, age:"5さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#e9e9ff"/><path d="M50 10 q14 14 14 36 l-28 0 q0 -22 14 -36z" fill="#fff" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M50 10 q9 9 12 22 l-24 0 q3 -13 12 -22z" fill="#ff4b4b" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><circle cx="50" cy="42" r="7" fill="#7ec8f7" stroke="#26356b" stroke-width="3"/><path d="M36 46 l-10 16 l10 -2 z" fill="#2d7ff0" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M64 46 l10 16 l-10 -2 z" fill="#2d7ff0" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M43 62 q7 6 14 0 l-3 10 q-4 4 -8 0 z" fill="#ffd23f" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M46 74 q4 8 8 0 q-2 12 -4 14 q-2 -2 -4 -14z" fill="#ff8c42" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><circle cx="22" cy="24" r="2.5" fill="#ffd23f"/><circle cx="80" cy="20" r="2" fill="#ffd23f"/><circle cx="76" cy="78" r="2.5" fill="#ffd23f"/>`},
+  { name:"ポータブルゲームき キッズポッド", cat:"game", price:12980, age:"6さい〜", badge:"人気No.3",
+    svg:`<circle cx="50" cy="50" r="47" fill="#e6fbff"/><rect x="14" y="30" width="72" height="40" rx="10" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/><rect x="30" y="37" width="40" height="26" rx="4" fill="#bfe9ff" stroke="#26356b" stroke-width="2.5"/><path d="M40 56 l0 -12 l10 6 z" fill="#26356b"/><rect x="19" y="43" width="5" height="15" rx="2.5" fill="#fff"/><rect x="14" y="48" width="15" height="5" rx="2.5" fill="#fff"/><circle cx="77" cy="44" r="3.6" fill="#ffd23f" stroke="#26356b" stroke-width="2"/><circle cx="77" cy="56" r="3.6" fill="#ff4b4b" stroke="#26356b" stroke-width="2"/>`},
+  { name:"レトロゲームき ミニ ふっこく版", cat:"game", price:8778, age:"6さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f5f0ff"/><rect x="22" y="24" width="56" height="26" rx="6" fill="#e8e9f5" stroke="#26356b" stroke-width="3"/><rect x="30" y="30" width="22" height="8" rx="3" fill="#8a93b5"/><circle cx="66" cy="34" r="4.5" fill="#ff4b4b" stroke="#26356b" stroke-width="2"/><path d="M50 50 q-14 4 -18 14" fill="none" stroke="#26356b" stroke-width="3" stroke-linecap="round"/><rect x="18" y="62" width="34" height="18" rx="6" fill="#26356b"/><rect x="24" y="67" width="4.5" height="9" rx="2" fill="#fff"/><rect x="21.5" y="69.5" width="9.5" height="4.5" rx="2" fill="#fff"/><circle cx="41" cy="69" r="3.2" fill="#ffd23f"/><circle cx="47.5" cy="72.5" r="3.2" fill="#ff4b4b"/>`},
+  { name:"バトルごま はっしゃスタジアム", cat:"game", price:3080, age:"6さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff0f0"/><ellipse cx="50" cy="72" rx="34" ry="12" fill="#e8e9f5" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="40" r="16" fill="#2d7ff0" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="40" r="8" fill="#ffd23f" stroke="#26356b" stroke-width="2.5"/><path d="M50 56 l-5 -4 h10 z" fill="#26356b"/><line x1="50" y1="56" x2="50" y2="66" stroke="#26356b" stroke-width="3.5" stroke-linecap="round"/><path d="M20 34 a30 30 0 0 1 8 -12" fill="none" stroke="#ff4b4b" stroke-width="3.5" stroke-linecap="round"/><path d="M80 34 a30 30 0 0 0 -8 -12" fill="none" stroke="#ff4b4b" stroke-width="3.5" stroke-linecap="round"/><path d="M27 46 a26 26 0 0 1 4 -7" fill="none" stroke="#ffd23f" stroke-width="3" stroke-linecap="round"/><path d="M73 46 a26 26 0 0 0 -4 -7" fill="none" stroke="#ffd23f" stroke-width="3" stroke-linecap="round"/>`},
+  { name:"やきゅうばんゲーム DX", cat:"game", price:3960, age:"5さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#eefbee"/><rect x="18" y="26" width="64" height="52" rx="8" fill="#4cc36b" stroke="#26356b" stroke-width="3" transform="rotate(45 50 52) scale(.78) translate(14 14)"/><path d="M50 24 L82 52 L50 80 L18 52 Z" fill="#4cc36b" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M50 36 L70 52 L50 68 L30 52 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><rect x="46" y="64" width="8" height="8" rx="2" fill="#fff" stroke="#26356b" stroke-width="2"/><circle cx="50" cy="52" r="6" fill="#c98850" stroke="#26356b" stroke-width="2.5"/><circle cx="66" cy="30" r="7" fill="#fff" stroke="#26356b" stroke-width="2.5"/><path d="M62 26 q4 4 0 8 M70 26 q-4 4 0 8" fill="none" stroke="#ff4b4b" stroke-width="1.8"/>`},
+  { name:"へんしんヒーローベルト", cat:"other", price:6578, age:"3さい〜", badge:"SALE",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff3e0"/><rect x="8" y="42" width="84" height="18" rx="9" fill="#ff4b4b" stroke="#26356b" stroke-width="3"/><rect x="8" y="47" width="84" height="4" fill="#ffd23f"/><circle cx="50" cy="51" r="17" fill="#ffd23f" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="51" r="10" fill="#7ec8f7" stroke="#26356b" stroke-width="2.5"/><path d="M50 44 l2.2 4.6 5 .6 -3.7 3.4 1 4.9 -4.5 -2.5 -4.5 2.5 1 -4.9 -3.7 -3.4 5 -.6z" fill="#fff"/><path d="M20 30 l3 6 M28 26 l1.5 6.5 M80 30 l-3 6 M72 26 l-1.5 6.5" stroke="#ffd23f" stroke-width="3" stroke-linecap="round"/>`},
+  { name:"ひかるけん ソードブレイバー", cat:"other", price:1980, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#e8f6ff"/><path d="M58 12 L70 24 L38 56 L26 44 Z" fill="#bfe9ff" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M58 12 L70 24 L64 30 L52 18Z" fill="#fff" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><rect x="18" y="42" width="26" height="10" rx="5" fill="#ffd23f" stroke="#26356b" stroke-width="3" transform="rotate(45 31 47)"/><rect x="16" y="58" width="18" height="9" rx="4.5" fill="#ff4b4b" stroke="#26356b" stroke-width="3" transform="rotate(45 25 62)"/><path d="M74 10 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffd23f"/><path d="M82 34 l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z" fill="#ffd23f"/>`},
+  { name:"きょうりゅうフィギュア 12たいセット", cat:"other", price:1650, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f0fbe6"/><ellipse cx="42" cy="58" rx="22" ry="13" fill="#8bc34a" stroke="#26356b" stroke-width="3"/><path d="M58 52 q10 -2 16 4 q-6 3 -10 7z" fill="#8bc34a" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M28 52 q-6 -18 4 -26 q8 -2 10 6 q-6 6 -6 20z" fill="#8bc34a" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><circle cx="36" cy="31" r="2.4" fill="#26356b"/><rect x="30" y="68" width="8" height="10" rx="4" fill="#71a63a" stroke="#26356b" stroke-width="2.5"/><rect x="47" y="68" width="8" height="10" rx="4" fill="#71a63a" stroke="#26356b" stroke-width="2.5"/><ellipse cx="74" cy="70" rx="10" ry="12" fill="#fff8e1" stroke="#26356b" stroke-width="3"/><path d="M68 68 l4 -4 4 4 4 -4" fill="none" stroke="#8a93b5" stroke-width="2"/><text x="64" y="34" font-size="14" font-weight="bold" fill="#26356b">×12</text>`},
+  { name:"ロボットいぬ ワンボット", cat:"other", price:8980, age:"6さい〜", badge:"NEW",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f0f4ff"/><rect x="26" y="42" width="42" height="24" rx="10" fill="#e8e9f5" stroke="#26356b" stroke-width="3"/><rect x="58" y="26" width="26" height="22" rx="9" fill="#e8e9f5" stroke="#26356b" stroke-width="3"/><circle cx="67" cy="36" r="3.5" fill="#2d7ff0"/><circle cx="78" cy="36" r="3.5" fill="#2d7ff0"/><rect x="66" y="42" width="10" height="3.5" rx="1.75" fill="#26356b"/><line x1="62" y1="26" x2="58" y2="16" stroke="#26356b" stroke-width="3" stroke-linecap="round"/><circle cx="57" cy="14" r="3" fill="#ff4b4b"/><path d="M26 48 l-10 -8 M26 54 l-10 0" stroke="#26356b" stroke-width="3" stroke-linecap="round"/><rect x="30" y="64" width="9" height="12" rx="4" fill="#aab6d8" stroke="#26356b" stroke-width="2.5"/><rect x="54" y="64" width="9" height="12" rx="4" fill="#aab6d8" stroke="#26356b" stroke-width="2.5"/><circle cx="47" cy="54" r="4" fill="#ffd23f" stroke="#26356b" stroke-width="2"/>`},
+  { name:"ウォーターガン ダブルショット", cat:"outdoor", price:1320, age:"6さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#e0f7ff"/><rect x="16" y="38" width="52" height="16" rx="8" fill="#ff8c42" stroke="#26356b" stroke-width="3"/><rect x="64" y="42" width="20" height="8" rx="4" fill="#2d7ff0" stroke="#26356b" stroke-width="2.5"/><circle cx="30" cy="34" r="10" fill="#7ec8f7" stroke="#26356b" stroke-width="3"/><rect x="22" y="54" width="12" height="20" rx="5" fill="#ffd23f" stroke="#26356b" stroke-width="3" transform="rotate(-12 28 64)"/><path d="M44 54 q-2 8 4 10" fill="none" stroke="#26356b" stroke-width="3" stroke-linecap="round"/><path d="M88 40 q3 3 0 6 M92 34 q4 4 0 8" fill="none" stroke="#2d7ff0" stroke-width="2.5" stroke-linecap="round"/><circle cx="88" cy="52" r="2" fill="#2d7ff0"/><circle cx="93" cy="47" r="1.6" fill="#2d7ff0"/>`},
+  { name:"サッカーボール&ゴールセット", cat:"outdoor", price:3278, age:"4さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#eefbee"/><path d="M30 28 h52 v40 h-52" fill="none" stroke="#26356b" stroke-width="3.5"/><path d="M36 34 h46 M36 42 h46 M36 50 h46 M36 58 h46 M40 28 v40 M52 28 v40 M64 28 v40 M76 28 v40" stroke="#c3cbe8" stroke-width="1.8"/><circle cx="30" cy="66" r="14" fill="#fff" stroke="#26356b" stroke-width="3"/><path d="M30 58 l5.5 4 -2 6.5 h-7 l-2 -6.5z" fill="#26356b"/><path d="M30 58 l0 -6 M35.5 62 l6 -2 M33.5 68.5 l4 5 M26.5 68.5 l-4 5 M24.5 62 l-6 -2" stroke="#26356b" stroke-width="2"/><path d="M60 78 q6 -4 12 0" fill="none" stroke="#4cc36b" stroke-width="3" stroke-linecap="round"/>`},
+  { name:"こんちゅうさいしゅう たんけんセット", cat:"outdoor", price:1540, age:"4さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f4fbe0"/><circle cx="38" cy="34" r="18" fill="rgba(255,255,255,.6)" stroke="#26356b" stroke-width="3"/><path d="M26 28 q12 -8 24 0 M24 36 q14 -8 28 0 M28 44 q10 -6 20 0 M32 20 q6 16 2 30 M44 20 q2 16 -2 30" fill="none" stroke="#8a93b5" stroke-width="1.6"/><line x1="51" y1="47" x2="72" y2="68" stroke="#c98850" stroke-width="5" stroke-linecap="round"/><ellipse cx="68" cy="38" rx="9" ry="11" fill="#5d4037" stroke="#26356b" stroke-width="3"/><path d="M64 28 q-4 -8 -8 -9 M72 28 q4 -8 8 -9 M78 -1" fill="none" stroke="#26356b" stroke-width="2.5" stroke-linecap="round"/><line x1="68" y1="30" x2="68" y2="47" stroke="#26356b" stroke-width="2"/><path d="M30 74 q5 -6 10 0 q5 6 10 0" fill="none" stroke="#4cc36b" stroke-width="3" stroke-linecap="round"/>`},
+];
+
+const GIRL_TOYS = [
+  { name:"わくわくキッチンセット", cat:"mama", price:6980, age:"3さい〜", badge:"人気No.1",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff0f5"/><rect x="18" y="34" width="64" height="44" rx="7" fill="#ff9ec4" stroke="#26356b" stroke-width="3"/><rect x="18" y="34" width="64" height="12" fill="#ffd6e7" stroke="#26356b" stroke-width="3"/><circle cx="34" cy="40" r="3" fill="#ff4b4b" stroke="#26356b" stroke-width="1.8"/><circle cx="46" cy="40" r="3" fill="#ffd23f" stroke="#26356b" stroke-width="1.8"/><rect x="26" y="52" width="20" height="20" rx="4" fill="#fff" stroke="#26356b" stroke-width="2.5"/><circle cx="36" cy="62" r="6" fill="#ffd6e7" stroke="#26356b" stroke-width="2"/><rect x="56" y="52" width="18" height="20" rx="4" fill="#fff" stroke="#26356b" stroke-width="2.5"/><line x1="59" y1="58" x2="71" y2="58" stroke="#26356b" stroke-width="2"/><rect x="40" y="18" width="20" height="12" rx="4" fill="#e8e9f5" stroke="#26356b" stroke-width="2.5"/><path d="M46 30 v4 M54 30 v4" stroke="#26356b" stroke-width="2"/><path d="M46 12 q2 -4 0 -6 M54 12 q2 -4 0 -6" fill="none" stroke="#aab6d8" stroke-width="2.5" stroke-linecap="round"/>`},
+  { name:"スイーツショップ おかしやさんセット", cat:"mama", price:3850, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff8ec"/><line x1="50" y1="18" x2="50" y2="78" stroke="#c98850" stroke-width="4"/><ellipse cx="50" cy="78" rx="30" ry="6" fill="#ffd6e7" stroke="#26356b" stroke-width="3"/><ellipse cx="50" cy="52" rx="22" ry="5" fill="#ffd6e7" stroke="#26356b" stroke-width="3"/><ellipse cx="50" cy="28" rx="14" ry="4" fill="#ffd6e7" stroke="#26356b" stroke-width="3"/><path d="M44 18 q6 -8 12 0 q-2 4 -6 4 q-4 0 -6 -4z" fill="#ff9ec4" stroke="#26356b" stroke-width="2.5"/><circle cx="50" cy="14" r="2.5" fill="#ff4b4b"/><path d="M32 44 a6 6 0 0 1 12 0 v4 h-12z" fill="#a26742" stroke="#26356b" stroke-width="2.5"/><path d="M58 44 a6 6 0 0 1 12 0 v4 h-12z" fill="#ffe9a0" stroke="#26356b" stroke-width="2.5"/><circle cx="34" cy="70" r="6" fill="#ff9ec4" stroke="#26356b" stroke-width="2.5"/><circle cx="66" cy="70" r="6" fill="#b3e5fc" stroke="#26356b" stroke-width="2.5"/><circle cx="50" cy="68" r="6" fill="#ffe9a0" stroke="#26356b" stroke-width="2.5"/>`},
+  { name:"レジスターでピッ! おかいものセット", cat:"mama", price:4950, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fef0ff"/><path d="M24 44 h52 l-6 -18 h-40z" fill="#c68cf0" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><rect x="36" y="30" width="24" height="9" rx="3" fill="#e0f7ff" stroke="#26356b" stroke-width="2.5"/><rect x="20" y="44" width="60" height="26" rx="5" fill="#a15ce0" stroke="#26356b" stroke-width="3"/><g fill="#fff" stroke="#26356b" stroke-width="1.8"><rect x="28" y="50" width="8" height="6" rx="2"/><rect x="40" y="50" width="8" height="6" rx="2"/><rect x="52" y="50" width="8" height="6" rx="2"/><rect x="28" y="59" width="8" height="6" rx="2"/><rect x="40" y="59" width="8" height="6" rx="2"/><rect x="52" y="59" width="8" height="6" rx="2"/></g><circle cx="69" cy="57" r="5.5" fill="#ffd23f" stroke="#26356b" stroke-width="2.2"/><rect x="24" y="70" width="52" height="9" rx="3" fill="#e8e9f5" stroke="#26356b" stroke-width="2.5"/><text x="80" y="30" font-size="12" fill="#a15ce0" font-weight="bold">♪</text>`},
+  { name:"ピクニック ティーセット", cat:"mama", price:2530, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fffbe6"/><path d="M32 40 h30 a4 4 0 0 1 4 4 v6 a16 15 0 0 1 -38 0 v-6 a4 4 0 0 1 4 -4z" fill="#ff9ec4" stroke="#26356b" stroke-width="3"/><path d="M66 46 q10 0 8 9 q-2 7 -10 6" fill="none" stroke="#26356b" stroke-width="3"/><path d="M40 40 q-4 -8 4 -10 q-4 -4 2 -8" fill="none" stroke="#aab6d8" stroke-width="2.5" stroke-linecap="round"/><circle cx="47" cy="27" r="4" fill="#ffd23f" stroke="#26356b" stroke-width="2.5"/><path d="M38 52 h18 M38 58 h18" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M20 74 h28 a3 3 0 0 1 -3 5 h-22 a3 3 0 0 1 -3 -5z" fill="#b3e5fc" stroke="#26356b" stroke-width="2.5"/><ellipse cx="34" cy="73" rx="10" ry="3" fill="#e0f7ff" stroke="#26356b" stroke-width="2"/>`},
+  { name:"きせかえドール ゆめかちゃん", cat:"doll", price:3080, age:"3さい〜", badge:"人気No.2",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff0f5"/><path d="M30 30 a20 20 0 0 1 40 0 v10 q0 6 -6 4 q4 -10 -2 -16 q-12 6 -24 2 q-6 6 -2 14 q-6 2 -6 -4z" fill="#8a5a3b" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><circle cx="50" cy="34" r="14" fill="#ffe0cc" stroke="#26356b" stroke-width="3"/><circle cx="45" cy="33" r="2" fill="#26356b"/><circle cx="55" cy="33" r="2" fill="#26356b"/><path d="M47 40 q3 2.5 6 0" fill="none" stroke="#26356b" stroke-width="2" stroke-linecap="round"/><circle cx="41" cy="37" r="2.2" fill="#ffb3b3" opacity=".8"/><circle cx="59" cy="37" r="2.2" fill="#ffb3b3" opacity=".8"/><path d="M36 22 l-4 -6 6 1 z" fill="#ff9ec4" stroke="#26356b" stroke-width="2"/><path d="M40 50 h20 l8 26 h-36 z" fill="#ff9ec4" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M44 58 h12 M42 66 h16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="53" r="2" fill="#fff"/>`},
+  { name:"ドールハウス ゆめのおうち", cat:"doll", price:7678, age:"4さい〜", badge:"SALE",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fef3ff"/><path d="M22 44 L50 18 L78 44 Z" fill="#ff9ec4" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><rect x="27" y="44" width="46" height="34" fill="#fff" stroke="#26356b" stroke-width="3"/><rect x="33" y="50" width="11" height="10" rx="2" fill="#b3e5fc" stroke="#26356b" stroke-width="2.5"/><rect x="56" y="50" width="11" height="10" rx="2" fill="#b3e5fc" stroke="#26356b" stroke-width="2.5"/><path d="M44 78 v-12 a6 6 0 0 1 12 0 v12" fill="#c68cf0" stroke="#26356b" stroke-width="2.5"/><path d="M50 68 m-1.5 0 a1.5 1.5 0 1 0 3 0 a1.5 1.5 0 1 0 -3 0" fill="#26356b"/><path d="M47 32 c0 -2.5 4 -2.5 4 0 c0 2 -2 3 -2 3 s-2 -1 -2 -3z M51 32 c0 -2.5 4 -2.5 4 0 c0 2 -2 3 -2 3 s-2 -1 -2 -3z" fill="#fff"/><circle cx="50" cy="26" r="0" fill="#fff"/><path d="M66 22 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2 -3 -3 -1.2 3 -1.2z" fill="#ffd23f"/>`},
+  { name:"おせわにんぎょう ねんねちゃん", cat:"doll", price:3980, age:"2さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff8ec"/><path d="M26 58 a24 22 0 0 1 48 0 v14 a6 6 0 0 1 -6 6 h-36 a6 6 0 0 1 -6 -6z" fill="#ffd6e7" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="40" r="17" fill="#ffe0cc" stroke="#26356b" stroke-width="3"/><path d="M33 36 a17 17 0 0 1 34 0 q-8 -8 -17 -8 q-9 0 -17 8z" fill="#ffd6e7" stroke="#26356b" stroke-width="3"/><path d="M43 40 q1.5 -3 3 0 M54 40 q1.5 -3 3 0" fill="none" stroke="#26356b" stroke-width="2" stroke-linecap="round"/><path d="M47 46 q3 2 6 0" fill="none" stroke="#26356b" stroke-width="2" stroke-linecap="round"/><circle cx="40" cy="44" r="2.2" fill="#ffb3b3" opacity=".8"/><circle cx="60" cy="44" r="2.2" fill="#ffb3b3" opacity=".8"/><path d="M42 64 q8 8 16 0" fill="none" stroke="#ff9ec4" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="24" r="3.5" fill="#ff9ec4" stroke="#26356b" stroke-width="2"/>`},
+  { name:"くまのぬいぐるみ モコ", cat:"doll", price:2750, age:"0さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff3e0"/><circle cx="32" cy="26" r="10" fill="#c98850" stroke="#26356b" stroke-width="3"/><circle cx="68" cy="26" r="10" fill="#c98850" stroke="#26356b" stroke-width="3"/><circle cx="32" cy="26" r="4.5" fill="#ffe0cc"/><circle cx="68" cy="26" r="4.5" fill="#ffe0cc"/><circle cx="50" cy="42" r="22" fill="#c98850" stroke="#26356b" stroke-width="3"/><ellipse cx="50" cy="49" rx="9" ry="7" fill="#ffe0cc" stroke="#26356b" stroke-width="2.5"/><ellipse cx="50" cy="46" rx="3.4" ry="2.6" fill="#26356b"/><path d="M50 49 v3 M47 53 q3 2.5 6 0" fill="none" stroke="#26356b" stroke-width="2" stroke-linecap="round"/><circle cx="42" cy="38" r="2.5" fill="#26356b"/><circle cx="58" cy="38" r="2.5" fill="#26356b"/><ellipse cx="50" cy="76" rx="18" ry="13" fill="#c98850" stroke="#26356b" stroke-width="3"/><ellipse cx="50" cy="78" rx="9" ry="7" fill="#ffe0cc" stroke="#26356b" stroke-width="2.5"/><path d="M62 62 q6 -4 10 2" fill="none" stroke="#ff4b4b" stroke-width="3" stroke-linecap="round"/>`},
+  { name:"ユニコーンぬいぐるみ キラリ", cat:"doll", price:3278, age:"3さい〜", badge:"NEW",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f3f0ff"/><path d="M50 26 l6 -18 l4 20z" fill="#ffd23f" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="52" cy="48" rx="24" ry="21" fill="#fff" stroke="#26356b" stroke-width="3"/><path d="M32 40 q-8 4 -8 14 q6 -2 10 -8 M36 30 q-8 -2 -12 4 q6 2 10 2" fill="#ff9ec4" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><path d="M64 28 q4 -8 12 -6 q-2 6 -8 10z" fill="#c68cf0" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><circle cx="46" cy="46" r="2.5" fill="#26356b"/><circle cx="62" cy="46" r="2.5" fill="#26356b"/><path d="M52 56 q4 3 8 0" fill="none" stroke="#26356b" stroke-width="2.2" stroke-linecap="round"/><circle cx="42" cy="52" r="2.6" fill="#ffb3b3" opacity=".85"/><circle cx="67" cy="52" r="2.6" fill="#ffb3b3" opacity=".85"/><path d="M18 68 l1.5 3.6 3.6 1.5 -3.6 1.5 -1.5 3.6 -1.5 -3.6 -3.6 -1.5 3.6 -1.5z" fill="#ffd23f"/><path d="M82 64 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2 -3 -3 -1.2 3 -1.2z" fill="#c68cf0"/>`},
+  { name:"バレリーナ オルゴールにんぎょう", cat:"doll", price:3740, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff0f5"/><rect x="28" y="64" width="44" height="16" rx="5" fill="#c68cf0" stroke="#26356b" stroke-width="3"/><path d="M32 70 h36" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="2 5"/><circle cx="50" cy="30" r="8" fill="#ffe0cc" stroke="#26356b" stroke-width="2.5"/><path d="M42 27 a8 8 0 0 1 16 0 q-4 -4 -8 -4 q-4 0 -8 4z" fill="#8a5a3b" stroke="#26356b" stroke-width="2.2"/><rect x="45" y="38" width="10" height="10" rx="3" fill="#ff9ec4" stroke="#26356b" stroke-width="2.5"/><path d="M38 52 l12 -6 l12 6 l-6 8 h-12z" fill="#ffd6e7" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><path d="M46 60 v4 M54 60 v4" stroke="#26356b" stroke-width="2.2" stroke-linecap="round"/><path d="M40 40 q-6 2 -8 8 M60 40 q6 2 8 8" fill="none" stroke="#26356b" stroke-width="2.2" stroke-linecap="round"/><text x="74" y="30" font-size="13" fill="#c68cf0" font-weight="bold">♪</text><text x="20" y="42" font-size="11" fill="#ff9ec4" font-weight="bold">♪</text>`},
+  { name:"ジグソーパズル どうぶつランド 100P", cat:"puzzle", price:1540, age:"5さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f0faff"/><g stroke="#26356b" stroke-width="3" stroke-linejoin="round"><path d="M26 26 h20 v8 a4 4 0 0 0 0 8 v-4 4 h-20z M26 26 h20 v20 h-8 a4 4 0 0 1 -8 0 h-4z" fill="#ffd23f"/><path d="M50 26 h20 v20 h-6 a4 4 0 0 0 -8 0 h-6 v-6 a4 4 0 0 1 0 -8z" fill="#4cc36b"/><path d="M26 50 h6 a4 4 0 0 1 8 0 h6 v20 h-20z" fill="#ff9ec4"/><path d="M54 54 h6 a4 4 0 0 1 8 0 h6 v16 h-20z" fill="#7ec8f7"/></g><circle cx="34" cy="34" r="2.2" fill="#26356b"/><circle cx="41" cy="34" r="2.2" fill="#26356b"/><path d="M34 39 q3.5 3 7 0" fill="none" stroke="#26356b" stroke-width="2" stroke-linecap="round"/>`},
+  { name:"まほうのおえかきボード", cat:"puzzle", price:3278, age:"2さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff8ec"/><rect x="16" y="24" width="68" height="46" rx="10" fill="#ff9ec4" stroke="#26356b" stroke-width="3"/><rect x="24" y="31" width="52" height="32" rx="5" fill="#fff" stroke="#26356b" stroke-width="2.5"/><path d="M32 52 q6 -14 12 0 q6 12 12 -2 q4 -8 10 -2" fill="none" stroke="#c68cf0" stroke-width="3" stroke-linecap="round"/><circle cx="62" cy="40" r="4" fill="#ffd23f" stroke="#26356b" stroke-width="2"/><circle cx="26" cy="76" r="5" fill="#ffd23f" stroke="#26356b" stroke-width="2.5"/><circle cx="40" cy="76" r="5" fill="#4cc36b" stroke="#26356b" stroke-width="2.5"/><rect x="56" y="70" width="26" height="8" rx="4" fill="#e8e9f5" stroke="#26356b" stroke-width="2.5" transform="rotate(-8 69 74)"/>`},
+  { name:"キッズピアノ レインボー", cat:"puzzle", price:5480, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fef0ff"/><path d="M20 34 h60 a6 6 0 0 1 6 6 v26 h-72 v-26 a6 6 0 0 1 6 -6z" fill="#ff9ec4" stroke="#26356b" stroke-width="3"/><g stroke="#26356b" stroke-width="2"><rect x="20" y="52" width="10" height="14" fill="#ff4b4b"/><rect x="30" y="52" width="10" height="14" fill="#ff8c42"/><rect x="40" y="52" width="10" height="14" fill="#ffd23f"/><rect x="50" y="52" width="10" height="14" fill="#4cc36b"/><rect x="60" y="52" width="10" height="14" fill="#7ec8f7"/><rect x="70" y="52" width="10" height="14" fill="#c68cf0"/></g><g fill="#26356b"><rect x="27" y="52" width="6" height="8"/><rect x="47" y="52" width="6" height="8"/><rect x="67" y="52" width="6" height="8"/></g><circle cx="34" cy="43" r="3" fill="#fff" stroke="#26356b" stroke-width="1.8"/><circle cx="66" cy="43" r="3" fill="#fff" stroke="#26356b" stroke-width="1.8"/><text x="44" y="26" font-size="14" fill="#c68cf0" font-weight="bold">♪</text><text x="60" y="18" font-size="11" fill="#ff9ec4" font-weight="bold">♫</text>`},
+  { name:"ひらがなつみき 50ピース", cat:"puzzle", price:4180, age:"1さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fffbe6"/><rect x="24" y="48" width="26" height="26" rx="4" fill="#ffd6e7" stroke="#26356b" stroke-width="3"/><text x="31" y="68" font-size="16" font-weight="bold" fill="#26356b">あ</text><rect x="52" y="48" width="26" height="26" rx="4" fill="#b3e5fc" stroke="#26356b" stroke-width="3"/><text x="59" y="68" font-size="16" font-weight="bold" fill="#26356b">い</text><rect x="38" y="22" width="26" height="26" rx="4" fill="#ffe9a0" stroke="#26356b" stroke-width="3"/><text x="45" y="42" font-size="16" font-weight="bold" fill="#26356b">う</text>`},
+  { name:"キラキラビーズ アクセサリーキット", cat:"craft", price:2420, age:"6さい〜", badge:"人気No.3",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff0f5"/><path d="M22 34 q28 30 56 0" fill="none" stroke="#c3cbe8" stroke-width="2.5"/><circle cx="22" cy="34" r="5" fill="#ff9ec4" stroke="#26356b" stroke-width="2.2"/><circle cx="30" cy="44" r="5" fill="#ffd23f" stroke="#26356b" stroke-width="2.2"/><circle cx="40" cy="50" r="5" fill="#7ec8f7" stroke="#26356b" stroke-width="2.2"/><circle cx="60" cy="50" r="5" fill="#4cc36b" stroke="#26356b" stroke-width="2.2"/><circle cx="70" cy="44" r="5" fill="#c68cf0" stroke="#26356b" stroke-width="2.2"/><circle cx="78" cy="34" r="5" fill="#ff8c42" stroke="#26356b" stroke-width="2.2"/><path d="M50 52 c-6 -7 -16 0 -8 8 l8 7 l8 -7 c8 -8 -2 -15 -8 -8z" fill="#ff4b4b" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><path d="M24 70 l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z" fill="#ffd23f"/><path d="M74 70 l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z" fill="#c68cf0"/>`},
+  { name:"シールメーカー デコデコ", cat:"craft", price:4378, age:"6さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f0faff"/><path d="M26 30 h48 a8 8 0 0 1 8 8 v22 a8 8 0 0 1 -8 8 h-48 a8 8 0 0 1 -8 -8 v-22 a8 8 0 0 1 8 -8z" fill="#c68cf0" stroke="#26356b" stroke-width="3"/><rect x="26" y="56" width="48" height="6" rx="3" fill="#26356b"/><rect x="34" y="20" width="32" height="14" rx="7" fill="#ff9ec4" stroke="#26356b" stroke-width="3"/><circle cx="50" cy="45" r="7" fill="#ffd23f" stroke="#26356b" stroke-width="2.5"/><path d="M50 40 l1.5 3.2 3.5 .4 -2.6 2.4 .7 3.4 -3.1 -1.7 -3.1 1.7 .7 -3.4 -2.6 -2.4 3.5 -.4z" fill="#fff"/><rect x="30" y="66" width="18" height="14" rx="3" fill="#fff" stroke="#26356b" stroke-width="2.5" transform="rotate(-6 39 73)"/><path d="M36 71 l1.2 2.6 2.8 .3 -2 2 .5 2.8 -2.5 -1.4 -2.5 1.4 .5 -2.8 -2 -2 2.8 -.3z" fill="#ff9ec4"/><circle cx="66" cy="74" r="6" fill="#fff" stroke="#26356b" stroke-width="2.5"/><circle cx="66" cy="74" r="2.5" fill="#7ec8f7"/>`},
+  { name:"スイーツデコ ねんどセット", cat:"craft", price:2530, age:"5さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff8ec"/><path d="M30 56 a10 10 0 0 1 8 -16 a12 12 0 0 1 24 0 a10 10 0 0 1 8 16z" fill="#fff" stroke="#26356b" stroke-width="3"/><path d="M34 42 h32 v6 a8 8 0 0 1 -8 4 l-4 -4 -4 4 -4 -4 -4 4 a8 8 0 0 1 -8 -4z" fill="#ff9ec4" stroke="#26356b" stroke-width="0"/><path d="M36 56 l-4 18 a4 4 0 0 0 4 4 h28 a4 4 0 0 0 4 -4 l-4 -18z" fill="#ffe9a0" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><circle cx="50" cy="34" r="3.5" fill="#ff4b4b" stroke="#26356b" stroke-width="2"/><circle cx="43" cy="68" r="2.2" fill="#ff9ec4"/><circle cx="57" cy="68" r="2.2" fill="#7ec8f7"/><circle cx="50" cy="72" r="2.2" fill="#4cc36b"/><ellipse cx="22" cy="76" rx="8" ry="5" fill="#c68cf0" stroke="#26356b" stroke-width="2.5"/><ellipse cx="79" cy="76" rx="8" ry="5" fill="#4cc36b" stroke="#26356b" stroke-width="2.5"/>`},
+  { name:"はじめてのしゅげい ミシンセット", cat:"craft", price:6578, age:"6さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fef0ff"/><path d="M26 30 h14 v14 h24 a10 10 0 0 1 10 10 v14 h-48 a6 6 0 0 1 -6 -6 v-26 a6 6 0 0 1 6 -6z" fill="#ff9ec4" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><rect x="30" y="44" width="8" height="14" rx="3" fill="#fff" stroke="#26356b" stroke-width="2.5"/><line x1="34" y1="58" x2="34" y2="66" stroke="#26356b" stroke-width="2.5"/><rect x="18" y="68" width="66" height="10" rx="4" fill="#c68cf0" stroke="#26356b" stroke-width="3"/><circle cx="62" cy="56" r="6" fill="#fff" stroke="#26356b" stroke-width="2.5"/><circle cx="26" cy="22" r="6" fill="#7ec8f7" stroke="#26356b" stroke-width="2.5"/><path d="M26 16 v12 M20 22 h12" stroke="#26356b" stroke-width="1.6"/><path d="M32 24 q10 4 6 20" fill="none" stroke="#7ec8f7" stroke-width="2" stroke-dasharray="4 3"/>`},
+  { name:"プリンセスドレス&ティアラ", cat:"other", price:4180, age:"3さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff0f5"/><path d="M38 12 l6 8 6 -10 6 10 6 -8 2 12 h-28z" fill="#ffd23f" stroke="#26356b" stroke-width="2.5" stroke-linejoin="round"/><circle cx="50" cy="14" r="2.5" fill="#ff4b4b"/><path d="M42 32 h16 l4 14 h-24z" fill="#c68cf0" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M34 46 h32 q10 22 6 30 q-22 6 -44 0 q-4 -8 6 -30z" fill="#e0b3ff" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><path d="M42 52 q-4 12 -4 20 M58 52 q4 12 4 20" fill="none" stroke="#c68cf0" stroke-width="2.5"/><circle cx="50" cy="38" r="2.5" fill="#ffd23f"/><path d="M50 58 l1.6 3.6 3.8 .5 -2.8 2.6 .8 3.8 -3.4 -1.9 -3.4 1.9 .8 -3.8 -2.8 -2.6 3.8 -.5z" fill="#fff"/>`},
+  { name:"まほうのステッキ ミラクルスター", cat:"other", price:3080, age:"3さい〜", badge:"NEW",
+    svg:`<circle cx="50" cy="50" r="47" fill="#f3f0ff"/><line x1="44" y1="46" x2="26" y2="84" stroke="#ff9ec4" stroke-width="7" stroke-linecap="round"/><line x1="44" y1="46" x2="26" y2="84" stroke="#fff" stroke-width="2.5" stroke-dasharray="6 6" stroke-linecap="round"/><path d="M54 10 l4.5 10.5 11.5 1.5 -8.5 8 2 11.5 -9.5 -5.5 -9.5 5.5 2 -11.5 -8.5 -8 11.5 -1.5z" fill="#ffd23f" stroke="#26356b" stroke-width="3" stroke-linejoin="round"/><circle cx="54" cy="26" r="4.5" fill="#fff" stroke="#26356b" stroke-width="2"/><path d="M74 46 q6 2 4 8 M78 40 l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z" fill="#c68cf0"/><path d="M22 46 l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z" fill="#ff9ec4"/><circle cx="34" cy="30" r="2.2" fill="#ffd23f"/><circle cx="72" cy="66" r="2.2" fill="#ffd23f"/>`},
+  { name:"キッズコスメ メイクボックス", cat:"other", price:2860, age:"5さい〜",
+    svg:`<circle cx="50" cy="50" r="47" fill="#fff0f5"/><rect x="22" y="44" width="56" height="30" rx="7" fill="#ff9ec4" stroke="#26356b" stroke-width="3"/><path d="M22 52 h56" stroke="#26356b" stroke-width="2.5"/><rect x="42" y="40" width="16" height="8" rx="3" fill="#ffd23f" stroke="#26356b" stroke-width="2.5"/><path d="M30 58 c-4 -5 -11 0 -5 5 l5 5 l5 -5 c6 -5 -1 -10 -5 -5z" fill="#ff4b4b"/><circle cx="50" cy="63" r="6" fill="#fff" stroke="#26356b" stroke-width="2.2"/><circle cx="50" cy="63" r="2.5" fill="#ffd6e7"/><rect x="64" y="56" width="7" height="14" rx="3" fill="#ff4b4b" stroke="#26356b" stroke-width="2.2"/><rect x="65.5" y="52" width="4" height="5" fill="#e02f2f" stroke="#26356b" stroke-width="1.6"/><path d="M20 30 c-5 -6 -13 0 -6 6 l6 6 l6 -6 c7 -6 -1 -12 -6 -6z" fill="#ffd6e7" stroke="#26356b" stroke-width="2.2"/><path d="M76 24 l1.6 3.8 3.8 1.6 -3.8 1.6 -1.6 3.8 -1.6 -3.8 -3.8 -1.6 3.8 -1.6z" fill="#ffd23f"/>`},
+];
+
+/* ============================================================
+   レンダリング
+   ============================================================ */
+const yen = n => "¥" + n.toLocaleString("ja-JP");
+const catLabel = (cats,id) => (cats.find(c=>c.id===id)||{}).label?.replace(/^[^ ]+ /,"") || "";
+
+function badgeClass(b){
+  if(!b) return "";
+  if(b==="NEW") return "new";
+  if(b==="SALE") return "sale";
+  return "";
+}
+
+function renderToys(gridId, toys, cats){
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = toys.map((t,i)=>`
+    <article class="toy-card" data-cat="${t.cat}" style="animation-delay:${(i%8)*0.05}s">
+      ${t.badge?`<span class="toy-badge ${badgeClass(t.badge)}">${t.badge==="SALE"?"⭐おかいどく":t.badge==="NEW"?"✨しんはつばい":"👑"+t.badge}</span>`:""}
+      <div class="toy-img"><svg viewBox="0 0 100 100" role="img" aria-label="${t.name}">${t.svg}</svg></div>
+      <div class="toy-body">
+        <div class="toy-meta">
+          <span class="toy-cat">${catLabel(cats,t.cat)}</span>
+          <span class="toy-age">${t.age}</span>
+        </div>
+        <h3 class="toy-name">${t.name}</h3>
+        <p class="toy-price">${yen(t.price)}<small>(税込)</small></p>
+        <button class="buy-btn" type="button">🛒 カートにいれる</button>
+      </div>
+    </article>`).join("");
+}
+
+function renderChips(chipsId, gridId, emptyId, cats){
+  const wrap = document.getElementById(chipsId);
+  wrap.innerHTML = cats.map((c,i)=>`<button class="chip${i===0?" active":""}" data-cat="${c.id}" type="button">${c.label}</button>`).join("");
+  wrap.addEventListener("click", e=>{
+    const btn = e.target.closest(".chip");
+    if(!btn) return;
+    wrap.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+    btn.classList.add("active");
+    const cat = btn.dataset.cat;
+    let visible = 0;
+    document.querySelectorAll(`#${gridId} .toy-card`).forEach(card=>{
+      const show = cat==="all" || card.dataset.cat===cat;
+      card.classList.toggle("hidden", !show);
+      if(show) visible++;
+    });
+    document.getElementById(emptyId).style.display = visible ? "none" : "block";
+  });
+}
+
+renderToys("boyGrid", BOY_TOYS, BOY_CATS);
+renderToys("girlGrid", GIRL_TOYS, GIRL_CATS);
+renderChips("boyChips","boyGrid","boyEmpty", BOY_CATS);
+renderChips("girlChips","girlGrid","girlEmpty", GIRL_CATS);
+
+/* ---------- カート(あそび用カウンター) ---------- */
+let cartTotal = 0;
+const cartCount = document.getElementById("cartCount");
+const toast = document.getElementById("toast");
+let toastTimer;
+
+document.addEventListener("click", e=>{
+  const btn = e.target.closest(".buy-btn");
+  if(!btn) return;
+  cartTotal++;
+  cartCount.textContent = cartTotal;
+  cartCount.classList.remove("pop");
+  void cartCount.offsetWidth;
+  cartCount.classList.add("pop");
+  btn.classList.add("added");
+  btn.textContent = "✅ いれたよ!";
+  setTimeout(()=>{ btn.classList.remove("added"); btn.textContent = "🛒 カートにいれる"; }, 1200);
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toast.classList.remove("show"), 1600);
+});
+
+document.getElementById("cartBtn").addEventListener("click", ()=>{
+  toast.textContent = cartTotal>0 ? `🛒 カートに ${cartTotal}こ はいってるよ!(サンプルサイトのため おかいものはできません)` : "🛒 カートはからっぽだよ!すきなおもちゃをいれてね";
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ toast.classList.remove("show"); toast.textContent="🛒 カートにいれたよ!"; }, 2400);
+});
+</script>
+</body>
+</html>

@@ -78,6 +78,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "トイトイパーク — 夢のおもちゃやさん",
+    description: "トイ・ストーリーのような青空と雲の世界観でつくった、子ども向けの架空おもちゃ屋サイト。ラジコン・プラモデル・ゲーム・おままごと・お人形など42点のおもちゃを手描きSVGイラスト+相場価格で掲載し、男の子用/女の子用×カテゴリで絞り込めます。スマホ・タブレット対応。",
+    url: "works/toy-park/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript", "SVG"],
+    emoji: "🧸",
+    image: "images/toy-park.png",
+    date: "2026.07",
+  },
+  {
     title: "黒井戸ノ家 ―KUROIDO― お化け屋敷サイト",
     description: "ジャパニーズホラー映画の空気感をまとった架空お化け屋敷の公式サイト。警告ゲート、VHSノイズ、一瞬だけ映る女、乱れる生還者カウンターなど恐怖演出満載。心霊写真・恐怖体験談・7種の料金プランを収録。",
     url: "works/haunted-house/index.html",
