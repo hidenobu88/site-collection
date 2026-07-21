@@ -142,6 +142,35 @@ nav.main-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-cont
 .cart-count.pop{animation:pop .35s;}
 @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.6) rotate(-8deg);}100%{transform:scale(1);}}
 
+/* ---------- カートのなかみパネル ---------- */
+.cart-wrap{position:relative;}
+.cart-panel{
+  position:absolute;top:calc(100% + 12px);right:0;z-index:1200;
+  width:290px;max-width:82vw;
+  background:#fff;color:var(--ink);
+  border:3px solid var(--ink);border-radius:18px;
+  box-shadow:0 8px 0 rgba(38,53,107,.18), 0 16px 30px rgba(38,53,107,.22);
+  padding:16px;
+  opacity:0;visibility:hidden;transform:translateY(-8px);
+  transition:opacity .18s, transform .18s, visibility .18s;
+}
+.cart-panel.show{opacity:1;visibility:visible;transform:translateY(0);}
+.cart-panel::before{
+  content:"";position:absolute;top:-9px;right:22px;
+  width:16px;height:16px;background:#fff;
+  border-left:3px solid var(--ink);border-top:3px solid var(--ink);
+  transform:rotate(45deg);
+}
+.cart-panel-title{font-size:.95rem;}
+.cart-empty{font-size:.8rem;color:#5b678f;font-weight:700;text-align:center;padding:14px 0;}
+.cart-list{list-style:none;display:flex;flex-direction:column;gap:9px;max-height:240px;overflow-y:auto;margin-top:10px;}
+.cart-item{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;}
+.cart-item-name{flex:1;line-height:1.3;}
+.cart-item-qty{background:var(--blue-soft);color:var(--ink);border-radius:999px;padding:2px 8px;font-weight:800;white-space:nowrap;}
+.cart-item-price{color:#5b678f;white-space:nowrap;font-size:.74rem;}
+.cart-total{margin-top:10px;padding-top:10px;border-top:2px dashed #d7ddf0;display:flex;justify-content:space-between;align-items:baseline;font-weight:800;font-size:.9rem;}
+.cart-note{margin-top:10px;font-size:.66rem;color:#8d9ac4;font-weight:700;text-align:center;line-height:1.5;}
+
 /* ---------- ヒーロー ---------- */
 .hero{
   position:relative;
@@ -495,7 +524,16 @@ footer.site-footer{
     <nav class="main-nav">
       <a class="nav-btn boy" href="#boys">🚗 男の子のおもちゃ</a>
       <a class="nav-btn girl" href="#girls">🎀 女の子のおもちゃ</a>
-      <button class="nav-btn cart-btn" id="cartBtn" type="button">🛒<span class="cart-count" id="cartCount">0</span></button>
+      <div class="cart-wrap">
+        <button class="nav-btn cart-btn" id="cartBtn" type="button">🛒<span class="cart-count" id="cartCount">0</span></button>
+        <div class="cart-panel" id="cartPanel">
+          <h4 class="cart-panel-title">🛒 カートのなかみ</h4>
+          <p class="cart-empty" id="cartEmpty">カートはからっぽだよ!すきなおもちゃをいれてね</p>
+          <ul class="cart-list" id="cartList"></ul>
+          <div class="cart-total" id="cartTotal"></div>
+          <p class="cart-note">※サンプルサイトのため じっさいのおかいものはできません</p>
+        </div>
+      </div>
     </nav>
   </div>
 </header>
@@ -752,7 +790,7 @@ function renderToys(gridId, toys, cats){
         </div>
         <h3 class="toy-name">${t.name}</h3>
         <p class="toy-price">${yen(t.price)}<small>(税込)</small></p>
-        <button class="buy-btn" type="button">🛒 カートにいれる</button>
+        <button class="buy-btn" type="button" data-name="${t.name}" data-price="${t.price}">🛒 カートにいれる</button>
       </div>
     </article>`).join("");
 }
@@ -781,15 +819,38 @@ renderToys("girlGrid", GIRL_TOYS, GIRL_CATS);
 renderChips("boyChips","boyGrid","boyEmpty", BOY_CATS);
 renderChips("girlChips","girlGrid","girlEmpty", GIRL_CATS);
 
-/* ---------- カート(あそび用カウンター) ---------- */
+/* ---------- カート(あそび用) ---------- */
+const cartItems = new Map(); // name -> {name, price, qty}
 let cartTotal = 0;
 const cartCount = document.getElementById("cartCount");
+const cartWrap = document.querySelector(".cart-wrap");
+const cartPanel = document.getElementById("cartPanel");
+const cartList = document.getElementById("cartList");
+const cartEmpty = document.getElementById("cartEmpty");
+const cartTotalEl = document.getElementById("cartTotal");
 const toast = document.getElementById("toast");
 let toastTimer;
+
+function renderCartPanel(){
+  const items = [...cartItems.values()];
+  cartEmpty.style.display = items.length ? "none" : "block";
+  cartList.innerHTML = items.map(it => `
+    <li class="cart-item">
+      <span class="cart-item-name">${it.name}</span>
+      <span class="cart-item-qty">×${it.qty}</span>
+      <span class="cart-item-price">${yen(it.price * it.qty)}</span>
+    </li>`).join("");
+  const sum = items.reduce((s, it) => s + it.price * it.qty, 0);
+  cartTotalEl.innerHTML = items.length ? `<span>ごうけい</span><span>${yen(sum)}</span>` : "";
+}
 
 document.addEventListener("click", e=>{
   const btn = e.target.closest(".buy-btn");
   if(!btn) return;
+  const name = btn.dataset.name;
+  const price = Number(btn.dataset.price);
+  const existing = cartItems.get(name);
+  if(existing){ existing.qty++; } else { cartItems.set(name, { name, price, qty: 1 }); }
   cartTotal++;
   cartCount.textContent = cartTotal;
   cartCount.classList.remove("pop");
@@ -798,17 +859,25 @@ document.addEventListener("click", e=>{
   btn.classList.add("added");
   btn.textContent = "✅ いれたよ!";
   setTimeout(()=>{ btn.classList.remove("added"); btn.textContent = "🛒 カートにいれる"; }, 1200);
+  renderCartPanel();
+  toast.textContent = `🛒「${name}」をカートにいれたよ!`;
   toast.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>toast.classList.remove("show"), 1600);
+  toastTimer = setTimeout(()=>{ toast.classList.remove("show"); toast.textContent="🛒 カートにいれたよ!"; }, 1800);
 });
 
-document.getElementById("cartBtn").addEventListener("click", ()=>{
-  toast.textContent = cartTotal>0 ? `🛒 カートに ${cartTotal}こ はいってるよ!(サンプルサイトのため おかいものはできません)` : "🛒 カートはからっぽだよ!すきなおもちゃをいれてね";
-  toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{ toast.classList.remove("show"); toast.textContent="🛒 カートにいれたよ!"; }, 2400);
+document.getElementById("cartBtn").addEventListener("click", e=>{
+  e.stopPropagation();
+  cartPanel.classList.toggle("show");
 });
+
+document.addEventListener("click", e=>{
+  if(cartPanel.classList.contains("show") && !cartWrap.contains(e.target)){
+    cartPanel.classList.remove("show");
+  }
+});
+
+renderCartPanel();
 </script>
 </body>
 </html>
