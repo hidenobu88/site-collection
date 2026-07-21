@@ -54,6 +54,7 @@ const PROJECTS = [
     tags: ["HTML", "CSS", "JavaScript"],
     emoji: "👻",
     date: "2026.07",
+    featured: true,
   },
   {
     title: "TORALUCE PRODUCTION — 芸能事務所サイト",
