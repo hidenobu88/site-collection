@@ -135,8 +135,9 @@ body[data-lang="ko"] .sec-title { font-family: var(--font-ko-disp); letter-spaci
   color: var(--red);
   text-shadow: 2px 2px 0 var(--ink);
   letter-spacing: .02em;
+  white-space: nowrap;
 }
-.nav__logo-ja { font-weight: 900; font-size: .8rem; letter-spacing: .2em; }
+.nav__logo-ja { font-weight: 900; font-size: .8rem; letter-spacing: .2em; white-space: nowrap; }
 
 .nav__links { display: flex; gap: clamp(.9rem, 2.5vw, 2rem); font-weight: 700; font-size: .92rem; }
 .nav__links a { position: relative; padding: .2em 0; }
@@ -168,7 +169,7 @@ body[data-lang="ko"] .sec-title { font-family: var(--font-ko-disp); letter-spaci
   overflow: hidden;
   box-shadow: 3px 3px 0 var(--ink);
 }
-.lang-toggle__opt { position: relative; z-index: 1; padding: .45em 1em; transition: color .25s; }
+.lang-toggle__opt { position: relative; z-index: 1; padding: .45em 1em; transition: color .25s; white-space: nowrap; }
 .lang-toggle__slider {
   position: absolute;
   top: 0; left: 0;
@@ -923,7 +924,15 @@ body[data-lang="ko"] .detail__related-title { font-family: var(--font-ko-disp); 
 @media (max-width: 720px) {
   html { scroll-padding-top: 76px; }
 
-  /* モバイルナビ */
+  /* モバイルナビ：ロゴと言語トグルが1行に収まるよう縮小 */
+  .nav { gap: .5rem; }
+  .nav__logo { gap: .4em; }
+  .nav__logo-ko { font-size: 1.35rem; }
+  .nav__logo-ja { font-size: .62rem; letter-spacing: .12em; }
+  .nav__right { gap: .5rem; }
+  .lang-toggle { font-size: .72rem; }
+  .lang-toggle__opt { padding: .4em .8em; }
+
   .nav__burger { display: flex; }
   .nav__links {
     position: absolute;
@@ -965,7 +974,11 @@ body[data-lang="ko"] .detail__related-title { font-family: var(--font-ko-disp); 
   .menu__grid { grid-template-columns: 1fr; }
   .card { transform: none; }
   .hero__cta .btn { width: 100%; max-width: 320px; }
-  .lang-toggle { font-size: .72rem; }
+  .nav { padding: .7rem .8rem; }
+  .nav__logo-ko { font-size: 1.15rem; }
+  .nav__logo-ja { font-size: .52rem; letter-spacing: .08em; }
+  .lang-toggle { font-size: .64rem; }
+  .lang-toggle__opt { padding: .38em .65em; }
 }
 
 /* アニメーション低減設定への配慮 */

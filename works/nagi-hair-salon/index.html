@@ -118,7 +118,7 @@ ul{list-style:none;}
 .gnav a:hover::after{transform:scaleX(1);}
 .header.on-hero:not(.is-solid) .gnav a{color:#fff;}
 .nav-reserve{
-  display:inline-flex;align-items:center;gap:8px;
+  display:inline-flex;align-items:center;gap:8px;flex-shrink:0;white-space:nowrap;
   background:var(--ink);color:var(--bone)!important;
   padding:12px 26px;font-size:12.5px;letter-spacing:.2em;
   transition:background .35s;
@@ -573,6 +573,12 @@ ul{list-style:none;}
   .price-row .pr{font-size:17px;}
   .feat-grid{grid-template-columns:1fr;}
   .feat-card:last-child{grid-column:auto;}
+  .drawer{padding:0 9vw;}
+  .drawer a{
+    flex-direction:column;align-items:flex-start;gap:4px;
+    font-size:clamp(24px,8vw,34px);white-space:nowrap;
+  }
+  .drawer a small{font-size:10px;}
 }
 </style>
 </head>

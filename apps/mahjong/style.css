@@ -435,7 +435,7 @@ body {
   z-index: 70;
   font-family: "Shippori Mincho B1", serif;
   font-weight: 800;
-  font-size: clamp(38px, 9vw, 64px);
+  font-size: clamp(30px, 8vw, 64px);
   letter-spacing: 0.2em;
   padding: 0.15em 0.6em 0.15em 0.8em;
   color: #fff7e3;
@@ -444,6 +444,9 @@ body {
   border-bottom: 2px solid var(--gold);
   text-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
   pointer-events: none;
+  white-space: nowrap;
+  max-width: 92vw;
+  box-sizing: border-box;
   animation: bannerIn 0.9s ease-out forwards;
 }
 .banner.blue { background: linear-gradient(100deg, rgba(20, 60, 120, 0.94), rgba(10, 34, 72, 0.94)); }

@@ -691,7 +691,7 @@ async function playHand() {
 
     /* 打牌 */
     doDiscard(p, res.tile, res.riichi);
-    if (res.riichi) { showBanner(p.seat, "リーチ", true); playSnd("riichi"); }
+    if (res.riichi) { showBanner(p.seat, "リーチ！", true); playSnd("riichi"); }
     else playSnd("discard");
     renderAll();
     if (res.riichi) await sleep(650);

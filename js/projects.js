@@ -117,12 +117,13 @@ const PROJECTS = [
     featured: true,  // 2ページ目の先頭に大きく表示
   },
   {
-    title: "もふもふパーク — 猫と犬のふれあいカフェ",
-    description: "かわいい猫と犬にエサをあげたり、撫でたり、おもちゃで遊んだり。時間制で気軽に楽しめるふれあいカフェの公式サイトです。",
-    url: "works/cat-dog/index.html",
+    title: "STRIDE FITNESS CLUB — スポーツジムサイト",
+    description: "24時間ジム・25mプール・スタジオを備えた架空の総合フィットネスクラブ。施設紹介、週間レッスン表、4つの料金プラン、入会キャンペーン、FAQまで実在するかのような情報量でまとめたモダンなサイトです。",
+    url: "works/stride-fitness/index.html",
     category: "website",
     tags: ["HTML", "CSS", "JavaScript"],
-    emoji: "🐾",
+    emoji: "💪",
+    image: "images/stride-fitness.png",
     date: "2026.07",
   },
   {
@@ -175,13 +176,12 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
-    title: "STRIDE FITNESS CLUB — スポーツジムサイト",
-    description: "24時間ジム・25mプール・スタジオを備えた架空の総合フィットネスクラブ。施設紹介、週間レッスン表、4つの料金プラン、入会キャンペーン、FAQまで実在するかのような情報量でまとめたモダンなサイトです。",
-    url: "works/stride-fitness/index.html",
+    title: "もふもふパーク — 猫と犬のふれあいカフェ",
+    description: "かわいい猫と犬にエサをあげたり、撫でたり、おもちゃで遊んだり。時間制で気軽に楽しめるふれあいカフェの公式サイトです。",
+    url: "works/cat-dog/index.html",
     category: "website",
     tags: ["HTML", "CSS", "JavaScript"],
-    emoji: "💪",
-    image: "images/stride-fitness.png",
+    emoji: "🐾",
     date: "2026.07",
   },
   {
