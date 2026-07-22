@@ -143,9 +143,9 @@ nav.main-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-cont
 @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.6) rotate(-8deg);}100%{transform:scale(1);}}
 
 /* ---------- カートのなかみパネル ---------- */
-.cart-wrap{position:relative;}
+.cart-wrap{position:static;}
 .cart-panel{
-  position:absolute;top:calc(100% + 12px);right:0;z-index:1200;
+  position:absolute;top:calc(100% + 12px);right:10px;z-index:1200;
   width:290px;max-width:82vw;
   background:#fff;color:var(--ink);
   border:3px solid var(--ink);border-radius:18px;
@@ -487,6 +487,7 @@ footer.site-footer{
 @media (max-width:640px){
   .header-inner{flex-wrap:wrap;justify-content:center;padding:8px 10px;}
   nav.main-nav{width:100%;justify-content:center;}
+  .cart-panel::before{display:none;}
   .nav-btn{font-size:.78rem;padding:8px 12px;}
   .hero{padding:44px 14px 100px;}
   .toy-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
