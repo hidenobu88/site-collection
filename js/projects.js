@@ -205,6 +205,16 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "スートマッチ — トランプ柄パズルゲーム",
+    description: "ダイヤ・ハート・スペード・クローバーのカードをスワイプで入れ替え、縦か横に4つ以上そろえて消す無料パズル。消えると連鎖して次々にコンボ発生。全6ステージで目標の絵柄と手数が変化し、進むほど難易度が上がります。スマホ・タブレット・iPad対応。",
+    url: "apps/trump-match/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🃏",
+    image: "images/trump-match.png",
+    date: "2026.07",
+  },
+  {
     title: "DRINK GARDEN — 世界のドリンク専門店",
     description: "コーラやタピオカミルクティーなど、世界の定番ドリンク62種類を実写真つきで「炭酸飲料」「フルーツジュース」「お茶」「コーヒー」など8カテゴリーに分けてあいうえお順で掲載。ドリンクをクリックすると詳細ページ、カートは数量変更・削除も自由自在なド派手でポップなドリンクスタンドサイトです。",
     url: "works/drink-garden/index.html",
