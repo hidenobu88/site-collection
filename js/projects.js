@@ -205,6 +205,15 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "DRINK GARDEN — 世界のドリンク専門店",
+    description: "コーラやタピオカミルクティーなど、世界の定番ドリンク62種類を「炭酸飲料」「フルーツジュース」「お茶」「コーヒー」など8カテゴリーに分けてあいうえお順で掲載。相場価格つきで、カートに追加して楽しめるカジュアルなドリンクスタンドサイトです。",
+    url: "works/drink-garden/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🥤",
+    date: "2026.07",
+  },
+  {
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",

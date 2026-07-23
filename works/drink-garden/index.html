@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>DRINK GARDEN ドリンクガーデン | 世界のドリンク専門店</title>
+<meta name="description" content="コーラからタピオカミルクティーまで、世界の定番ドリンク60種類以上を集めたカジュアルなドリンクスタンドの紹介サイト。カテゴリー別・あいうえお順でご紹介。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥤</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --cream:#FFF8EE;
+  --cream2:#FFF1DD;
+  --ink:#3B2C22;
+  --ink-soft:#8A7A6C;
+  --pink:#FF8FAB;
+  --peach:#FF9F5A;
+  --mint:#4FB894;
+  --yellow:#FFC93C;
+  --sky:#3FB6D8;
+  --grape:#A17BE0;
+  --card:#FFFFFF;
+  --line:rgba(59,44,34,0.10);
+  --shadow:0 10px 30px rgba(90,55,30,0.10);
+  --radius:22px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Zen Maru Gothic','Hiragino Maru Gothic ProN',sans-serif;
+  color:var(--ink);
+  background:var(--cream);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;}
+h1,h2,h3{font-family:'Kiwi Maru','Zen Maru Gothic',serif;margin:0;}
+.en{font-family:'Fredoka',sans-serif;}
+button{font-family:inherit;cursor:pointer;}
+
+/* ===================== 背景装飾（いろんなドリンクが薄く浮かぶレイヤー） ===================== */
+.bg-decor{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.bg-decor .blob{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:.35;
+}
+.blob1{width:420px;height:420px;background:radial-gradient(circle,var(--pink),transparent 70%);top:-120px;left:-100px;}
+.blob2{width:460px;height:460px;background:radial-gradient(circle,var(--yellow),transparent 70%);top:20%;right:-160px;}
+.blob3{width:400px;height:400px;background:radial-gradient(circle,var(--sky),transparent 70%);bottom:5%;left:-140px;}
+.blob4{width:380px;height:380px;background:radial-gradient(circle,var(--mint),transparent 70%);bottom:-140px;right:8%;}
+.blob5{width:340px;height:340px;background:radial-gradient(circle,var(--grape),transparent 70%);top:55%;left:38%;}
+
+.bg-decor .icon{
+  position:absolute;
+  color:var(--ink);
+  opacity:.07;
+}
+.bg-decor svg{width:100%;height:100%;}
+
+/* ===================== ヘッダー ===================== */
+.site-header{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 5vw;
+  background:rgba(255,248,238,0.82);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand-emoji{font-size:26px;}
+.brand-text{font-family:'Kiwi Maru',serif;font-size:19px;font-weight:500;color:var(--ink);line-height:1.1;}
+.brand-sub{display:block;font-family:'Fredoka',sans-serif;font-size:10px;letter-spacing:.14em;color:var(--peach);font-weight:600;}
+
+.header-right{display:flex;align-items:center;gap:10px;}
+
+.cart-btn{
+  position:relative;
+  display:flex;align-items:center;gap:6px;
+  background:var(--ink);color:#fff;
+  border:none;border-radius:999px;
+  padding:9px 16px 9px 13px;
+  font-size:13px;font-weight:700;
+  box-shadow:var(--shadow);
+}
+.cart-count{
+  position:absolute;top:-6px;right:-6px;
+  background:var(--pink);color:#fff;
+  font-size:11px;font-weight:700;
+  min-width:19px;height:19px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--cream);
+}
+
+.nav-toggle{
+  display:none;
+  flex-direction:column;justify-content:center;gap:5px;
+  width:38px;height:38px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+}
+.nav-toggle span{display:block;width:18px;height:2px;background:var(--ink);margin:0 auto;border-radius:2px;}
+
+/* カテゴリークイックナビ */
+.cat-nav{
+  position:sticky;top:65px;z-index:190;
+  display:flex;gap:8px;
+  padding:10px 5vw;
+  overflow-x:auto;
+  background:rgba(255,248,238,0.92);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  scrollbar-width:none;
+}
+.cat-nav::-webkit-scrollbar{display:none;}
+.cat-chip{
+  flex:0 0 auto;
+  display:flex;align-items:center;gap:6px;
+  background:#fff;border:1px solid var(--line);
+  border-radius:999px;padding:8px 14px;
+  font-size:12.5px;font-weight:700;color:var(--ink-soft);
+  white-space:nowrap;text-decoration:none;
+  transition:all .2s ease;
+}
+.cat-chip.active,.cat-chip:hover{
+  background:var(--ink);color:#fff;border-color:var(--ink);
+  transform:translateY(-1px);
+}
+
+/* ===================== ヒーロー ===================== */
+.hero{
+  position:relative;z-index:1;
+  padding:70px 6vw 50px;
+  text-align:center;
+  max-width:900px;margin:0 auto;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#fff;border:1px solid var(--line);
+  padding:7px 16px;border-radius:999px;
+  font-size:12px;font-weight:700;color:var(--peach);
+  box-shadow:var(--shadow);margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(34px,7vw,58px);
+  line-height:1.25;
+  font-weight:500;
+}
+.hero h1 .accent{color:var(--pink);}
+.hero-lead{
+  margin:20px auto 0;
+  max-width:560px;
+  color:var(--ink-soft);
+  font-size:15px;line-height:1.9;
+}
+.hero-stats{
+  display:flex;justify-content:center;gap:14px;
+  margin-top:34px;flex-wrap:wrap;
+}
+.hero-stat{
+  background:#fff;border-radius:18px;padding:14px 24px;
+  box-shadow:var(--shadow);min-width:104px;
+}
+.hero-stat b{display:block;font-family:'Fredoka',sans-serif;font-size:26px;color:var(--ink);}
+.hero-stat span{font-size:11px;color:var(--ink-soft);font-weight:700;}
+.hero-cta{
+  margin-top:34px;display:inline-flex;align-items:center;gap:8px;
+  background:var(--pink);color:#fff;
+  padding:14px 30px;border-radius:999px;
+  font-size:14.5px;font-weight:700;text-decoration:none;
+  box-shadow:0 12px 24px rgba(255,143,171,.4);
+}
+
+/* ===================== 検索 ===================== */
+.search-wrap{
+  position:relative;z-index:1;
+  max-width:480px;margin:0 auto 8px;padding:0 6vw;
+}
+.search-box{
+  display:flex;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--line);
+  border-radius:999px;padding:12px 18px;
+  box-shadow:var(--shadow);
+}
+.search-box input{
+  border:none;outline:none;flex:1;
+  font-family:inherit;font-size:14px;background:transparent;color:var(--ink);
+}
+.search-box svg{flex:0 0 auto;color:var(--ink-soft);}
+.no-result{
+  text-align:center;color:var(--ink-soft);font-size:14px;
+  padding:30px 0;display:none;
+}
+
+/* ===================== メニュー本体 ===================== */
+.menu{
+  position:relative;z-index:1;
+  max-width:1180px;margin:0 auto;
+  padding:20px 5vw 60px;
+}
+.cat-section{scroll-margin-top:130px;margin-top:56px;}
+.cat-head{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:20px;
+}
+.cat-icon{
+  width:50px;height:50px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex:0 0 auto;
+  box-shadow:var(--shadow);
+}
+.cat-titles{flex:1;min-width:0;}
+.cat-titles h2{font-size:clamp(19px,3.4vw,25px);font-weight:500;}
+.cat-titles p{margin:2px 0 0;font-size:12px;color:var(--ink-soft);letter-spacing:.03em;}
+.cat-count{
+  font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;
+  color:var(--ink-soft);background:#fff;border:1px solid var(--line);
+  border-radius:999px;padding:5px 12px;flex:0 0 auto;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:16px;
+}
+
+.drink-card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px 16px 16px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--line);
+  display:flex;flex-direction:column;gap:10px;
+  position:relative;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.drink-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(90,55,30,.14);}
+
+.card-top{display:flex;align-items:flex-start;gap:12px;}
+.card-emoji{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex:0 0 auto;
+}
+.card-name-wrap{flex:1;min-width:0;}
+.card-name{font-size:15.5px;font-weight:700;line-height:1.35;}
+.card-kana{font-size:10.5px;color:var(--ink-soft);letter-spacing:.02em;margin-top:1px;}
+.card-tag{
+  position:absolute;top:-8px;right:14px;
+  font-size:10px;font-weight:700;color:#fff;
+  padding:4px 10px;border-radius:999px;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+.tag-定番{background:var(--peach);}
+.tag-人気{background:var(--pink);}
+
+.card-desc{
+  font-size:12.5px;color:var(--ink-soft);line-height:1.7;
+  flex:1;min-height:38px;
+}
+.card-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;margin-top:2px;
+}
+.card-price{font-family:'Fredoka',sans-serif;font-size:19px;font-weight:600;}
+.card-price small{font-size:11px;font-weight:500;color:var(--ink-soft);margin-left:2px;}
+
+.add-btn{
+  background:var(--ink);color:#fff;border:none;border-radius:999px;
+  padding:8px 15px;font-size:12px;font-weight:700;
+  display:flex;align-items:center;gap:5px;
+  transition:background .2s ease;
+}
+.add-btn:hover{background:var(--pink);}
+
+.qty-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--cream2);border-radius:999px;padding:4px 6px;
+}
+.qty-box button{
+  width:24px;height:24px;border-radius:50%;border:none;
+  background:#fff;font-size:14px;font-weight:700;color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+.qty-box span{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;min-width:14px;text-align:center;}
+
+/* ===================== カートドロワー ===================== */
+.overlay{
+  position:fixed;inset:0;background:rgba(59,44,34,.42);
+  z-index:300;opacity:0;pointer-events:none;transition:opacity .25s ease;
+}
+.overlay.show{opacity:1;pointer-events:auto;}
+
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(380px,88vw);
+  background:var(--cream);
+  z-index:310;
+  box-shadow:-16px 0 40px rgba(0,0,0,.18);
+  transform:translateX(100%);transition:transform .3s ease;
+  display:flex;flex-direction:column;
+}
+.cart-drawer.show{transform:translateX(0);}
+.cart-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 20px 14px;border-bottom:1px solid var(--line);
+}
+.cart-head h3{font-size:18px;font-weight:500;}
+.cart-close{
+  width:32px;height:32px;border-radius:50%;border:none;background:#fff;
+  box-shadow:var(--shadow);font-size:16px;
+}
+.cart-list{flex:1;overflow-y:auto;padding:12px 20px;}
+.cart-empty{text-align:center;color:var(--ink-soft);font-size:13px;padding:60px 10px;}
+.cart-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 0;border-bottom:1px solid var(--line);
+}
+.cart-item .em{font-size:22px;width:36px;text-align:center;flex:0 0 auto;}
+.cart-item .info{flex:1;min-width:0;}
+.cart-item .info b{display:block;font-size:13px;font-weight:700;}
+.cart-item .info span{font-size:11.5px;color:var(--ink-soft);}
+.cart-item .sub{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;}
+.cart-foot{padding:16px 20px 22px;border-top:1px solid var(--line);}
+.cart-total{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:6px;font-size:14px;font-weight:700;
+}
+.cart-total b{font-family:'Fredoka',sans-serif;font-size:22px;}
+.cart-note{font-size:11px;color:var(--ink-soft);line-height:1.6;margin:8px 0 14px;}
+.cart-order-btn{
+  width:100%;background:var(--pink);color:#fff;border:none;
+  border-radius:999px;padding:14px;font-size:14px;font-weight:700;
+  box-shadow:0 10px 22px rgba(255,143,171,.4);
+}
+
+/* ===================== フッター ===================== */
+.site-footer{
+  position:relative;z-index:1;
+  background:var(--ink);color:#fff;
+  padding:44px 6vw 26px;text-align:center;
+}
+.site-footer p{font-size:12px;color:rgba(255,255,255,.65);line-height:1.8;max-width:520px;margin:0 auto;}
+.footer-brand{font-family:'Kiwi Maru',serif;font-size:18px;margin-bottom:10px;}
+.footer-copy{margin-top:22px;font-size:11px;color:rgba(255,255,255,.4);}
+
+.top-btn{
+  position:fixed;left:14px;bottom:14px;z-index:399;
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(25,25,25,.82);color:#fff;
+  font-family:system-ui,sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.04em;padding:9px 16px;border-radius:999px;
+  text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.35);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.2);
+}
+
+/* ===================== モバイルナビ（ハンバーガー） ===================== */
+.mobile-nav{
+  position:fixed;top:0;right:0;height:100%;
+  width:min(280px,80vw);
+  background:var(--cream);
+  z-index:320;
+  transform:translateX(100%);transition:transform .28s ease;
+  box-shadow:-10px 0 30px rgba(0,0,0,.15);
+  display:flex;flex-direction:column;
+  padding:18px 18px 22px;
+  overflow-y:auto;
+  max-height:100vh;
+  box-sizing:border-box;
+}
+.mobile-nav.show{transform:translateX(0);}
+.mobile-nav-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex:0 0 auto;}
+.mobile-nav-head span{font-family:'Kiwi Maru',serif;font-size:16px;}
+.mobile-nav a{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 10px;border-radius:14px;
+  font-size:14px;font-weight:700;color:var(--ink);
+  text-decoration:none;
+}
+.mobile-nav a:hover{background:#fff;}
+
+/* ===================== レスポンシブ ===================== */
+@media (max-width:860px){
+  .cart-btn span.label{display:none;}
+}
+@media (max-width:720px){
+  .nav-toggle{display:flex;}
+  .cat-nav{display:none;}
+  .hero{padding:50px 6vw 40px;}
+  .hero-stats{gap:10px;}
+  .hero-stat{padding:12px 18px;min-width:88px;}
+}
+@media (max-width:480px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;}
+  .drink-card{padding:14px 12px 12px;border-radius:16px;}
+  .card-emoji{width:42px;height:42px;font-size:21px;border-radius:12px;}
+  .card-name{font-size:13.5px;}
+  .card-desc{font-size:11px;min-height:32px;}
+  .card-price{font-size:16px;}
+  .add-btn{padding:7px 11px;font-size:11px;}
+  .site-header{padding:12px 4vw;}
+  .brand-text{font-size:16px;}
+  .hero-lead{font-size:13.5px;}
+}
+</style>
+</head>
+<body>
+
+<!-- 背景装飾レイヤー -->
+<div class="bg-decor" aria-hidden="true" id="bgDecor">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="blob blob4"></div>
+  <div class="blob blob5"></div>
+</div>
+
+<!-- ヘッダー -->
+<header class="site-header">
+  <a class="brand" href="#top">
+    <span class="brand-emoji">🥤</span>
+    <span class="brand-text">DRINK GARDEN<span class="brand-sub en">DRINK STAND &amp; CATALOG</span></span>
+  </a>
+  <div class="header-right">
+    <button class="cart-btn" id="cartOpenBtn" aria-label="カートを開く">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="label">カート</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- カテゴリークイックナビ（PC/タブレット） -->
+<nav class="cat-nav" id="catNav" aria-label="カテゴリー"></nav>
+
+<!-- モバイルナビ -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-head">
+    <span>カテゴリー</span>
+    <button class="cart-close" id="mobileNavClose" aria-label="閉じる">✕</button>
+  </div>
+  <div id="mobileNavLinks"></div>
+</div>
+<div class="overlay" id="mobileNavOverlay"></div>
+
+<main id="top">
+  <!-- ヒーロー -->
+  <section class="hero">
+    <span class="hero-badge">🍋 世界のドリンク60種類以上</span>
+    <h1>のどをうるおす、<br /><span class="accent">とっておきの一杯を。</span></h1>
+    <p class="hero-lead">
+      定番の炭酸からタピオカミルクティー、こだわりのコーヒー、ノンアルコールカクテルまで。<br />
+      世界中で愛されているドリンクを、カテゴリー別・あいうえお順にぎゅっと集めました。<br />
+      好きな一杯を見つけて、カートに入れてお楽しみください。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat"><b id="statCount">0</b><span>種類のドリンク</span></div>
+      <div class="hero-stat"><b id="statCat">0</b><span>カテゴリー</span></div>
+      <div class="hero-stat"><b>¥110〜</b><span>お手頃価格</span></div>
+    </div>
+    <a href="#menu" class="hero-cta">
+      メニューを見る
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </a>
+  </section>
+
+  <!-- 検索 -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="searchInput" placeholder="ドリンク名で検索（例：コーラ、ミルクティー）" aria-label="ドリンクを検索" />
+    </div>
+  </div>
+  <p class="no-result" id="noResult">🥤 該当するドリンクが見つかりませんでした。</p>
+
+  <!-- メニュー本体（JSで自動生成） -->
+  <section class="menu" id="menu"></section>
+</main>
+
+<!-- フッター -->
+<footer class="site-footer">
+  <div class="footer-brand">🥤 DRINK GARDEN</div>
+  <p>
+    掲載しているドリンクの名称・価格は、一般的な相場を参考にしたイメージです。<br />
+    実際の店舗・商品とは異なる場合があります。本サイトはポートフォリオ作品として制作した架空のドリンクスタンド紹介ページです。<br />
+    カートの「注文する」ボタンからの決済は行われません（デモ機能）。
+  </p>
+  <p class="footer-copy">© 2026 DRINK GARDEN — Portfolio Work</p>
+</footer>
+
+<!-- カートドロワー -->
+<div class="overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="カート">
+  <div class="cart-head">
+    <h3>🛒 カート</h3>
+    <button class="cart-close" id="cartCloseBtn" aria-label="閉じる">✕</button>
+  </div>
+  <div class="cart-list" id="cartList"></div>
+  <div class="cart-foot">
+    <div class="cart-total"><span>合計</span><b id="cartTotal">¥0</b></div>
+    <p class="cart-note">※ こちらはデモサイトです。実際の注文・決済はできません。ご了承ください。</p>
+    <button class="cart-order-btn" id="cartOrderBtn">注文する（デモ）</button>
+  </div>
+</aside>
+
+<a href="../../index.html" data-topbtn class="top-btn">↑ TOPページへ</a>
+
+<script>
+/* =========================================================
+ * カテゴリー定義
+ * ========================================================= */
+const CATEGORIES = [
+  { id:"carbonated", label:"炭酸飲料",             en:"SODA",     icon:"🥤", color:"#FF7A59" },
+  { id:"juice",      label:"フルーツジュース",       en:"JUICE",    icon:"🧃", color:"#FFB300" },
+  { id:"tea",        label:"お茶・ティー",           en:"TEA",      icon:"🍵", color:"#5C9A5A" },
+  { id:"coffee",     label:"コーヒー",               en:"COFFEE",   icon:"☕", color:"#8B5E3C" },
+  { id:"milk",       label:"ミルク＆スムージー",      en:"MILK",     icon:"🥛", color:"#FF8FC1" },
+  { id:"sports",     label:"スポーツ＆エナジー",      en:"SPORTS",   icon:"⚡", color:"#2FA6C9" },
+  { id:"water",      label:"ミネラルウォーター＆ソーダ", en:"WATER", icon:"💧", color:"#4FC3E0" },
+  { id:"mocktail",   label:"ノンアルコールカクテル",  en:"MOCKTAIL", icon:"🍹", color:"#B18CFF" },
+];
+
+/* =========================================================
+ * ドリンクデータ（各カテゴリー内はあいうえお順）
+ * ========================================================= */
+const DRINKS = [
+  // ---------- 炭酸飲料 ----------
+  { cat:"carbonated", name:"コーラ", kana:"こーら", emoji:"🥤", price:150, desc:"しゅわっと爽快、世界中で愛される定番炭酸。", tag:"定番" },
+  { cat:"carbonated", name:"サイダー", kana:"さいだー", emoji:"🫧", price:140, desc:"透明でやさしい甘さの日本生まれの炭酸。" },
+  { cat:"carbonated", name:"ジンジャーエール", kana:"じんじゃーえーる", emoji:"🫚", price:160, desc:"生姜がピリッと香る、大人にも人気の炭酸。" },
+  { cat:"carbonated", name:"スプライト", kana:"すぷらいと", emoji:"🍋", price:150, desc:"レモン＆ライムの爽やかな辛口炭酸。" },
+  { cat:"carbonated", name:"ドクターペッパー", kana:"どくたーぺっぱー", emoji:"🥤", price:180, desc:"23種類のフレーバーが溶け合う個性派コーラ。" },
+  { cat:"carbonated", name:"ファンタオレンジ", kana:"ふぁんたおれんじ", emoji:"🍊", price:150, desc:"濃厚オレンジの香りがはじける定番フレーバー。" },
+  { cat:"carbonated", name:"ファンタグレープ", kana:"ふぁんたぐれーぷ", emoji:"🍇", price:150, desc:"甘酸っぱいぶどう味で子どもにも大人気。" },
+  { cat:"carbonated", name:"三ツ矢サイダー", kana:"みつやさいだー", emoji:"🫧", price:150, desc:"130年以上愛される日本発の元祖サイダー。", tag:"定番" },
+  { cat:"carbonated", name:"メロンソーダ", kana:"めろんそーだ", emoji:"🍈", price:170, desc:"喫茶店の定番、鮮やかな緑色のメロン風味。" },
+  { cat:"carbonated", name:"ラムネ", kana:"らむね", emoji:"🔵", price:130, desc:"ビー玉の弾ける音が涼しい、夏の風物詩。" },
+
+  // ---------- フルーツジュース ----------
+  { cat:"juice", name:"アップルジュース", kana:"あっぷるじゅーす", emoji:"🍎", price:180, desc:"りんごのようなすっきり甘い果汁100%。" },
+  { cat:"juice", name:"オレンジジュース", kana:"おれんじじゅーす", emoji:"🍊", price:190, desc:"朝食の定番、ビタミンCたっぷりの果汁。", tag:"定番" },
+  { cat:"juice", name:"クランベリージュース", kana:"くらんべりーじゅーす", emoji:"🫐", price:220, desc:"北米生まれの甘酸っぱいベリー果汁。" },
+  { cat:"juice", name:"グレープジュース", kana:"ぐれーぷじゅーす", emoji:"🍇", price:200, desc:"濃厚な巨峰やコンコードの甘い香り。" },
+  { cat:"juice", name:"グレープフルーツジュース", kana:"ぐれーぷふるーつじゅーす", emoji:"🟠", price:200, desc:"ほろ苦さがクセになるピンク色の果汁。" },
+  { cat:"juice", name:"ざくろジュース", kana:"ざくろじゅーす", emoji:"🔴", price:280, desc:"美容効果でも人気の、宝石のような赤い果汁。" },
+  { cat:"juice", name:"パイナップルジュース", kana:"ぱいなっぷるじゅーす", emoji:"🍍", price:190, desc:"南国育ちの濃厚な甘さとトロピカルな香り。" },
+  { cat:"juice", name:"パッションフルーツジュース", kana:"ぱっしょんふるーつじゅーす", emoji:"🟡", price:260, desc:"種のプチプチ食感が楽しい南国フルーツ。" },
+  { cat:"juice", name:"マンゴージュース", kana:"まんごーじゅーす", emoji:"🥭", price:250, desc:"とろけるような甘さの完熟マンゴー果汁。", tag:"人気" },
+  { cat:"juice", name:"レモネード", kana:"れもねーど", emoji:"🍋", price:350, desc:"はちみつとレモンでつくる爽やかな一杯。" },
+
+  // ---------- お茶・ティー ----------
+  { cat:"tea", name:"ウーロン茶", kana:"うーろんちゃ", emoji:"🍵", price:150, desc:"食事によく合う、香ばしい半発酵茶。" },
+  { cat:"tea", name:"紅茶", kana:"こうちゃ", emoji:"🫖", price:150, desc:"芳醇な香りが広がる、世界中で愛される茶葉。" },
+  { cat:"tea", name:"ジャスミン茶", kana:"じゃすみんちゃ", emoji:"🌸", price:150, desc:"ジャスミンの花の香りをまとった中国茶。" },
+  { cat:"tea", name:"タピオカミルクティー", kana:"たぴおかみるくてぃー", emoji:"🧋", price:550, desc:"もちもちタピオカが人気の台湾発ドリンク。", tag:"人気" },
+  { cat:"tea", name:"チャイ", kana:"ちゃい", emoji:"🫖", price:480, desc:"スパイスが香る、インド式ミルクティー。" },
+  { cat:"tea", name:"ほうじ茶", kana:"ほうじちゃ", emoji:"🍵", price:150, desc:"香ばしく煎った茶葉の、やさしい味わい。" },
+  { cat:"tea", name:"ミルクティー", kana:"みるくてぃー", emoji:"🧋", price:420, desc:"紅茶とミルクがまろやかに溶け合う一杯。" },
+  { cat:"tea", name:"麦茶", kana:"むぎちゃ", emoji:"🌾", price:130, desc:"カフェインゼロ、夏に嬉しい香ばしい麦の茶。" },
+  { cat:"tea", name:"緑茶", kana:"りょくちゃ", emoji:"🍵", price:140, desc:"すっきりとした渋みが心地よい、日本茶の定番。", tag:"定番" },
+  { cat:"tea", name:"レモンティー", kana:"れもんてぃー", emoji:"🍋", price:400, desc:"紅茶にレモンを添えた、さっぱりティー。" },
+
+  // ---------- コーヒー ----------
+  { cat:"coffee", name:"アイスコーヒー", kana:"あいすこーひー", emoji:"🧊", price:380, desc:"深煎り豆をキンキンに冷やした、夏の定番。" },
+  { cat:"coffee", name:"エスプレッソ", kana:"えすぷれっそ", emoji:"☕", price:350, desc:"凝縮された濃厚な一杯、イタリア生まれ。" },
+  { cat:"coffee", name:"カフェモカ", kana:"かふぇもか", emoji:"🍫", price:520, desc:"チョコレートの甘さが溶け込むコーヒー。" },
+  { cat:"coffee", name:"カフェラテ", kana:"かふぇらて", emoji:"☕", price:450, desc:"エスプレッソにたっぷりのミルクを注いで。", tag:"人気" },
+  { cat:"coffee", name:"カプチーノ", kana:"かぷちーの", emoji:"☕", price:450, desc:"きめ細かいミルクフォームがふわふわ。" },
+  { cat:"coffee", name:"キャラメルマキアート", kana:"きゃらめるまきあーと", emoji:"☕", price:550, desc:"キャラメルソースが甘く香るラテ。" },
+  { cat:"coffee", name:"フラペチーノ", kana:"ふらぺちーの", emoji:"🥤", price:580, desc:"凍らせてブレンドした、冷たいコーヒー飲料。" },
+  { cat:"coffee", name:"ブラックコーヒー", kana:"ぶらっくこーひー", emoji:"☕", price:350, desc:"何も加えない、豆本来の味を楽しむ一杯。", tag:"定番" },
+
+  // ---------- ミルク＆スムージー ----------
+  { cat:"milk", name:"いちごミルク", kana:"いちごみるく", emoji:"🍓", price:350, desc:"いちごの甘酸っぱさとミルクのやさしい甘さ。" },
+  { cat:"milk", name:"牛乳", kana:"ぎゅうにゅう", emoji:"🥛", price:130, desc:"毎日の食卓に欠かせない、定番ドリンク。", tag:"定番" },
+  { cat:"milk", name:"バナナオレ", kana:"ばななおれ", emoji:"🍌", price:320, desc:"バナナの自然な甘さがミルクに溶け込む。" },
+  { cat:"milk", name:"ミックスベリースムージー", kana:"みっくすべりーすむーじー", emoji:"🫐", price:580, desc:"冷たく濃厚な、数種のベリーをブレンド。", tag:"人気" },
+  { cat:"milk", name:"ミルクセーキ", kana:"みるくせーき", emoji:"🥛", price:400, desc:"卵とミルクでつくる、懐かしい甘い一杯。" },
+  { cat:"milk", name:"ミロ", kana:"みろ", emoji:"🍫", price:350, desc:"麦芽とカカオの香ばしい甘さが人気。" },
+  { cat:"milk", name:"ヨーグルトドリンク", kana:"よーぐるとどりんく", emoji:"🥛", price:180, desc:"さわやかな酸味の、飲むヨーグルト。" },
+  { cat:"milk", name:"ラッシー", kana:"らっしー", emoji:"🥛", price:420, desc:"インド発、ヨーグルトベースの冷たい飲み物。" },
+
+  // ---------- スポーツ＆エナジー ----------
+  { cat:"sports", name:"アクエリアス", kana:"あくえりあす", emoji:"⚡", price:150, desc:"体液に近い成分で、スポーツ後の水分補給に。", tag:"定番" },
+  { cat:"sports", name:"オロナミンC", kana:"おろなみんしー", emoji:"🟠", price:130, desc:"元気はつらつ、ビタミンCの炭酸ドリンク。" },
+  { cat:"sports", name:"経口補水液", kana:"けいこうほすいえき", emoji:"💧", price:180, desc:"水分と電解質を効率よく補給できる飲料。" },
+  { cat:"sports", name:"ポカリスエット", kana:"ぽかりすえっと", emoji:"⚡", price:150, desc:"汗で失われた成分を補給する、イオン飲料。", tag:"定番" },
+  { cat:"sports", name:"モンスターエナジー", kana:"もんすたーえなじー", emoji:"⚡", price:230, desc:"強めの刺激で集中力を高めるエナジー系。" },
+  { cat:"sports", name:"レッドブル", kana:"れっどぶる", emoji:"⚡", price:230, desc:"翼をさずける、世界的エナジードリンク。", tag:"人気" },
+
+  // ---------- ミネラルウォーター＆ソーダ ----------
+  { cat:"water", name:"炭酸水", kana:"たんさんすい", emoji:"🫧", price:120, desc:"シュワシュワ感がクセになる、無糖ソーダ水。" },
+  { cat:"water", name:"天然水", kana:"てんねんすい", emoji:"💧", price:110, desc:"自然の恵みそのままの、やさしい軟水。", tag:"定番" },
+  { cat:"water", name:"トニックウォーター", kana:"となっくうぉーたー", emoji:"🫧", price:180, desc:"ほろ苦さが特徴の、キニーネ入り炭酸水。" },
+  { cat:"water", name:"フレーバーウォーター", kana:"ふれーばーうぉーたー", emoji:"💧", price:200, desc:"果実のほのかな香りをつけた、微炭酸水。" },
+
+  // ---------- ノンアルコールカクテル ----------
+  { cat:"mocktail", name:"カルピス", kana:"かるぴす", emoji:"🥛", price:350, desc:"水で割って楽しむ、乳酸菌飲料の原液。", tag:"定番" },
+  { cat:"mocktail", name:"カルピスソーダ", kana:"かるぴすそーだ", emoji:"🫧", price:400, desc:"カルピスを炭酸で割った、爽快な一杯。" },
+  { cat:"mocktail", name:"シャーリーテンプル", kana:"しゃーりーてんぷる", emoji:"🍒", price:550, desc:"グレナデンシロップが香る、ノンアルカクテル。" },
+  { cat:"mocktail", name:"ジンジャーモヒート", kana:"じんじゃーもひーと", emoji:"🌿", price:580, desc:"ミントと生姜が香る、さわやかなモクテル。" },
+  { cat:"mocktail", name:"バージンモヒート", kana:"ばーじんもひーと", emoji:"🌿", price:600, desc:"ライムとミントが香る、定番モクテル。", tag:"人気" },
+  { cat:"mocktail", name:"フルーツポンチソーダ", kana:"ふるーつぽんちそーだ", emoji:"🍹", price:550, desc:"彩り豊かなフルーツが浮かぶ、華やかな一杯。" },
+];
+DRINKS.forEach((d,i)=>d.id=i);
+
+/* =========================================================
+ * 背景装飾アイコンを生成
+ * ========================================================= */
+(function buildBgIcons(){
+  const wrap = document.getElementById("bgDecor");
+  const icons = ["🥤","🧋","☕","🍵","🥛","🧃","🍹","💧","🍋","🍓","🍊","🫧"];
+  const colors = ["#FF8FAB","#FF9F5A","#4FB894","#FFC93C","#3FB6D8","#A17BE0"];
+  const spots = [
+    [4,8],[14,62],[8,88],[26,28],[22,80],[38,6],[40,50],[34,92],
+    [55,15],[58,72],[66,40],[72,88],[78,10],[84,58],[90,30],[95,80],
+    [12,40],[48,88]
+  ];
+  spots.forEach((pos,i)=>{
+    const el = document.createElement("div");
+    el.className = "icon";
+    const size = 42 + (i % 4) * 16;
+    el.style.left = pos[0] + "vw";
+    el.style.top = pos[1] + "vh";
+    el.style.fontSize = size + "px";
+    el.style.color = colors[i % colors.length];
+    el.style.transform = "rotate(" + ((i * 37) % 40 - 20) + "deg)";
+    el.textContent = icons[i % icons.length];
+    wrap.appendChild(el);
+  });
+})();
+
+/* =========================================================
+ * カテゴリーナビ生成
+ * ========================================================= */
+const catNav = document.getElementById("catNav");
+const mobileLinks = document.getElementById("mobileNavLinks");
+CATEGORIES.forEach(c=>{
+  const a = document.createElement("a");
+  a.className = "cat-chip";
+  a.href = "#cat-" + c.id;
+  a.dataset.cat = c.id;
+  a.innerHTML = c.icon + " " + c.label;
+  catNav.appendChild(a);
+
+  const ma = document.createElement("a");
+  ma.href = "#cat-" + c.id;
+  ma.innerHTML = "<span>" + c.icon + "</span><span>" + c.label + "</span>";
+  ma.addEventListener("click", closeMobileNav);
+  mobileLinks.appendChild(ma);
+});
+
+/* =========================================================
+ * メニュー描画
+ * ========================================================= */
+const menuEl = document.getElementById("menu");
+const catMap = Object.fromEntries(CATEGORIES.map(c=>[c.id,c]));
+
+function renderMenu(){
+  menuEl.innerHTML = "";
+  CATEGORIES.forEach(cat=>{
+    const items = DRINKS.filter(d=>d.cat===cat.id);
+    const section = document.createElement("section");
+    section.className = "cat-section";
+    section.id = "cat-" + cat.id;
+
+    section.innerHTML = `
+      <div class="cat-head">
+        <div class="cat-icon" style="background:${cat.color}22;color:${cat.color}">${cat.icon}</div>
+        <div class="cat-titles">
+          <h2>${cat.label}</h2>
+          <p class="en">${cat.en} · あいうえお順</p>
+        </div>
+        <span class="cat-count">${items.length}種類</span>
+      </div>
+      <div class="grid" data-grid="${cat.id}"></div>
+    `;
+    menuEl.appendChild(section);
+
+    const grid = section.querySelector(".grid");
+    items.forEach(d=>{
+      const card = document.createElement("article");
+      card.className = "drink-card";
+      card.dataset.name = d.name + d.kana;
+      card.innerHTML = `
+        ${d.tag ? `<span class="card-tag tag-${d.tag}">${d.tag}</span>` : ""}
+        <div class="card-top">
+          <div class="card-emoji" style="background:${cat.color}1c">${d.emoji}</div>
+          <div class="card-name-wrap">
+            <div class="card-name">${d.name}</div>
+            <div class="card-kana">${d.kana}</div>
+          </div>
+        </div>
+        <p class="card-desc">${d.desc}</p>
+        <div class="card-bottom">
+          <div class="card-price">¥${d.price}<small>税込</small></div>
+          <div class="card-action" data-id="${d.id}"></div>
+        </div>
+      `;
+      grid.appendChild(card);
+      renderCardAction(card.querySelector(".card-action"), d);
+    });
+  });
+}
+
+/* =========================================================
+ * カート機能
+ * ========================================================= */
+const cart = {}; // id -> qty
+
+function renderCardAction(el, d){
+  const qty = cart[d.id] || 0;
+  if(qty === 0){
+    el.innerHTML = `<button class="add-btn" data-add="${d.id}">＋ カートに追加</button>`;
+  }else{
+    el.innerHTML = `
+      <div class="qty-box">
+        <button data-minus="${d.id}">−</button>
+        <span>${qty}</span>
+        <button data-plus="${d.id}">＋</button>
+      </div>
+    `;
+  }
+}
+
+function refreshAllCardActions(){
+  document.querySelectorAll(".card-action").forEach(el=>{
+    const id = Number(el.dataset.id);
+    const d = DRINKS[id];
+    renderCardAction(el, d);
+  });
+}
+
+function updateCart(id, delta){
+  cart[id] = (cart[id] || 0) + delta;
+  if(cart[id] <= 0) delete cart[id];
+  refreshAllCardActions();
+  renderCart();
+}
+
+menuEl.addEventListener("click", e=>{
+  const add = e.target.closest("[data-add]");
+  const plus = e.target.closest("[data-plus]");
+  const minus = e.target.closest("[data-minus]");
+  if(add) updateCart(Number(add.dataset.add), 1);
+  if(plus) updateCart(Number(plus.dataset.plus), 1);
+  if(minus) updateCart(Number(minus.dataset.minus), -1);
+});
+
+const cartListEl = document.getElementById("cartList");
+const cartTotalEl = document.getElementById("cartTotal");
+const cartCountEl = document.getElementById("cartCount");
+
+function renderCart(){
+  const ids = Object.keys(cart);
+  let total = 0;
+  let count = 0;
+  if(ids.length === 0){
+    cartListEl.innerHTML = `<p class="cart-empty">🥤 カートはまだ空っぽです。<br />気になるドリンクを追加してみてください。</p>`;
+  }else{
+    cartListEl.innerHTML = ids.map(id=>{
+      const d = DRINKS[id];
+      const qty = cart[id];
+      const sub = d.price * qty;
+      total += sub;
+      count += qty;
+      return `
+        <div class="cart-item">
+          <div class="em">${d.emoji}</div>
+          <div class="info"><b>${d.name}</b><span>¥${d.price} × ${qty}</span></div>
+          <div class="sub">¥${sub}</div>
+        </div>
+      `;
+    }).join("");
+  }
+  ids.forEach(id=> count += 0); // no-op safeguard
+  cartTotalEl.textContent = "¥" + total;
+  cartCountEl.textContent = Object.values(cart).reduce((a,b)=>a+b,0);
+}
+
+/* カート開閉 */
+const cartDrawer = document.getElementById("cartDrawer");
+const cartOverlay = document.getElementById("cartOverlay");
+function openCart(){ cartDrawer.classList.add("show"); cartOverlay.classList.add("show"); }
+function closeCart(){ cartDrawer.classList.remove("show"); cartOverlay.classList.remove("show"); }
+document.getElementById("cartOpenBtn").addEventListener("click", openCart);
+document.getElementById("cartCloseBtn").addEventListener("click", closeCart);
+cartOverlay.addEventListener("click", closeCart);
+document.getElementById("cartOrderBtn").addEventListener("click", ()=>{
+  if(Object.keys(cart).length === 0){
+    alert("カートにドリンクを追加してください🥤");
+    return;
+  }
+  alert("ご注文ありがとうございます！\n（本サイトはデモのため、実際の注文・決済は行われません）");
+});
+
+/* =========================================================
+ * モバイルナビ
+ * ========================================================= */
+const mobileNav = document.getElementById("mobileNav");
+const mobileNavOverlay = document.getElementById("mobileNavOverlay");
+function openMobileNav(){ mobileNav.classList.add("show"); mobileNavOverlay.classList.add("show"); }
+function closeMobileNav(){ mobileNav.classList.remove("show"); mobileNavOverlay.classList.remove("show"); }
+document.getElementById("navToggle").addEventListener("click", openMobileNav);
+document.getElementById("mobileNavClose").addEventListener("click", closeMobileNav);
+mobileNavOverlay.addEventListener("click", closeMobileNav);
+
+/* =========================================================
+ * 検索
+ * ========================================================= */
+const searchInput = document.getElementById("searchInput");
+const noResult = document.getElementById("noResult");
+searchInput.addEventListener("input", ()=>{
+  const q = searchInput.value.trim().toLowerCase();
+  let anyVisible = false;
+  document.querySelectorAll(".cat-section").forEach(section=>{
+    let sectionHasVisible = false;
+    section.querySelectorAll(".drink-card").forEach(card=>{
+      const match = !q || card.dataset.name.toLowerCase().includes(q);
+      card.style.display = match ? "" : "none";
+      if(match){ sectionHasVisible = true; anyVisible = true; }
+    });
+    section.style.display = sectionHasVisible ? "" : "none";
+  });
+  noResult.style.display = anyVisible ? "none" : "block";
+});
+
+/* =========================================================
+ * スクロールでカテゴリーチップをアクティブ化
+ * ========================================================= */
+const chips = ()=>document.querySelectorAll(".cat-chip");
+const sections = ()=>document.querySelectorAll(".cat-section");
+function onScroll(){
+  let current = "";
+  sections().forEach(sec=>{
+    const rect = sec.getBoundingClientRect();
+    if(rect.top <= 150) current = sec.id.replace("cat-","");
+  });
+  chips().forEach(c=>c.classList.toggle("active", c.dataset.cat === current));
+}
+window.addEventListener("scroll", onScroll, { passive:true });
+
+/* =========================================================
+ * 初期化
+ * ========================================================= */
+renderMenu();
+renderCart();
+document.getElementById("statCount").textContent = DRINKS.length;
+document.getElementById("statCat").textContent = CATEGORIES.length;
+onScroll();
+</script>
+</body>
+</html>
