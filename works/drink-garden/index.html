@@ -15,18 +15,23 @@
 :root{
   --cream:#FFF8EE;
   --cream2:#FFF1DD;
-  --ink:#3B2C22;
+  --ink:#2B1830;
   --ink-soft:#8A7A6C;
-  --pink:#FF8FAB;
-  --peach:#FF9F5A;
-  --mint:#4FB894;
-  --yellow:#FFC93C;
-  --sky:#3FB6D8;
-  --grape:#A17BE0;
+  --pink:#FF2E93;
+  --pink-soft:#FF8FAB;
+  --peach:#FF7A00;
+  --mint:#00D9A3;
+  --yellow:#FFD500;
+  --sky:#00C2FF;
+  --grape:#8B2FE0;
+  --lime:#C6FF3D;
   --card:#FFFFFF;
   --line:rgba(59,44,34,0.10);
   --shadow:0 10px 30px rgba(90,55,30,0.10);
   --radius:22px;
+  --gradient-hero:linear-gradient(115deg,#FF2E93,#FF7A00 26%,#FFD500 48%,#00D9A3 66%,#00C2FF 84%,#8B2FE0);
+  --gradient-btn:linear-gradient(120deg,#FF2E93,#FF7A00);
+  --gradient-btn2:linear-gradient(120deg,#8B2FE0,#00C2FF);
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -43,6 +48,14 @@ a{color:inherit;}
 h1,h2,h3{font-family:'Kiwi Maru','Zen Maru Gothic',serif;margin:0;}
 .en{font-family:'Fredoka',sans-serif;}
 button{font-family:inherit;cursor:pointer;}
+::selection{background:var(--pink);color:#fff;}
+@keyframes heroShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-16px) rotate(var(--r,0deg));}}
+@keyframes popIn{0%{transform:scale(.5);opacity:0;}70%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);}}
+@keyframes shine{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+@keyframes bounce{0%,100%{transform:scale(1);}30%{transform:scale(1.35);}55%{transform:scale(.9);}75%{transform:scale(1.12);}}
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+@keyframes spin-slow{to{transform:rotate(360deg);}}
 
 /* ===================== 背景装飾（いろんなドリンクが薄く浮かぶレイヤー） ===================== */
 .bg-decor{
@@ -55,8 +68,8 @@ button{font-family:inherit;cursor:pointer;}
 .bg-decor .blob{
   position:absolute;
   border-radius:50%;
-  filter:blur(60px);
-  opacity:.35;
+  filter:blur(70px);
+  opacity:.45;
 }
 .blob1{width:420px;height:420px;background:radial-gradient(circle,var(--pink),transparent 70%);top:-120px;left:-100px;}
 .blob2{width:460px;height:460px;background:radial-gradient(circle,var(--yellow),transparent 70%);top:20%;right:-160px;}
@@ -64,46 +77,58 @@ button{font-family:inherit;cursor:pointer;}
 .blob4{width:380px;height:380px;background:radial-gradient(circle,var(--mint),transparent 70%);bottom:-140px;right:8%;}
 .blob5{width:340px;height:340px;background:radial-gradient(circle,var(--grape),transparent 70%);top:55%;left:38%;}
 
-.bg-decor .icon{
+/* 実写ドリンク画像のうっすらコラージュ背景 */
+.bg-decor .photo{
   position:absolute;
-  color:var(--ink);
-  opacity:.07;
+  width:150px;height:150px;
+  border-radius:34%;
+  object-fit:cover;
+  opacity:.16;
+  filter:saturate(1.3);
+  animation:floaty 7s ease-in-out infinite;
+  box-shadow:0 20px 40px rgba(0,0,0,.08);
 }
-.bg-decor svg{width:100%;height:100%;}
 
 /* ===================== ヘッダー ===================== */
 .site-header{
   position:sticky;top:0;z-index:200;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 5vw;
-  background:rgba(255,248,238,0.82);
+  background:rgba(255,248,238,0.86);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);
+  border-bottom:3px solid transparent;
+  border-image:var(--gradient-hero) 1;
 }
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.brand-emoji{font-size:26px;}
-.brand-text{font-family:'Kiwi Maru',serif;font-size:19px;font-weight:500;color:var(--ink);line-height:1.1;}
-.brand-sub{display:block;font-family:'Fredoka',sans-serif;font-size:10px;letter-spacing:.14em;color:var(--peach);font-weight:600;}
+.brand-emoji{font-size:28px;animation:floaty 3.2s ease-in-out infinite;display:inline-block;}
+.brand-text{font-family:'Kiwi Maru',serif;font-size:20px;font-weight:500;line-height:1.1;
+  background:var(--gradient-hero);background-size:300% 300%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:heroShift 6s ease infinite;}
+.brand-sub{display:block;font-family:'Fredoka',sans-serif;font-size:10px;letter-spacing:.14em;color:var(--peach);font-weight:700;-webkit-text-fill-color:var(--peach);}
 
 .header-right{display:flex;align-items:center;gap:10px;}
 
 .cart-btn{
   position:relative;
   display:flex;align-items:center;gap:6px;
-  background:var(--ink);color:#fff;
+  background:var(--gradient-btn);color:#fff;
   border:none;border-radius:999px;
-  padding:9px 16px 9px 13px;
+  padding:10px 18px 10px 14px;
   font-size:13px;font-weight:700;
-  box-shadow:var(--shadow);
+  box-shadow:0 8px 20px rgba(255,46,147,.45);
+  transition:transform .2s ease;
 }
+.cart-btn:hover{transform:translateY(-2px) scale(1.04);}
 .cart-count{
-  position:absolute;top:-6px;right:-6px;
-  background:var(--pink);color:#fff;
-  font-size:11px;font-weight:700;
-  min-width:19px;height:19px;border-radius:50%;
+  position:absolute;top:-8px;right:-8px;
+  background:var(--yellow);color:var(--ink);
+  font-size:11px;font-weight:800;
+  min-width:20px;height:20px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   border:2px solid var(--cream);
+  box-shadow:0 3px 8px rgba(0,0,0,.2);
 }
+.cart-count.bump{animation:bounce .5s ease;}
 
 .nav-toggle{
   display:none;
@@ -128,60 +153,99 @@ button{font-family:inherit;cursor:pointer;}
 .cat-chip{
   flex:0 0 auto;
   display:flex;align-items:center;gap:6px;
-  background:#fff;border:1px solid var(--line);
+  background:#fff;border:2px solid var(--chip-color,var(--line));
   border-radius:999px;padding:8px 14px;
-  font-size:12.5px;font-weight:700;color:var(--ink-soft);
+  font-size:12.5px;font-weight:800;color:var(--chip-color,var(--ink-soft));
   white-space:nowrap;text-decoration:none;
   transition:all .2s ease;
 }
 .cat-chip.active,.cat-chip:hover{
-  background:var(--ink);color:#fff;border-color:var(--ink);
-  transform:translateY(-1px);
+  background:var(--chip-color,var(--ink));color:#fff;border-color:var(--chip-color,var(--ink));
+  transform:translateY(-2px) scale(1.05);
+  box-shadow:0 8px 16px color-mix(in srgb, var(--chip-color,var(--ink)) 40%, transparent);
 }
 
 /* ===================== ヒーロー ===================== */
 .hero{
   position:relative;z-index:1;
-  padding:70px 6vw 50px;
+  padding:76px 6vw 34px;
   text-align:center;
-  max-width:900px;margin:0 auto;
+  max-width:960px;margin:0 auto;
+  overflow:visible;
+}
+.hero-photo{
+  position:absolute;border-radius:50%;
+  object-fit:cover;border:4px solid #fff;
+  box-shadow:0 14px 30px rgba(90,30,60,.25);
+  animation:floaty 5s ease-in-out infinite;
+  z-index:-1;
 }
 .hero-badge{
   display:inline-flex;align-items:center;gap:6px;
-  background:#fff;border:1px solid var(--line);
-  padding:7px 16px;border-radius:999px;
-  font-size:12px;font-weight:700;color:var(--peach);
-  box-shadow:var(--shadow);margin-bottom:22px;
+  background:var(--gradient-hero);background-size:300% 300%;animation:heroShift 6s ease infinite;
+  padding:8px 18px;border-radius:999px;color:#fff;
+  font-size:12px;font-weight:800;letter-spacing:.02em;
+  box-shadow:0 10px 24px rgba(255,46,147,.35);margin-bottom:26px;
 }
 .hero h1{
-  font-size:clamp(34px,7vw,58px);
-  line-height:1.25;
-  font-weight:500;
+  font-size:clamp(36px,7.4vw,64px);
+  line-height:1.28;
+  font-weight:700;
 }
-.hero h1 .accent{color:var(--pink);}
+.hero h1 .accent{
+  background:var(--gradient-hero);background-size:300% 300%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:heroShift 6s ease infinite;
+}
 .hero-lead{
-  margin:20px auto 0;
-  max-width:560px;
+  margin:22px auto 0;
+  max-width:580px;
   color:var(--ink-soft);
   font-size:15px;line-height:1.9;
 }
 .hero-stats{
-  display:flex;justify-content:center;gap:14px;
-  margin-top:34px;flex-wrap:wrap;
+  display:flex;justify-content:center;gap:16px;
+  margin-top:36px;flex-wrap:wrap;
 }
 .hero-stat{
-  background:#fff;border-radius:18px;padding:14px 24px;
-  box-shadow:var(--shadow);min-width:104px;
+  background:#fff;border-radius:18px;padding:14px 26px;
+  border:2px solid var(--line);
+  box-shadow:var(--shadow);min-width:108px;
+  transition:transform .2s ease;
 }
-.hero-stat b{display:block;font-family:'Fredoka',sans-serif;font-size:26px;color:var(--ink);}
+.hero-stat:hover{transform:translateY(-4px) rotate(-2deg);}
+.hero-stat b{display:block;font-family:'Fredoka',sans-serif;font-size:27px;
+  background:var(--gradient-hero);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .hero-stat span{font-size:11px;color:var(--ink-soft);font-weight:700;}
 .hero-cta{
-  margin-top:34px;display:inline-flex;align-items:center;gap:8px;
-  background:var(--pink);color:#fff;
-  padding:14px 30px;border-radius:999px;
-  font-size:14.5px;font-weight:700;text-decoration:none;
-  box-shadow:0 12px 24px rgba(255,143,171,.4);
+  margin-top:36px;display:inline-flex;align-items:center;gap:8px;
+  background:var(--gradient-btn);color:#fff;
+  padding:15px 32px;border-radius:999px;
+  font-size:15px;font-weight:800;text-decoration:none;
+  box-shadow:0 14px 28px rgba(255,46,147,.45);
+  transition:transform .2s ease;
 }
+.hero-cta:hover{transform:translateY(-3px) scale(1.04);}
+
+/* マーキー：ドリンクがどんどん流れる帯 */
+.marquee-strip{
+  position:relative;z-index:1;
+  overflow:hidden;
+  background:var(--ink);
+  padding:12px 0;
+  margin-top:38px;
+  transform:rotate(-1deg) scale(1.03);
+}
+.marquee-track{
+  display:flex;width:max-content;
+  animation:marquee 26s linear infinite;
+}
+.marquee-track span{
+  display:inline-flex;align-items:center;gap:8px;
+  color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;
+  font-size:14px;padding:0 22px;white-space:nowrap;
+}
+.marquee-track span b{color:var(--yellow);}
 
 /* ===================== 検索 ===================== */
 .search-wrap{
@@ -190,10 +254,12 @@ button{font-family:inherit;cursor:pointer;}
 }
 .search-box{
   display:flex;align-items:center;gap:8px;
-  background:#fff;border:1px solid var(--line);
+  background:#fff;border:2px solid var(--line);
   border-radius:999px;padding:12px 18px;
   box-shadow:var(--shadow);
+  transition:border-color .2s ease, box-shadow .2s ease;
 }
+.search-box:focus-within{border-color:var(--pink);box-shadow:0 10px 26px rgba(255,46,147,.25);}
 .search-box input{
   border:none;outline:none;flex:1;
   font-family:inherit;font-size:14px;background:transparent;color:var(--ink);
@@ -214,88 +280,120 @@ button{font-family:inherit;cursor:pointer;}
 .cat-head{
   display:flex;align-items:center;gap:14px;
   margin-bottom:20px;
+  position:relative;
 }
 .cat-icon{
-  width:50px;height:50px;border-radius:16px;
+  width:54px;height:54px;border-radius:18px;
   display:flex;align-items:center;justify-content:center;
-  font-size:24px;flex:0 0 auto;
-  box-shadow:var(--shadow);
+  font-size:26px;flex:0 0 auto;
+  box-shadow:0 10px 22px color-mix(in srgb, var(--cc,#000) 35%, transparent);
+  border:3px solid #fff;
 }
 .cat-titles{flex:1;min-width:0;}
-.cat-titles h2{font-size:clamp(19px,3.4vw,25px);font-weight:500;}
-.cat-titles p{margin:2px 0 0;font-size:12px;color:var(--ink-soft);letter-spacing:.03em;}
+.cat-titles h2{font-size:clamp(20px,3.6vw,27px);font-weight:800;}
+.cat-titles p{margin:2px 0 0;font-size:12px;color:var(--ink-soft);letter-spacing:.03em;font-weight:700;}
 .cat-count{
-  font-family:'Fredoka',sans-serif;font-size:12px;font-weight:600;
-  color:var(--ink-soft);background:#fff;border:1px solid var(--line);
-  border-radius:999px;padding:5px 12px;flex:0 0 auto;
+  font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;
+  color:#fff;background:var(--cc,var(--ink));border:none;
+  border-radius:999px;padding:6px 14px;flex:0 0 auto;
+  box-shadow:0 6px 14px color-mix(in srgb, var(--cc,#000) 40%, transparent);
 }
+.cat-section{border-bottom:3px dashed var(--line);padding-bottom:44px;}
+.cat-section:last-child{border-bottom:none;}
 
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
-  gap:16px;
+  gap:18px;
 }
 
 .drink-card{
   background:var(--card);
   border-radius:var(--radius);
-  padding:18px 16px 16px;
+  padding:0 0 16px;
   box-shadow:var(--shadow);
   border:1px solid var(--line);
   display:flex;flex-direction:column;gap:10px;
   position:relative;
-  transition:transform .2s ease, box-shadow .2s ease;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .25s cubic-bezier(.2,.8,.3,1.4), box-shadow .25s ease;
 }
-.drink-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(90,55,30,.14);}
+.drink-card:hover{
+  transform:translateY(-6px) rotate(-.6deg) scale(1.015);
+  box-shadow:0 22px 40px color-mix(in srgb, var(--cc,#000) 28%, transparent);
+}
 
-.card-top{display:flex;align-items:flex-start;gap:12px;}
-.card-emoji{
-  width:52px;height:52px;border-radius:16px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;flex:0 0 auto;
+.card-photo-wrap{
+  position:relative;width:100%;height:148px;overflow:hidden;
+  background:linear-gradient(135deg,var(--cc,#eee)22,var(--cc,#eee)44);
 }
+.card-photo-wrap img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .4s ease;
+}
+.drink-card:hover .card-photo-wrap img{transform:scale(1.12) rotate(1deg);}
+.card-photo-wrap::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:46%;
+  background:linear-gradient(to top, rgba(0,0,0,.42), transparent);
+}
+.card-emoji-badge{
+  position:absolute;right:10px;bottom:8px;z-index:2;
+  width:34px;height:34px;border-radius:50%;
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:17px;box-shadow:0 6px 14px rgba(0,0,0,.25);
+  border:2px solid var(--cc,#fff);
+}
+
+.card-top{display:flex;align-items:flex-start;gap:12px;padding:12px 16px 0;}
 .card-name-wrap{flex:1;min-width:0;}
-.card-name{font-size:15.5px;font-weight:700;line-height:1.35;}
+.card-name{font-size:15.5px;font-weight:800;line-height:1.35;}
 .card-kana{font-size:10.5px;color:var(--ink-soft);letter-spacing:.02em;margin-top:1px;}
 .card-tag{
-  position:absolute;top:-8px;right:14px;
-  font-size:10px;font-weight:700;color:#fff;
-  padding:4px 10px;border-radius:999px;
-  box-shadow:0 4px 10px rgba(0,0,0,.15);
+  position:absolute;top:10px;left:10px;z-index:3;
+  font-size:10.5px;font-weight:800;color:#fff;
+  padding:5px 12px;border-radius:999px;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+  background-size:200% auto;
 }
-.tag-定番{background:var(--peach);}
-.tag-人気{background:var(--pink);}
+.tag-定番{background-image:linear-gradient(120deg,var(--peach),var(--yellow));}
+.tag-人気{background-image:linear-gradient(120deg,var(--pink),var(--grape));}
 
 .card-desc{
   font-size:12.5px;color:var(--ink-soft);line-height:1.7;
   flex:1;min-height:38px;
+  padding:0 16px;
 }
 .card-bottom{
   display:flex;align-items:center;justify-content:space-between;
   gap:8px;margin-top:2px;
+  padding:0 16px;
 }
-.card-price{font-family:'Fredoka',sans-serif;font-size:19px;font-weight:600;}
+.card-price{font-family:'Fredoka',sans-serif;font-size:20px;font-weight:700;color:var(--cc,var(--ink));}
 .card-price small{font-size:11px;font-weight:500;color:var(--ink-soft);margin-left:2px;}
 
 .add-btn{
-  background:var(--ink);color:#fff;border:none;border-radius:999px;
-  padding:8px 15px;font-size:12px;font-weight:700;
+  background:var(--gradient-btn);color:#fff;border:none;border-radius:999px;
+  padding:9px 16px;font-size:12px;font-weight:800;
   display:flex;align-items:center;gap:5px;
-  transition:background .2s ease;
+  box-shadow:0 8px 16px rgba(255,46,147,.3);
+  transition:transform .15s ease;
 }
-.add-btn:hover{background:var(--pink);}
+.add-btn:hover{transform:scale(1.07);}
+.add-btn:active{transform:scale(.95);}
 
 .qty-box{
   display:flex;align-items:center;gap:8px;
   background:var(--cream2);border-radius:999px;padding:4px 6px;
 }
 .qty-box button{
-  width:24px;height:24px;border-radius:50%;border:none;
-  background:#fff;font-size:14px;font-weight:700;color:var(--ink);
+  width:26px;height:26px;border-radius:50%;border:none;
+  background:#fff;font-size:14px;font-weight:800;color:var(--ink);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 2px 5px rgba(0,0,0,.1);
+  box-shadow:0 2px 5px rgba(0,0,0,.15);
 }
-.qty-box span{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;min-width:14px;text-align:center;}
+.qty-box button:hover{background:var(--pink);color:#fff;}
+.qty-box span{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;min-width:14px;text-align:center;}
 
 /* ===================== カートドロワー ===================== */
 .overlay{
@@ -306,55 +404,138 @@ button{font-family:inherit;cursor:pointer;}
 
 .cart-drawer{
   position:fixed;top:0;right:0;bottom:0;
-  width:min(380px,88vw);
+  width:min(400px,88vw);
   background:var(--cream);
   z-index:310;
   box-shadow:-16px 0 40px rgba(0,0,0,.18);
   transform:translateX(100%);transition:transform .3s ease;
   display:flex;flex-direction:column;
+  border-left:4px solid transparent;border-image:var(--gradient-hero) 1;
 }
 .cart-drawer.show{transform:translateX(0);}
 .cart-head{
   display:flex;align-items:center;justify-content:space-between;
   padding:20px 20px 14px;border-bottom:1px solid var(--line);
 }
-.cart-head h3{font-size:18px;font-weight:500;}
+.cart-head h3{font-size:19px;font-weight:800;}
 .cart-close{
-  width:32px;height:32px;border-radius:50%;border:none;background:#fff;
+  width:34px;height:34px;border-radius:50%;border:none;background:#fff;
   box-shadow:var(--shadow);font-size:16px;
+  transition:transform .15s ease;
 }
+.cart-close:hover{transform:rotate(90deg);background:var(--pink);color:#fff;}
 .cart-list{flex:1;overflow-y:auto;padding:12px 20px;}
 .cart-empty{text-align:center;color:var(--ink-soft);font-size:13px;padding:60px 10px;}
 .cart-item{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 0;border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:52px 1fr auto;grid-template-rows:auto auto;
+  column-gap:12px;row-gap:6px;
+  padding:14px 0;border-bottom:1px solid var(--line);
+  animation:popIn .25s ease;
 }
-.cart-item .em{font-size:22px;width:36px;text-align:center;flex:0 0 auto;}
-.cart-item .info{flex:1;min-width:0;}
-.cart-item .info b{display:block;font-size:13px;font-weight:700;}
+.cart-item .thumb{
+  grid-row:1 / 3;width:52px;height:52px;border-radius:14px;overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+.cart-item .thumb img{width:100%;height:100%;object-fit:cover;}
+.cart-item .info{min-width:0;}
+.cart-item .info b{display:block;font-size:13.5px;font-weight:800;}
 .cart-item .info span{font-size:11.5px;color:var(--ink-soft);}
-.cart-item .sub{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;}
+.cart-item .sub{font-family:'Fredoka',sans-serif;font-size:13.5px;font-weight:700;white-space:nowrap;text-align:right;}
+.cart-item .actions{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.cart-item .qty-box{padding:2px 4px;}
+.cart-item .qty-box button{width:22px;height:22px;}
+.cart-remove{
+  border:none;background:#fff;color:var(--pink);border-radius:50%;
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.12);font-size:13px;
+  transition:transform .15s ease, background .15s ease, color .15s ease;
+}
+.cart-remove:hover{background:var(--pink);color:#fff;transform:scale(1.1);}
 .cart-foot{padding:16px 20px 22px;border-top:1px solid var(--line);}
 .cart-total{
   display:flex;justify-content:space-between;align-items:baseline;
   margin-bottom:6px;font-size:14px;font-weight:700;
 }
-.cart-total b{font-family:'Fredoka',sans-serif;font-size:22px;}
+.cart-total b{font-family:'Fredoka',sans-serif;font-size:24px;
+  background:var(--gradient-hero);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .cart-note{font-size:11px;color:var(--ink-soft);line-height:1.6;margin:8px 0 14px;}
 .cart-order-btn{
-  width:100%;background:var(--pink);color:#fff;border:none;
-  border-radius:999px;padding:14px;font-size:14px;font-weight:700;
-  box-shadow:0 10px 22px rgba(255,143,171,.4);
+  width:100%;background:var(--gradient-btn);color:#fff;border:none;
+  border-radius:999px;padding:15px;font-size:14.5px;font-weight:800;
+  box-shadow:0 12px 24px rgba(255,46,147,.4);
+  transition:transform .15s ease;
 }
+.cart-order-btn:hover{transform:translateY(-2px) scale(1.02);}
+
+/* ===================== ドリンク詳細モーダル ===================== */
+.detail-modal{
+  position:fixed;left:50%;top:50%;
+  transform:translate(-50%,-50%) scale(.9);
+  width:min(560px,92vw);max-height:88vh;overflow-y:auto;
+  background:var(--card);border-radius:28px;
+  z-index:330;box-shadow:0 30px 70px rgba(0,0,0,.35);
+  opacity:0;pointer-events:none;
+  transition:transform .28s cubic-bezier(.2,.8,.3,1.3), opacity .22s ease;
+}
+.detail-modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+.detail-close{
+  position:absolute;top:14px;right:14px;z-index:5;
+  width:36px;height:36px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.9);font-size:16px;
+  box-shadow:0 6px 14px rgba(0,0,0,.2);
+  transition:transform .15s ease;
+}
+.detail-close:hover{transform:rotate(90deg);background:var(--pink);color:#fff;}
+.detail-img-wrap{width:100%;height:250px;position:relative;overflow:hidden;}
+.detail-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.detail-img-wrap::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:60%;
+  background:linear-gradient(to top, rgba(0,0,0,.5), transparent);
+}
+.detail-tag{
+  position:absolute;top:14px;left:14px;z-index:2;
+  font-size:11px;font-weight:800;color:#fff;padding:6px 14px;border-radius:999px;
+  background-image:linear-gradient(120deg,var(--pink),var(--grape));
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.detail-body{padding:22px 26px 28px;}
+.detail-cat-label{
+  display:inline-block;font-size:11.5px;font-weight:800;color:var(--cc,var(--pink));
+  background:color-mix(in srgb, var(--cc,var(--pink)) 14%, transparent);
+  padding:5px 12px;border-radius:999px;margin-bottom:10px;
+}
+.detail-body h3{font-size:24px;font-weight:800;}
+.detail-kana{font-size:12px;color:var(--ink-soft);margin:2px 0 14px;}
+.detail-desc{font-size:14px;line-height:1.9;color:var(--ink);margin:0 0 6px;}
+.detail-meta{
+  display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 20px;
+}
+.detail-meta span{
+  font-size:11.5px;font-weight:700;color:var(--ink-soft);
+  background:var(--cream2);border-radius:999px;padding:6px 12px;
+}
+.detail-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;padding-top:16px;border-top:1px dashed var(--line);
+}
+.detail-price{font-family:'Fredoka',sans-serif;font-size:26px;font-weight:800;color:var(--cc,var(--ink));}
+.detail-price small{font-size:12px;font-weight:500;color:var(--ink-soft);margin-left:4px;}
+.detail-bottom .add-btn{padding:12px 22px;font-size:13.5px;}
+.detail-bottom .qty-box button{width:30px;height:30px;}
 
 /* ===================== フッター ===================== */
 .site-footer{
   position:relative;z-index:1;
-  background:var(--ink);color:#fff;
-  padding:44px 6vw 26px;text-align:center;
+  background:linear-gradient(180deg,#241129,var(--ink));color:#fff;
+  padding:48px 6vw 26px;text-align:center;
+  border-top:5px solid transparent;border-image:var(--gradient-hero) 1;
 }
 .site-footer p{font-size:12px;color:rgba(255,255,255,.65);line-height:1.8;max-width:520px;margin:0 auto;}
-.footer-brand{font-family:'Kiwi Maru',serif;font-size:18px;margin-bottom:10px;}
+.footer-brand{
+  font-family:'Kiwi Maru',serif;font-size:20px;margin-bottom:12px;font-weight:700;
+  background:var(--gradient-hero);background-size:300% 300%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:heroShift 6s ease infinite;display:inline-block;
+}
 .footer-copy{margin-top:22px;font-size:11px;color:rgba(255,255,255,.4);}
 
 .top-btn{
@@ -405,16 +586,27 @@ button{font-family:inherit;cursor:pointer;}
   .hero-stat{padding:12px 18px;min-width:88px;}
 }
 @media (max-width:480px){
-  .grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;}
-  .drink-card{padding:14px 12px 12px;border-radius:16px;}
-  .card-emoji{width:42px;height:42px;font-size:21px;border-radius:12px;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+  .drink-card{border-radius:18px;}
+  .card-photo-wrap{height:118px;}
+  .card-emoji-badge{width:28px;height:28px;font-size:14px;right:8px;bottom:6px;}
+  .card-top{padding:10px 12px 0;}
+  .card-desc{font-size:11px;min-height:32px;padding:0 12px;}
+  .card-bottom{padding:0 12px;}
   .card-name{font-size:13.5px;}
-  .card-desc{font-size:11px;min-height:32px;}
   .card-price{font-size:16px;}
   .add-btn{padding:7px 11px;font-size:11px;}
   .site-header{padding:12px 4vw;}
   .brand-text{font-size:16px;}
   .hero-lead{font-size:13.5px;}
+  .hero-photo{display:none;}
+  .detail-img-wrap{height:190px;}
+  .detail-body{padding:18px 18px 22px;}
+  .detail-body h3{font-size:20px;}
+  .detail-bottom{flex-direction:column;align-items:stretch;gap:12px;}
+}
+@media (max-width:600px){
+  .cart-drawer{width:100vw;}
 }
 </style>
 </head>
@@ -462,8 +654,8 @@ button{font-family:inherit;cursor:pointer;}
 
 <main id="top">
   <!-- ヒーロー -->
-  <section class="hero">
-    <span class="hero-badge">🍋 世界のドリンク60種類以上</span>
+  <section class="hero" id="heroSection">
+    <span class="hero-badge">🍋 世界のドリンク60種類以上・実写フォトで大集合</span>
     <h1>のどをうるおす、<br /><span class="accent">とっておきの一杯を。</span></h1>
     <p class="hero-lead">
       定番の炭酸からタピオカミルクティー、こだわりのコーヒー、ノンアルコールカクテルまで。<br />
@@ -480,6 +672,11 @@ button{font-family:inherit;cursor:pointer;}
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </a>
   </section>
+
+  <!-- マーキー：ドリンク名が流れる帯 -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
 
   <!-- 検索 -->
   <div class="search-wrap">
@@ -519,6 +716,27 @@ button{font-family:inherit;cursor:pointer;}
     <button class="cart-order-btn" id="cartOrderBtn">注文する（デモ）</button>
   </div>
 </aside>
+
+<!-- ドリンク詳細モーダル -->
+<div class="overlay" id="detailOverlay"></div>
+<div class="detail-modal" id="detailModal" role="dialog" aria-modal="true">
+  <button class="detail-close" id="detailClose" aria-label="閉じる">✕</button>
+  <div class="detail-img-wrap">
+    <span class="detail-tag" id="detailTag" style="display:none;"></span>
+    <img id="detailImg" src="" alt="" />
+  </div>
+  <div class="detail-body">
+    <span class="detail-cat-label" id="detailCatLabel"></span>
+    <h3 id="detailName"></h3>
+    <p class="detail-kana" id="detailKana"></p>
+    <p class="detail-desc" id="detailDesc"></p>
+    <div class="detail-meta" id="detailMeta"></div>
+    <div class="detail-bottom">
+      <div class="detail-price" id="detailPrice"></div>
+      <div id="detailAction"></div>
+    </div>
+  </div>
+</div>
 
 <a href="../../index.html" data-topbtn class="top-btn">↑ TOPページへ</a>
 
@@ -619,30 +837,51 @@ const DRINKS = [
   { cat:"mocktail", name:"バージンモヒート", kana:"ばーじんもひーと", emoji:"🌿", price:600, desc:"ライムとミントが香る、定番モクテル。", tag:"人気" },
   { cat:"mocktail", name:"フルーツポンチソーダ", kana:"ふるーつぽんちそーだ", emoji:"🍹", price:550, desc:"彩り豊かなフルーツが浮かぶ、華やかな一杯。" },
 ];
-DRINKS.forEach((d,i)=>d.id=i);
+DRINKS.forEach((d,i)=>{ d.id = i; d.img = "images/" + i + ".jpg"; });
 
 /* =========================================================
- * 背景装飾アイコンを生成
+ * カテゴリー別の補足情報（詳細モーダル用）
  * ========================================================= */
-(function buildBgIcons(){
+const CATEGORY_NOTE = {
+  carbonated:"よく冷やして、シュワッとした爽快な喉ごしをお楽しみください。",
+  juice:"果実そのものの自然な甘さと栄養をぎゅっと閉じ込めた一杯です。",
+  tea:"茶葉の香りをじっくり引き出した、心も体もほっとするひとときに。",
+  coffee:"豆の香ばしさが際立つ、目覚めの一杯やひと休みのお供にぴったりです。",
+  milk:"まろやかな口当たりで、小さなお子様からご年配の方まで楽しめます。",
+  sports:"運動後や汗をかいた日の、水分・エネルギー補給におすすめです。",
+  water:"すっきりとした後味で、食事やリラックスタイムのお供に。",
+  mocktail:"お酒が苦手な方やドライバーの方にも楽しんでいただける、ノンアルコールの一杯です。",
+};
+
+/* =========================================================
+ * 背景装飾：実写ドリンク写真のうっすらコラージュ
+ * ========================================================= */
+(function buildBgPhotos(){
   const wrap = document.getElementById("bgDecor");
-  const icons = ["🥤","🧋","☕","🍵","🥛","🧃","🍹","💧","🍋","🍓","🍊","🫧"];
-  const colors = ["#FF8FAB","#FF9F5A","#4FB894","#FFC93C","#3FB6D8","#A17BE0"];
   const spots = [
     [4,8],[14,62],[8,88],[26,28],[22,80],[38,6],[40,50],[34,92],
     [55,15],[58,72],[66,40],[72,88],[78,10],[84,58],[90,30],[95,80],
     [12,40],[48,88]
   ];
+  const pickIds = [];
+  const step = Math.floor(DRINKS.length / spots.length) || 1;
+  for(let i=0;i<spots.length;i++) pickIds.push((i*step + 3) % DRINKS.length);
+
   spots.forEach((pos,i)=>{
-    const el = document.createElement("div");
-    el.className = "icon";
-    const size = 42 + (i % 4) * 16;
+    const d = DRINKS[pickIds[i]];
+    const el = document.createElement("img");
+    el.className = "photo";
+    el.src = d.img;
+    el.alt = "";
+    el.loading = "lazy";
+    const size = 110 + (i % 4) * 30;
     el.style.left = pos[0] + "vw";
     el.style.top = pos[1] + "vh";
-    el.style.fontSize = size + "px";
-    el.style.color = colors[i % colors.length];
+    el.style.width = size + "px";
+    el.style.height = size + "px";
+    el.style.setProperty("--r", ((i * 37) % 40 - 20) + "deg");
     el.style.transform = "rotate(" + ((i * 37) % 40 - 20) + "deg)";
-    el.textContent = icons[i % icons.length];
+    el.style.animationDelay = (i % 6) + "s";
     wrap.appendChild(el);
   });
 })();
@@ -657,6 +896,7 @@ CATEGORIES.forEach(c=>{
   a.className = "cat-chip";
   a.href = "#cat-" + c.id;
   a.dataset.cat = c.id;
+  a.style.setProperty("--chip-color", c.color);
   a.innerHTML = c.icon + " " + c.label;
   catNav.appendChild(a);
 
@@ -666,6 +906,15 @@ CATEGORIES.forEach(c=>{
   ma.addEventListener("click", closeMobileNav);
   mobileLinks.appendChild(ma);
 });
+
+/* =========================================================
+ * マーキー（流れる帯）生成
+ * ========================================================= */
+(function buildMarquee(){
+  const track = document.getElementById("marqueeTrack");
+  const items = DRINKS.map(d=>`<span>${d.emoji} <b>${d.name}</b> ¥${d.price}</span>`).join("");
+  track.innerHTML = items + items; // 2周分でシームレスにループ
+})();
 
 /* =========================================================
  * メニュー描画
@@ -681,6 +930,7 @@ function renderMenu(){
     section.className = "cat-section";
     section.id = "cat-" + cat.id;
 
+    section.style.setProperty("--cc", cat.color);
     section.innerHTML = `
       <div class="cat-head">
         <div class="cat-icon" style="background:${cat.color}22;color:${cat.color}">${cat.icon}</div>
@@ -699,10 +949,14 @@ function renderMenu(){
       const card = document.createElement("article");
       card.className = "drink-card";
       card.dataset.name = d.name + d.kana;
+      card.dataset.id = d.id;
       card.innerHTML = `
         ${d.tag ? `<span class="card-tag tag-${d.tag}">${d.tag}</span>` : ""}
+        <div class="card-photo-wrap">
+          <img src="${d.img}" alt="${d.name}" loading="lazy" />
+          <span class="card-emoji-badge">${d.emoji}</span>
+        </div>
         <div class="card-top">
-          <div class="card-emoji" style="background:${cat.color}1c">${d.emoji}</div>
           <div class="card-name-wrap">
             <div class="card-name">${d.name}</div>
             <div class="card-kana">${d.kana}</div>
@@ -725,27 +979,32 @@ function renderMenu(){
  * ========================================================= */
 const cart = {}; // id -> qty
 
-function renderCardAction(el, d){
-  const qty = cart[d.id] || 0;
+function actionHTML(id){
+  const qty = cart[id] || 0;
   if(qty === 0){
-    el.innerHTML = `<button class="add-btn" data-add="${d.id}">＋ カートに追加</button>`;
-  }else{
-    el.innerHTML = `
-      <div class="qty-box">
-        <button data-minus="${d.id}">−</button>
-        <span>${qty}</span>
-        <button data-plus="${d.id}">＋</button>
-      </div>
-    `;
+    return `<button class="add-btn" data-add="${id}">＋ カートに追加</button>`;
   }
+  return `
+    <div class="qty-box">
+      <button data-minus="${id}">−</button>
+      <span>${qty}</span>
+      <button data-plus="${id}">＋</button>
+    </div>
+  `;
+}
+
+function renderCardAction(el, d){
+  el.innerHTML = actionHTML(d.id);
 }
 
 function refreshAllCardActions(){
   document.querySelectorAll(".card-action").forEach(el=>{
-    const id = Number(el.dataset.id);
-    const d = DRINKS[id];
-    renderCardAction(el, d);
+    el.innerHTML = actionHTML(Number(el.dataset.id));
   });
+  const detailAction = document.getElementById("detailAction");
+  if(detailAction && detailAction.dataset.id !== undefined && detailAction.dataset.id !== ""){
+    detailAction.innerHTML = actionHTML(Number(detailAction.dataset.id));
+  }
 }
 
 function updateCart(id, delta){
@@ -755,13 +1014,30 @@ function updateCart(id, delta){
   renderCart();
 }
 
-menuEl.addEventListener("click", e=>{
+function removeFromCart(id){
+  delete cart[id];
+  refreshAllCardActions();
+  renderCart();
+}
+
+function bumpCartCount(){
+  cartCountEl.classList.remove("bump");
+  void cartCountEl.offsetWidth; // reflow でアニメーションを再トリガー
+  cartCountEl.classList.add("bump");
+}
+
+/* add / plus / minus / remove / カード詳細クリック をまとめて処理 */
+document.addEventListener("click", e=>{
   const add = e.target.closest("[data-add]");
+  if(add){ updateCart(Number(add.dataset.add), 1); bumpCartCount(); return; }
   const plus = e.target.closest("[data-plus]");
+  if(plus){ updateCart(Number(plus.dataset.plus), 1); bumpCartCount(); return; }
   const minus = e.target.closest("[data-minus]");
-  if(add) updateCart(Number(add.dataset.add), 1);
-  if(plus) updateCart(Number(plus.dataset.plus), 1);
-  if(minus) updateCart(Number(minus.dataset.minus), -1);
+  if(minus){ updateCart(Number(minus.dataset.minus), -1); return; }
+  const remove = e.target.closest("[data-remove]");
+  if(remove){ removeFromCart(Number(remove.dataset.remove)); return; }
+  const card = e.target.closest(".drink-card");
+  if(card && card.dataset.id !== undefined){ openDetail(Number(card.dataset.id)); }
 });
 
 const cartListEl = document.getElementById("cartList");
@@ -771,7 +1047,6 @@ const cartCountEl = document.getElementById("cartCount");
 function renderCart(){
   const ids = Object.keys(cart);
   let total = 0;
-  let count = 0;
   if(ids.length === 0){
     cartListEl.innerHTML = `<p class="cart-empty">🥤 カートはまだ空っぽです。<br />気になるドリンクを追加してみてください。</p>`;
   }else{
@@ -780,17 +1055,23 @@ function renderCart(){
       const qty = cart[id];
       const sub = d.price * qty;
       total += sub;
-      count += qty;
       return `
         <div class="cart-item">
-          <div class="em">${d.emoji}</div>
+          <div class="thumb"><img src="${d.img}" alt="${d.name}" loading="lazy" /></div>
           <div class="info"><b>${d.name}</b><span>¥${d.price} × ${qty}</span></div>
           <div class="sub">¥${sub}</div>
+          <div class="actions">
+            <div class="qty-box">
+              <button data-minus="${d.id}">−</button>
+              <span>${qty}</span>
+              <button data-plus="${d.id}">＋</button>
+            </div>
+            <button class="cart-remove" data-remove="${d.id}" aria-label="${d.name}をカートから削除">🗑</button>
+          </div>
         </div>
       `;
     }).join("");
   }
-  ids.forEach(id=> count += 0); // no-op safeguard
   cartTotalEl.textContent = "¥" + total;
   cartCountEl.textContent = Object.values(cart).reduce((a,b)=>a+b,0);
 }
@@ -809,6 +1090,54 @@ document.getElementById("cartOrderBtn").addEventListener("click", ()=>{
     return;
   }
   alert("ご注文ありがとうございます！\n（本サイトはデモのため、実際の注文・決済は行われません）");
+});
+
+/* =========================================================
+ * ドリンク詳細モーダル
+ * ========================================================= */
+const detailOverlay = document.getElementById("detailOverlay");
+const detailModal = document.getElementById("detailModal");
+const detailImg = document.getElementById("detailImg");
+const detailTag = document.getElementById("detailTag");
+const detailCatLabel = document.getElementById("detailCatLabel");
+const detailName = document.getElementById("detailName");
+const detailKana = document.getElementById("detailKana");
+const detailDesc = document.getElementById("detailDesc");
+const detailMeta = document.getElementById("detailMeta");
+const detailPrice = document.getElementById("detailPrice");
+const detailAction = document.getElementById("detailAction");
+
+function openDetail(id){
+  const d = DRINKS[id];
+  const cat = catMap[d.cat];
+  detailModal.style.setProperty("--cc", cat.color);
+  detailImg.src = d.img;
+  detailImg.alt = d.name;
+  if(d.tag){ detailTag.textContent = d.tag; detailTag.style.display = "inline-block"; }
+  else{ detailTag.style.display = "none"; }
+  detailCatLabel.textContent = cat.icon + " " + cat.label;
+  detailName.textContent = d.emoji + " " + d.name;
+  detailKana.textContent = d.kana;
+  detailDesc.textContent = d.desc + " " + (CATEGORY_NOTE[d.cat] || "");
+  detailMeta.innerHTML = `
+    <span>🥤 1杯 約350ml</span>
+    <span>${(d.cat==="tea"||d.cat==="coffee") ? "🔥 ホット／アイスどちらも" : "🧊 よく冷やしてどうぞ"}</span>
+    <span>📂 ${cat.label}</span>
+  `;
+  detailPrice.innerHTML = `¥${d.price}<small>税込</small>`;
+  detailAction.dataset.id = id;
+  detailAction.innerHTML = actionHTML(id);
+  detailModal.classList.add("show");
+  detailOverlay.classList.add("show");
+}
+function closeDetail(){
+  detailModal.classList.remove("show");
+  detailOverlay.classList.remove("show");
+}
+document.getElementById("detailClose").addEventListener("click", closeDetail);
+detailOverlay.addEventListener("click", closeDetail);
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape"){ closeDetail(); closeCart(); closeMobileNav(); }
 });
 
 /* =========================================================
