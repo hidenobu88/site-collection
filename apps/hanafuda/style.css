@@ -1,0 +1,353 @@
+/* =========================================================
+ * style.css — 花札 こいこい
+ * ========================================================= */
+
+:root {
+  --lacquer-1: #2a0f14;
+  --lacquer-2: #170609;
+  --gold: #d9b45c;
+  --gold-bright: #f2d27a;
+  --gold-soft: #b89a52;
+  --ivory: #f6f1e3;
+  --ivory-dim: #e7e0cd;
+  --ink: #221512;
+  --red: #c9403f;
+  --blue: #3a5fbf;
+  --green: #3f8a4a;
+  --bg: #0d0708;
+  --panel: #1c1013;
+  --panel-2: #26161a;
+  --text: #f2ece0;
+  --text-dim: #c9b9a6;
+  --line: #4a3530;
+
+  --card-w: clamp(44px, 9.6vw, 76px);
+  --card-h: calc(var(--card-w) * 1.48);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body {
+  background:
+    radial-gradient(1200px 700px at 50% -260px, #3a1b20 0%, transparent 60%),
+    repeating-linear-gradient(135deg, rgba(217,180,92,.025) 0 2px, transparent 2px 26px),
+    var(--bg);
+  color: var(--text);
+  font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+.serif { font-family: "Shippori Mincho B1", serif; }
+img, svg { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; }
+.hidden { display: none !important; }
+
+/* ---------- 共通ヘッダー ---------- */
+.ghead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  min-height: 56px;
+  flex-wrap: wrap;
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,.03);
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+}
+.back:hover { color: var(--gold-bright); border-color: var(--gold-soft); }
+.ghead-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 800;
+  line-height: 1;
+}
+.t-kanji { font-size: 19px; color: var(--text); letter-spacing: .18em; }
+.t-sub { font-size: 10px; color: var(--gold); letter-spacing: .28em; border-left: 1px solid var(--line); padding-left: 8px; }
+.ghead-btns { display: flex; gap: 6px; }
+@media (max-width: 480px) {
+  .ghead { justify-content: center; row-gap: 8px; }
+  .ghead-btns { width: 100%; justify-content: center; }
+}
+.icon-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+  color: var(--text-dim);
+  font-size: 14px; font-weight: 700;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.icon-btn:hover { color: var(--gold-bright); border-color: var(--gold-soft); }
+.icon-btn:active { transform: scale(.92); }
+
+/* ---------- タイトル画面 ---------- */
+#titleScreen { padding: 8px 16px 48px; max-width: 900px; margin: 0 auto; }
+.hero { text-align: center; padding: 18px 8px 10px; position: relative; }
+.hero-cards {
+  display: flex; justify-content: center; gap: 6px; margin-bottom: 6px;
+  perspective: 600px;
+}
+.hero-cards .mini-card {
+  width: clamp(34px, 8vw, 52px); height: calc(clamp(34px, 8vw, 52px) * 1.48);
+  border-radius: 6px; overflow: hidden; box-shadow: 0 6px 16px rgba(0,0,0,.5);
+  transform: rotate(var(--r, 0deg)) translateY(0);
+  animation: floatCard 4.5s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.hero-cards .mini-card:nth-child(1) { --r: -14deg; --d: 0s; }
+.hero-cards .mini-card:nth-child(2) { --r: -6deg; --d: .3s; }
+.hero-cards .mini-card:nth-child(3) { --r: 3deg; --d: .6s; }
+.hero-cards .mini-card:nth-child(4) { --r: 10deg; --d: .9s; }
+.hero-cards .mini-card:nth-child(5) { --r: 17deg; --d: 1.2s; }
+@keyframes floatCard { 0%,100% { transform: rotate(var(--r)) translateY(0); } 50% { transform: rotate(var(--r)) translateY(-8px); } }
+
+.hero h1 {
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 800;
+  font-size: clamp(2.1rem, 8vw, 3.4rem);
+  color: var(--gold-bright);
+  letter-spacing: .1em;
+  text-shadow: 0 2px 18px rgba(217,180,92,.35);
+}
+.hero .kana { font-size: .4em; color: var(--text-dim); letter-spacing: .3em; display: block; margin-top: 4px; }
+.hero p.lead { color: var(--text-dim); margin-top: 10px; font-size: .92rem; line-height: 1.8; }
+
+.mode-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+  margin: 26px 0 10px;
+}
+@media (max-width: 480px) { .mode-grid { grid-template-columns: 1fr; } }
+
+.mode-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px 16px 16px;
+  text-align: left;
+  color: var(--text);
+  overflow: hidden;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+.mode-card:hover { transform: translateY(-4px); border-color: var(--gold-soft); box-shadow: 0 14px 30px rgba(0,0,0,.5); }
+.mode-card:active { transform: translateY(-1px); }
+.mode-card .mc-icon { font-size: 30px; margin-bottom: 6px; }
+.mode-card .mc-title { font-family: "Shippori Mincho B1", serif; font-weight: 800; font-size: 1.2rem; color: var(--gold-bright); }
+.mode-card .mc-sub { font-size: .74rem; color: var(--gold); letter-spacing: .1em; margin: 2px 0 8px; }
+.mode-card .mc-desc { font-size: .82rem; color: var(--text-dim); line-height: 1.6; }
+.mode-card.tutorial { grid-column: 1 / -1; background: linear-gradient(160deg, #2a2417, #1a160e); border-color: #6a5a2c; }
+.mode-card.tutorial .mc-title { color: var(--gold-bright); }
+.mode-card .badge {
+  position: absolute; top: 12px; right: 14px; font-size: .68rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 999px; background: rgba(217,180,92,.15); color: var(--gold-bright);
+  border: 1px solid var(--gold-soft);
+}
+
+.title-links { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.link-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 18px; border-radius: 999px;
+  border: 1px solid var(--line); background: rgba(255,255,255,.04);
+  color: var(--text); font-size: .84rem; font-weight: 700; letter-spacing: .04em;
+  transition: border-color .2s, color .2s;
+}
+.link-btn:hover { border-color: var(--gold-soft); color: var(--gold-bright); }
+
+.title-note {
+  margin-top: 22px; font-size: .74rem; color: var(--text-dim); text-align: center; line-height: 1.8;
+  border-top: 1px dashed var(--line); padding-top: 14px;
+}
+
+/* ---------- ルール説明画面 ---------- */
+#rulesScreen { max-width: 760px; margin: 0 auto; padding: 8px 18px 60px; }
+.rules-hero { text-align: center; margin: 10px 0 24px; }
+.rules-hero h1 { font-family: "Shippori Mincho B1", serif; font-size: clamp(1.6rem, 6vw, 2.2rem); color: var(--gold-bright); }
+.rules-hero p { color: var(--text-dim); font-size: .86rem; margin-top: 6px; }
+
+.rule-section {
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line); border-radius: 16px;
+  padding: 18px 18px 20px; margin-bottom: 16px;
+}
+.rule-section h2 {
+  font-family: "Shippori Mincho B1", serif; font-size: 1.15rem; color: var(--gold-bright);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.rule-section h2 .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: var(--ink);
+  font-size: .82rem; font-weight: 800;
+}
+.rule-section p, .rule-section li { font-size: .87rem; line-height: 1.85; color: var(--text); }
+.rule-section ul, .rule-section ol { padding-left: 1.3em; margin: 6px 0 10px; }
+.rule-section .note {
+  margin-top: 10px; font-size: .78rem; color: var(--text-dim);
+  background: rgba(217,180,92,.08); border-left: 3px solid var(--gold-soft);
+  padding: 8px 10px; border-radius: 6px;
+}
+
+.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0; }
+@media (max-width: 560px) { .type-grid { grid-template-columns: repeat(2, 1fr); } }
+.type-chip {
+  text-align: center; background: rgba(255,255,255,.03); border: 1px solid var(--line);
+  border-radius: 12px; padding: 10px 6px;
+}
+.type-chip .tc-badge { font-size: .72rem; font-weight: 800; color: var(--ink); background: var(--gold);
+  display: inline-block; padding: 2px 10px; border-radius: 999px; margin-bottom: 6px; }
+.type-chip .tc-num { font-size: 1.3rem; font-family: "Shippori Mincho B1", serif; color: var(--gold-bright); }
+.type-chip .tc-desc { font-size: .74rem; color: var(--text-dim); margin-top: 4px; line-height: 1.5; }
+
+.yaku-table { width: 100%; border-collapse: collapse; font-size: .84rem; margin-top: 6px; }
+.yaku-table th, .yaku-table td { padding: 8px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+.yaku-table th { color: var(--gold); font-weight: 700; font-size: .76rem; letter-spacing: .05em; }
+.yaku-table td.pts { color: var(--gold-bright); font-weight: 800; white-space: nowrap; }
+
+.rules-cards-strip { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 10px; }
+.rules-cards-strip .mini-card2 { flex: 0 0 auto; width: 56px; height: 83px; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,.4); }
+
+/* ---------- ゲーム画面 ---------- */
+#gameScreen { display: flex; flex-direction: column; min-height: calc(100dvh - 56px); }
+.status-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 6px 12px; font-size: .78rem; color: var(--text-dim);
+  border-bottom: 1px solid var(--line); flex-wrap: wrap;
+}
+.status-bar .sb-item { display: flex; align-items: center; gap: 5px; }
+.status-bar .sb-item b { color: var(--gold-bright); font-size: .9rem; }
+.status-bar .turn-flag {
+  font-weight: 800; padding: 3px 12px; border-radius: 999px; font-size: .76rem;
+  background: rgba(217,180,92,.15); color: var(--gold-bright); border: 1px solid var(--gold-soft);
+}
+.status-bar .turn-flag.cpu { background: rgba(120,140,220,.15); color: #b9c6ff; border-color: #5f6fb0; }
+
+.board {
+  flex: 1; display: flex; flex-direction: column; gap: 6px;
+  padding: 6px 8px; max-width: 980px; width: 100%; margin: 0 auto;
+}
+
+.side-row { display: flex; align-items: center; gap: 8px; }
+.side-row .hand-strip { flex: 1; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; min-height: var(--card-h); }
+.captured-mini { display: flex; gap: 4px; flex-wrap: wrap; width: 108px; flex: 0 0 auto; }
+.captured-mini .cm-badge {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 48px; height: 40px; border-radius: 8px; background: rgba(255,255,255,.04);
+  border: 1px solid var(--line); font-size: .62rem; color: var(--text-dim);
+}
+.captured-mini .cm-badge b { font-size: .92rem; color: var(--gold-bright); }
+.captured-mini { cursor: pointer; }
+
+.card {
+  width: var(--card-w); height: var(--card-h); border-radius: 7px; overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,.45);
+  position: relative; transition: transform .15s, box-shadow .15s;
+  flex: 0 0 auto;
+}
+.card.selectable { cursor: pointer; }
+.card.selectable:hover { transform: translateY(-6px); }
+.card.glow { box-shadow: 0 0 0 3px var(--gold-bright), 0 0 18px 4px rgba(242,210,122,.7); animation: pulseGlow 1.4s ease-in-out infinite; }
+@keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 3px var(--gold-bright), 0 0 10px 2px rgba(242,210,122,.5); } 50% { box-shadow: 0 0 0 3px var(--gold-bright), 0 0 22px 6px rgba(242,210,122,.85); } }
+.card svg { width: 100%; height: 100%; display: block; }
+.card.new-drop { animation: dropIn .35s ease-out; }
+@keyframes dropIn { 0% { transform: translateY(-30px) scale(.8); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+
+.field-wrap {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at 50% 40%, rgba(217,180,92,.06), transparent 70%);
+  border-radius: 20px; padding: 10px 6px; min-height: calc(var(--card-h) * 2.4 + 20px);
+}
+.field-grid { display: grid; grid-template-columns: repeat(4, var(--card-w)); gap: 10px 8px; justify-content: center; }
+
+.deck-pile { position: relative; width: var(--card-w); height: var(--card-h); flex: 0 0 auto; }
+.deck-pile .card { position: absolute; inset: 0; }
+.deck-count {
+  position: absolute; bottom: -8px; right: -8px; background: var(--gold); color: var(--ink);
+  font-size: .68rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; box-shadow: 0 2px 4px rgba(0,0,0,.4);
+}
+
+.center-row { display: flex; align-items: center; justify-content: center; gap: 14px; }
+
+/* ---------- メッセージ/花子先生バー ---------- */
+.mascot-bar {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 14px; margin: 4px 8px; border-radius: 16px;
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+}
+.mascot-avatar { width: 40px; height: 40px; flex: 0 0 auto; border-radius: 50%; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+.mascot-text { flex: 1; font-size: .82rem; line-height: 1.7; color: var(--text); }
+.mascot-text b { color: var(--gold-bright); }
+.mascot-text .mt-title { display: block; font-weight: 800; color: var(--gold-bright); margin-bottom: 2px; }
+.mascot-close { align-self: flex-start; background: none; border: none; color: var(--text-dim); font-size: 1rem; }
+
+.log-strip { font-size: .72rem; color: var(--text-dim); padding: 0 14px 8px; min-height: 1.4em; }
+
+/* ---------- オーバーレイ / モーダル ---------- */
+.overlay-root {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(6,3,4,.72); backdrop-filter: blur(2px);
+  padding: 16px;
+}
+.modal {
+  width: min(92vw, 460px); max-height: 88vh; overflow-y: auto;
+  background: linear-gradient(165deg, #241417, #170a0c);
+  border: 1px solid var(--gold-soft); border-radius: 18px;
+  padding: 22px 20px 20px; box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  animation: modalIn .22s ease-out;
+}
+@keyframes modalIn { 0% { transform: translateY(14px) scale(.97); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+.modal h2 { font-family: "Shippori Mincho B1", serif; color: var(--gold-bright); font-size: 1.25rem; margin-bottom: 10px; text-align: center; }
+.modal p { font-size: .88rem; line-height: 1.75; color: var(--text); margin-bottom: 10px; }
+.modal .yaku-list { list-style: none; margin: 10px 0; }
+.modal .yaku-list li { display: flex; justify-content: space-between; padding: 6px 4px; border-bottom: 1px dashed var(--line); font-size: .86rem; }
+.modal .yaku-list li b { color: var(--gold-bright); }
+.modal .total-line { display: flex; justify-content: space-between; font-weight: 800; padding-top: 8px; font-size: 1.05rem; color: var(--gold-bright); }
+.modal-btns { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.modal-btns button { flex: 1; min-width: 120px; }
+
+.btn {
+  padding: 12px 16px; border-radius: 12px; border: 1px solid var(--gold-soft);
+  background: linear-gradient(160deg, #3a2a1a, #241609); color: var(--gold-bright);
+  font-weight: 800; font-size: .9rem; letter-spacing: .03em;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.4); }
+.btn:active { transform: translateY(0); }
+.btn.primary { background: linear-gradient(160deg, var(--gold-bright), var(--gold)); color: var(--ink); border-color: var(--gold-bright); }
+.btn.ghost { background: rgba(255,255,255,.04); color: var(--text); border-color: var(--line); }
+.btn.wide { width: 100%; }
+
+.slide-dots { display: flex; justify-content: center; gap: 6px; margin: 10px 0 4px; }
+.slide-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+.slide-dots span.active { background: var(--gold-bright); }
+
+/* ---------- 獲得札モーダル(グリッド) ---------- */
+.captured-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 8px; margin-top: 10px; }
+.captured-grid .card { width: 100%; height: auto; aspect-ratio: 100/148; }
+
+/* ---------- ユーティリティ ---------- */
+.center-text { text-align: center; }
+.small-note { font-size: .72rem; color: var(--text-dim); }
+
+@media (max-width: 380px) {
+  .captured-mini { width: 90px; }
+  .captured-mini .cm-badge { width: 40px; }
+}

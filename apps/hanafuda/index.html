@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>花札 こいこい — 1人用こいこい対戦</title>
+<meta name="description" content="CPUと対戦できる1人用の花札(こいこい)。強さは弱・中・強の3段階に加え、小学生でもわかるチュートリアル(れんしゅう)モードを搭載。役の一覧やルールを解説する「ルール説明」ページ付き。スマホ・タブレット・iPad対応。" />
+<meta property="og:title" content="花札 こいこい — 1人用こいこい対戦" />
+<meta property="og:description" content="CPU対戦・強さ3段階・小学生でもわかるチュートリアル付きの花札(こいこい)。" />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23170609'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="ghead">
+  <a class="back" href="../../index.html">↑ TOPページへ</a>
+  <h1 class="ghead-title"><span class="t-kanji">花札</span><span class="t-sub">こいこい</span></h1>
+  <div class="ghead-btns">
+    <button class="icon-btn" id="soundBtn" aria-label="サウンド切り替え" title="サウンド ON/OFF">♪</button>
+    <button class="icon-btn" id="helpBtn" aria-label="ルール説明" title="ルール説明">？</button>
+    <button class="icon-btn hidden" id="restartBtn" aria-label="タイトルに戻る" title="タイトルに戻る">⟳</button>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ========== タイトル画面 ========== -->
+  <section id="titleScreen">
+    <div class="hero">
+      <div class="hero-cards" id="heroCards"></div>
+      <h1>花札<span class="kana">はなふだ・こいこい</span></h1>
+      <p class="lead">季節の絵札で遊ぶ、日本の伝統かるた「こいこい」。<br>CPUと1対1で対戦しよう。</p>
+    </div>
+
+    <div class="mode-grid">
+      <button class="mode-card" data-mode="tutorial" style="grid-column:1/-1;">
+        <span class="badge">はじめての方はここから</span>
+        <div class="mc-icon">🔰</div>
+        <div class="mc-title">チュートリアル(れんしゅう)</div>
+        <div class="mc-sub">小学生でもあそべる やさしいガイド付き</div>
+        <div class="mc-desc">花子先生と一緒に、実際に1局プレイしながらルールを覚えられるモード。ルールがわからなくても大丈夫、大切なところはその場でアドバイスするよ。</div>
+      </button>
+
+      <button class="mode-card" data-mode="weak">
+        <div class="mc-icon">🌱</div>
+        <div class="mc-title">弱</div>
+        <div class="mc-sub">EASY</div>
+        <div class="mc-desc">CPUは気ままにプレイ。ルールを覚えたての人におすすめ。</div>
+      </button>
+
+      <button class="mode-card" data-mode="medium">
+        <div class="mc-icon">🍃</div>
+        <div class="mc-title">中</div>
+        <div class="mc-sub">NORMAL</div>
+        <div class="mc-desc">CPUは取れる札をしっかり取ってくる。ほどよい手応え。</div>
+      </button>
+
+      <button class="mode-card" data-mode="strong" style="grid-column:1/-1;">
+        <div class="mc-icon">🔥</div>
+        <div class="mc-title">強</div>
+        <div class="mc-sub">HARD</div>
+        <div class="mc-desc">CPUは役の完成を狙い、こいこいの引き際も見極めてくる本格派。じっくり腰を据えて挑もう。</div>
+      </button>
+    </div>
+
+    <div class="title-links">
+      <button class="link-btn" id="openRulesBtn">📖 ルール説明を読む</button>
+    </div>
+
+    <p class="title-note">対局は6局(6回勝負)。局が終わるごとに親(先に配る側)が交代し、6局終わった時点で合計点が高いほうの勝ちだよ。<br>スマホ・タブレット・iPad、どの画面サイズでも遊べます。</p>
+  </section>
+
+  <!-- ========== ルール説明画面 ========== -->
+  <section id="rulesScreen" class="hidden">
+    <div class="rules-hero">
+      <h1>ルール説明</h1>
+      <p>花札(こいこい)がはじめての人にも、小学生にもわかるように説明します。</p>
+    </div>
+
+    <div class="rule-section">
+      <h2><span class="num">1</span>花札ってどんなゲーム？</h2>
+      <p>花札(はなふだ)は、1月から12月までの「季節の絵」が描かれたカードを使う、日本の伝統的なカードゲームです。全部で48枚。今回のアプリでは「こいこい」という、いちばんポピュラーな遊び方で対戦できます。</p>
+      <p>目的はかんたん。<b>自分の手札と、場に置かれたカードで、同じ「月」の絵を2枚そろえて集める</b>ことです。集めたカードの組み合わせによって「役(やく)」が完成し、得点になります。</p>
+      <div class="rules-cards-strip" id="rulesStripMonths"></div>
+    </div>
+
+    <div class="rule-section">
+      <h2><span class="num">2</span>札の種類</h2>
+      <p>48枚のカードは、絵柄によって4つの種類に分かれています。</p>
+      <div class="type-grid" id="typeGrid"></div>
+      <div class="note">見分け方のコツ：カードの左上に小さく「月の番号(1〜12)」が書いてあります。同じ番号どうしが「同じ月」で、そろえて取れる相手です。</div>
+    </div>
+
+    <div class="rule-section">
+      <h2><span class="num">3</span>遊び方の流れ</h2>
+      <ol>
+        <li>最初に、自分とCPUに8枚ずつ手札が配られ、場に8枚のカードが置かれます。残りは山札(やまふだ)になります。</li>
+        <li><b>①手札を1枚出す</b> … 場に同じ月のカードがあれば、2枚そろえて「取り札」にできます。無ければ、そのカードは場に置かれます。</li>
+        <li><b>②山札を1枚めくる</b> … めくったカードも、場に同じ月があれば取れます。無ければ場に置かれます。</li>
+        <li><b>③相手の番へ交代</b> … おたがいの手札(8枚ずつ)がなくなるまで、これをくり返します。</li>
+        <li>もし場に同じ月のカードが2枚あるところへカードを出したときは、どちらを取るか選べます(3枚そろっているときは3枚とも総取りできます)。</li>
+      </ol>
+      <div class="note">得点にかかわる役ができたときは、「やめて得点をもらう」か「こいこい！と言ってもっと集める」かを選べます(くわしくは4を見てね)。</div>
+    </div>
+
+    <div class="rule-section">
+      <h2><span class="num">4</span>「こいこい」って何？</h2>
+      <p>手札や山札から取ったカードで役が完成すると、「やめる(勝負する)」か「こいこい」と宣言して続けるかを選べます。</p>
+      <ul>
+        <li><b>やめる(勝負)を選ぶ</b> … その時点の役の得点が、そのまま自分の得点になります。安全策です。</li>
+        <li><b>こいこいを選ぶ</b> … 対局を続け、もっと役を増やして高得点を狙います。ただし、こいこいの後に<b>相手が先に役を完成させて「勝負」を選ぶと、得点は相手のものになってしまいます</b>。</li>
+        <li>こいこいを宣言してから自分がやめた場合、こいこいを言った回数だけ得点が2倍・4倍…と増えていきます。ハイリスク・ハイリターンな選択です。</li>
+      </ul>
+      <div class="note">迷ったら「早めにやめて得点を確保する」のが初心者にはおすすめ。慣れてきたら、あえて「こいこい」でねらってみよう。</div>
+    </div>
+
+    <div class="rule-section">
+      <h2><span class="num">5</span>役(やく)の一覧と得点</h2>
+      <table class="yaku-table">
+        <thead><tr><th>役の名前</th><th>条件</th><th>得点</th></tr></thead>
+        <tbody id="yakuTableBody"></tbody>
+      </table>
+      <div class="note">※このアプリでは、初心者にもわかりやすい標準的な得点ルールを採用しています(細かいローカルルールは省略しています)。</div>
+    </div>
+
+    <div class="rule-section">
+      <h2><span class="num">6</span>対局の進み方</h2>
+      <p>1回のゲームは「6局(6回)勝負」。1局ごとに親(先に札を配る側)が交代し、6局終わったところで合計点が多いほうの勝ちです。役ができないまま手札と山札を使い切った局は「引き分け(流れ)」となり、得点は入りません。</p>
+    </div>
+
+    <div class="rule-section">
+      <h2><span class="num">7</span>モードについて</h2>
+      <p><b>チュートリアル</b>は、花子先生が横についてくれる練習モード。実際に1局プレイしながら、大切な場面でアドバイスが出ます。<b>弱・中・強</b>はCPUの強さの3段階で、通常の6局勝負が楽しめます。</p>
+    </div>
+
+    <div class="title-links">
+      <button class="btn ghost" id="backFromRulesBtn">← タイトルへ戻る</button>
+    </div>
+  </section>
+
+  <!-- ========== ゲーム画面 ========== -->
+  <section id="gameScreen" class="hidden">
+    <div class="status-bar">
+      <div class="sb-item">第<b id="roundNo">1</b>/<span id="roundTotal">6</span>局</div>
+      <div class="sb-item">きみ <b id="scorePlayer">0</b>点</div>
+      <div class="sb-item">CPU <b id="scoreCpu">0</b>点</div>
+      <div class="turn-flag" id="turnFlag">きみの番</div>
+    </div>
+
+    <div class="board">
+      <div class="side-row">
+        <div class="captured-mini" id="cpuCapturedMini" title="CPUの取り札を見る"></div>
+        <div class="hand-strip" id="cpuHandStrip"></div>
+        <div style="width:48px"></div>
+      </div>
+
+      <div class="center-row">
+        <div class="field-wrap">
+          <div class="field-grid" id="fieldGrid"></div>
+        </div>
+        <div class="deck-pile" id="deckPile">
+          <div class="deck-count" id="deckCount">24</div>
+        </div>
+      </div>
+
+      <div class="side-row">
+        <div class="captured-mini" id="playerCapturedMini" title="きみの取り札を見る"></div>
+        <div class="hand-strip" id="playerHandStrip"></div>
+        <div style="width:48px"></div>
+      </div>
+
+      <div class="mascot-bar hidden" id="mascotBar">
+        <div class="mascot-avatar" id="mascotAvatar"></div>
+        <div class="mascot-text" id="mascotText"></div>
+        <button class="mascot-close" id="mascotClose">×</button>
+      </div>
+      <div class="log-strip" id="logStrip"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- オーバーレイ(モーダル各種)は JS が生成 -->
+<div id="overlayRoot"></div>
+
+<script src="cards.js"></script>
+<script src="engine.js"></script>
+<script src="ai.js"></script>
+<script src="tutorial.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
