@@ -44,6 +44,8 @@ const CATEGORIES = [
  *   date        : 制作時期（表示用。形式は自由）
  *   featured    : true にすると一覧の先頭で大きく表示（1つだけ推奨）
  *   sample      : true のものはサンプル表示。実物と差し替えたら削除してください
+ *   pageBreakAfter : true にすると「すべて」タブでこのカードの直後でページを区切る
+ *                    （検索していないときだけ有効。省略した項目は前のページの続きになります）
  */
 const PROJECTS = [
   {
@@ -88,6 +90,17 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "STRIDE FITNESS CLUB — スポーツジムサイト",
+    description: "24時間ジム・25mプール・スタジオを備えた架空の総合フィットネスクラブ。施設紹介、週間レッスン表、4つの料金プラン、入会キャンペーン、FAQまで実在するかのような情報量でまとめたモダンなサイトです。",
+    url: "works/stride-fitness/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "💪",
+    image: "images/stride-fitness.png",
+    date: "2026.07",
+    pageBreakAfter: true,  // 1ページ目はここまで
+  },
+  {
     title: "ソウル横丁 서울골목 — ネオレトロ韓国食堂",
     description: "路地裏のネオレトロな架空韓国料理店。サムギョプサルからスンドゥブ、チーズハットグまで50品超のメニューページ付き。テイクアウトOK。",
     url: "works/korea-site/index.html",
@@ -106,27 +119,6 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
-    title: "TORANOBU_GAME — フォートナイト制作マップ",
-    description: "公式クリエイターページから実際にプレイできます。フォローも是非よろしくお願いします♪",
-    url: "works/fortnite/index.html",
-    category: "game",
-    tags: ["UEFN", "Verse", "Fortnite"],
-    emoji: "⚡",
-    image: "images/fortnite.png",
-    date: "2026.07",
-    featured: true,  // 2ページ目の先頭に大きく表示
-  },
-  {
-    title: "STRIDE FITNESS CLUB — スポーツジムサイト",
-    description: "24時間ジム・25mプール・スタジオを備えた架空の総合フィットネスクラブ。施設紹介、週間レッスン表、4つの料金プラン、入会キャンペーン、FAQまで実在するかのような情報量でまとめたモダンなサイトです。",
-    url: "works/stride-fitness/index.html",
-    category: "website",
-    tags: ["HTML", "CSS", "JavaScript"],
-    emoji: "💪",
-    image: "images/stride-fitness.png",
-    date: "2026.07",
-  },
-  {
     title: "麻雀 虎の間 — 本格四人打ち麻雀",
     description: "CPU3人と対戦できる1人用の本格麻雀。強さは弱・中・強の3段階、東風戦/半荘戦を選択可能。リーチ・鳴き・赤ドラ・裏ドラ・符計算までフルルールで、役と点数もきちんと計算します。スマホ・タブレット対応。",
     url: "apps/mahjong/index.html",
@@ -135,6 +127,17 @@ const PROJECTS = [
     emoji: "🀄",
     image: "images/mahjong.png",
     date: "2026.07",
+  },
+  {
+    title: "TORANOBU_GAME — フォートナイト制作マップ",
+    description: "公式クリエイターページから実際にプレイできます。フォローも是非よろしくお願いします♪",
+    url: "works/fortnite/index.html",
+    category: "game",
+    tags: ["UEFN", "Verse", "Fortnite"],
+    emoji: "⚡",
+    image: "images/fortnite.png",
+    date: "2026.07",
+    featured: true,  // 2ページ目の中央に大きく表示
   },
   {
     title: "スミカ不動産 — 賃貸物件検索",
@@ -164,6 +167,7 @@ const PROJECTS = [
     emoji: "🧸",
     image: "images/toy-park.png",
     date: "2026.07",
+    pageBreakAfter: true,  // 2ページ目はここまで
   },
   {
     title: "NEON 2048 — スライドパズル",
@@ -223,6 +227,7 @@ const PROJECTS = [
     emoji: "🥤",
     image: "images/drink-garden.png",
     date: "2026.07",
+    pageBreakAfter: true,  // 3ページ目はここまで
   },
   {
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています

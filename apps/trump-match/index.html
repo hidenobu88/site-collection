@@ -735,7 +735,7 @@
   }
 
   boardEl.addEventListener("pointerdown", e => {
-    if (busy || gameEnded) return;
+    if (busy || gameEnded || overlay.classList.contains("show")) return;
     const { r, c } = cellFromPoint(e.clientX, e.clientY);
     drag = { r, c, x: e.clientX, y: e.clientY, used: false };
     try { boardEl.setPointerCapture(e.pointerId); } catch (err) {}

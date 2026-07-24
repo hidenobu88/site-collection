@@ -155,13 +155,30 @@
       .filter((p) => matchesSearch(p, searchQuery));
     // 表示順は projects.js の配列順のまま。featured はその位置で大きく表示される
 
-    // ページ数は作品数から自動計算（4件区切り）
-    const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-    currentPage = Math.min(Math.max(1, currentPage), totalPages);
-    const pageItems = filtered.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
-    );
+    // 「すべて」表示（検索なし）のときだけ、projects.js の pageBreakAfter で
+    // 指定した位置でページを区切る（featured カードの見え方に合わせた手動レイアウト）。
+    // それ以外（カテゴリ絞り込み・検索時）は ITEMS_PER_PAGE 件区切りで自動ページ分け。
+    const useManualBreaks = activeCategory === "all" && !searchQuery;
+    let totalPages, pageItems;
+    if (useManualBreaks) {
+      const pageStarts = [0];
+      filtered.forEach((p, i) => {
+        if (p.pageBreakAfter && i < filtered.length - 1) pageStarts.push(i + 1);
+      });
+      totalPages = pageStarts.length;
+      currentPage = Math.min(Math.max(1, currentPage), totalPages);
+      const start = pageStarts[currentPage - 1];
+      const end = currentPage < totalPages ? pageStarts[currentPage] : filtered.length;
+      pageItems = filtered.slice(start, end);
+    } else {
+      // ページ数は作品数から自動計算（4件区切り）
+      totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+      currentPage = Math.min(Math.max(1, currentPage), totalPages);
+      pageItems = filtered.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+      );
+    }
 
     grid.innerHTML = pageItems.map((p) => cardHtml(p, p._index)).join("");
     empty.hidden = filtered.length > 0;
