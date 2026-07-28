@@ -330,7 +330,7 @@ document.querySelectorAll('form.demo-form').forEach(form => {
       result.style.display = 'block';
       result.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    if (form.id === 'contact-form') {
+    if (form.id === 'contact-form' || form.id === 'audition-form') {
       alert('送信しました。\n※これはサンプル体験用のフォームのため、実際には送信されていません。');
     }
   });
