@@ -316,12 +316,22 @@ if (snsDetailRoot) {
 document.querySelectorAll('form.demo-form').forEach(form => {
   form.addEventListener('submit', e => {
     e.preventDefault();
+    // 必須項目が未入力の場合はアラートを出して送信をブロック
+    if (!form.checkValidity()) {
+      const firstInvalid = form.querySelector(':invalid');
+      alert('未入力の必須項目があります。すべて入力してから送信してください。');
+      firstInvalid?.focus();
+      return;
+    }
     // 実運用時はここでフォーム送信サービス（formrun / Googleフォーム / 自社API等）へPOSTしてください
     form.style.display = 'none';
     const result = form.closest('.inner')?.querySelector('.form-result');
     if (result) {
       result.style.display = 'block';
       result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (form.id === 'contact-form') {
+      alert('送信しました。\n※これはサンプル体験用のフォームのため、実際には送信されていません。');
     }
   });
 });

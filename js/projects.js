@@ -46,6 +46,8 @@ const CATEGORIES = [
  *   sample      : true のものはサンプル表示。実物と差し替えたら削除してください
  *   pageBreakAfter : true にすると「すべて」タブでこのカードの直後でページを区切る
  *                    （検索していないときだけ有効。省略した項目は前のページの続きになります）
+ *   catPageBreakAfter : true にすると、そのカードのカテゴリタブ（絞り込み表示）で
+ *                    このカードの直後でページを区切る（検索していないときだけ有効）
  */
 const PROJECTS = [
   {
@@ -99,6 +101,7 @@ const PROJECTS = [
     image: "images/stride-fitness.png",
     date: "2026.07",
     pageBreakAfter: true,  // 1ページ目はここまで
+    catPageBreakAfter: true,  // Webサイトカテゴリ絞り込み時：1ページ目(5件)はここまで
   },
   {
     title: "ソウル横丁 서울골목 — ネオレトロ韓国食堂",

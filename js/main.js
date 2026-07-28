@@ -157,13 +157,20 @@
 
     // 「すべて」表示（検索なし）のときだけ、projects.js の pageBreakAfter で
     // 指定した位置でページを区切る（featured カードの見え方に合わせた手動レイアウト）。
-    // それ以外（カテゴリ絞り込み・検索時）は ITEMS_PER_PAGE 件区切りで自動ページ分け。
-    const useManualBreaks = activeCategory === "all" && !searchQuery;
+    // カテゴリ絞り込み表示（検索なし）で catPageBreakAfter が指定されていれば、
+    // そのカテゴリ内でも同様に手動でページを区切る。
+    // それ以外（検索時など）は ITEMS_PER_PAGE 件区切りで自動ページ分け。
+    const breakKey =
+      activeCategory === "all" && !searchQuery
+        ? "pageBreakAfter"
+        : activeCategory !== "all" && !searchQuery && filtered.some((p) => p.catPageBreakAfter)
+        ? "catPageBreakAfter"
+        : null;
     let totalPages, pageItems;
-    if (useManualBreaks) {
+    if (breakKey) {
       const pageStarts = [0];
       filtered.forEach((p, i) => {
-        if (p.pageBreakAfter && i < filtered.length - 1) pageStarts.push(i + 1);
+        if (p[breakKey] && i < filtered.length - 1) pageStarts.push(i + 1);
       });
       totalPages = pageStarts.length;
       currentPage = Math.min(Math.max(1, currentPage), totalPages);
