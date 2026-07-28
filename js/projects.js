@@ -51,6 +51,17 @@ const CATEGORIES = [
  */
 const PROJECTS = [
   {
+    title: "FLORIA GARDENS フローリア・ガーデンズ — 花と光のテーマパーク",
+    description: "実写の観覧車・コースター・花回廊で園内のリアル感を出した架空テーマパークの公式サイト。看板マスコット「ふわん&ぴょんた」となかまたち6ぴきのオリジナルキャラクター、アトラクション20種の個別紹介ページ、大人/こども/シニア/家族/カップル料金がそろうチケットページ、ぬいぐるみ・グルメを実写で紹介するショップページまで全7ページ構成。スマホ・タブレット・iPad対応。",
+    url: "works/reoma-website/index.html",
+    category: "website",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "🌸",
+    image: "images/reoma-website.png",
+    date: "2026.07",
+    featured: true,
+  },
+  {
     title: "黒井戸ノ家 ―KUROIDO― お化け屋敷サイト",
     description: "ジャパニーズホラー映画の空気感をまとった架空お化け屋敷の公式サイト。警告ゲート、VHSノイズ、一瞬だけ映る女、乱れる生還者カウンターなど恐怖演出満載。心霊写真・恐怖体験談・7種の料金プランを収録。",
     url: "works/haunted-house/index.html",

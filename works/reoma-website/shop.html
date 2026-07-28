@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ショップ&グルメ | FLORIA GARDENS フローリア・ガーデンズ</title>
+<meta name="description" content="FLORIA GARDENSのショップ&グルメページ。キャラクターぬいぐるみやグッズ、パーク限定グルメを紹介しています。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Baloo+2:wght@600;700;800&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+</head>
+<body>
+
+<a href="../../index.html" data-topbtn style="position:fixed;left:14px;bottom:14px;z-index:99999;display:inline-flex;align-items:center;gap:5px;background:rgba(25,25,25,.82);color:#fff;font-family:system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;padding:9px 16px;border-radius:999px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);">↑ TOPページへ</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true">🌸</span>
+      <span class="brand-text"><span class="brand-name">Floria Gardens</span><span class="brand-sub">フローリア・ガーデンズ</span></span>
+    </a>
+    <nav class="global-nav" id="globalNav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="index.html#flower" class="nav-link">花回廊</a></li>
+        <li><a href="attractions.html" class="nav-link">アトラクション</a></li>
+        <li><a href="characters.html" class="nav-link">キャラクター</a></li>
+        <li><a href="tickets.html" class="nav-link">チケット</a></li>
+        <li><a href="shop.html" class="nav-link">ショップ</a></li>
+        <li><a href="index.html#access" class="nav-link">アクセス</a></li>
+        <li class="nav-cta"><a href="tickets.html" class="btn btn-gold btn-sm">🎫 チケット購入</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="メニューを開閉" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+  <section class="detail-hero" style="padding-top:110px;">
+    <div class="detail-hero-media"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bunnies_in_a_Basket_%28Where_toys_go_to_die%29.jpg/1920px-Bunnies_in_a_Basket_%28Where_toys_go_to_die%29.jpg" alt="ショップ&グルメ"></div>
+    <p class="breadcrumb"><a href="index.html">🏠 ホーム</a> ▶ ショップ&グルメ</p>
+    <h1 class="detail-title">ショップ&グルメ</h1>
+    <p class="detail-copy">キャラクターぬいぐるみやアパレルから、食べ歩きグルメまで。おみやげ選びもフローリア・ガーデンズの楽しみのひとつです。</p>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="shop-tabs" role="tablist" aria-label="商品カテゴリ">
+        <button class="filter-btn shop-tab-btn is-active" data-filter="all">ぜんぶ</button>
+        <button class="filter-btn shop-tab-btn" data-filter="plush">🧸 ぬいぐるみ</button>
+        <button class="filter-btn shop-tab-btn" data-filter="apparel">👕 アパレル・雑貨</button>
+        <button class="filter-btn shop-tab-btn" data-filter="sweets">🍬 スイーツ・おみやげ</button>
+        <button class="filter-btn shop-tab-btn" data-filter="meal">🍔 フード</button>
+      </div>
+
+      <div class="shop-store-banner">
+        <span class="ssb-emoji">🛍️</span>
+        <div><h4>フローリア・マーケット</h4><p>パーク最大のギフトショップ。ぬいぐるみからアパレル、おみやげ菓子まで約80種類をご用意。エントランス広場すぐ。</p></div>
+      </div>
+      <div class="shop-grid" id="goodsGrid"><!-- data.js から生成 --></div>
+
+      <div class="shop-store-banner" id="food" style="margin-top:50px;">
+        <span class="ssb-emoji">🍡</span>
+        <div><h4>モグモグキッチン & 屋台エリア</h4><p>ソフトクリームからだこ焼き、パークバーガーまで。食べ歩きグルメが充実のフードエリアです。</p></div>
+      </div>
+      <div class="shop-grid" id="foodGrid"><!-- data.js から生成 --></div>
+    </div>
+  </section>
+
+  <div class="detail-cta" style="padding-bottom:80px;">
+    <a href="index.html" class="btn btn-pink btn-xl">🏠 ホームにもどる</a>
+    <a href="tickets.html" class="btn btn-outline btn-xl">🎫 チケット料金を見る</a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-ribbon" aria-hidden="true">
+    <div class="footer-ribbon-track">
+      <span>🌸 FLORIA GARDENS 🌸 また あそびにきてね!! 🌸 FLORIA GARDENS 🌸 また あそびにきてね!! 🌸 FLORIA GARDENS 🌸 また あそびにきてね!! </span>
+      <span>🌸 FLORIA GARDENS 🌸 また あそびにきてね!! 🌸 FLORIA GARDENS 🌸 また あそびにきてね!! 🌸 FLORIA GARDENS 🌸 また あそびにきてね!! </span>
+    </div>
+  </div>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a href="index.html" class="brand"><span class="brand-mark">🌸</span><span class="brand-text"><span class="brand-name">Floria Gardens</span></span></a>
+      <p class="footer-desc">花回廊とアトラクション、はなうさぎの「ふわん」となかまたちに会える、家族みんなが楽しめる架空のテーマパークです。</p>
+      <div class="footer-sns" aria-hidden="true"><a href="#" onclick="return false;">📷</a><a href="#" onclick="return false;">🐦</a><a href="#" onclick="return false;">▶️</a></div>
+    </div>
+    <div class="footer-col"><h5>EXPLORE</h5><ul><li><a href="index.html#flower">花回廊</a></li><li><a href="attractions.html">アトラクション一覧</a></li><li><a href="characters.html">キャラクター</a></li><li><a href="attraction.html?id=night-illumination">ナイトイルミネーション</a></li></ul></div>
+    <div class="footer-col"><h5>TICKETS & SHOP</h5><ul><li><a href="tickets.html">チケット料金</a></li><li><a href="tickets.html#pass">年間パスポート</a></li><li><a href="shop.html">ショップ&グッズ</a></li><li><a href="shop.html#food">パークグルメ</a></li></ul></div>
+    <div class="footer-col"><h5>GUEST INFO</h5><ul><li><a href="index.html#access">営業時間・アクセス</a></li><li><a href="tickets.html#faq">よくあるご質問</a></li><li><a href="attraction.html?id=floria-yu">フローリアの湯</a></li><li><a href="#" onclick="alert('これはデモサイトです🌸'); return false;">お問い合わせ</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>このサイトはデモ用に制作した架空のテーマパークのウェブサイトです。登場する施設・キャラクター・料金はすべてフィクションであり、実在の施設・団体とは関係ありません。掲載写真はフリーライセンス素材(Wikimedia Commons)を使用したイメージです。</p>
+    <p>&copy; 2026 FLORIA GARDENS (Demo Site)</p>
+  </div>
+</footer>
+
+<a href="#top" class="to-top" id="toTop" aria-label="ページの先頭へ">🌸</a>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
