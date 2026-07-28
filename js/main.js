@@ -171,7 +171,7 @@
       const end = currentPage < totalPages ? pageStarts[currentPage] : filtered.length;
       pageItems = filtered.slice(start, end);
     } else {
-      // ページ数は作品数から自動計算（4件区切り）
+      // ページ数は作品数から自動計算（ITEMS_PER_PAGE 件区切り）
       totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
       currentPage = Math.min(Math.max(1, currentPage), totalPages);
       pageItems = filtered.slice(
