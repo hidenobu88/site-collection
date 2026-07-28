@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>トランプパーティー | TRUMP PARTY</title>
+<meta name="description" content="ポーカー・ブラックジャック・大富豪・神経衰弱が遊べるトランプゲーム集。初級/中級/上級の3段階でCPU対戦。スマホ・タブレット対応。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%83%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="table-deco" aria-hidden="true"></div>
+
+<div class="wrap">
+  <a class="back" href="../../index.html">↑ TOPページへ</a>
+  <header>
+    <div class="title">
+      <span class="title-suit red">♥</span><span class="title-suit black">♠</span>
+      トランプパーティー
+      <span class="title-suit black">♣</span><span class="title-suit red">♦</span>
+    </div>
+    <p class="subtitle">TRUMP PARTY — 4つのゲームで遊ぼう！</p>
+  </header>
+
+  <!-- ========== ホーム(モード選択) ========== -->
+  <section id="screen-home" class="screen active">
+    <p class="lead">遊びたいゲームを選んでね。難易度は次の画面で選べるよ。</p>
+    <div class="mode-grid">
+      <button class="mode-card" data-mode="poker">
+        <span class="mode-icon">🂡</span>
+        <span class="mode-name">ポーカー</span>
+        <span class="mode-desc">5カードドロー・CPU2人と勝負</span>
+      </button>
+      <button class="mode-card" data-mode="blackjack">
+        <span class="mode-icon">🂱</span>
+        <span class="mode-name">ブラックジャック</span>
+        <span class="mode-desc">21を目指してディーラーに勝とう</span>
+      </button>
+      <button class="mode-card" data-mode="daifugo">
+        <span class="mode-icon">👑</span>
+        <span class="mode-name">大富豪</span>
+        <span class="mode-desc">CPU3人と早く手札を出し切ろう</span>
+      </button>
+      <button class="mode-card" data-mode="concentration">
+        <span class="mode-icon">🧠</span>
+        <span class="mode-name">神経衰弱</span>
+        <span class="mode-desc">同じ数字のペアを見つけよう</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== セットアップ(難易度選択) ========== -->
+  <section id="screen-setup" class="screen">
+    <button class="back-mode" data-nav="home">← モード選択へ</button>
+    <div class="setup-card">
+      <span class="setup-icon" id="setupIcon">🂡</span>
+      <h2 id="setupTitle">ポーカー</h2>
+      <p id="setupDesc" class="setup-desc"></p>
+      <div class="level-row">
+        <span class="lbl">難易度:</span>
+        <button class="level-chip" data-lv="1">初級</button>
+        <button class="level-chip active" data-lv="2">中級</button>
+        <button class="level-chip" data-lv="3">上級</button>
+      </div>
+      <p class="level-desc" id="levelDesc"></p>
+      <button class="btn btn-main btn-large" id="startBtn">▶ はじめる</button>
+    </div>
+  </section>
+
+  <!-- ========== ポーカー ========== -->
+  <section id="screen-poker" class="screen game-screen">
+    <div class="game-topbar">
+      <button class="mini-btn" data-nav="home">🏠 ホーム</button>
+      <div class="game-name">🂡 ポーカー <span class="lv-badge" id="pokerLvBadge"></span></div>
+      <button class="mini-btn" data-nav="setup" data-mode="poker">⚙ 難易度</button>
+    </div>
+    <div class="pot-row"><span class="pot">POT <b id="pokerPot">0</b></span></div>
+    <div class="table poker-table">
+      <div class="cpu-row">
+        <div class="seat cpu" id="pokerCpu1">
+          <div class="seat-label">CPU 1<span class="chip-count" id="pokerCpu1Chips">1000</span></div>
+          <div class="mini-hand" id="pokerCpu1Hand"></div>
+          <div class="seat-msg" id="pokerCpu1Msg"></div>
+        </div>
+        <div class="seat cpu" id="pokerCpu2">
+          <div class="seat-label">CPU 2<span class="chip-count" id="pokerCpu2Chips">1000</span></div>
+          <div class="mini-hand" id="pokerCpu2Hand"></div>
+          <div class="seat-msg" id="pokerCpu2Msg"></div>
+        </div>
+      </div>
+      <div class="status" id="pokerStatus">ゲーム開始！</div>
+      <div class="seat player">
+        <div class="seat-label">あなた<span class="chip-count" id="pokerPlayerChips">1000</span><span class="hand-name" id="pokerHandName"></span></div>
+        <div class="hand" id="pokerPlayerHand"></div>
+      </div>
+    </div>
+    <div class="controls" id="pokerControls"></div>
+    <p class="hint">カードをタップで選択→「交換する」で入れ替え。役が強いほど勝ちやすいよ。ベットされたら「コール」か「フォールド」を選ぼう。</p>
+  </section>
+
+  <!-- ========== ブラックジャック ========== -->
+  <section id="screen-blackjack" class="screen game-screen">
+    <div class="game-topbar">
+      <button class="mini-btn" data-nav="home">🏠 ホーム</button>
+      <div class="game-name">🂱 ブラックジャック <span class="lv-badge" id="bjLvBadge"></span></div>
+      <button class="mini-btn" data-nav="setup" data-mode="blackjack">⚙ 難易度</button>
+    </div>
+    <div class="chip-display">所持チップ <b id="bjChips">1000</b> ／ ベット <b id="bjBet">100</b></div>
+    <div class="bet-row" id="bjBetRow">
+      <button class="mini-btn" id="bjBetMinus">−50</button>
+      <button class="mini-btn" id="bjBetPlus">+50</button>
+      <button class="btn btn-main" id="bjDealBtn">🎴 配る</button>
+    </div>
+    <div class="table bj-table">
+      <div class="bj-area">
+        <div class="seat-label">ディーラー <span class="score-badge" id="bjDealerScore"></span></div>
+        <div class="hand" id="bjDealerHand"></div>
+      </div>
+      <div class="status" id="bjStatus">ベットを決めて「配る」を押してね</div>
+      <div class="bj-area">
+        <div class="seat-label">あなた <span class="score-badge" id="bjPlayerScore"></span></div>
+        <div class="hand" id="bjPlayerHand"></div>
+      </div>
+    </div>
+    <div class="controls" id="bjControls"></div>
+    <p class="hint" id="bjHint">21に近いほうが勝ち。22以上でバースト(負け)。カードの合計は A=1か11、絵札=10、他は数字通り。</p>
+  </section>
+
+  <!-- ========== 大富豪 ========== -->
+  <section id="screen-daifugo" class="screen game-screen">
+    <div class="game-topbar">
+      <button class="mini-btn" data-nav="home">🏠 ホーム</button>
+      <div class="game-name">👑 大富豪 <span class="lv-badge" id="dfgLvBadge"></span></div>
+      <button class="mini-btn" data-nav="setup" data-mode="daifugo">⚙ 難易度</button>
+    </div>
+    <div class="table dfg-table">
+      <div class="opp-row">
+        <div class="opp" id="dfgOpp1"><div class="opp-label">CPU 1</div><div class="opp-cards" id="dfgOpp1Cards"></div></div>
+        <div class="opp" id="dfgOpp2"><div class="opp-label">CPU 2</div><div class="opp-cards" id="dfgOpp2Cards"></div></div>
+        <div class="opp" id="dfgOpp3"><div class="opp-label">CPU 3</div><div class="opp-cards" id="dfgOpp3Cards"></div></div>
+      </div>
+      <div class="field-area">
+        <span class="revo-badge" id="dfgRevo" style="display:none">🔄 革命中</span>
+        <div class="field-cards" id="dfgField"></div>
+        <div class="status" id="dfgStatus">ゲーム開始！</div>
+      </div>
+      <div class="player-hand-area">
+        <div class="seat-label">あなたの手札</div>
+        <div class="hand" id="dfgPlayerHand"></div>
+      </div>
+    </div>
+    <div class="controls" id="dfgControls"></div>
+    <p class="hint">同じ枚数で場より強いカードを出そう。出せなければ「パス」。8を出すと場が流れるよ(8切り)。同じ数字4枚を出すと革命(強さ逆転)！ 強さ順(弱い→強い): 3→4→…→K→A→2</p>
+  </section>
+
+  <!-- ========== 神経衰弱 ========== -->
+  <section id="screen-concentration" class="screen game-screen">
+    <div class="game-topbar">
+      <button class="mini-btn" data-nav="home">🏠 ホーム</button>
+      <div class="game-name">🧠 神経衰弱 <span class="lv-badge" id="mcLvBadge"></span></div>
+      <button class="mini-btn" data-nav="setup" data-mode="concentration">⚙ 難易度</button>
+    </div>
+    <div class="score-row">
+      <div class="score-box player-score">あなた <b id="mcPlayerScore">0</b></div>
+      <div class="turn-indicator" id="mcTurn">あなたの番</div>
+      <div class="score-box cpu-score">CPU <b id="mcCpuScore">0</b></div>
+    </div>
+    <div class="status" id="mcStatus">2枚めくって同じ数字のペアを探そう！</div>
+    <div class="mc-grid" id="mcGrid"></div>
+    <div class="controls" id="mcControls"></div>
+    <p class="hint">2枚めくって同じ数字なら自分のペア！ 揃うと続けてもう1回、揃わなければ相手の番。ペアを多く取ったほうが勝ち。</p>
+  </section>
+
+  <footer>© 2026 トランプパーティー 🃏 このゲームはデモ用のオリジナル作品です。</footer>
+</div>
+
+<!-- 結果モーダル(共通) -->
+<div class="modal" id="resultModal">
+  <div class="modal-card">
+    <div class="modal-emoji" id="modalEmoji">🎉</div>
+    <h2 id="modalTitle">ゲーム終了</h2>
+    <p id="modalMsg"></p>
+    <div class="modal-btns">
+      <button class="btn btn-main" id="modalPrimary">もう一度</button>
+      <button class="btn btn-sub" id="modalSecondary">ホームへ</button>
+    </div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script src="poker.js"></script>
+<script src="blackjack.js"></script>
+<script src="daifugo.js"></script>
+<script src="concentration.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
