@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>大和屋酒店 | 創業明治十二年・老舗の酒類卸小売</title>
+<meta name="description" content="明治十二年創業、三代にわたり暖簾を守る老舗酒店の通信販売サイト。ウイスキー・ビール・ワイン・日本酒・焼酎など全82品を実写でご紹介。全国配送、お客様の声も掲載。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%237A2333'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23F2E9D8' font-family='serif'>酒</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Old+Mincho:wght@400;500;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --paper:#F2E8D5;
+  --paper2:#E9DBBC;
+  --paper3:#DECFA9;
+  --ink:#2A2118;
+  --ink-soft:#6E5C46;
+  --indigo:#22384F;
+  --indigo-soft:#3A5570;
+  --wine:#7A2333;
+  --wine-soft:#9A3546;
+  --gold:#A9782E;
+  --gold-bright:#C99A3E;
+  --line:rgba(42,33,24,0.20);
+  --line-soft:rgba(42,33,24,0.10);
+  --card:#FFFCF2;
+  --shadow:0 12px 30px rgba(42,33,24,0.16);
+  --shadow-sm:0 4px 12px rgba(42,33,24,0.12);
+  --radius:6px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Zen Old Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
+  color:var(--ink);
+  background:var(--paper);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4{font-family:'Shippori Mincho B1',serif;margin:0;}
+.en{font-family:'Cormorant Garamond',serif;}
+button{font-family:inherit;cursor:pointer;}
+::selection{background:var(--wine);color:#fff;}
+
+/* 和紙のような背景テクスチャ */
+body::before{
+  content:"";
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(42,33,24,0.025) 0px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(42,33,24,0.02) 0px, transparent 1px, transparent 3px);
+  opacity:.6;
+}
+.wrap{position:relative;z-index:1;}
+
+/* ---------- 年齢確認ゲート ---------- */
+.age-gate{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--indigo);
+  padding:24px;
+  transition:opacity .5s ease, visibility .5s ease;
+}
+.age-gate.hide{opacity:0;visibility:hidden;pointer-events:none;}
+.age-box{
+  max-width:460px;width:100%;
+  background:var(--paper);
+  border:1px solid var(--gold);
+  border-radius:var(--radius);
+  padding:44px 32px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.age-seal{
+  width:64px;height:64px;border-radius:50%;
+  border:2px solid var(--wine);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;
+  font-family:'Shippori Mincho B1',serif;font-size:26px;color:var(--wine);
+  position:relative;
+}
+.age-seal::after{content:"";position:absolute;inset:5px;border:1px solid var(--wine);border-radius:50%;}
+.age-box h2{font-size:19px;letter-spacing:.06em;margin-bottom:10px;}
+.age-box p{font-size:13.5px;color:var(--ink-soft);line-height:1.9;margin:0 0 22px;}
+.age-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.age-btn{
+  padding:12px 26px;border-radius:999px;border:1px solid var(--ink);
+  font-size:14px;letter-spacing:.04em;background:transparent;color:var(--ink);
+}
+.age-btn.primary{background:var(--wine);border-color:var(--wine);color:#fff;}
+.age-note{margin-top:18px;font-size:11px;color:var(--ink-soft);opacity:.8;}
+
+/* ---------- ヘッダー ---------- */
+.site-header{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 4vw;
+  background:rgba(242,232,213,0.92);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-mark{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--wine);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--paper);font-family:'Shippori Mincho B1',serif;font-size:19px;
+  border:2px solid var(--gold);
+  flex-shrink:0;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.25;}
+.brand-name{font-size:18px;font-weight:700;letter-spacing:.04em;}
+.brand-sub{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.14em;color:var(--gold);font-style:italic;}
+
+.header-nav{display:flex;align-items:center;gap:22px;}
+.header-nav a{font-size:13.5px;letter-spacing:.03em;position:relative;padding:4px 0;}
+.header-nav a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--wine);transition:width .25s ease;}
+.header-nav a:hover::after{width:100%;}
+
+.header-right{display:flex;align-items:center;gap:10px;}
+.cart-btn{
+  position:relative;display:flex;align-items:center;gap:7px;
+  background:var(--indigo);color:var(--paper);
+  border:1px solid var(--gold);border-radius:999px;
+  padding:9px 18px 9px 14px;font-size:12.5px;letter-spacing:.03em;
+}
+.cart-count{
+  position:absolute;top:-7px;right:-7px;
+  background:var(--wine);color:#fff;
+  border-radius:50%;min-width:20px;height:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-family:'Cormorant Garamond',serif;font-weight:600;
+  border:1px solid var(--paper);
+}
+.cart-count.bump{animation:bump .35s ease;}
+@keyframes bump{0%{transform:scale(1);}40%{transform:scale(1.35);}100%{transform:scale(1);}}
+
+.nav-toggle{display:none;background:none;border:1px solid var(--ink);border-radius:6px;padding:8px 10px;}
+.nav-toggle span{display:block;width:18px;height:2px;background:var(--ink);margin:3px 0;}
+
+/* ---------- ヒーロー ---------- */
+.hero{
+  position:relative;
+  padding:72px 6vw 60px;
+  background:
+    linear-gradient(180deg, rgba(34,56,79,0.94), rgba(34,56,79,0.88)),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0px, transparent 2px, transparent 10px);
+  color:var(--paper);
+  overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 0%, rgba(201,154,62,0.18), transparent 60%);
+  pointer-events:none;
+}
+.hero-inner{position:relative;max-width:920px;margin:0 auto;text-align:center;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--gold-bright);border-radius:999px;
+  padding:6px 18px;font-size:11.5px;letter-spacing:.16em;
+  color:var(--gold-bright);margin-bottom:26px;
+}
+.hero h1{
+  font-size:clamp(28px,5vw,46px);line-height:1.5;letter-spacing:.03em;margin-bottom:22px;
+}
+.hero h1 .accent{color:var(--gold-bright);}
+.hero-lead{font-size:14.5px;line-height:2.1;color:rgba(242,232,213,0.85);max-width:640px;margin:0 auto 34px;}
+.hero-stats{display:flex;justify-content:center;gap:0;flex-wrap:wrap;margin-bottom:34px;}
+.hero-stat{padding:0 28px;border-right:1px solid rgba(242,232,213,0.25);}
+.hero-stat:last-child{border-right:none;}
+.hero-stat-num{display:block;font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--gold-bright);font-weight:600;}
+.hero-stat-label{font-size:11px;letter-spacing:.08em;color:rgba(242,232,213,0.7);}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--wine);color:#fff;border:1px solid var(--gold-bright);
+  padding:13px 32px;border-radius:999px;font-size:13.5px;letter-spacing:.06em;
+}
+
+/* ---------- こだわりセクション ---------- */
+.section{padding:64px 6vw;position:relative;}
+.section-head{max-width:920px;margin:0 auto 40px;text-align:center;}
+.section-kicker{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.24em;color:var(--gold);font-style:italic;}
+.section-title{font-size:clamp(21px,3.2vw,28px);letter-spacing:.05em;margin-top:6px;}
+.section-lead{font-size:13px;color:var(--ink-soft);margin-top:12px;line-height:1.9;}
+
+.commitment{background:var(--paper2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.commitment-grid{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+.commitment-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px 20px;text-align:center;
+}
+.commitment-icon{font-size:26px;margin-bottom:14px;}
+.commitment-card h3{font-size:15px;margin-bottom:10px;letter-spacing:.03em;}
+.commitment-card p{font-size:12px;color:var(--ink-soft);line-height:1.85;margin:0;}
+
+/* ---------- カタログ ---------- */
+.catalog-controls{
+  max-width:920px;margin:0 auto 30px;
+  display:flex;flex-direction:column;gap:16px;align-items:center;
+}
+.search-box{
+  position:relative;width:100%;max-width:420px;
+}
+.search-box input{
+  width:100%;padding:11px 16px 11px 38px;border-radius:999px;
+  border:1px solid var(--line);background:var(--card);
+  font-size:13.5px;color:var(--ink);font-family:inherit;
+}
+.search-box input:focus{outline:none;border-color:var(--gold);}
+.search-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-soft);}
+
+.cat-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.cat-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--cc,var(--line));border-radius:999px;
+  padding:7px 15px;font-size:12px;letter-spacing:.02em;
+  color:var(--ink);background:var(--card);
+  transition:background .2s ease,color .2s ease;
+}
+.cat-chip.active{background:var(--cc,var(--ink));color:#fff;}
+
+.menu-outer{max-width:1180px;margin:0 auto;}
+.cat-section{margin-bottom:52px;}
+.cat-head{
+  display:flex;align-items:center;gap:14px;margin-bottom:20px;
+  padding-bottom:12px;border-bottom:2px solid var(--cc,var(--ink));
+}
+.cat-icon{
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  background:color-mix(in srgb, var(--cc,#333) 16%, transparent);
+  flex-shrink:0;
+}
+.cat-titles h2{font-size:18px;letter-spacing:.04em;}
+.cat-titles .en{display:block;font-size:11px;letter-spacing:.14em;color:var(--ink-soft);margin-top:2px;}
+.cat-count{margin-left:auto;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
+.product-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;cursor:pointer;display:flex;flex-direction:column;
+  transition:transform .2s ease, box-shadow .2s ease;
+  position:relative;
+}
+.product-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.card-tag{
+  position:absolute;top:10px;left:10px;z-index:2;
+  background:var(--wine);color:#fff;font-size:10.5px;letter-spacing:.04em;
+  padding:4px 10px;border-radius:999px;
+}
+.card-photo-wrap{aspect-ratio:4/3;overflow:hidden;background:#ddd0ae;}
+.card-photo-wrap img{width:100%;height:100%;object-fit:cover;}
+.card-body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:6px;flex:1;}
+.card-origin{font-size:10.5px;color:var(--ink-soft);letter-spacing:.03em;}
+.card-name{font-size:14.5px;font-weight:700;line-height:1.4;}
+.card-desc{font-size:11.5px;color:var(--ink-soft);line-height:1.7;flex:1;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:6px;}
+.card-price{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--wine);}
+.card-price small{font-size:10px;color:var(--ink-soft);font-family:'Zen Old Mincho',serif;margin-left:2px;}
+
+.add-btn{
+  background:var(--indigo);color:var(--paper);border:none;border-radius:999px;
+  padding:8px 14px;font-size:11.5px;letter-spacing:.02em;
+}
+.qty-box{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:4px 6px;}
+.qty-box button{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:14px;line-height:1;}
+.qty-box span{font-size:13px;min-width:16px;text-align:center;}
+
+.empty-state{max-width:920px;margin:0 auto;text-align:center;padding:40px 0;color:var(--ink-soft);font-size:13px;}
+
+/* ---------- お客様の声 ---------- */
+.voices{background:var(--indigo);color:var(--paper);}
+.voices .section-kicker{color:var(--gold-bright);}
+.voices .section-lead{color:rgba(242,232,213,0.75);}
+.voices-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.voice-card{
+  background:rgba(242,232,213,0.06);border:1px solid rgba(201,154,62,0.35);
+  border-radius:var(--radius);padding:22px 22px 20px;
+}
+.voice-stars{color:var(--gold-bright);font-size:13px;letter-spacing:2px;margin-bottom:12px;}
+.voice-text{font-size:13px;line-height:2;color:rgba(242,232,213,0.92);margin-bottom:16px;}
+.voice-name{font-size:12px;color:var(--gold-bright);letter-spacing:.03em;}
+.voice-name span{color:rgba(242,232,213,0.6);font-size:11px;}
+
+/* ---------- アクセス ---------- */
+.access-grid{max-width:920px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card);}
+.access-row{display:contents;}
+.access-label,.access-value{padding:16px 22px;font-size:13px;border-bottom:1px solid var(--line-soft);}
+.access-label{background:var(--paper2);color:var(--ink-soft);font-weight:700;letter-spacing:.03em;}
+.access-value{color:var(--ink);}
+.access-grid .access-row:last-child .access-label,
+.access-grid .access-row:last-child .access-value{border-bottom:none;}
+
+/* ---------- フッター ---------- */
+.site-footer{
+  text-align:center;padding:48px 6vw 40px;color:var(--ink-soft);
+  border-top:1px solid var(--line);background:var(--paper2);
+}
+.footer-brand{font-family:'Shippori Mincho B1',serif;font-size:17px;color:var(--ink);margin-bottom:8px;}
+.footer-copy{font-size:11.5px;margin:4px 0;}
+.back-links{margin-top:16px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:12px;}
+.back-links a{border-bottom:1px solid var(--ink-soft);}
+
+.top-btn{
+  position:fixed;right:18px;bottom:18px;z-index:150;
+  background:var(--indigo);color:var(--paper);border:1px solid var(--gold);
+  border-radius:999px;padding:10px 18px;font-size:12px;letter-spacing:.03em;
+  box-shadow:var(--shadow-sm);
+}
+
+/* ---------- カートドロワー ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(20,15,10,0.5);z-index:300;
+  opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;
+}
+.overlay.show{opacity:1;visibility:visible;}
+.cart-drawer{
+  position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);z-index:400;
+  background:var(--paper);border-left:1px solid var(--gold);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .35s ease;
+  box-shadow:-10px 0 30px rgba(0,0,0,0.2);
+}
+.cart-drawer.show{transform:translateX(0);}
+.cart-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line);}
+.cart-head h3{font-size:16px;letter-spacing:.03em;}
+.cart-close{background:none;border:1px solid var(--line);border-radius:50%;width:30px;height:30px;font-size:14px;}
+.cart-list{flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:14px;}
+.cart-empty{text-align:center;color:var(--ink-soft);font-size:12.5px;line-height:2;margin-top:40px;}
+.cart-item{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--line-soft);padding-bottom:14px;}
+.cart-item .thumb{width:56px;height:56px;border-radius:6px;overflow:hidden;background:#ddd0ae;}
+.cart-item .thumb img{width:100%;height:100%;object-fit:cover;}
+.cart-item .info{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.cart-item .info b{font-size:12.5px;line-height:1.4;}
+.cart-item .info span{font-size:11px;color:var(--ink-soft);}
+.cart-item .actions{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.cart-item .sub{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--wine);font-weight:600;}
+.cart-remove{background:none;border:none;color:var(--ink-soft);font-size:14px;}
+.cart-foot{padding:18px 22px 24px;border-top:1px solid var(--line);}
+.cart-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-size:14px;}
+.cart-total b{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--wine);}
+.cart-note{font-size:10.5px;color:var(--ink-soft);line-height:1.7;margin:0 0 14px;}
+.cart-order-btn{
+  width:100%;padding:14px;background:var(--wine);color:#fff;border:none;
+  border-radius:999px;font-size:13.5px;letter-spacing:.05em;
+}
+
+/* ---------- 商品詳細モーダル ---------- */
+.detail-modal{
+  position:fixed;top:50%;left:50%;
+  width:min(760px,92vw);max-height:88vh;overflow-y:auto;
+  transform:translate(-50%,-48%) scale(.97);
+  background:var(--paper);border:1px solid var(--gold);border-radius:var(--radius);
+  z-index:400;opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.detail-modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+.detail-close{
+  position:absolute;top:14px;right:14px;z-index:2;
+  background:var(--paper);border:1px solid var(--line);border-radius:50%;width:32px;height:32px;font-size:15px;
+}
+.detail-img-wrap{position:relative;background:#ddd0ae;min-height:220px;}
+.detail-img-wrap img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.detail-tag{
+  position:absolute;top:14px;left:14px;z-index:1;
+  background:var(--wine);color:#fff;font-size:11px;padding:5px 12px;border-radius:999px;
+}
+.detail-body{padding:30px 28px;display:flex;flex-direction:column;}
+.detail-cat-label{font-size:11.5px;color:var(--ink-soft);letter-spacing:.04em;margin-bottom:8px;}
+.detail-body h3{font-size:20px;line-height:1.4;margin-bottom:4px;}
+.detail-origin{font-size:12px;color:var(--gold);margin-bottom:14px;letter-spacing:.02em;}
+.detail-desc{font-size:13px;line-height:1.9;color:var(--ink);margin-bottom:16px;}
+.detail-meta{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;font-size:11.5px;color:var(--ink-soft);}
+.detail-note{font-size:11.5px;color:var(--ink-soft);line-height:1.8;border-top:1px dashed var(--line);padding-top:14px;margin-bottom:18px;}
+.detail-bottom{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.detail-price{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--wine);font-weight:600;}
+.detail-price small{font-size:11px;color:var(--ink-soft);font-family:'Zen Old Mincho',serif;margin-left:3px;}
+
+/* ---------- モバイルナビ ---------- */
+.mobile-nav{
+  position:fixed;top:0;left:0;height:100%;width:min(300px,84vw);z-index:400;
+  background:var(--paper);border-right:1px solid var(--gold);
+  transform:translateX(-100%);transition:transform .3s ease;
+  display:flex;flex-direction:column;padding:24px 24px;
+}
+.mobile-nav.show{transform:translateX(0);}
+.mobile-nav-close{align-self:flex-end;background:none;border:1px solid var(--line);border-radius:50%;width:30px;height:30px;margin-bottom:20px;}
+.mobile-nav a{display:block;padding:12px 0;font-size:14.5px;border-bottom:1px solid var(--line-soft);}
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width:980px){
+  .commitment-grid{grid-template-columns:repeat(2,1fr);}
+  .voices-grid{grid-template-columns:repeat(2,1fr);}
+  .detail-modal{grid-template-columns:1fr;}
+  .detail-img-wrap{min-height:180px;}
+}
+@media (max-width:720px){
+  .header-nav{display:none;}
+  .nav-toggle{display:block;}
+  .hero{padding:56px 6vw 44px;}
+  .hero-stat{padding:0 16px;}
+  .commitment-grid{grid-template-columns:1fr;}
+  .voices-grid{grid-template-columns:1fr;}
+  .access-grid{grid-template-columns:1fr;}
+  .section{padding:48px 5vw;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
+  .card-body{padding:11px 12px 13px;}
+  .card-name{font-size:13px;}
+  .card-desc{display:none;}
+  .top-btn{padding:9px 14px;font-size:11px;}
+}
+@media (max-width:480px){
+  .brand-sub{display:none;}
+}
+@media (max-width:420px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+  .brand-name{font-size:15px;}
+  .age-box{padding:34px 22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- 年齢確認ゲート -->
+<div class="age-gate" id="ageGate">
+  <div class="age-box">
+    <div class="age-seal">酒</div>
+    <h2>ご入店の前に</h2>
+    <p>このサイトはお酒に関する商品をご紹介しております。<br />あなたは20歳以上ですか？</p>
+    <div class="age-buttons">
+      <button class="age-btn primary" id="ageYes">はい、20歳以上です</button>
+      <button class="age-btn" id="ageNo">いいえ</button>
+    </div>
+    <p class="age-note">飲酒は20歳になってから。妊娠中や授乳期の飲酒はお控えください。</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ヘッダー -->
+<header class="site-header">
+  <a class="brand" href="#top">
+    <span class="brand-mark">酒</span>
+    <span class="brand-text">
+      <span class="brand-name">大和屋酒店</span>
+      <span class="brand-sub en">Est. 1879 &nbsp;·&nbsp; YAMATOYA SAKE-TEN</span>
+    </span>
+  </a>
+  <nav class="header-nav">
+    <a href="#catalog">商品一覧</a>
+    <a href="#commitment">老舗のこだわり</a>
+    <a href="#voices">お客様の声</a>
+    <a href="#access">店舗案内</a>
+  </nav>
+  <div class="header-right">
+    <button class="cart-btn" id="cartOpenBtn">
+      🛒 カート <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="nav-toggle" id="navToggle" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-badge en">SINCE 1879 · 創業明治十二年</span>
+      <h1>三代にわたり暖簾を守り、<br /><span class="accent">変わらぬ目利き</span>で選び抜く一本を。</h1>
+      <p class="hero-lead">
+        灘・伏見をはじめとする全国の蔵元、そして世界の銘醸地との縁を大切に、<br class="br-pc" />
+        ウイスキー・ビール・ワイン・日本酒・焼酎など、確かな品だけを店先に並べてまいりました。<br class="br-pc" />
+        インターネットでも、店頭と変わらぬ目利きの品々を全国へお届けいたします。
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="hero-stat-num en" id="statYears">0</span><span class="hero-stat-label">年の歴史</span></div>
+        <div class="hero-stat"><span class="hero-stat-num en" id="statItems">0</span><span class="hero-stat-label">取扱い品目</span></div>
+        <div class="hero-stat"><span class="hero-stat-num en" id="statCats">0</span><span class="hero-stat-label">ジャンル</span></div>
+      </div>
+      <a class="hero-cta" href="#catalog">商品を見る ↓</a>
+    </div>
+  </section>
+
+  <!-- 老舗のこだわり -->
+  <section class="section commitment" id="commitment">
+    <div class="section-head">
+      <span class="section-kicker en">OUR COMMITMENT</span>
+      <h2 class="section-title">老舗のこだわり</h2>
+      <p class="section-lead">先代、そのまた先代から受け継いだ「良い酒を、正しい価格で」という一心を、いまも変わらず守っております。</p>
+    </div>
+    <div class="commitment-grid">
+      <div class="commitment-card">
+        <div class="commitment-icon">🔎</div>
+        <h3>三代・百四十余年の目利き</h3>
+        <p>明治の創業以来、蔵元へ直接足を運び、味を確かめて仕入れる姿勢を守り続けています。</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🏔️</div>
+        <h3>蔵元・醸造元との直取引</h3>
+        <p>国内外の蔵元・醸造元と長年の信頼関係を築き、確かな品だけを店頭に並べています。</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🌡️</div>
+        <h3>温度管理された蔵での保管</h3>
+        <p>店奥の酒蔵で温度・湿度を管理し、瓶詰め時そのままの味わいを保ってお届けします。</p>
+      </div>
+      <div class="commitment-card">
+        <div class="commitment-icon">🚚</div>
+        <h3>相場に忠実な価格・全国配送</h3>
+        <p>過剰な値付けはせず、実勢価格に忠実な価格設定で全国どこへでもお届けいたします。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 商品カタログ -->
+  <section class="section" id="catalog">
+    <div class="section-head">
+      <span class="section-kicker en">OUR SELECTION</span>
+      <h2 class="section-title">お品書き</h2>
+      <p class="section-lead">ウイスキー・ビール・ワイン・日本酒・焼酎はじめ、世界と日本の銘酒82品を取り揃えております。</p>
+    </div>
+    <div class="catalog-controls">
+      <div class="search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="searchInput" placeholder="銘柄名で検索（例：山崎、獺祭、ワイン）" aria-label="商品を検索" />
+      </div>
+      <div class="cat-nav" id="catNav"></div>
+    </div>
+    <div class="menu-outer" id="menu"></div>
+    <div class="empty-state" id="emptyState" hidden>該当する商品が見つかりませんでした。検索条件を変えてお試しください。</div>
+  </section>
+
+  <!-- お客様の声 -->
+  <section class="section voices" id="voices">
+    <div class="section-head">
+      <span class="section-kicker en">VOICE OF CUSTOMERS</span>
+      <h2 class="section-title">お客様の声</h2>
+      <p class="section-lead">長年ご愛顧いただいているお客様より寄せられた、ありがたいお言葉の数々です。</p>
+    </div>
+    <div class="voices-grid">
+      <div class="voice-card">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">先代の頃から通っております。山崎や白州を切らすことなく置いてくださるので、贈答用にも毎年お願いしています。</p>
+        <p class="voice-name">田中様 <span>（60代・ご愛顧歴35年）</span></p>
+      </div>
+      <div class="voice-card">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">ワインに詳しいご主人が、料理に合わせて選んでくれるのが本当にありがたいです。ボジョレーの季節は毎年楽しみにしています。</p>
+        <p class="voice-name">佐藤様 <span>（50代）</span></p>
+      </div>
+      <div class="voice-card">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">父の代からのお付き合いです。品揃えも接客も、時代が変わっても変わらない安心感があります。</p>
+        <p class="voice-name">鈴木様 <span>（70代・ご愛顧歴42年）</span></p>
+      </div>
+      <div class="voice-card">
+        <div class="voice-stars">★★★★☆</div>
+        <p class="voice-text">ネット注文が想像以上にスムーズでした。獺祭がすぐ手配できて感激です。梱包も丁寧でした。</p>
+        <p class="voice-name">山本様 <span>（40代）</span></p>
+      </div>
+      <div class="voice-card">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">珍しい焼酎まで揃っていて、いつも新しい発見があります。品書きのひとことコメントも参考になります。</p>
+        <p class="voice-name">伊藤様 <span>（60代・ご愛顧歴28年）</span></p>
+      </div>
+      <div class="voice-card">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">戦後間もない頃からお世話になっている、地元では知らぬ者のいない酒屋さんです。これからも末永く。</p>
+        <p class="voice-name">小林様 <span>（80代・ご愛顧歴50年以上）</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 店舗案内 -->
+  <section class="section" id="access">
+    <div class="section-head">
+      <span class="section-kicker en">SHOP INFORMATION</span>
+      <h2 class="section-title">店舗案内</h2>
+    </div>
+    <div class="access-grid">
+      <div class="access-row"><div class="access-label">屋号</div><div class="access-value">大和屋酒店（やまとやさけてん）</div></div>
+      <div class="access-row"><div class="access-label">創業</div><div class="access-value">明治十二年（1879年）</div></div>
+      <div class="access-row"><div class="access-label">所在地</div><div class="access-value">〒000-0000　架空県架空市本町2丁目3-1（サンプルサイトのため実在いたしません）</div></div>
+      <div class="access-row"><div class="access-label">電話番号</div><div class="access-value">00-0000-0000（サンプル）</div></div>
+      <div class="access-row"><div class="access-label">営業時間</div><div class="access-value">10:00〜19:00　定休日：毎週水曜日</div></div>
+      <div class="access-row"><div class="access-label">免許</div><div class="access-value">酒類小売業免許（架空・第000号）</div></div>
+      <div class="access-row"><div class="access-label">配送</div><div class="access-value">全国配送対応（本サイトはデモのため実際の配送は行われません）</div></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p class="footer-brand">大和屋酒店</p>
+  <p class="footer-copy">本サイトはポートフォリオ用のサンプルサイトです。実際の販売・決済は行われません。</p>
+  <p class="footer-copy">飲酒は20歳になってから。飲酒運転は法律で禁止されています。</p>
+  <p class="footer-copy en">© 2026 YAMATOYA SAKE-TEN — Portfolio Work</p>
+  <div class="back-links">
+    <a href="../../index.html">← Site Collection トップへ</a>
+  </div>
+</footer>
+
+</div><!-- /.wrap -->
+
+<a href="../../index.html" class="top-btn">↑ TOPページへ</a>
+
+<!-- カートドロワー -->
+<div class="overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="カート">
+  <div class="cart-head">
+    <h3>🛒 買い物かご</h3>
+    <button class="cart-close" id="cartCloseBtn" aria-label="閉じる">✕</button>
+  </div>
+  <div class="cart-list" id="cartList"></div>
+  <div class="cart-foot">
+    <div class="cart-total"><span>合計（税込）</span><b id="cartTotal">¥0</b></div>
+    <p class="cart-note">※ こちらはサンプルサイトです。実際のご購入・決済はできません。ご了承ください。</p>
+    <button class="cart-order-btn" id="cartOrderBtn">ご注文はこちら（デモ）</button>
+  </div>
+</aside>
+
+<!-- 商品詳細モーダル -->
+<div class="overlay" id="detailOverlay"></div>
+<div class="detail-modal" id="detailModal" role="dialog" aria-modal="true">
+  <button class="detail-close" id="detailClose" aria-label="閉じる">✕</button>
+  <div class="detail-img-wrap">
+    <span class="detail-tag" id="detailTag" style="display:none;"></span>
+    <img id="detailImg" src="" alt="" />
+  </div>
+  <div class="detail-body">
+    <span class="detail-cat-label" id="detailCatLabel"></span>
+    <h3 id="detailName"></h3>
+    <p class="detail-origin" id="detailOrigin"></p>
+    <p class="detail-desc" id="detailDesc"></p>
+    <div class="detail-meta" id="detailMeta"></div>
+    <p class="detail-note" id="detailNote"></p>
+    <div class="detail-bottom">
+      <div class="detail-price" id="detailPrice"></div>
+      <div id="detailAction"></div>
+    </div>
+  </div>
+</div>
+
+<!-- モバイルナビ -->
+<div class="overlay" id="mobileNavOverlay"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileNavClose" aria-label="閉じる">✕</button>
+  <a href="#catalog">商品一覧</a>
+  <a href="#commitment">老舗のこだわり</a>
+  <a href="#voices">お客様の声</a>
+  <a href="#access">店舗案内</a>
+</nav>
+
+<script>
+/* =========================================================
+ * カテゴリー定義
+ * ========================================================= */
+const CATEGORIES = [
+  { id:"whisky", label:"ウイスキー", en:"WHISKY", icon:"🥃", color:"#8A5A2B", note:"樽の中で静かに眠り、時とともに深みを増す一本。食後のひとときや語らいのお供にどうぞ。" },
+  { id:"beer", label:"ビール", en:"BEER", icon:"🍺", color:"#B8860B", note:"きりっと冷やして、乾杯の一杯に。晩酌のはじまりを彩ります。" },
+  { id:"wine", label:"ワイン", en:"WINE", icon:"🍷", color:"#7A1F2B", note:"料理と合わせて楽しむ、食卓の名脇役。開栓後はお早めにお楽しみください。" },
+  { id:"sake", label:"日本酒", en:"SAKE", icon:"🍶", color:"#2E5339", note:"杜氏が丹精込めて醸した一滴。冷や・常温・燗と、温度で表情を変える奥深さをご堪能ください。" },
+  { id:"shochu", label:"焼酎", en:"SHOCHU", icon:"🏺", color:"#5A4632", note:"水割り・お湯割り・ロックと、お好みの飲み方で。飲み飽きしない食中酒の代表格です。" },
+  { id:"vodka", label:"ウォッカ", en:"VODKA", icon:"🧊", color:"#3B5A6B", note:"クセのない味わいはカクテルベースにも最適。ロックやソーダ割りですっきりと。" },
+  { id:"gin", label:"ジン", en:"GIN", icon:"🍸", color:"#3F6E52", note:"ボタニカルの香りを楽しむ蒸留酒。ジントニックなど、カクテルでその個性をお楽しみください。" },
+  { id:"rum", label:"ラム", en:"RUM", icon:"🌴", color:"#8C4A2F", note:"サトウキビ由来の芳醇な甘い香り。ロックはもちろん、コーラ割りやお菓子作りにも。" },
+  { id:"tequila", label:"テキーラ", en:"TEQUILA", icon:"🌵", color:"#9C7A20", note:"アガベ由来の力強い風味。ショットはもちろん、カクテルのベースとしても人気です。" },
+  { id:"sparkling", label:"シャンパン＆スパークリング", en:"SPARKLING", icon:"🍾", color:"#946A2B", note:"お祝いの席や特別な日に。よく冷やして、きめ細やかな泡をお楽しみください。" },
+  { id:"liqueur", label:"リキュール＆梅酒", en:"LIQUEUR", icon:"🍹", color:"#7A3B5A", note:"食後酒やカクテルのベースとして。梅酒はロック・水割り・ソーダ割りでも美味しくいただけます。" },
+];
+
+/* 分類ごとの内容量・度数目安（表示用の一般的な目安です） */
+const CATEGORY_INFO = {
+  whisky:{vol:"700ml前後", abv:"40〜43%"},
+  beer:{vol:"350ml×6本", abv:"4〜6%"},
+  wine:{vol:"750ml", abv:"12〜14%"},
+  sake:{vol:"720ml前後", abv:"15〜16%"},
+  shochu:{vol:"720〜900ml", abv:"20〜25%"},
+  vodka:{vol:"700ml前後", abv:"約40%"},
+  gin:{vol:"700ml前後", abv:"40〜47%"},
+  rum:{vol:"700ml前後", abv:"37〜40%"},
+  tequila:{vol:"700ml前後", abv:"38〜40%"},
+  sparkling:{vol:"750ml", abv:"約12%"},
+  liqueur:{vol:"500〜700ml", abv:"10〜40%（商品による）"},
+};
+
+/* =========================================================
+ * 商品データ（各カテゴリー内はあいうえお順）
+ * ========================================================= */
+const PRODUCTS = [
+  { cat:"whisky", name:"山崎12年", kana:"やまざき12ねん", origin:"日本・シングルモルト", price:9800, desc:"白桃を思わせる甘くみずみずしい香りとミズナラ樽由来の東洋的な余韻。ジャパニーズウイスキーの名を世界に知らしめた代表格です。", tag:"人気", img:"images/0.jpg" },
+  { cat:"whisky", name:"白州12年", kana:"はくしゅう12ねん", origin:"日本・シングルモルト", price:9800, desc:"南アルプスの森を思わせる、みずみずしくグリーンな香り。爽快な飲み口が持ち味の「森香るウイスキー」。", tag:"人気", img:"images/1.jpg" },
+  { cat:"whisky", name:"響 ジャパニーズハーモニー", kana:"ひびきじゃぱにーずはーもにー", origin:"日本・ブレンデッド", price:7800, desc:"厳選された数十種の原酒を熟練のブレンダーが調和させた、繊細で華やかな香りのプレミアムブレンデッド。", tag:"定番", img:"images/2.jpg" },
+  { cat:"whisky", name:"ニッカ竹鶴 ピュアモルト", kana:"にっかたけつるぴゅあもると", origin:"日本・ピュアモルト", price:5200, desc:"ウイスキーの父・竹鶴政孝の名を冠した、複数の蒸溜所のモルト原酒をヴァッティングした奥深い味わい。", tag:null, img:"images/3.jpg" },
+  { cat:"whisky", name:"ラフロイグ 10年", kana:"らふろいぐ10ねん", origin:"スコットランド・アイラ島", price:5500, desc:"薬品香とも評される強烈なピート香とヨードの風味。アイラモルトの王様と称される個性派シングルモルト。", tag:"通好み", img:"images/4.jpg" },
+  { cat:"whisky", name:"ザ・マッカラン 12年 シェリーオーク", kana:"ざまっからん12ねんしぇりーおーく", origin:"スコットランド・スペイサイド", price:8900, desc:"シェリー樽熟成による、ドライフルーツとスパイスの複雑な香り。世界中のコレクターに愛される名門シングルモルト。", tag:"高級", img:"images/5.jpg" },
+  { cat:"whisky", name:"グレンフィディック 12年", kana:"ぐれんふぃでぃっく12ねん", origin:"スコットランド・スペイサイド", price:4800, desc:"洋梨のような爽やかな香りとまろやかな味わい。世界で最も売れているシングルモルトのひとつです。", tag:null, img:"images/6.jpg" },
+  { cat:"whisky", name:"ザ・グレンリベット 12年", kana:"ざぐれんりべっと12ねん", origin:"スコットランド・スペイサイド", price:4600, desc:"スペイサイドの伝統を受け継ぐ、フルーティで飲みやすい味わい。シングルモルトの元祖とも呼ばれます。", tag:null, img:"images/7.jpg" },
+  { cat:"whisky", name:"ジョニーウォーカー 黒ラベル 12年", kana:"じょにーうぉーかーくろらべる12ねん", origin:"スコットランド・ブレンデッド", price:3200, desc:"世界で最も飲まれているスコッチウイスキーのひとつ。スモーキーでコクのあるバランスの取れた味わい。", tag:"定番", img:"images/8.jpg" },
+  { cat:"whisky", name:"シーバスリーガル 12年", kana:"しーばすりーがる12ねん", origin:"スコットランド・ブレンデッド", price:3400, desc:"はちみつのような甘い香りとまろやかな口当たり。パーティーシーンにもふさわしい上品なブレンデッド。", tag:null, img:"images/9.jpg" },
+  { cat:"whisky", name:"ジェムソン", kana:"じぇむそん", origin:"アイルランド", price:2800, desc:"3回蒸溜による軽やかでスムーズな口当たり。アイリッシュウイスキーの代表銘柄としてハイボールにも人気。", tag:null, img:"images/10.jpg" },
+  { cat:"whisky", name:"ブッシュミルズ オリジナル", kana:"ぶっしゅみるずおりじなる", origin:"アイルランド", price:2600, desc:"世界最古のライセンス蒸溜所が手がける、軽快でフルーティなアイリッシュウイスキー。", tag:null, img:"images/11.jpg" },
+  { cat:"whisky", name:"ジムビーム ホワイト", kana:"じむびーむほわいと", origin:"アメリカ・バーボン", price:1800, desc:"トウモロコシ由来の甘い香りとバニラの風味。手頃な価格で楽しめる王道バーボンです。", tag:null, img:"images/12.jpg" },
+  { cat:"whisky", name:"ジャックダニエル ブラック", kana:"じゃっくだにえるぶらっく", origin:"アメリカ・テネシーウイスキー", price:2400, desc:"サトウカエデの木炭でろ過する「リンチング製法」による、まろやかで芳醇な味わい。", tag:"定番", img:"images/13.jpg" },
+  { cat:"whisky", name:"メーカーズマーク", kana:"めーかーずまーく", origin:"アメリカ・バーボン", price:3100, desc:"手作業で赤い封蝋を施す、小麦を使ったソフトでまろやかな口当たりが特徴のプレミアムバーボン。", tag:null, img:"images/14.jpg" },
+  { cat:"whisky", name:"ワイルドターキー 8年", kana:"わいるどたーきー8ねん", origin:"アメリカ・バーボン", price:3300, desc:"高いアルコール度数から生まれる力強いコクと余韻。バーボン通に根強い人気を誇ります。", tag:null, img:"images/15.jpg" },
+  { cat:"whisky", name:"カナディアンクラブ 6年", kana:"かなでぃあんくらぶ6ねん", origin:"カナダ", price:2000, desc:"軽やかでスムーズな飲み口が特徴のカナディアンウイスキーの代表格。水割り・ハイボールに最適。", tag:null, img:"images/16.jpg" },
+  { cat:"beer", name:"アサヒスーパードライ", kana:"あさひすーぱーどらい", origin:"日本", price:1280, desc:"辛口ですっきりとした「キレ」が持ち味の、日本で最も飲まれているビールのひとつ。缶6本セット。", tag:"定番", img:"images/17.jpg" },
+  { cat:"beer", name:"キリン一番搾り", kana:"きりんいちばんしぼり", origin:"日本", price:1280, desc:"麦芽の一番搾り麦汁のみを使用した、雑味のないクリアな味わい。缶6本セット。", tag:null, img:"images/18.jpg" },
+  { cat:"beer", name:"サッポロ黒ラベル", kana:"さっぽろくろらべる", origin:"日本", price:1280, desc:"すっきりとした後味とコクを両立した、長く愛されるロングセラー。缶6本セット。", tag:null, img:"images/19.jpg" },
+  { cat:"beer", name:"サントリー ザ・プレミアム・モルツ", kana:"さんとりーざぷれみあむもるつ", origin:"日本", price:1380, desc:"芳醇な香りと深いコクが特徴の、国際ビール大賞受賞歴を持つプレミアムビール。缶6本セット。", tag:"人気", img:"images/20.jpg" },
+  { cat:"beer", name:"エビスビール", kana:"えびすびーる", origin:"日本", price:1400, desc:"麦芽100%仕込みによる、コクと旨みを追求したプレミアムラガー。缶6本セット。", tag:null, img:"images/21.jpg" },
+  { cat:"beer", name:"ハイネケン", kana:"はいねけん", origin:"オランダ", price:1500, desc:"世界190カ国以上で愛される、すっきりとした苦みが特徴の緑瓶ビール。瓶6本セット。", tag:null, img:"images/22.jpg" },
+  { cat:"beer", name:"バドワイザー", kana:"ばどわいざー", origin:"アメリカ", price:1400, desc:"米国No.1の販売量を誇る、軽快でクリアな飲み口のアメリカンラガー。缶6本セット。", tag:null, img:"images/23.jpg" },
+  { cat:"beer", name:"ギネス ドラフト", kana:"ぎねすどらふと", origin:"アイルランド", price:1600, desc:"クリーミーな泡と香ばしいロースト香が特徴の黒ビール。缶に窒素サーバー内蔵で本場の味を再現。", tag:"定番", img:"images/24.jpg" },
+  { cat:"beer", name:"コロナ・エキストラ", kana:"ころなえきすとら", origin:"メキシコ", price:1500, desc:"ライムを差して飲む爽快なスタイルで人気の、軽やかなメキシカンビール。瓶6本セット。", tag:null, img:"images/25.jpg" },
+  { cat:"beer", name:"ステラ・アルトワ", kana:"すてらあるとわ", origin:"ベルギー", price:1550, desc:"1366年創業の歴史を持つ醸造所が手がける、上品な苦みのプレミアムラガー。瓶6本セット。", tag:null, img:"images/26.jpg" },
+  { cat:"beer", name:"カールスバーグ", kana:"かーるすばーぐ", origin:"デンマーク", price:1450, desc:"「おそらく世界最高のビール」のキャッチコピーで知られる、キレのあるピルスナー。缶6本セット。", tag:null, img:"images/27.jpg" },
+  { cat:"beer", name:"パウラーナー ヴァイスビア", kana:"ぱうらーなーゔぁいすびあ", origin:"ドイツ", price:1700, desc:"バナナやクローブを思わせるフルーティーな香りが特徴の、ミュンヘン発白ビール。瓶6本セット。", tag:null, img:"images/28.jpg" },
+  { cat:"beer", name:"ヒューガルデン ホワイト", kana:"ひゅーがるでんほわいと", origin:"ベルギー", price:1650, desc:"オレンジピールとコリアンダーの爽やかな香りが特徴の、白濁したベルギービール。瓶6本セット。", tag:null, img:"images/29.jpg" },
+  { cat:"wine", name:"シャトー・マルゴー", kana:"しゃとーまるごー", origin:"フランス・ボルドー", price:98000, desc:"ボルドー・メドック地区の格付け第一級。芳醇でエレガントな香りは「ワインの女王」と称されます。", tag:"高級", img:"images/30.jpg" },
+  { cat:"wine", name:"シャトー・ムートン・ロートシルト", kana:"しゃとーむーとんろーとしると", origin:"フランス・ボルドー", price:85000, desc:"毎年著名アーティストがラベルを手がけることでも有名な、ボルドー格付け第一級シャトー。", tag:"高級", img:"images/31.jpg" },
+  { cat:"wine", name:"ボジョレー・ヌーヴォー", kana:"ぼじょれーぬーゔぉー", origin:"フランス・ボジョレー", price:2400, desc:"その年の新酒をいち早く楽しむ、フルーティーで軽やかな味わいの秋の風物詩。", tag:null, img:"images/32.jpg" },
+  { cat:"wine", name:"シャブリ", kana:"しゃぶり", origin:"フランス・ブルゴーニュ", price:3800, desc:"シャルドネ種から造られる、キリッとしたミネラル感が特徴の白ワイン。魚介料理との相性は抜群。", tag:null, img:"images/33.jpg" },
+  { cat:"wine", name:"コート・デュ・ローヌ", kana:"こーとでゅろーぬ", origin:"フランス・ローヌ", price:2600, desc:"グルナッシュ主体の、スパイシーで果実味豊かな飲みやすい赤ワイン。", tag:null, img:"images/34.jpg" },
+  { cat:"wine", name:"カッシェロ・デル・ディアブロ", kana:"かっしぇろでるでぃあぶろ", origin:"チリ", price:1280, desc:"「悪魔の蔵」の伝説で知られる、コンチャ・イ・トロ社の看板ブランド。凝縮感のある果実味が魅力。", tag:"定番", img:"images/35.jpg" },
+  { cat:"wine", name:"クシーニョ・マクル アンティグアス・レゼルバス", kana:"くしーにょまくるあんてぃぐあすれぜるばす", origin:"チリ", price:2980, desc:"1856年創業、チリ最古の名門ワイナリーのひとつ。樹齢を重ねた畑から生まれる、凝縮感のあるカベルネ・ソーヴィニヨン。", tag:null, img:"images/36.jpg" },
+  { cat:"wine", name:"コノスル ビシクレタ", kana:"このするびしくれた", origin:"チリ", price:1180, desc:"自転車で畑を回った創業の逸話にちなむラベルが目印。果実味豊かで親しみやすい味わい。", tag:null, img:"images/37.jpg" },
+  { cat:"wine", name:"キャンティ・クラシコ", kana:"きゃんてぃくらしこ", origin:"イタリア・トスカーナ", price:3200, desc:"黒い雄鶏のマークが目印の、サンジョヴェーゼ種主体の伝統的なトスカーナ赤ワイン。", tag:null, img:"images/38.jpg" },
+  { cat:"wine", name:"バローロ", kana:"ばーろー", origin:"イタリア・ピエモンテ", price:6800, desc:"「ワインの王、王のワイン」と称される、ネッビオーロ種による長期熟成型の力強い赤ワイン。", tag:"通好み", img:"images/39.jpg" },
+  { cat:"wine", name:"ティニャネロ", kana:"てぃにゃねろ", origin:"イタリア・トスカーナ", price:15000, desc:"名門アンティノリ家が手がける、伝統と革新を融合させたスーパータスカンの代表格。", tag:"高級", img:"images/40.jpg" },
+  { cat:"wine", name:"リオハ グラン・レゼルバ", kana:"りおはぐらんれぜるば", origin:"スペイン", price:3400, desc:"テンプラニーリョ種を長期樽熟成させた、スペインを代表する格式高い赤ワイン。", tag:null, img:"images/41.jpg" },
+  { cat:"wine", name:"モーゼル リースリング", kana:"もーぜるりーすりんぐ", origin:"ドイツ", price:2800, desc:"急斜面の畑で育まれる、はちみつのような芳香と上品な酸味が特徴の白ワイン。", tag:null, img:"images/42.jpg" },
+  { cat:"wine", name:"甲州", kana:"こうしゅう", origin:"日本・山梨", price:2600, desc:"日本固有のブドウ品種「甲州」から造られる、繊細でやさしい味わいの白ワイン。", tag:"国産", img:"images/43.jpg" },
+  { cat:"wine", name:"ナパヴァレー カベルネ・ソーヴィニヨン", kana:"なぱう゛ぁれーかべるねそーゔぃにょん", origin:"アメリカ・カリフォルニア", price:4200, desc:"カリフォルニアを代表する銘醸地ナパヴァレー産。凝縮した果実味と樽香が調和した力強い赤。", tag:null, img:"images/44.jpg" },
+  { cat:"wine", name:"オーストラリア シラーズ", kana:"おーすとらりあしらーず", origin:"オーストラリア", price:2200, desc:"温暖な気候で育ったシラー種による、スパイシーで濃厚な味わいが持ち味の赤ワイン。", tag:null, img:"images/45.jpg" },
+  { cat:"sake", name:"獺祭 磨き二割三分", kana:"だっさいみがきにわりさんぶ", origin:"日本・山口県", price:7500, desc:"米を23%まで磨き上げて醸す、華やかな香りと透明感のある味わいで世界的な人気を誇る純米大吟醸。", tag:"人気", img:"images/46.jpg" },
+  { cat:"sake", name:"久保田 万寿", kana:"くぼたまんじゅ", origin:"日本・新潟県", price:4800, desc:"久保田シリーズの最高峰。上品でなめらかな口当たりと奥行きのある味わいの純米大吟醸。", tag:null, img:"images/47.jpg" },
+  { cat:"sake", name:"八海山", kana:"はっかいさん", origin:"日本・新潟県", price:2600, desc:"淡麗辛口の代表格。すっきりとキレのある味わいで、食中酒として長く愛されています。", tag:"定番", img:"images/48.jpg" },
+  { cat:"sake", name:"十四代 本丸", kana:"じゅうよんだいほんまる", origin:"日本・山形県", price:3800, desc:"入手困難な幻の銘酒として名高い蔵元の看板酒。芳醇な甘みとやわらかな旨みが特徴。", tag:"入手困難", img:"images/49.jpg" },
+  { cat:"sake", name:"而今 特別純米", kana:"じこんとくべつじゅんまい", origin:"日本・三重県", price:3600, desc:"若手蔵元が手がける、フレッシュな果実香とジューシーな旨みで人気急上昇の銘柄。", tag:null, img:"images/50.jpg" },
+  { cat:"sake", name:"出羽桜 桜花吟醸", kana:"でわざくらおうかぎんじょう", origin:"日本・山形県", price:1800, desc:"吟醸酒ブームの先駆けとなった銘柄。華やかな香りと軽快な飲み口が特徴です。", tag:null, img:"images/51.jpg" },
+  { cat:"shochu", name:"いいちこ", kana:"いいちこ", origin:"日本・大分県（麦）", price:1280, desc:"クセのないまろやかな味わいで、麦焼酎ブームを牽引したロングセラー銘柄。", tag:"定番", img:"images/52.jpg" },
+  { cat:"shochu", name:"黒霧島", kana:"くろきりしま", origin:"日本・宮崎県（芋）", price:1380, desc:"黒麹仕込みによるコクと芋の香ばしさが人気の、芋焼酎ブームの立役者。", tag:"人気", img:"images/53.jpg" },
+  { cat:"shochu", name:"二階堂", kana:"にかいどう", origin:"日本・大分県（麦）", price:1320, desc:"すっきりとした飲みやすさで根強い人気を誇る、麦焼酎の代表銘柄。", tag:null, img:"images/54.jpg" },
+  { cat:"shochu", name:"白岳しろ", kana:"はくたけしろ", origin:"日本・熊本県（米）", price:1250, desc:"やわらかな口当たりとほのかな甘みが特徴の、米焼酎の定番ブランド。", tag:null, img:"images/55.jpg" },
+  { cat:"shochu", name:"森伊蔵", kana:"もりいぞう", origin:"日本・鹿児島県（芋）", price:4500, desc:"「幻の芋焼酎」と呼ばれるプレミア銘柄。芳醇な香りとまろやかな甘みが特徴。", tag:"幻", img:"images/56.jpg" },
+  { cat:"vodka", name:"アブソルート", kana:"あぶそるーと", origin:"スウェーデン", price:1900, desc:"小麦から造られる、クセのないピュアな味わい。カクテルベースとして世界中で愛用されています。", tag:"定番", img:"images/57.jpg" },
+  { cat:"vodka", name:"スミノフ", kana:"すみのふ", origin:"イギリス", price:1700, desc:"世界で最も飲まれているウォッカブランドのひとつ。何度も濾過されたクリアな飲み口。", tag:null, img:"images/58.jpg" },
+  { cat:"vodka", name:"グレイグース", kana:"ぐれいぐーす", origin:"フランス", price:4200, desc:"フランス産の厳選小麦を使用した、なめらかで上質な味わいのプレミアムウォッカ。", tag:"高級", img:"images/59.jpg" },
+  { cat:"vodka", name:"ストリチナヤ", kana:"すとりちなや", origin:"ラトビア", price:2100, desc:"伝統的な製法を守り続ける、コクのある芳醇な味わいのウォッカ。", tag:null, img:"images/60.jpg" },
+  { cat:"gin", name:"ボンベイ・サファイア", kana:"ぼんべいさふぁいあ", origin:"イギリス", price:2400, desc:"美しいブルーボトルが目印。10種のボタニカルが織りなす繊細な香りが特徴。", tag:null, img:"images/61.jpg" },
+  { cat:"gin", name:"タンカレー", kana:"たんかれー", origin:"イギリス", price:2300, desc:"ジュニパーベリーの力強い香りが特徴の、ジントニックに最適な王道ロンドンドライジン。", tag:"定番", img:"images/62.jpg" },
+  { cat:"gin", name:"翠 SUI", kana:"すいすい", origin:"日本", price:1600, desc:"柚子など和素材を使用した、和食にも合うすっきりとした味わいのジャパニーズジン。", tag:"人気", img:"images/63.jpg" },
+  { cat:"gin", name:"ヘンドリックス", kana:"へんどりっくす", origin:"スコットランド", price:3800, desc:"キュウリとバラの花びらを使用した、個性的でエレガントな香りが人気のクラフトジン。", tag:null, img:"images/64.png" },
+  { cat:"rum", name:"バカルディ スペリオール", kana:"ばかるでぃすぺりおーる", origin:"プエルトリコ", price:1600, desc:"世界で最も売れているホワイトラム。軽やかでクセのない味わいでカクテルに最適。", tag:"定番", img:"images/65.jpg" },
+  { cat:"rum", name:"キャプテンモルガン スパイスド", kana:"きゃぷてんもーがんすぱいすど", origin:"ジャマイカ", price:1900, desc:"バニラやスパイスの香りをまとった、コクのある飲みやすいスパイストラム。", tag:null, img:"images/66.jpg" },
+  { cat:"rum", name:"マイヤーズ ラム", kana:"まいやーずらむ", origin:"ジャマイカ", price:1800, desc:"濃厚でコクのある味わいが特徴のダークラム。カクテルやお菓子作りにも重宝します。", tag:null, img:"images/67.png" },
+  { cat:"tequila", name:"ホセ・クエルボ エスペシャル", kana:"ほせくえるぼえすぺしゃる", origin:"メキシコ", price:1900, desc:"世界で最も飲まれているテキーラブランド。まろやかでバランスの良い味わい。", tag:"定番", img:"images/68.jpg" },
+  { cat:"tequila", name:"パトロン シルバー", kana:"ぱとろんしるば", origin:"メキシコ", price:6800, desc:"100%アガベを使用した、なめらかで上質な味わいのスーパープレミアムテキーラ。", tag:"高級", img:"images/69.jpg" },
+  { cat:"tequila", name:"サウザ ブルー", kana:"さうざぶるー", origin:"メキシコ", price:1700, desc:"ブルーアガベ100%使用。すっきりとした飲み口でショットにもカクテルにも人気。", tag:null, img:"images/70.jpg" },
+  { cat:"sparkling", name:"モエ・エ・シャンドン", kana:"もええしゃんどん", origin:"フランス・シャンパーニュ", price:6800, desc:"1743年創業の名門メゾン。華やかな香りときめ細やかな泡が特徴の代表的シャンパン。", tag:"定番", img:"images/71.jpg" },
+  { cat:"sparkling", name:"ヴーヴ・クリコ イエローラベル", kana:"ゔーゔくりこいえろーらべる", origin:"フランス・シャンパーニュ", price:7200, desc:"鮮やかな黄色いラベルが目印。コクがありながらも上品な味わいの人気シャンパン。", tag:null, img:"images/72.jpg" },
+  { cat:"sparkling", name:"ドン・ペリニヨン", kana:"どんぺりにょん", origin:"フランス・シャンパーニュ", price:32000, desc:"「ドンペリ」の愛称で知られる、シャンパンの最高峰と称されるヴィンテージシャンパン。", tag:"高級", img:"images/73.jpg" },
+  { cat:"sparkling", name:"プロセッコ", kana:"ぷろせっこ", origin:"イタリア・ヴェネト", price:2400, desc:"軽やかでフルーティーな味わいが人気の、イタリア発の手頃なスパークリングワイン。", tag:null, img:"images/74.jpg" },
+  { cat:"sparkling", name:"カヴァ", kana:"かゔぁ", origin:"スペイン・カタルーニャ", price:2100, desc:"シャンパンと同じ瓶内二次発酵で造られる、コストパフォーマンスに優れたスペインの発泡性ワイン。", tag:null, img:"images/75.jpg" },
+  { cat:"liqueur", name:"カンパリ", kana:"かんぱり", origin:"イタリア", price:2200, desc:"鮮やかな赤色とほろ苦さが特徴のハーブ系リキュール。カンパリソーダの定番素材。", tag:null, img:"images/76.jpg" },
+  { cat:"liqueur", name:"ベイリーズ アイリッシュクリーム", kana:"べいりーずあいりっしゅくりーむ", origin:"アイルランド", price:2600, desc:"アイリッシュウイスキーとクリームが溶け合う、まろやかで甘い人気のリキュール。", tag:"人気", img:"images/77.jpg" },
+  { cat:"liqueur", name:"カルーア", kana:"かるーあ", origin:"メキシコ", price:2100, desc:"コーヒー豆から造られる、芳醇な香りが特徴のコーヒーリキュール。カクテルのベースにも。", tag:null, img:"images/78.jpg" },
+  { cat:"liqueur", name:"コアントロー", kana:"こあんとろー", origin:"フランス", price:3200, desc:"オレンジピールを使用した、上品な香りのオレンジキュラソー。マルガリータにも欠かせません。", tag:null, img:"images/79.jpg" },
+  { cat:"liqueur", name:"チョーヤ 梅酒", kana:"ちょーやうめしゅ", origin:"日本・大阪府", price:1400, desc:"完熟梅を使用した、まろやかな酸味と甘みが持ち味の日本の定番梅酒。", tag:"定番", img:"images/80.jpg" },
+  { cat:"liqueur", name:"中野BC 紀州完熟梅酒", kana:"なかのびーしーきしゅうかんじゅくうめしゅ", origin:"日本・和歌山県", price:1800, desc:"梅の名産地・紀州の完熟南高梅を使用した、香り豊かな本格梅酒。", tag:null, img:"images/81.jpg" },
+];
+PRODUCTS.forEach((p,i)=>{ p.id = i; });
+
+/* =========================================================
+ * 年齢確認ゲート
+ * ========================================================= */
+(function ageGateInit(){
+  const gate = document.getElementById("ageGate");
+  if(sessionStorage.getItem("yamatoya_age_ok") === "1"){
+    gate.classList.add("hide");
+  }
+  document.getElementById("ageYes").addEventListener("click", ()=>{
+    sessionStorage.setItem("yamatoya_age_ok","1");
+    gate.classList.add("hide");
+  });
+  document.getElementById("ageNo").addEventListener("click", ()=>{
+    alert("大変申し訳ございませんが、20歳未満の方にはご案内できません。");
+    location.href = "https://www.google.com";
+  });
+})();
+
+/* =========================================================
+ * カテゴリーナビ生成
+ * ========================================================= */
+const catNav = document.getElementById("catNav");
+CATEGORIES.forEach(c=>{
+  const a = document.createElement("a");
+  a.className = "cat-chip";
+  a.href = "#cat-" + c.id;
+  a.dataset.cat = c.id;
+  a.style.setProperty("--cc", c.color);
+  a.innerHTML = c.icon + " " + c.label;
+  catNav.appendChild(a);
+});
+
+/* =========================================================
+ * メニュー描画
+ * ========================================================= */
+const menuEl = document.getElementById("menu");
+const catMap = Object.fromEntries(CATEGORIES.map(c=>[c.id,c]));
+
+function renderMenu(){
+  menuEl.innerHTML = "";
+  CATEGORIES.forEach(cat=>{
+    const items = PRODUCTS.filter(p=>p.cat===cat.id);
+    const section = document.createElement("section");
+    section.className = "cat-section";
+    section.id = "cat-" + cat.id;
+    section.style.setProperty("--cc", cat.color);
+    section.innerHTML = `
+      <div class="cat-head">
+        <div class="cat-icon" style="color:${cat.color}">${cat.icon}</div>
+        <div class="cat-titles">
+          <h2>${cat.label}</h2>
+          <span class="en">${cat.en} · あいうえお順</span>
+        </div>
+        <span class="cat-count">${items.length}品</span>
+      </div>
+      <div class="grid" data-grid="${cat.id}"></div>
+    `;
+    menuEl.appendChild(section);
+
+    const grid = section.querySelector(".grid");
+    items.forEach(p=>{
+      const card = document.createElement("article");
+      card.className = "product-card";
+      card.dataset.name = (p.name + p.kana + p.origin).toLowerCase();
+      card.dataset.id = p.id;
+      card.innerHTML = `
+        ${p.tag ? `<span class="card-tag">${p.tag}</span>` : ""}
+        <div class="card-photo-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" /></div>
+        <div class="card-body">
+          <span class="card-origin">${p.origin}</span>
+          <div class="card-name">${p.name}</div>
+          <p class="card-desc">${p.desc}</p>
+          <div class="card-bottom">
+            <div class="card-price">¥${p.price.toLocaleString()}<small>税込</small></div>
+            <div class="card-action" data-id="${p.id}"></div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+      renderCardAction(card.querySelector(".card-action"), p);
+    });
+  });
+}
+
+/* =========================================================
+ * カート機能
+ * ========================================================= */
+const cart = {}; // id -> qty
+
+function actionHTML(id){
+  const qty = cart[id] || 0;
+  if(qty === 0){
+    return `<button class="add-btn" data-add="${id}">＋ かごに入れる</button>`;
+  }
+  return `
+    <div class="qty-box">
+      <button data-minus="${id}">−</button>
+      <span>${qty}</span>
+      <button data-plus="${id}">＋</button>
+    </div>
+  `;
+}
+function renderCardAction(el, p){ el.innerHTML = actionHTML(p.id); }
+function refreshAllCardActions(){
+  document.querySelectorAll(".card-action").forEach(el=>{
+    el.innerHTML = actionHTML(Number(el.dataset.id));
+  });
+  const detailAction = document.getElementById("detailAction");
+  if(detailAction && detailAction.dataset.id !== undefined && detailAction.dataset.id !== ""){
+    detailAction.innerHTML = actionHTML(Number(detailAction.dataset.id));
+  }
+}
+function updateCart(id, delta){
+  cart[id] = (cart[id] || 0) + delta;
+  if(cart[id] <= 0) delete cart[id];
+  refreshAllCardActions();
+  renderCart();
+}
+function removeFromCart(id){
+  delete cart[id];
+  refreshAllCardActions();
+  renderCart();
+}
+function bumpCartCount(){
+  cartCountEl.classList.remove("bump");
+  void cartCountEl.offsetWidth;
+  cartCountEl.classList.add("bump");
+}
+
+document.addEventListener("click", e=>{
+  const add = e.target.closest("[data-add]");
+  if(add){ updateCart(Number(add.dataset.add), 1); bumpCartCount(); return; }
+  const plus = e.target.closest("[data-plus]");
+  if(plus){ updateCart(Number(plus.dataset.plus), 1); bumpCartCount(); return; }
+  const minus = e.target.closest("[data-minus]");
+  if(minus){ updateCart(Number(minus.dataset.minus), -1); return; }
+  const remove = e.target.closest("[data-remove]");
+  if(remove){ removeFromCart(Number(remove.dataset.remove)); return; }
+  const card = e.target.closest(".product-card");
+  if(card && card.dataset.id !== undefined){ openDetail(Number(card.dataset.id)); }
+});
+
+const cartListEl = document.getElementById("cartList");
+const cartTotalEl = document.getElementById("cartTotal");
+const cartCountEl = document.getElementById("cartCount");
+
+function renderCart(){
+  const ids = Object.keys(cart);
+  let total = 0;
+  if(ids.length === 0){
+    cartListEl.innerHTML = `<p class="cart-empty">🛒 買い物かごは空です。<br />気になる銘柄をお選びください。</p>`;
+  }else{
+    cartListEl.innerHTML = ids.map(id=>{
+      const p = PRODUCTS[id];
+      const qty = cart[id];
+      const sub = p.price * qty;
+      total += sub;
+      return `
+        <div class="cart-item">
+          <div class="thumb"><img src="${p.img}" alt="${p.name}" loading="lazy" /></div>
+          <div class="info"><b>${p.name}</b><span>¥${p.price.toLocaleString()} × ${qty}</span></div>
+          <div class="actions">
+            <div class="sub">¥${sub.toLocaleString()}</div>
+            <div class="qty-box">
+              <button data-minus="${p.id}">−</button>
+              <span>${qty}</span>
+              <button data-plus="${p.id}">＋</button>
+            </div>
+            <button class="cart-remove" data-remove="${p.id}" aria-label="${p.name}をかごから削除">🗑 削除</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+  cartTotalEl.textContent = "¥" + total.toLocaleString();
+  cartCountEl.textContent = Object.values(cart).reduce((a,b)=>a+b,0);
+}
+
+const cartDrawer = document.getElementById("cartDrawer");
+const cartOverlay = document.getElementById("cartOverlay");
+function openCart(){ cartDrawer.classList.add("show"); cartOverlay.classList.add("show"); }
+function closeCart(){ cartDrawer.classList.remove("show"); cartOverlay.classList.remove("show"); }
+document.getElementById("cartOpenBtn").addEventListener("click", openCart);
+document.getElementById("cartCloseBtn").addEventListener("click", closeCart);
+cartOverlay.addEventListener("click", closeCart);
+document.getElementById("cartOrderBtn").addEventListener("click", ()=>{
+  if(Object.keys(cart).length === 0){
+    alert("買い物かごに商品を入れてください。");
+    return;
+  }
+  alert("ご注文ありがとうございます！\n（本サイトはサンプルサイトのため、実際にはご購入いただけません。）");
+  for(const id in cart) delete cart[id];
+  refreshAllCardActions();
+  renderCart();
+  closeCart();
+});
+
+/* =========================================================
+ * 商品詳細モーダル
+ * ========================================================= */
+const detailOverlay = document.getElementById("detailOverlay");
+const detailModal = document.getElementById("detailModal");
+const detailImg = document.getElementById("detailImg");
+const detailTag = document.getElementById("detailTag");
+const detailCatLabel = document.getElementById("detailCatLabel");
+const detailName = document.getElementById("detailName");
+const detailOrigin = document.getElementById("detailOrigin");
+const detailDesc = document.getElementById("detailDesc");
+const detailMeta = document.getElementById("detailMeta");
+const detailNote = document.getElementById("detailNote");
+const detailPrice = document.getElementById("detailPrice");
+const detailAction = document.getElementById("detailAction");
+
+function openDetail(id){
+  const p = PRODUCTS[id];
+  const cat = catMap[p.cat];
+  const info = CATEGORY_INFO[p.cat];
+  detailModal.style.setProperty("--cc", cat.color);
+  detailImg.src = p.img;
+  detailImg.alt = p.name;
+  if(p.tag){ detailTag.textContent = p.tag; detailTag.style.display = "inline-block"; }
+  else{ detailTag.style.display = "none"; }
+  detailCatLabel.textContent = cat.icon + " " + cat.label;
+  detailName.textContent = p.name;
+  detailOrigin.textContent = p.origin;
+  detailDesc.textContent = p.desc;
+  detailMeta.innerHTML = `
+    <span>📦 内容量目安：${info.vol}</span>
+    <span>🌡️ アルコール分目安：${info.abv}</span>
+  `;
+  detailNote.textContent = cat.note;
+  detailPrice.innerHTML = `¥${p.price.toLocaleString()}<small>税込</small>`;
+  detailAction.dataset.id = id;
+  detailAction.innerHTML = actionHTML(id);
+  detailModal.classList.add("show");
+  detailOverlay.classList.add("show");
+}
+function closeDetail(){
+  detailModal.classList.remove("show");
+  detailOverlay.classList.remove("show");
+}
+document.getElementById("detailClose").addEventListener("click", closeDetail);
+detailOverlay.addEventListener("click", closeDetail);
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape"){ closeDetail(); closeCart(); closeMobileNav(); }
+});
+
+/* =========================================================
+ * モバイルナビ
+ * ========================================================= */
+const mobileNav = document.getElementById("mobileNav");
+const mobileNavOverlay = document.getElementById("mobileNavOverlay");
+function openMobileNav(){ mobileNav.classList.add("show"); mobileNavOverlay.classList.add("show"); }
+function closeMobileNav(){ mobileNav.classList.remove("show"); mobileNavOverlay.classList.remove("show"); }
+document.getElementById("navToggle").addEventListener("click", openMobileNav);
+document.getElementById("mobileNavClose").addEventListener("click", closeMobileNav);
+mobileNavOverlay.addEventListener("click", closeMobileNav);
+mobileNav.querySelectorAll("a").forEach(a=>a.addEventListener("click", closeMobileNav));
+
+/* =========================================================
+ * 検索
+ * ========================================================= */
+const searchInput = document.getElementById("searchInput");
+const emptyState = document.getElementById("emptyState");
+searchInput.addEventListener("input", ()=>{
+  const q = searchInput.value.trim().toLowerCase();
+  let anyVisible = false;
+  document.querySelectorAll(".cat-section").forEach(section=>{
+    let sectionHasVisible = false;
+    section.querySelectorAll(".product-card").forEach(card=>{
+      const match = !q || card.dataset.name.includes(q);
+      card.style.display = match ? "" : "none";
+      if(match){ sectionHasVisible = true; anyVisible = true; }
+    });
+    section.style.display = sectionHasVisible ? "" : "none";
+  });
+  emptyState.hidden = anyVisible;
+});
+
+/* =========================================================
+ * スクロールでカテゴリーチップをアクティブ化
+ * ========================================================= */
+function onScroll(){
+  let current = "";
+  document.querySelectorAll(".cat-section").forEach(sec=>{
+    const rect = sec.getBoundingClientRect();
+    if(rect.top <= 160) current = sec.id.replace("cat-","");
+  });
+  document.querySelectorAll(".cat-chip").forEach(c=>c.classList.toggle("active", c.dataset.cat === current));
+}
+window.addEventListener("scroll", onScroll, { passive:true });
+
+/* =========================================================
+ * 初期化
+ * ========================================================= */
+renderMenu();
+renderCart();
+document.getElementById("statYears").textContent = (new Date().getFullYear() - 1879) + "+";
+document.getElementById("statItems").textContent = PRODUCTS.length;
+document.getElementById("statCats").textContent = CATEGORIES.length;
+onScroll();
+</script>
+</body>
+</html>
