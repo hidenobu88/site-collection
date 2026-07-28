@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>アローパズルエスケープ - 矢印を全部にがすロジックパズル</title>
+<meta name="description" content="盤面にならんだ矢印を、進む方向に他の矢印がないものからタップして外へにがすロジックパズル。ミスは3回まで、制限時間なしでじっくり遊べます。レベルが進むほど盤面が大きく複雑に。スマホ・タブレット・iPad対応。">
+<meta name="theme-color" content="#0a0e17">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='14'%3E%E2%9E%A1%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<a href="../../index.html" class="top-link">↑ TOPページへ</a>
+<button id="muteBtn" class="mute-btn" aria-label="サウンド切り替え" type="button">🔊</button>
+
+<div class="app-shell">
+
+  <!-- タイトル画面 -->
+  <section id="scr-title" class="screen active">
+    <p class="eyebrow">LOGIC ESCAPE PUZZLE</p>
+    <h1 class="logo">アロー<span class="accent">パズル</span>エスケープ</h1>
+    <p class="subtitle">ARROW PUZZLE ESCAPE</p>
+    <div class="arrow-deco" aria-hidden="true">
+      <span class="deco-arrow deco-up">➜</span>
+      <span class="deco-arrow deco-right">➜</span>
+      <span class="deco-arrow deco-down">➜</span>
+      <span class="deco-arrow deco-left">➜</span>
+    </div>
+    <p class="best-level" id="bestLevelLine" hidden>これまでの最高到達レベル：<b id="bestLevelNum">1</b></p>
+    <button class="btn btn-primary" id="btnContinue">▶ つづきから遊ぶ</button>
+    <div class="title-sub-actions">
+      <button class="btn btn-sub" id="btnRestartAll">🔄 レベル1から</button>
+      <button class="btn btn-sub" id="btnHowTo">あそびかた</button>
+    </div>
+    <p class="credit">HIDENOBU GAMES 2026 &copy; ALL RIGHTS RESERVED</p>
+  </section>
+
+  <!-- ゲーム画面 -->
+  <section id="scr-game" class="screen">
+    <div class="game-hud">
+      <div class="hud-item"><span class="hud-label">LEVEL</span><span class="hud-value" id="hudLevel">1</span></div>
+      <div class="hud-item"><span class="hud-label">残り</span><span class="hud-value" id="hudRemain">0</span></div>
+      <div class="hud-item hud-mistakes">
+        <span class="hud-label">MISS</span>
+        <span class="hud-value hearts" id="hudHearts">●●●</span>
+      </div>
+      <button class="btn btn-icon" id="btnHint" aria-label="ヒント" title="ヒント" type="button">💡</button>
+      <button class="btn btn-icon" id="btnRetryLevel" aria-label="このレベルをやり直す" title="やり直す" type="button">↺</button>
+      <button class="btn btn-icon btn-quit" id="btnQuit" aria-label="メニューへ戻る" title="メニューへ戻る" type="button">✕</button>
+    </div>
+    <div class="board-frame">
+      <div class="board" id="board"></div>
+    </div>
+    <p class="game-tip">矢印が進む先に、別の矢印がなければタップで脱出できます。</p>
+  </section>
+
+  <!-- 結果オーバーレイ -->
+  <div class="overlay" id="overlayResult">
+    <div class="overlay-card" id="resultCard">
+      <p class="overlay-eyebrow" id="resultEyebrow">STAGE CLEAR!</p>
+      <h2 class="overlay-title" id="resultTitle">クリア！</h2>
+      <div class="overlay-body" id="resultBody"></div>
+      <div class="overlay-actions" id="resultActions"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- あそびかたモーダル -->
+<div class="overlay" id="howtoModal">
+  <div class="overlay-card">
+    <p class="overlay-eyebrow">HOW TO PLAY</p>
+    <h2 class="overlay-title">あそびかた</h2>
+    <ol class="howto-list">
+      <li>盤面には矢印が不規則な向きで並んでいます。矢印をタップすると、その指す方向へまっすぐ進んで盤外へ脱出します。</li>
+      <li>ただし進む先に<b>別の矢印</b>があると動けません。動けない矢印をタップすると<b>ミス</b>としてカウントされます。</li>
+      <li>ミスは<b>3回まで</b>。3回ミスするとそのレベルは失敗となり、新しい盤面で再挑戦します。</li>
+      <li>全ての矢印を盤外へ脱出させればレベルクリア。制限時間はないので、じっくり順番を考えましょう。</li>
+      <li>迷ったら💡ヒントボタンで、今すぐ動かせる矢印を教えてもらえます。</li>
+      <li>レベルが進むほど盤面が大きく、矢印の数も増えていきます。</li>
+    </ol>
+    <button id="closeHowto" class="btn btn-primary" type="button">わかった！</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

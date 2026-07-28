@@ -111,8 +111,7 @@
     const gradient = GRADIENTS[index % GRADIENTS.length];
     const thumb = p.image
       ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)} のスクリーンショット" loading="lazy" />`
-      : `<span class="thumb-emoji" aria-hidden="true">${p.emoji || "🌐"}</span>
-         <span class="thumb-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>`;
+      : `<span class="thumb-emoji" aria-hidden="true">${p.emoji || "🌐"}</span>`;
 
     return `
       <article class="work-card${p.featured ? " featured" : ""}">

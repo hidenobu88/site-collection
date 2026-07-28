@@ -231,6 +231,7 @@ const PROJECTS = [
     image: "images/drink-garden.png",
     date: "2026.07",
     pageBreakAfter: true,  // 3ページ目はここまで
+    catPageBreakAfter: true,  // Webサイトカテゴリ絞り込み時：2ページ目(6件)はここまで
   },
   {
     title: "花札 こいこい — 1人用こいこい対戦",
@@ -266,6 +267,16 @@ const PROJECTS = [
     category: "webapp",
     tags: ["HTML", "CSS", "JavaScript"],
     emoji: "🪙",
+    date: "2026.07",
+  },
+  {
+    title: "アローパズルエスケープ — 矢印脱出ロジックパズル",
+    description: "盤面にならんだ矢印を、進む先がクリアなものからタップして全部にがすロジックパズル。ミスは3回まで、制限時間はなくじっくり考えられます。レベルが進むほど盤面が4×4から8×8まで大きく複雑になり、ヒント機能付き。スマホ・タブレット・iPad対応。",
+    url: "apps/arrow-puzzle-escape/index.html",
+    category: "webapp",
+    tags: ["HTML", "CSS", "JavaScript"],
+    emoji: "➡️",
+    image: "images/arrow-puzzle-escape.png",
     date: "2026.07",
   },
   {

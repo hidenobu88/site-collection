@@ -386,17 +386,6 @@ main { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 }
 .work-card:hover .thumb-emoji { transform: scale(1.15) rotate(-4deg); }
 
-.card-thumb .thumb-index {
-  position: absolute;
-  right: 14px; bottom: 4px;
-  font-family: var(--font-en);
-  font-weight: 700;
-  font-size: 3.4rem;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.22);
-  user-select: none;
-}
-
 .sample-ribbon {
   position: absolute;
   top: 12px; left: 12px;
