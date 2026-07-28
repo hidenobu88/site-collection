@@ -251,6 +251,15 @@ const PROJECTS = [
     date: "2026.07",
   },
   {
+    title: "CODE DOJO — Java/TypeScript/React 中級〜上級講座",
+    description: "3つのプログラミング言語を学べる自習型の学習サイト。ジェネリクスや並行処理、高度な型操作、Hooksの応用設計など、実務でよく使う内容を中心に全18モジュール・74問の演習を収録。進捗はブラウザに自動保存されます。",
+    url: "works/code-dojo/index.html",
+    category: "website",
+    tags: ["Java", "TypeScript", "React"],
+    emoji: "🥋",
+    date: "2026.07",
+  },
+  {
     // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",

@@ -1,0 +1,590 @@
+/* =========================================================
+ * CODE DOJO — 講座ページ共通スタイル
+ * java / typescript / react の3コースで共有します
+ * ========================================================= */
+
+:root {
+  --bg: #0b0d12;
+  --bg-raise: #12151d;
+  --bg-card: #161a24;
+  --bg-card-hover: #1c2130;
+  --line: #262c3a;
+  --line-soft: #1c212d;
+  --ink: #e7e9f0;
+  --ink-soft: #a7adc0;
+  --ink-mute: #6b7286;
+  --accent: #5ee6c8;
+  --accent-ink: #06231d;
+  --accent-soft: rgba(94, 230, 200, 0.12);
+  --warn: #f5b95c;
+  --warn-soft: rgba(245, 185, 92, 0.12);
+  --danger: #f16a6a;
+  --code-bg: #0d1017;
+  --radius: 14px;
+  --sidebar-w: 300px;
+  font-size: 16px;
+}
+
+/* コース別アクセントカラー */
+body.course-java   { --accent: #f2a35c; --accent-ink: #2b1704; --accent-soft: rgba(242, 163, 92, 0.14); }
+body.course-ts      { --accent: #5b9dff; --accent-ink: #04122b; --accent-soft: rgba(91, 157, 255, 0.14); }
+body.course-react   { --accent: #61dafb; --accent-ink: #032530; --accent-soft: rgba(97, 218, 251, 0.14); }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+img, svg { max-width: 100%; display: block; }
+::selection { background: var(--accent-soft); color: var(--ink); }
+
+.mono { font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+
+/* ---------- トップバー ---------- */
+.course-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 64px;
+  padding: 0 18px;
+  background: rgba(11, 13, 18, 0.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+  color: var(--ink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.topbar-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.topbar-back:hover { color: var(--ink); border-color: var(--accent); }
+.topbar-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+.topbar-title .dot { color: var(--accent); margin: 0 6px; }
+.topbar-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.topbar-progress-bar {
+  width: 90px;
+  height: 6px;
+  border-radius: 4px;
+  background: var(--line);
+  overflow: hidden;
+}
+.topbar-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+.topbar-progress-label {
+  font-size: 12px;
+  color: var(--ink-mute);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- レイアウト ---------- */
+.course-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  align-items: start;
+}
+
+/* ---------- サイドバー ---------- */
+.course-sidebar {
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  background: var(--bg-raise);
+  padding: 22px 14px 60px;
+}
+.sidebar-intro {
+  padding: 4px 10px 18px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 14px;
+}
+.sidebar-intro .badge-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent);
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+.sidebar-intro h1 {
+  font-size: 17px;
+  margin: 0 0 6px;
+  line-height: 1.5;
+}
+.sidebar-intro p {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  margin: 0;
+}
+.toc-module { margin-bottom: 4px; }
+.toc-module-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 10px;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: inherit;
+}
+.toc-module-head:hover { background: var(--bg-card); color: var(--ink); }
+.toc-module-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.toc-module-caret {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--ink-mute);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+.toc-module.is-open .toc-module-caret { transform: rotate(90deg); }
+.toc-lessons {
+  list-style: none;
+  margin: 0;
+  padding: 2px 0 10px 0;
+  display: none;
+}
+.toc-module.is-open .toc-lessons { display: block; }
+.toc-lessons a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px 7px 30px;
+  font-size: 13px;
+  color: var(--ink-mute);
+  text-decoration: none;
+  border-radius: 8px;
+  border-left: 2px solid transparent;
+}
+.toc-lessons a:hover { color: var(--ink); background: var(--bg-card); }
+.toc-lessons a.is-active {
+  color: var(--ink);
+  border-left-color: var(--accent);
+  background: var(--accent-soft);
+}
+.toc-check {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1.5px solid var(--ink-mute);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.toc-lessons a.is-done .toc-check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 55;
+}
+
+/* ---------- メインコンテンツ ---------- */
+.course-main {
+  min-width: 0;
+  padding: 40px clamp(20px, 4vw, 64px) 120px;
+  max-width: 880px;
+}
+.course-hero {
+  margin-bottom: 44px;
+}
+.course-hero .badge-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent);
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+.course-hero h1 {
+  font-size: clamp(26px, 4vw, 36px);
+  line-height: 1.4;
+  margin: 0 0 14px;
+}
+.course-hero .lead {
+  color: var(--ink-soft);
+  font-size: 15.5px;
+  max-width: 60ch;
+}
+.course-hero .stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+.course-hero .stat-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  min-width: 92px;
+}
+.course-hero .stat-chip b { font-size: 18px; }
+.course-hero .stat-chip span { font-size: 11.5px; color: var(--ink-mute); }
+.course-hero .how-to {
+  margin-top: 26px;
+  padding: 16px 18px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raise);
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+.course-hero .how-to b { color: var(--ink); }
+
+/* モジュール見出し */
+.module-section { margin-top: 70px; scroll-margin-top: 80px; }
+.module-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 26px;
+}
+.module-heading .num {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 700;
+}
+.module-heading h2 { font-size: 22px; margin: 0; }
+.module-lead { color: var(--ink-mute); font-size: 14px; margin: -14px 0 30px; }
+
+/* レッスン */
+.lesson { margin-top: 40px; scroll-margin-top: 80px; }
+.lesson-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.lesson-head h3 { font-size: 18.5px; margin: 0; flex: 1; }
+.lesson-check-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-mute);
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 6px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.lesson-check-btn .box {
+  width: 13px; height: 13px; border-radius: 4px;
+  border: 1.5px solid var(--ink-mute);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px;
+}
+.lesson-check-btn.is-done { color: var(--accent); border-color: var(--accent-soft); background: var(--accent-soft); }
+.lesson-check-btn.is-done .box { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.lesson p { color: var(--ink-soft); font-size: 15px; margin: 0 0 14px; }
+.lesson ul, .lesson ol { color: var(--ink-soft); font-size: 15px; padding-left: 1.3em; margin: 0 0 16px; }
+.lesson li { margin-bottom: 6px; }
+.lesson strong { color: var(--ink); }
+.lesson h4 { font-size: 15px; margin: 22px 0 10px; color: var(--ink); }
+
+/* コールアウト */
+.callout {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  margin: 18px 0;
+  font-size: 13.5px;
+}
+.callout .icon { flex-shrink: 0; font-size: 16px; }
+.callout .body b { display: block; color: var(--ink); margin-bottom: 3px; font-size: 13px; }
+.callout .body { color: var(--ink-soft); }
+.callout.warn { background: var(--warn-soft); border-color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+
+/* コードブロック */
+.code-block {
+  margin: 16px 0 22px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--code-bg);
+}
+.code-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--bg-raise);
+  border-bottom: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--ink-mute);
+}
+.code-block-head .fname { font-family: "JetBrains Mono", monospace; }
+.copy-btn {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--ink-mute);
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { color: var(--ink); border-color: var(--accent); }
+.copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+.code-block pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.code-block pre, .code-block code {
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+}
+
+/* 演習カード */
+.exercise {
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+.exercise-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line-soft);
+  flex-wrap: wrap;
+}
+.exercise-head .ex-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+.exercise-head h4 { margin: 0; font-size: 15px; flex: 1; min-width: 120px; }
+.diff {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.diff-basic { background: rgba(94,230,200,0.15); color: #5ee6c8; }
+.diff-mid   { background: rgba(245,185,92,0.15); color: #f5b95c; }
+.diff-hard  { background: rgba(241,106,106,0.15); color: #f18a8a; }
+.exercise-body { padding: 16px 18px 6px; }
+.exercise-body p { margin: 0 0 12px; }
+.exercise-body .code-block { margin: 12px 0; }
+.exercise-hint {
+  font-size: 13px;
+  color: var(--ink-mute);
+  background: var(--bg-raise);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0 0 14px;
+}
+.exercise-hint b { color: var(--ink-soft); }
+
+.solution { border-top: 1px solid var(--line-soft); }
+.solution summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 13px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+.solution summary::-webkit-details-marker { display: none; }
+.solution summary::before {
+  content: "▸";
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+.solution[open] summary::before { transform: rotate(90deg); }
+.solution .solution-body { padding: 0 18px 18px; }
+.solution .solution-body p { color: var(--ink-soft); font-size: 13.5px; }
+
+/* モジュール完了バナー */
+.module-done-banner {
+  margin: 46px 0 0;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: linear-gradient(135deg, var(--accent-soft), transparent);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+/* 講座フッター(前後ナビ) */
+.course-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.course-footer-nav a {
+  flex: 1;
+  max-width: 48%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.course-footer-nav a:hover { border-color: var(--accent); color: var(--ink); }
+.course-footer-nav a.next { text-align: right; margin-left: auto; }
+.course-footer-nav a span.label { display: block; color: var(--ink-mute); font-size: 11px; margin-bottom: 4px; }
+
+/* 表 */
+.lesson table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 20px;
+  font-size: 13.5px;
+}
+.lesson th, .lesson td {
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  text-align: left;
+  color: var(--ink-soft);
+}
+.lesson th { background: var(--bg-raise); color: var(--ink); }
+.lesson code:not(pre code) {
+  font-family: "JetBrains Mono", monospace;
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: 0.86em;
+  color: var(--accent);
+}
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width: 1024px) {
+  :root { --sidebar-w: 270px; }
+  .course-main { max-width: none; }
+}
+
+@media (max-width: 860px) {
+  .topbar-menu-btn { display: inline-flex; }
+  .course-shell { grid-template-columns: 1fr; }
+  .course-sidebar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: min(84vw, 320px);
+    height: calc(100vh - 64px);
+    z-index: 56;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 8px 0 28px rgba(0,0,0,0.4);
+  }
+  body.sidebar-open .course-sidebar { transform: translateX(0); }
+  body.sidebar-open .sidebar-backdrop { display: block; }
+  .course-main { padding: 30px 20px 100px; }
+  .topbar-progress-bar { width: 60px; }
+}
+
+@media (max-width: 560px) {
+  .course-main { padding: 24px 16px 90px; }
+  .course-hero h1 { font-size: 24px; }
+  .module-heading h2 { font-size: 19px; }
+  .lesson-head { flex-wrap: wrap; }
+  .lesson-check-btn { order: 3; }
+  .topbar-title { font-size: 12.5px; }
+  .exercise-head h4 { flex-basis: 100%; }
+  .course-footer-nav { flex-direction: column; }
+  .course-footer-nav a { max-width: none; }
+  .course-footer-nav a.next { text-align: left; }
+}

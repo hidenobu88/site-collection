@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>React 実務力養成講座 | CODE DOJO</title>
+<meta name="description" content="Hooksの応用、レンダリング最適化、カスタムフック設計、状態管理、フォーム設計、実務のコンポーネント設計パターンまで。React中級者向け講座。演習問題と解答例つき。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%E2%9A%9B%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="../css/course.css">
+</head>
+<body class="course-react" data-course="react">
+
+<header class="course-topbar">
+  <button id="sidebarMenuBtn" class="topbar-menu-btn" aria-label="目次メニューを開く">☰</button>
+  <a class="topbar-back" href="../index.html">← 講座一覧</a>
+  <div class="topbar-title">⚛️ React 実務力養成講座</div>
+  <div class="topbar-progress">
+    <div class="topbar-progress-bar"><div class="topbar-progress-fill" id="progressFill"></div></div>
+    <span class="topbar-progress-label" id="progressLabel">0 / 24 完了</span>
+  </div>
+</header>
+<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+<div class="course-shell">
+  <aside class="course-sidebar">
+    <div class="sidebar-intro">
+      <span class="badge-lang">⚛️ REACT・中級〜上級</span>
+      <h1>React 実務力養成講座</h1>
+      <p>全6モジュール・12レッスン・24演習</p>
+    </div>
+    <nav aria-label="目次">
+
+      <div class="toc-module is-open" data-module="1">
+        <button class="toc-module-head"><span class="toc-module-num">01</span>Hooksの応用<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-1-1" data-lesson-id="1-1"><span class="toc-check"></span>useStateの設計パターン</a></li>
+          <li><a href="#l-1-2" data-lesson-id="1-2"><span class="toc-check"></span>useEffectの依存配列とクリーンアップ</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="2">
+        <button class="toc-module-head"><span class="toc-module-num">02</span>レンダリング最適化<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-2-1" data-lesson-id="2-1"><span class="toc-check"></span>useMemo・useCallbackの正しい使い所</a></li>
+          <li><a href="#l-2-2" data-lesson-id="2-2"><span class="toc-check"></span>React.memoと不要な再レンダリング防止</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="3">
+        <button class="toc-module-head"><span class="toc-module-num">03</span>カスタムフック設計<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-3-1" data-lesson-id="3-1"><span class="toc-check"></span>ロジックを切り出すカスタムフック</a></li>
+          <li><a href="#l-3-2" data-lesson-id="3-2"><span class="toc-check"></span>データ取得用カスタムフックの設計</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="4">
+        <button class="toc-module-head"><span class="toc-module-num">04</span>状態管理設計<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-4-1" data-lesson-id="4-1"><span class="toc-check"></span>useReducerによる複雑な状態管理</a></li>
+          <li><a href="#l-4-2" data-lesson-id="4-2"><span class="toc-check"></span>Context APIと状態のリフトアップ</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="5">
+        <button class="toc-module-head"><span class="toc-module-num">05</span>フォームとバリデーション実務<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-5-1" data-lesson-id="5-1"><span class="toc-check"></span>制御コンポーネントとバリデーション設計</a></li>
+          <li><a href="#l-5-2" data-lesson-id="5-2"><span class="toc-check"></span>送信状態管理とUXパターン</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="6">
+        <button class="toc-module-head"><span class="toc-module-num">06</span>実務でよく使う設計パターン<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-6-1" data-lesson-id="6-1"><span class="toc-check"></span>コンポーネント分割の考え方</a></li>
+          <li><a href="#l-6-2" data-lesson-id="6-2"><span class="toc-check"></span>エラーバウンダリと非同期データ表示</a></li>
+        </ul>
+      </div>
+
+    </nav>
+  </aside>
+
+  <main class="course-main">
+
+    <div class="course-hero">
+      <span class="badge-lang">⚛️ REACT・中級〜上級</span>
+      <h1>React 実務力養成講座</h1>
+      <p class="lead">
+        「Hooksの書き方は知っているが、なぜそう書くのかは説明できない」を卒業する講座です。
+        useState/useEffectの設計判断から、レンダリング最適化、カスタムフック、状態管理設計、
+        フォームの実務パターン、コンポーネント分割まで扱います。コード例はTypeScriptで統一しています。
+      </p>
+      <div class="stat-row">
+        <div class="stat-chip"><b>6</b><span>モジュール</span></div>
+        <div class="stat-chip"><b>12</b><span>レッスン</span></div>
+        <div class="stat-chip"><b>24</b><span>演習問題</span></div>
+      </div>
+      <div class="how-to">
+        <b>進め方:</b> 演習はCodeSandboxやローカルのVite環境（<code>npm create vite@latest -- --template react-ts</code>）に貼り付けて、実際に画面の挙動を確認しながら進めるのがおすすめです。
+      </div>
+    </div>
+
+    <!-- ========================================================
+         MODULE 1
+    ========================================================= -->
+    <section class="module-section" id="m-1">
+      <div class="module-heading"><span class="num">MODULE 01</span><h2>Hooksの応用</h2></div>
+      <p class="module-lead">useState・useEffectは書けて当然、という前提で「なぜその書き方が安全なのか」を掘り下げます。</p>
+
+      <section class="lesson" id="l-1-1" data-lesson-id="1-1">
+        <div class="lesson-head">
+          <h3>1-1. useStateの設計パターン</h3>
+          <button class="lesson-check-btn" data-lesson-id="1-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>直前の状態を使って更新する場合は、必ず<strong>関数形式の更新</strong>を使います。<code>setCount(count + 1)</code>は「今読んでいる<code>count</code>」を使うため、連続で呼び出すとバッチ処理により意図しない結果になることがあります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">Counter.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">function Counter() {
+  const [count, setCount] = useState(0);
+
+  function handleTripleClick() {
+    // NG: 3回呼んでも +1 にしかならないことがある
+    // setCount(count + 1);
+    // setCount(count + 1);
+    // setCount(count + 1);
+
+    // OK: 常に最新の状態を受け取って更新する
+    setCount((prev) =&gt; prev + 1);
+    setCount((prev) =&gt; prev + 1);
+    setCount((prev) =&gt; prev + 1);
+  }
+
+  return &lt;button onClick={handleTripleClick}&gt;count: {count}&lt;/button&gt;;
+}</code></pre>
+        </div>
+        <p>また、複数の関連するstateはオブジェクトにまとめるべきか、それとも別々のuseStateに分けるべきか迷うところです。目安は「<strong>同時に更新されることが多いか</strong>」です。</p>
+        <div class="code-block">
+          <pre><code class="language-tsx">// 良い例: xとyは常にセットで更新されるのでオブジェクトにまとめる
+const [position, setPosition] = useState({ x: 0, y: 0 });
+
+// 良い例: nameとisLoadingは無関係な頻度で更新されるので分ける
+const [name, setName] = useState("");
+const [isLoading, setIsLoading] = useState(false);</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b>オブジェクトのstateを更新するとき、<code>setPosition({ x: 10 })</code>のように書くと<code>y</code>が消えてしまいます。<code>useState</code>の更新は<strong>マージではなく置き換え</strong>なので、<code>setPosition((prev) =&gt; ({ ...prev, x: 10 }))</code>のようにスプレッドで既存の値を保持する必要があります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-1-a</span><h4>非同期処理後のカウントアップを安全に書く</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>ボタンを押すと1秒後に<code>count</code>を+1する<code>DelayedCounter</code>コンポーネントを、関数形式の更新を使って実装してください（<code>setTimeout</code>を使用）。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function DelayedCounter() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setTimeout(() =&gt; {
+      setCount((prev) =&gt; prev + 1);
+    }, 1000);
+  }
+
+  return &lt;button onClick={handleClick}&gt;count: {count}&lt;/button&gt;;
+}</code></pre>
+              </div>
+              <p>もし<code>setCount(count + 1)</code>と書いていた場合、1秒の間にボタンを連打すると、クロージャに閉じ込められた古い<code>count</code>を元に計算してしまい、正しく加算されません。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-1-b</span><h4>オブジェクトstateの部分更新フォームを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>{ name: string; email: string }</code>を1つの<code>useState</code>で管理し、<code>name</code>用と<code>email</code>用の2つの<code>&lt;input&gt;</code>から、それぞれ他方の値を消さずに更新できるフォームコンポーネントを実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function ProfileForm() {
+  const [form, setForm] = useState({ name: "", email: "" });
+
+  function updateField&lt;K extends keyof typeof form&gt;(key: K, value: string) {
+    setForm((prev) =&gt; ({ ...prev, [key]: value }));
+  }
+
+  return (
+    &lt;form&gt;
+      &lt;input
+        value={form.name}
+        onChange={(e) =&gt; updateField("name", e.target.value)}
+      /&gt;
+      &lt;input
+        value={form.email}
+        onChange={(e) =&gt; updateField("email", e.target.value)}
+      /&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-1-2" data-lesson-id="1-2">
+        <div class="lesson-head">
+          <h3>1-2. useEffectの依存配列とクリーンアップ</h3>
+          <button class="lesson-check-btn" data-lesson-id="1-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>useEffect</code>は「Reactの外の世界と同期する」ための仕組みです。依存配列（第2引数）は「このEffectが再実行される条件」であり、ESLintの<code>react-hooks/exhaustive-deps</code>が警告する項目は基本的にすべて含めるべきです。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">SearchBox.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">function SearchResults({ query }: { query: string }) {
+  const [results, setResults] = useState&lt;string[]&gt;([]);
+
+  useEffect(() =&gt; {
+    let cancelled = false;
+
+    async function fetchResults() {
+      const res = await fetch(`/api/search?q=${query}`);
+      const data = await res.json();
+      if (!cancelled) {
+        setResults(data);
+      }
+    }
+    fetchResults();
+
+    // クリーンアップ: 古いリクエストの結果を反映させない
+    return () =&gt; {
+      cancelled = true;
+    };
+  }, [query]); // queryが変わるたびに再実行
+
+  return (
+    &lt;ul&gt;
+      {results.map((r) =&gt; &lt;li key={r}&gt;{r}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>cancelled</code>フラグを立てずに<code>setResults</code>だけ呼んでいると、「Aの検索結果を取得中にBに検索し直した」場合、Aのレスポンスが後から返ってきてBの結果を上書きしてしまう競合状態（レースコンディション）が起こります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-2-a</span><h4>イベントリスナーの登録と解除を実装する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>ウィンドウ幅を追跡する<code>useEffect</code>を持つ<code>WindowWidth</code>コンポーネントを実装してください。<code>window.addEventListener("resize", ...)</code>で監視し、アンマウント時に必ず<code>removeEventListener</code>でクリーンアップしてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function WindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() =&gt; {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () =&gt; {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); // マウント時に1回だけ登録
+
+  return &lt;p&gt;幅: {width}px&lt;/p&gt;;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-2-b</span><h4>依存配列の不足バグを見つける</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次のコードには依存配列の不足によるバグがあります。何が問題か指摘し、修正してください。</p>
+            <div class="code-block">
+              <pre><code class="language-tsx">function UserGreeting({ userId }: { userId: number }) {
+  const [name, setName] = useState("");
+
+  useEffect(() =&gt; {
+    fetchUserName(userId).then(setName);
+  }, []); // userIdが依存配列に無い
+
+  return &lt;p&gt;こんにちは、{name}さん&lt;/p&gt;;
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>問題点: <code>userId</code>が変わって親コンポーネントから別のユーザーが指定されても、Effectが再実行されず、最初にマウントされたときの<code>userId</code>の名前が表示され続けます。</p>
+              <div class="code-block">
+                <pre><code class="language-tsx">useEffect(() =&gt; {
+  fetchUserName(userId).then(setName);
+}, [userId]); // userIdの変化を検知して再実行する</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール1完了の目安: <code>useEffect</code>のクリーンアップとレースコンディション対策を説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 2
+    ========================================================= -->
+    <section class="module-section" id="m-2">
+      <div class="module-heading"><span class="num">MODULE 02</span><h2>レンダリング最適化</h2></div>
+      <p class="module-lead">「とりあえずuseMemoを付ける」は多くの場合逆効果です。何がどう再計算・再レンダリングされているかを理解してから最適化しましょう。</p>
+
+      <section class="lesson" id="l-2-1" data-lesson-id="2-1">
+        <div class="lesson-head">
+          <h3>2-1. useMemo・useCallbackの正しい使い所</h3>
+          <button class="lesson-check-btn" data-lesson-id="2-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>useMemo</code>と<code>useCallback</code>は「再計算・再生成のコストが高い場合」または「値の同一性（参照）を保つ必要がある場合（<code>memo</code>化した子への props や、依存配列に渡す関数など）」に使うのが基本です。単純な計算にまで乱用すると、メモ化自体のコストで逆に遅くなることもあります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">ExpensiveList.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">function ProductList({ products, keyword }: { products: Product[]; keyword: string }) {
+  // 重い処理（大量データのフィルタ・ソート）はuseMemoの好例
+  const filtered = useMemo(() =&gt; {
+    return products
+      .filter((p) =&gt; p.name.includes(keyword))
+      .sort((a, b) =&gt; b.price - a.price);
+  }, [products, keyword]);
+
+  return (
+    &lt;ul&gt;
+      {filtered.map((p) =&gt; &lt;li key={p.id}&gt;{p.name}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">SearchInput.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">function SearchInput({ onSearch }: { onSearch: (q: string) =&gt; void }) {
+  const [query, setQuery] = useState("");
+
+  // memo化した子コンポーネントに関数を渡すときは useCallback で参照を安定させる
+  const handleSearch = useCallback(() =&gt; {
+    onSearch(query);
+  }, [query, onSearch]);
+
+  return (
+    &lt;&gt;
+      &lt;input value={query} onChange={(e) =&gt; setQuery(e.target.value)} /&gt;
+      &lt;SearchButton onClick={handleSearch} /&gt;
+    &lt;/&gt;
+  );
+}
+
+const SearchButton = memo(function SearchButton({ onClick }: { onClick: () =&gt; void }) {
+  return &lt;button onClick={onClick}&gt;検索&lt;/button&gt;;
+});</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>「このコンポーネントが遅い」と体感する前に最適化するのはコストに見合わないことが多いです。React DevTools Profilerで実際に再レンダリングのコストを計測してから、必要な箇所にだけメモ化を入れましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-1-a</span><h4>合計金額の計算をuseMemoで最適化する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p><code>items: { price: number; quantity: number }[]</code>を受け取り、合計金額を表示する<code>CartTotal</code>コンポーネントで、合計金額の計算を<code>useMemo</code>でメモ化してください（<code>items</code>が変わらない限り再計算しない）。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function CartTotal({ items }: { items: { price: number; quantity: number }[] }) {
+  const total = useMemo(() =&gt; {
+    return items.reduce((sum, item) =&gt; sum + item.price * item.quantity, 0);
+  }, [items]);
+
+  return &lt;p&gt;合計: {total}円&lt;/p&gt;;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-1-b</span><h4>不要なuseMemoを見つけて削除する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次のコードの<code>useMemo</code>は、実は不要（むしろ有害に近い）です。理由を説明し、シンプルな書き方に直してください。</p>
+            <div class="code-block">
+              <pre><code class="language-tsx">function Greeting({ name }: { name: string }) {
+  const message = useMemo(() =&gt; `こんにちは、${name}さん`, [name]);
+  return &lt;p&gt;{message}&lt;/p&gt;;
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>理由: 文字列の結合は極めて軽量な処理であり、<code>useMemo</code>によるメモ化・依存配列の比較コストの方が上回ります。「重い計算・大きなデータ構造の生成」以外では、素直に毎回計算した方がシンプルで速いことがほとんどです。</p>
+              <div class="code-block">
+                <pre><code class="language-tsx">function Greeting({ name }: { name: string }) {
+  const message = `こんにちは、${name}さん`;
+  return &lt;p&gt;{message}&lt;/p&gt;;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-2-2" data-lesson-id="2-2">
+        <div class="lesson-head">
+          <h3>2-2. React.memoと不要な再レンダリング防止</h3>
+          <button class="lesson-check-btn" data-lesson-id="2-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>親コンポーネントが再レンダリングされると、子コンポーネントも（原則として）連鎖的に再レンダリングされます。<code>memo</code>は「propsが（浅い比較で）変わっていなければ再レンダリングをスキップする」仕組みです。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">memo-demo.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">const ExpensiveRow = memo(function ExpensiveRow({ user }: { user: User }) {
+  console.log("render:", user.name); // propsが変わらなければ呼ばれない
+  return &lt;tr&gt;&lt;td&gt;{user.name}&lt;/td&gt;&lt;/tr&gt;;
+});
+
+function UserTable({ users }: { users: User[] }) {
+  const [filter, setFilter] = useState("");
+
+  return (
+    &lt;&gt;
+      &lt;input value={filter} onChange={(e) =&gt; setFilter(e.target.value)} /&gt;
+      &lt;table&gt;
+        &lt;tbody&gt;
+          {users.map((u) =&gt; &lt;ExpensiveRow key={u.id} user={u} /&gt;)}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>memo</code>で子をラップしても、親がその都度<code>{ ... }</code>や<code>() =&gt; {}</code>のようなオブジェクト・関数リテラルをpropsとして渡していると、毎回「新しい参照」が生成されるため<code>memo</code>の浅い比較は必ず「変化あり」と判定します。<code>useMemo</code>/<code>useCallback</code>とセットで初めて効果を発揮します。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-2-a</span><h4>memoが効かない原因を直す</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次の<code>Parent</code>は<code>filter</code>を更新するたびに<code>ExpensiveChild</code>（<code>memo</code>化済み）が毎回再レンダリングされてしまいます。原因を指摘し、修正してください。</p>
+            <div class="code-block">
+              <pre><code class="language-tsx">const ExpensiveChild = memo(function ExpensiveChild({ onSave }: { onSave: () =&gt; void }) {
+  console.log("render ExpensiveChild");
+  return &lt;button onClick={onSave}&gt;保存&lt;/button&gt;;
+});
+
+function Parent() {
+  const [filter, setFilter] = useState("");
+
+  return (
+    &lt;&gt;
+      &lt;input value={filter} onChange={(e) =&gt; setFilter(e.target.value)} /&gt;
+      &lt;ExpensiveChild onSave={() =&gt; console.log("saved")} /&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>原因: <code>onSave={() =&gt; console.log("saved")}</code>は<code>Parent</code>が再レンダリングされるたびに新しい関数（新しい参照）が作られるため、<code>memo</code>の浅い比較が常に「変化あり」と判定してしまいます。</p>
+              <div class="code-block">
+                <pre><code class="language-tsx">function Parent() {
+  const [filter, setFilter] = useState("");
+
+  const handleSave = useCallback(() =&gt; {
+    console.log("saved");
+  }, []); // 依存がないので常に同じ参照を維持する
+
+  return (
+    &lt;&gt;
+      &lt;input value={filter} onChange={(e) =&gt; setFilter(e.target.value)} /&gt;
+      &lt;ExpensiveChild onSave={handleSave} /&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-2-b</span><h4>カスタム比較関数を持つmemoを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p><code>user: { id: number; name: string; lastLoginAt: Date }</code>をpropsに持つ<code>UserBadge</code>コンポーネントを、「<code>id</code>と<code>name</code>が同じなら<code>lastLoginAt</code>が変わっても再レンダリングしない」ようにカスタム比較関数付きの<code>memo</code>で実装してください。</p>
+            <div class="exercise-hint"><b>ヒント:</b> <code>memo(Component, areEqual)</code>の第2引数で、propsを比較する関数を渡せます。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">type UserBadgeProps = { user: { id: number; name: string; lastLoginAt: Date } };
+
+const UserBadge = memo(
+  function UserBadge({ user }: UserBadgeProps) {
+    return &lt;span&gt;{user.name}&lt;/span&gt;;
+  },
+  (prevProps, nextProps) =&gt; {
+    // trueを返すと「等しい＝再レンダリング不要」
+    return (
+      prevProps.user.id === nextProps.user.id &amp;&amp;
+      prevProps.user.name === nextProps.user.name
+    );
+  }
+);</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール2完了の目安: メモ化が効かなくなるパターン（新しい参照の生成）を説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 3
+    ========================================================= -->
+    <section class="module-section" id="m-3">
+      <div class="module-heading"><span class="num">MODULE 03</span><h2>カスタムフック設計</h2></div>
+      <p class="module-lead">似たようなuseState/useEffectの組み合わせをコンポーネント間でコピペしていたら、カスタムフックに切り出すサインです。</p>
+
+      <section class="lesson" id="l-3-1" data-lesson-id="3-1">
+        <div class="lesson-head">
+          <h3>3-1. ロジックを切り出すカスタムフック</h3>
+          <button class="lesson-check-btn" data-lesson-id="3-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>カスタムフックは「<code>use</code>から始まる、Hooksを内部で使う普通の関数」です。UIを持たず、状態とロジックだけを再利用可能な形にまとめられます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">useToggle.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">function useToggle(initial = false) {
+  const [value, setValue] = useState(initial);
+
+  const toggle = useCallback(() =&gt; setValue((v) =&gt; !v), []);
+  const setTrue = useCallback(() =&gt; setValue(true), []);
+  const setFalse = useCallback(() =&gt; setValue(false), []);
+
+  return { value, toggle, setTrue, setFalse } as const;
+}
+
+// 呼び出し側
+function Modal() {
+  const { value: isOpen, setTrue: open, setFalse: close } = useToggle(false);
+  return (
+    &lt;&gt;
+      &lt;button onClick={open}&gt;開く&lt;/button&gt;
+      {isOpen &amp;&amp; &lt;div className="modal"&gt;モーダルの中身 &lt;button onClick={close}&gt;閉じる&lt;/button&gt;&lt;/div&gt;}
+    &lt;/&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>返り値をオブジェクトにするか配列にするかは、「呼び出し側で名前を変えたいか」で判断します。<code>useState</code>のように必ず2つセットで分割代入するものは配列、<code>useToggle</code>のように一部だけ使うことが多いものはオブジェクトが向いています。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-1-a</span><h4>localStorageと同期するuseLocalStorageを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>useState</code>と同じ使い勝手で、値の変更が自動的に<code>localStorage</code>にも保存される<code>useLocalStorage&lt;T&gt;(key: string, initialValue: T)</code>を実装してください（<code>[value, setValue]</code>のタプルを返します）。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function useLocalStorage&lt;T&gt;(key: string, initialValue: T) {
+  const [value, setValue] = useState&lt;T&gt;(() =&gt; {
+    const stored = window.localStorage.getItem(key);
+    return stored ? (JSON.parse(stored) as T) : initialValue;
+  });
+
+  useEffect(() =&gt; {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue] as const;
+}
+
+// 呼び出し例
+const [theme, setTheme] = useLocalStorage("theme", "light");</code></pre>
+              </div>
+              <p><code>useState</code>の初期値に関数（遅延初期化）を渡すことで、<code>localStorage</code>の読み取りが初回レンダリング時にしか実行されない点がポイントです。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-1-b</span><h4>デバウンスされた値を返すuseDebouncedValueを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>入力値の変化から一定時間（<code>delayMs</code>）操作がなければ確定値を更新する<code>useDebouncedValue&lt;T&gt;(value: T, delayMs: number): T</code>を実装してください。検索ボックスの入力中に毎回APIを叩かないようにする用途を想定しています。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function useDebouncedValue&lt;T&gt;(value: T, delayMs: number): T {
+  const [debounced, setDebounced] = useState(value);
+
+  useEffect(() =&gt; {
+    const timer = setTimeout(() =&gt; {
+      setDebounced(value);
+    }, delayMs);
+
+    return () =&gt; clearTimeout(timer); // 値が変わったら前のタイマーをキャンセル
+  }, [value, delayMs]);
+
+  return debounced;
+}
+
+// 呼び出し例
+function SearchBox() {
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebouncedValue(query, 400);
+
+  useEffect(() =&gt; {
+    if (debouncedQuery) fetchSearchResults(debouncedQuery);
+  }, [debouncedQuery]);
+
+  return &lt;input value={query} onChange={(e) =&gt; setQuery(e.target.value)} /&gt;;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-3-2" data-lesson-id="3-2">
+        <div class="lesson-head">
+          <h3>3-2. データ取得用カスタムフックの設計</h3>
+          <button class="lesson-check-btn" data-lesson-id="3-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>データ取得のロジック（ローディング・成功・失敗の管理、キャンセル処理）は、コンポーネントごとに書くとどうしても重複します。Discriminated Unionの状態表現（TypeScript講座モジュール5参照）と組み合わせると、扱いやすいカスタムフックになります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">useFetch.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">type FetchState&lt;T&gt; =
+  | { status: "loading" }
+  | { status: "success"; data: T }
+  | { status: "error"; error: Error };
+
+function useFetch&lt;T&gt;(url: string): FetchState&lt;T&gt; {
+  const [state, setState] = useState&lt;FetchState&lt;T&gt;&gt;({ status: "loading" });
+
+  useEffect(() =&gt; {
+    let cancelled = false;
+    setState({ status: "loading" });
+
+    fetch(url)
+      .then((res) =&gt; {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data: T) =&gt; {
+        if (!cancelled) setState({ status: "success", data });
+      })
+      .catch((error: Error) =&gt; {
+        if (!cancelled) setState({ status: "error", error });
+      });
+
+    return () =&gt; {
+      cancelled = true;
+    };
+  }, [url]);
+
+  return state;
+}
+
+// 呼び出し側
+function UserProfile({ userId }: { userId: number }) {
+  const state = useFetch&lt;User&gt;(`/api/users/${userId}`);
+
+  if (state.status === "loading") return &lt;p&gt;読み込み中...&lt;/p&gt;;
+  if (state.status === "error") return &lt;p&gt;エラー: {state.error.message}&lt;/p&gt;;
+  return &lt;p&gt;{state.data.name}&lt;/p&gt;;
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>実務では自前実装よりも、キャッシュ・再取得・重複排除まで面倒を見てくれるTanStack Query（旧React Query）やSWRを使うのが一般的です。ただしそれらのライブラリの内部でも、ここで学んだ「状態の型設計」と同じ考え方が使われています。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-2-a</span><h4>再取得できるrefetch機能を追加する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>上記の<code>useFetch</code>を拡張し、戻り値に<code>refetch: () =&gt; void</code>を追加してください。呼び出すと同じ<code>url</code>に対してもう一度リクエストし直します。</p>
+            <div class="exercise-hint"><b>ヒント:</b> 「再取得のトリガー」用に<code>useState</code>のカウンターを追加し、依存配列に含めると、値を変えるだけでEffectを再実行できます。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function useFetch&lt;T&gt;(url: string) {
+  const [state, setState] = useState&lt;FetchState&lt;T&gt;&gt;({ status: "loading" });
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() =&gt; {
+    let cancelled = false;
+    setState({ status: "loading" });
+
+    fetch(url)
+      .then((res) =&gt; res.json())
+      .then((data: T) =&gt; { if (!cancelled) setState({ status: "success", data }); })
+      .catch((error: Error) =&gt; { if (!cancelled) setState({ status: "error", error }); });
+
+    return () =&gt; { cancelled = true; };
+  }, [url, reloadKey]);
+
+  const refetch = useCallback(() =&gt; {
+    setReloadKey((k) =&gt; k + 1);
+  }, []);
+
+  return { ...state, refetch };
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-2-b</span><h4>状態のUI表示を関数コンポーネントで分岐する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p><code>useFetch&lt;Product[]&gt;("/api/products")</code>の結果を使って、ローディング中は「読み込み中...」、エラー時は「取得に失敗しました」、成功時は商品名の<code>&lt;ul&gt;</code>一覧を表示する<code>ProductList</code>コンポーネントを実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function ProductList() {
+  const state = useFetch&lt;Product[]&gt;("/api/products");
+
+  if (state.status === "loading") return &lt;p&gt;読み込み中...&lt;/p&gt;;
+  if (state.status === "error") return &lt;p&gt;取得に失敗しました&lt;/p&gt;;
+
+  return (
+    &lt;ul&gt;
+      {state.data.map((p) =&gt; &lt;li key={p.id}&gt;{p.name}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール3完了の目安: 状態管理を含むロジックをカスタムフックに切り出す判断ができればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 4
+    ========================================================= -->
+    <section class="module-section" id="m-4">
+      <div class="module-heading"><span class="num">MODULE 04</span><h2>状態管理設計</h2></div>
+      <p class="module-lead">stateが増えて更新ロジックが複雑になったら、状態遷移を1箇所にまとめる設計に切り替えるタイミングです。</p>
+
+      <section class="lesson" id="l-4-1" data-lesson-id="4-1">
+        <div class="lesson-head">
+          <h3>4-1. useReducerによる複雑な状態管理</h3>
+          <button class="lesson-check-btn" data-lesson-id="4-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>1つのstateに対して「複数の更新パターン（アクション）」があり、それぞれの更新ロジックが絡み合っている場合、<code>useReducer</code>で「アクションの種類ごとに状態遷移を1箇所にまとめる」と見通しが良くなります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">cartReducer.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">type CartItem = { id: number; name: string; quantity: number };
+type CartState = { items: CartItem[] };
+
+type CartAction =
+  | { type: "ADD_ITEM"; item: CartItem }
+  | { type: "REMOVE_ITEM"; id: number }
+  | { type: "CHANGE_QUANTITY"; id: number; quantity: number }
+  | { type: "CLEAR" };
+
+function cartReducer(state: CartState, action: CartAction): CartState {
+  switch (action.type) {
+    case "ADD_ITEM":
+      return { items: [...state.items, action.item] };
+    case "REMOVE_ITEM":
+      return { items: state.items.filter((i) =&gt; i.id !== action.id) };
+    case "CHANGE_QUANTITY":
+      return {
+        items: state.items.map((i) =&gt;
+          i.id === action.id ? { ...i, quantity: action.quantity } : i
+        ),
+      };
+    case "CLEAR":
+      return { items: [] };
+  }
+}
+
+function Cart() {
+  const [state, dispatch] = useReducer(cartReducer, { items: [] });
+
+  return (
+    &lt;button onClick={() =&gt; dispatch({ type: "CLEAR" })}&gt;
+      カートを空にする
+    &lt;/button&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>Discriminated Unionでアクション型を定義しておくと、<code>switch</code>文のそれぞれのcase内で<code>action</code>のプロパティが自動的に絞り込まれます（TypeScript講座モジュール5の内容そのものです）。ReduxやZustandの設計思想もこの延長線上にあります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-1-a</span><h4>Todoリストのreducerを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>{ id: number; text: string; done: boolean }[]</code>を状態として持ち、<code>"ADD"</code>（テキストを追加）、<code>"TOGGLE"</code>（idを指定してdoneを反転）、<code>"REMOVE"</code>（idを指定して削除）の3アクションに対応する<code>todoReducer</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">type Todo = { id: number; text: string; done: boolean };
+
+type TodoAction =
+  | { type: "ADD"; text: string }
+  | { type: "TOGGLE"; id: number }
+  | { type: "REMOVE"; id: number };
+
+let nextId = 1;
+
+function todoReducer(state: Todo[], action: TodoAction): Todo[] {
+  switch (action.type) {
+    case "ADD":
+      return [...state, { id: nextId++, text: action.text, done: false }];
+    case "TOGGLE":
+      return state.map((t) =&gt;
+        t.id === action.id ? { ...t, done: !t.done } : t
+      );
+    case "REMOVE":
+      return state.filter((t) =&gt; t.id !== action.id);
+  }
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-1-b</span><h4>useStateの乱立をuseReducerに置き換える</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>次のようにバラバラに管理されているフォームのstateを、1つの<code>useReducer</code>にまとめてください。アクションは<code>{ type: "SET_FIELD"; field: "name" | "email"; value: string }</code>と<code>{ type: "RESET" }</code>の2種類とします。</p>
+            <div class="code-block">
+              <pre><code class="language-tsx">const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+// 個別のsetterが増え続けている...</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">type FormState = { name: string; email: string };
+type FormAction =
+  | { type: "SET_FIELD"; field: "name" | "email"; value: string }
+  | { type: "RESET" };
+
+const initialState: FormState = { name: "", email: "" };
+
+function formReducer(state: FormState, action: FormAction): FormState {
+  switch (action.type) {
+    case "SET_FIELD":
+      return { ...state, [action.field]: action.value };
+    case "RESET":
+      return initialState;
+  }
+}
+
+function ProfileForm() {
+  const [form, dispatch] = useReducer(formReducer, initialState);
+
+  return (
+    &lt;input
+      value={form.name}
+      onChange={(e) =&gt;
+        dispatch({ type: "SET_FIELD", field: "name", value: e.target.value })
+      }
+    /&gt;
+  );
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-4-2" data-lesson-id="4-2">
+        <div class="lesson-head">
+          <h3>4-2. Context APIと状態のリフトアップ</h3>
+          <button class="lesson-check-btn" data-lesson-id="4-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>props経由でデータを何段も下に渡し続ける「プロップドリリング」がつらくなったら、Context APIの出番です。ただし<strong>すべての状態をContextにするのはアンチパターン</strong>で、Contextの値が変わるたびに、それを購読するすべてのコンポーネントが再レンダリングされることを理解しておく必要があります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">ThemeContext.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">type Theme = "light" | "dark";
+type ThemeContextValue = { theme: Theme; toggleTheme: () =&gt; void };
+
+const ThemeContext = createContext&lt;ThemeContextValue | null&gt;(null);
+
+function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState&lt;Theme&gt;("light");
+
+  const toggleTheme = useCallback(() =&gt; {
+    setTheme((t) =&gt; (t === "light" ? "dark" : "light"));
+  }, []);
+
+  const value = useMemo(() =&gt; ({ theme, toggleTheme }), [theme, toggleTheme]);
+
+  return &lt;ThemeContext.Provider value={value}&gt;{children}&lt;/ThemeContext.Provider&gt;;
+}
+
+// 使う側専用のカスタムフックにしておくと、nullチェックを毎回書かずに済む
+function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
+  return ctx;
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>value={{ theme, toggleTheme }}</code>のようにインラインでオブジェクトを作ると、Providerが再レンダリングされるたびに新しい参照が生成され、Contextを購読する全コンポーネントが不要に再レンダリングされます。<code>useMemo</code>で安定させましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-2-a</span><h4>ログインユーザー情報のContextを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>{ id: number; name: string } | null</code>を保持する<code>AuthContext</code>と、それを提供する<code>AuthProvider</code>、利用側の<code>useAuth()</code>フック（<code>Provider</code>の外で呼ばれたらエラーを投げる）を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">type User = { id: number; name: string };
+type AuthContextValue = {
+  user: User | null;
+  login: (user: User) =&gt; void;
+  logout: () =&gt; void;
+};
+
+const AuthContext = createContext&lt;AuthContextValue | null&gt;(null);
+
+function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState&lt;User | null&gt;(null);
+
+  const login = useCallback((u: User) =&gt; setUser(u), []);
+  const logout = useCallback(() =&gt; setUser(null), []);
+
+  const value = useMemo(() =&gt; ({ user, login, logout }), [user, login, logout]);
+
+  return &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;;
+}
+
+function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-2-b</span><h4>Context化すべきか、propsのままでよいか判断する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>「3階層下のコンポーネントだけが必要とする値」と「アプリのほぼ全体で必要になるログインユーザー情報」、それぞれContext APIにすべきか、素直にpropsで渡すべきか、理由とあわせて答えてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>「3階層下のコンポーネントだけが必要とする値」は、階層が浅いうちはpropsのバケツリレーで十分読みやすく、Contextにすると値の出どころが追いにくくなるデメリットの方が大きいことが多いです。「アプリのほぼ全体で必要になるログインユーザー情報」のように、利用箇所がツリー全体に散らばるものはContext化する価値があります。「Contextは広く浅く使う共有情報向け、propsは局所的なデータの受け渡し向け」が基本方針です。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール4完了の目安: <code>useReducer</code>でアクションを設計でき、Context乱用のデメリットを説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 5
+    ========================================================= -->
+    <section class="module-section" id="m-5">
+      <div class="module-heading"><span class="num">MODULE 05</span><h2>フォームとバリデーション実務パターン</h2></div>
+      <p class="module-lead">フォームはReactアプリで最もバグが出やすい領域の1つです。実務で頻出するパターンを押さえます。</p>
+
+      <section class="lesson" id="l-5-1" data-lesson-id="5-1">
+        <div class="lesson-head">
+          <h3>5-1. 制御コンポーネントとバリデーション設計</h3>
+          <button class="lesson-check-btn" data-lesson-id="5-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>フォームの値をstateで管理する「制御コンポーネント」が基本です。バリデーションは「入力のたびに実行する」か「送信時にまとめて実行する」かで、ユーザー体験が大きく変わります。実務では両方を組み合わせることが多いです。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">SignupForm.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">type FormValues = { email: string; password: string };
+type FormErrors = Partial&lt;Record&lt;keyof FormValues, string&gt;&gt;;
+
+function validate(values: FormValues): FormErrors {
+  const errors: FormErrors = {};
+  if (!values.email.includes("@")) {
+    errors.email = "メールアドレスの形式が正しくありません";
+  }
+  if (values.password.length &lt; 8) {
+    errors.password = "パスワードは8文字以上で入力してください";
+  }
+  return errors;
+}
+
+function SignupForm() {
+  const [values, setValues] = useState&lt;FormValues&gt;({ email: "", password: "" });
+  const [touched, setTouched] = useState&lt;Partial&lt;Record&lt;keyof FormValues, boolean&gt;&gt;&gt;({});
+
+  const errors = validate(values); // 送信前でも常に最新のエラーを計算しておく
+
+  function handleBlur(field: keyof FormValues) {
+    setTouched((prev) =&gt; ({ ...prev, [field]: true }));
+  }
+
+  return (
+    &lt;form&gt;
+      &lt;input
+        value={values.email}
+        onChange={(e) =&gt; setValues((v) =&gt; ({ ...v, email: e.target.value }))}
+        onBlur={() =&gt; handleBlur("email")}
+      /&gt;
+      {touched.email &amp;&amp; errors.email &amp;&amp; &lt;p className="error"&gt;{errors.email}&lt;/p&gt;}
+    &lt;/form&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>入力した瞬間からエラーを表示すると「まだ何も入力していないのに赤字が出る」体験になりがちです。<code>touched</code>（そのフィールドを一度でも触ったか）を管理し、「touchedかつエラーがある場合だけ表示する」のが定番の折衷案です。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-1-a</span><h4>パスワード確認フィールドのバリデーションを追加する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>上記の<code>validate</code>関数に、<code>confirmPassword</code>フィールドを追加し、「<code>password</code>と一致しない場合にエラーを出す」バリデーションを実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">type FormValues = { email: string; password: string; confirmPassword: string };
+type FormErrors = Partial&lt;Record&lt;keyof FormValues, string&gt;&gt;;
+
+function validate(values: FormValues): FormErrors {
+  const errors: FormErrors = {};
+  if (!values.email.includes("@")) {
+    errors.email = "メールアドレスの形式が正しくありません";
+  }
+  if (values.password.length &lt; 8) {
+    errors.password = "パスワードは8文字以上で入力してください";
+  }
+  if (values.confirmPassword !== values.password) {
+    errors.confirmPassword = "パスワードが一致しません";
+  }
+  return errors;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-1-b</span><h4>フィールドごとのエラー表示コンポーネントに切り出す</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>touched</code>と<code>errorMessage</code>を受け取り、表示すべきときだけエラーメッセージを出す<code>FieldError</code>コンポーネント（<code>{ touched: boolean; message?: string }</code>をpropsに持つ）を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function FieldError({ touched, message }: { touched: boolean; message?: string }) {
+  if (!touched || !message) return null;
+  return &lt;p className="error"&gt;{message}&lt;/p&gt;;
+}
+
+// 呼び出し例
+&lt;FieldError touched={touched.email ?? false} message={errors.email} /&gt;</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-5-2" data-lesson-id="5-2">
+        <div class="lesson-head">
+          <h3>5-2. 送信状態管理とUXパターン</h3>
+          <button class="lesson-check-btn" data-lesson-id="5-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>送信ボタンの連打による二重送信は実務で頻出のバグです。送信中は「送信中の状態」を持ち、ボタンを無効化するのが基本パターンです。また、送信失敗時にはユーザーが再入力せずに再送信できるよう、入力値を保持したままエラーだけを表示します。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">SubmitButton.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">type SubmitStatus = "idle" | "submitting" | "success" | "error";
+
+function ContactForm() {
+  const [status, setStatus] = useState&lt;SubmitStatus&gt;("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (status === "submitting") return; // 二重送信防止
+
+    setStatus("submitting");
+    try {
+      await postContact({ message });
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;textarea value={message} onChange={(e) =&gt; setMessage(e.target.value)} /&gt;
+      &lt;button type="submit" disabled={status === "submitting"}&gt;
+        {status === "submitting" ? "送信中..." : "送信する"}
+      &lt;/button&gt;
+      {status === "error" &amp;&amp; &lt;p className="error"&gt;送信に失敗しました。もう一度お試しください&lt;/p&gt;}
+      {status === "success" &amp;&amp; &lt;p&gt;送信しました！&lt;/p&gt;}
+    &lt;/form&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>disabled</code>属性だけに頼っていると、フォーム外からの二重送信（例えばEnterキー連打がイベントキューに溜まっている場合など）を防ぎきれないことがあります。<code>handleSubmit</code>関数の冒頭でも状態をチェックする「二重の防御」が安全です。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-2-a</span><h4>いいねボタンの楽観的UIを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>いいねボタンをクリックしたら即座に見た目を反映し（楽観的UI）、APIリクエストが失敗したら元の状態に戻す<code>LikeButton</code>コンポーネントを実装してください。<code>likeApi(): Promise&lt;void&gt;</code>は失敗するとエラーをthrowするものとします。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function LikeButton() {
+  const [liked, setLiked] = useState(false);
+
+  async function handleClick() {
+    const previous = liked;
+    setLiked(!previous); // 先に見た目を反映（楽観的UI）
+
+    try {
+      await likeApi();
+    } catch {
+      setLiked(previous); // 失敗したら元に戻す
+    }
+  }
+
+  return (
+    &lt;button onClick={handleClick}&gt;
+      {liked ? "♥ いいね済み" : "♡ いいね"}
+    &lt;/button&gt;
+  );
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-2-b</span><h4>送信状態をuseReducerで管理する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>上記の<code>SubmitStatus</code>（<code>"idle" | "submitting" | "success" | "error"</code>）と、エラー時のメッセージを1つの<code>useReducer</code>で管理するように書き換えてください。アクションは<code>"SUBMIT_START"</code>、<code>"SUBMIT_SUCCESS"</code>、<code>{ type: "SUBMIT_ERROR"; message: string }</code>とします。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">type SubmitState = { status: SubmitStatus; errorMessage: string | null };
+type SubmitAction =
+  | { type: "SUBMIT_START" }
+  | { type: "SUBMIT_SUCCESS" }
+  | { type: "SUBMIT_ERROR"; message: string };
+
+function submitReducer(state: SubmitState, action: SubmitAction): SubmitState {
+  switch (action.type) {
+    case "SUBMIT_START":
+      return { status: "submitting", errorMessage: null };
+    case "SUBMIT_SUCCESS":
+      return { status: "success", errorMessage: null };
+    case "SUBMIT_ERROR":
+      return { status: "error", errorMessage: action.message };
+  }
+}
+
+// 呼び出し側
+const [state, dispatch] = useReducer(submitReducer, { status: "idle", errorMessage: null });</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール5完了の目安: 二重送信防止と楽観的UIのロールバック処理を実装できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 6
+    ========================================================= -->
+    <section class="module-section" id="m-6">
+      <div class="module-heading"><span class="num">MODULE 06</span><h2>実務でよく使う設計パターン</h2></div>
+      <p class="module-lead">最後のモジュールは、ここまで学んだ内容を「コンポーネント設計」というより大きな視点にまとめます。</p>
+
+      <section class="lesson" id="l-6-1" data-lesson-id="6-1">
+        <div class="lesson-head">
+          <h3>6-1. コンポーネント分割の考え方</h3>
+          <button class="lesson-check-btn" data-lesson-id="6-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>「見た目（Presentational）」と「データ・ロジック（Container）」を分けて考えると、UIコンポーネントはテストしやすく、デザインの変更にも強くなります。近年はカスタムフックにロジックを寄せ、コンポーネント自体は見た目に専念させる形が主流です。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">UserListContainer.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">// ロジック層: データ取得とビジネスロジックだけを担当
+function useUserListPage() {
+  const state = useFetch&lt;User[]&gt;("/api/users");
+  const [keyword, setKeyword] = useState("");
+
+  const filteredUsers =
+    state.status === "success"
+      ? state.data.filter((u) =&gt; u.name.includes(keyword))
+      : [];
+
+  return { state, keyword, setKeyword, filteredUsers };
+}
+
+// 見た目層: propsを受け取って表示するだけ（テストが書きやすい）
+function UserListView({
+  users,
+  keyword,
+  onKeywordChange,
+}: {
+  users: User[];
+  keyword: string;
+  onKeywordChange: (v: string) =&gt; void;
+}) {
+  return (
+    &lt;&gt;
+      &lt;input value={keyword} onChange={(e) =&gt; onKeywordChange(e.target.value)} /&gt;
+      &lt;ul&gt;{users.map((u) =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;
+    &lt;/&gt;
+  );
+}
+
+// 接続: 2つを組み合わせるだけの薄いコンポーネント
+function UserListPage() {
+  const { keyword, setKeyword, filteredUsers } = useUserListPage();
+  return &lt;UserListView users={filteredUsers} keyword={keyword} onKeywordChange={setKeyword} /&gt;;
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>この分割の一番のメリットは、<code>UserListView</code>を単体でStorybookに表示したり、ロジックなしでスナップショットテストできる点です。「このコンポーネントをテストするのにAPIのモックが必要」と感じたら、分割のサインです。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-1-a</span><h4>ロジックと見た目を分離する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次の<code>ProductCard</code>は、データ取得と表示が1つのコンポーネントに混ざっています。<code>useProductCard(productId)</code>カスタムフック（ロジック）と、propsだけを受け取る<code>ProductCardView</code>（見た目）に分割してください。</p>
+            <div class="code-block">
+              <pre><code class="language-tsx">function ProductCard({ productId }: { productId: number }) {
+  const [product, setProduct] = useState&lt;Product | null&gt;(null);
+
+  useEffect(() =&gt; {
+    fetchProduct(productId).then(setProduct);
+  }, [productId]);
+
+  if (!product) return &lt;p&gt;読み込み中...&lt;/p&gt;;
+  return &lt;div&gt;{product.name} - {product.price}円&lt;/div&gt;;
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function useProductCard(productId: number) {
+  const [product, setProduct] = useState&lt;Product | null&gt;(null);
+
+  useEffect(() =&gt; {
+    fetchProduct(productId).then(setProduct);
+  }, [productId]);
+
+  return { product };
+}
+
+function ProductCardView({ product }: { product: Product | null }) {
+  if (!product) return &lt;p&gt;読み込み中...&lt;/p&gt;;
+  return &lt;div&gt;{product.name} - {product.price}円&lt;/div&gt;;
+}
+
+function ProductCard({ productId }: { productId: number }) {
+  const { product } = useProductCard(productId);
+  return &lt;ProductCardView product={product} /&gt;;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-1-b</span><h4>コンポーネント分割の基準を説明する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>「1つのコンポーネントを分割すべきタイミング」を、JSXの行数以外の観点から2つ挙げて説明してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>例1: 「このコンポーネントは何をするものですか」と一言で説明できなくなったとき（複数の責任を持ち始めているサイン）。例2: 同じUIパターン（カード、リストアイテムなど）を別の場所でコピペし始めたとき（再利用可能な単位として切り出すべきサイン）。他にも「テストしようとするとモックすべき依存が増えすぎる」なども有効な基準です。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-6-2" data-lesson-id="6-2">
+        <div class="lesson-head">
+          <h3>6-2. エラーバウンダリと非同期データの表示パターン</h3>
+          <button class="lesson-check-btn" data-lesson-id="6-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>子コンポーネントで発生した予期しないレンダリングエラーは、そのままだとアプリ全体が白画面になります。<code>ErrorBoundary</code>（現状クラスコンポーネントでのみ実装可能）で囲むことで、一部分だけをフォールバックUIに差し替えられます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">ErrorBoundary.tsx</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-tsx">type Props = { children: React.ReactNode; fallback: React.ReactNode };
+type State = { hasError: boolean };
+
+class ErrorBoundary extends React.Component&lt;Props, State&gt; {
+  state: State = { hasError: false };
+
+  static getDerivedStateFromError(): State {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error("caught by ErrorBoundary:", error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
+// 使う側: 一部分だけをエラーバウンダリで囲む
+function Dashboard() {
+  return (
+    &lt;&gt;
+      &lt;Header /&gt;
+      &lt;ErrorBoundary fallback={&lt;p&gt;このウィジェットの表示に失敗しました&lt;/p&gt;}&gt;
+        &lt;RiskyWidget /&gt;
+      &lt;/ErrorBoundary&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>ErrorBoundary</code>はレンダリング中の例外しか捕まえられません。イベントハンドラ内の例外（<code>onClick</code>など）や<code>async</code>処理中の例外は捕まえられないため、それらは通常のtry/catchで扱う必要があります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-2-a</span><h4>アプリ全体を1つのErrorBoundaryで囲む</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>上記の<code>ErrorBoundary</code>を使って、アプリのルート（<code>&lt;App /&gt;</code>相当）全体を、「予期しないエラーが発生しました。ページを再読み込みしてください」というフォールバックで囲むコードを書いてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function Root() {
+  return (
+    &lt;ErrorBoundary fallback={&lt;p&gt;予期しないエラーが発生しました。ページを再読み込みしてください&lt;/p&gt;}&gt;
+      &lt;App /&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-2-b</span><h4>複数のウィジェットを個別のErrorBoundaryで守る</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>WeatherWidget</code>と<code>NewsWidget</code>という2つの独立したウィジェットがあるダッシュボードで、片方がクラッシュしてももう片方は表示され続けるように、それぞれを個別の<code>ErrorBoundary</code>で囲んでください。全体を1つの<code>ErrorBoundary</code>で囲む場合と比べて、何が改善されるか一言で説明してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-tsx">function Dashboard() {
+  return (
+    &lt;&gt;
+      &lt;ErrorBoundary fallback={&lt;p&gt;天気の取得に失敗しました&lt;/p&gt;}&gt;
+        &lt;WeatherWidget /&gt;
+      &lt;/ErrorBoundary&gt;
+      &lt;ErrorBoundary fallback={&lt;p&gt;ニュースの取得に失敗しました&lt;/p&gt;}&gt;
+        &lt;NewsWidget /&gt;
+      &lt;/ErrorBoundary&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+              </div>
+              <p>改善点: エラーの影響範囲を最小化できます。全体を1つの<code>ErrorBoundary</code>で囲むと、<code>NewsWidget</code>のバグで<code>WeatherWidget</code>まで巻き添えで消えてしまいますが、個別に分ければ被害をそのウィジェットだけに閉じ込められます。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール6完了の目安: コンポーネントの責任分割とエラーバウンダリの守備範囲を説明できればOKです。これで講座は修了です、お疲れさまでした！</div>
+    </section>
+
+    <div class="course-footer-nav">
+      <a class="prev" href="../typescript/index.html"><span class="label">前の講座</span>← TypeScript 実務力養成講座</a>
+      <a class="next" href="../index.html"><span class="label">講座一覧</span>CODE DOJO トップへ →</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="../js/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TypeScript 実務力養成講座 | CODE DOJO</title>
+<meta name="description" content="Union/Intersection、ジェネリクス、Mapped Types・Conditional Types、非同期処理の型付け、実務の型設計パターンまで。TypeScript中級者向け講座。演習問題と解答例つき。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%F0%9F%94%B7%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="../css/course.css">
+</head>
+<body class="course-ts" data-course="typescript">
+
+<header class="course-topbar">
+  <button id="sidebarMenuBtn" class="topbar-menu-btn" aria-label="目次メニューを開く">☰</button>
+  <a class="topbar-back" href="../index.html">← 講座一覧</a>
+  <div class="topbar-title">🔷 TypeScript 実務力養成講座</div>
+  <div class="topbar-progress">
+    <div class="topbar-progress-bar"><div class="topbar-progress-fill" id="progressFill"></div></div>
+    <span class="topbar-progress-label" id="progressLabel">0 / 25 完了</span>
+  </div>
+</header>
+<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+<div class="course-shell">
+  <aside class="course-sidebar">
+    <div class="sidebar-intro">
+      <span class="badge-lang">🔷 TYPESCRIPT・中級〜上級</span>
+      <h1>TypeScript 実務力養成講座</h1>
+      <p>全6モジュール・12レッスン・25演習</p>
+    </div>
+    <nav aria-label="目次">
+
+      <div class="toc-module is-open" data-module="1">
+        <button class="toc-module-head"><span class="toc-module-num">01</span>型システムの基礎を固める<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-1-1" data-lesson-id="1-1"><span class="toc-check"></span>Union・Intersection・Literal Types</a></li>
+          <li><a href="#l-1-2" data-lesson-id="1-2"><span class="toc-check"></span>型ガードとNarrowing</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="2">
+        <button class="toc-module-head"><span class="toc-module-num">02</span>ジェネリクスと関数型のテクニック<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-2-1" data-lesson-id="2-1"><span class="toc-check"></span>ジェネリック関数と制約</a></li>
+          <li><a href="#l-2-2" data-lesson-id="2-2"><span class="toc-check"></span>高階関数とユーティリティ型</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="3">
+        <button class="toc-module-head"><span class="toc-module-num">03</span>高度な型操作<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-3-1" data-lesson-id="3-1"><span class="toc-check"></span>Mapped Types・自作Utility Types</a></li>
+          <li><a href="#l-3-2" data-lesson-id="3-2"><span class="toc-check"></span>Conditional Types・infer</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="4">
+        <button class="toc-module-head"><span class="toc-module-num">04</span>非同期処理とエラーハンドリング<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-4-1" data-lesson-id="4-1"><span class="toc-check"></span>Promise/async-awaitの型付け</a></li>
+          <li><a href="#l-4-2" data-lesson-id="4-2"><span class="toc-check"></span>Result型パターン</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="5">
+        <button class="toc-module-head"><span class="toc-module-num">05</span>実務で使う型設計パターン<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-5-1" data-lesson-id="5-1"><span class="toc-check"></span>Discriminated Union・ブランド型</a></li>
+          <li><a href="#l-5-2" data-lesson-id="5-2"><span class="toc-check"></span>型安全なAPIクライアント設計</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="6">
+        <button class="toc-module-head"><span class="toc-module-num">06</span>クラス・モジュール設計<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-6-1" data-lesson-id="6-1"><span class="toc-check"></span>抽象クラス・インターフェース設計</a></li>
+          <li><a href="#l-6-2" data-lesson-id="6-2"><span class="toc-check"></span>モジュール分割とtsconfig実務Tips</a></li>
+        </ul>
+      </div>
+
+    </nav>
+  </aside>
+
+  <main class="course-main">
+
+    <div class="course-hero">
+      <span class="badge-lang">🔷 TYPESCRIPT・中級〜上級</span>
+      <h1>TypeScript 実務力養成講座</h1>
+      <p class="lead">
+        「型を書くのが目的」ではなく「型でバグを未然に防ぐ」ことを目的にした講座です。
+        Union/ジェネリクスの復習から、Mapped Types・Conditional Typesなどの高度な型操作、
+        非同期処理の型安全な扱い方、実務のAPI設計パターンまでを扱います。
+      </p>
+      <div class="stat-row">
+        <div class="stat-chip"><b>6</b><span>モジュール</span></div>
+        <div class="stat-chip"><b>12</b><span>レッスン</span></div>
+        <div class="stat-chip"><b>25</b><span>演習問題</span></div>
+      </div>
+      <div class="how-to">
+        <b>進め方:</b> コードはお使いのエディタ（VS Codeなど）に貼り付けて型エラーを確認しながら進めると理解が深まります。TypeScript Playground（公式サイト）で試すのもおすすめです。
+      </div>
+    </div>
+
+    <!-- ========================================================
+         MODULE 1
+    ========================================================= -->
+    <section class="module-section" id="m-1">
+      <div class="module-heading"><span class="num">MODULE 01</span><h2>型システムの基礎を固める</h2></div>
+      <p class="module-lead">Union・Intersection・Literal Typesは、以降のすべてのモジュールの土台になります。「anyで逃げない」書き方をここで固めます。</p>
+
+      <section class="lesson" id="l-1-1" data-lesson-id="1-1">
+        <div class="lesson-head">
+          <h3>1-1. Union・Intersection・Literal Types</h3>
+          <button class="lesson-check-btn" data-lesson-id="1-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>Union型（<code>A | B</code>）は「AまたはB」、Intersection型（<code>A &amp; B</code>）は「AかつB（両方の性質を持つ）」を表します。Literal Typesは、値そのものを型として扱う仕組みで、<code>"pending" | "paid" | "cancelled"</code>のような「取りうる値を限定した型」を作れます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">types-basics.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">type OrderStatus = "pending" | "paid" | "cancelled";
+
+function label(status: OrderStatus): string {
+  switch (status) {
+    case "pending": return "処理待ち";
+    case "paid": return "支払い済み";
+    case "cancelled": return "キャンセル";
+  }
+}
+
+// Intersection: 2つの型の性質をすべて持つ
+type Timestamped = { createdAt: Date };
+type Named = { name: string };
+type NamedEvent = Timestamped &amp; Named;
+
+const event: NamedEvent = { name: "リリース会", createdAt: new Date() };</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b><code>string</code>で状態を表すより、Literal Typesの合併型にしておくと、タイプミス（<code>"pendign"</code>など）をコンパイル時に検出できます。API通信のstatusフィールドなどに積極的に使いましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-1-a</span><h4>信号の色をLiteral Typesで表現する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p><code>"red" | "yellow" | "green"</code>のUnion型<code>TrafficLight</code>を定義し、その値を受け取って「止まれ」「注意」「進め」を返す<code>describe(light: TrafficLight): string</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type TrafficLight = "red" | "yellow" | "green";
+
+function describe(light: TrafficLight): string {
+  switch (light) {
+    case "red": return "止まれ";
+    case "yellow": return "注意";
+    case "green": return "進め";
+  }
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-1-b</span><h4>Intersection型でロール付きユーザーを表現する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>BaseUser</code>（<code>id: number, name: string</code>）と<code>AdminPermissions</code>（<code>canDeleteUser: boolean, canEditBilling: boolean</code>）を定義し、両方の性質を持つ<code>AdminUser</code>型をIntersectionで作成してください。そのうえで、<code>AdminUser</code>型の値を1つ作成してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type BaseUser = { id: number; name: string };
+type AdminPermissions = { canDeleteUser: boolean; canEditBilling: boolean };
+type AdminUser = BaseUser &amp; AdminPermissions;
+
+const admin: AdminUser = {
+  id: 1,
+  name: "管理者A",
+  canDeleteUser: true,
+  canEditBilling: false,
+};</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-1-2" data-lesson-id="1-2">
+        <div class="lesson-head">
+          <h3>1-2. 型ガードとNarrowing</h3>
+          <button class="lesson-check-btn" data-lesson-id="1-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>Union型の値を扱うとき、TypeScriptは<code>typeof</code>や<code>in</code>、<code>instanceof</code>などのチェックを通じて型を絞り込みます（Narrowing）。さらに複雑な条件は「ユーザー定義型ガード（<code>is</code>構文）」として関数に切り出せます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">type-guards.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">type ApiResult =
+  | { kind: "success"; data: string[] }
+  | { kind: "error"; message: string };
+
+function handle(result: ApiResult) {
+  if (result.kind === "success") {
+    // ここでは result.data が使える（Narrowing済み）
+    console.log(result.data.length);
+  } else {
+    console.log(result.message);
+  }
+}
+
+// ユーザー定義型ガード
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+
+function printLength(value: unknown) {
+  if (isString(value)) {
+    console.log(value.length); // valueはstringとして扱える
+  }
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>any</code>を使うとNarrowingの恩恵がすべて失われます。外部から来る未知のデータには<code>any</code>ではなく<code>unknown</code>を使い、型ガードで絞り込んでから使いましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-2-a</span><h4>unknownな値を安全に扱う</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>引数<code>value: unknown</code>を受け取り、数値なら2倍にして返し、文字列ならそのまま返し、それ以外なら<code>null</code>を返す<code>normalize(value: unknown): number | string | null</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function normalize(value: unknown): number | string | null {
+  if (typeof value === "number") {
+    return value * 2;
+  }
+  if (typeof value === "string") {
+    return value;
+  }
+  return null;
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-2-b</span><h4>ユーザー定義型ガードでシェイプを判定する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次の<code>Shape</code>型に対し、ユーザー定義型ガード<code>isCircle(shape: Shape): shape is Circle</code>を実装したうえで、それを使って面積を計算する<code>area(shape: Shape): number</code>を実装してください（円は<code>πr²</code>、四角形は<code>幅×高さ</code>。円周率は<code>Math.PI</code>を使用）。</p>
+            <div class="code-block">
+              <pre><code class="language-typescript">type Circle = { type: "circle"; radius: number };
+type Rectangle = { type: "rectangle"; width: number; height: number };
+type Shape = Circle | Rectangle;</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function isCircle(shape: Shape): shape is Circle {
+  return shape.type === "circle";
+}
+
+function area(shape: Shape): number {
+  if (isCircle(shape)) {
+    return Math.PI * shape.radius ** 2;
+  }
+  return shape.width * shape.height;
+}</code></pre>
+              </div>
+              <p>実はこのケースでは<code>shape.type</code>を直接switchで見るだけでもNarrowingは効きますが、判定ロジックが複雑・再利用したい場合はユーザー定義型ガードに切り出すと見通しが良くなります。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール1完了の目安: <code>unknown</code>と<code>any</code>の違いを説明でき、型ガードでNarrowingできればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 2
+    ========================================================= -->
+    <section class="module-section" id="m-2">
+      <div class="module-heading"><span class="num">MODULE 02</span><h2>ジェネリクスと関数型のテクニック</h2></div>
+      <p class="module-lead">「なんとなく&lt;T&gt;をつける」から「制約と推論を意図的に設計する」レベルへ。</p>
+
+      <section class="lesson" id="l-2-1" data-lesson-id="2-1">
+        <div class="lesson-head">
+          <h3>2-1. ジェネリック関数と制約</h3>
+          <button class="lesson-check-btn" data-lesson-id="2-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>ジェネリクスは呼び出し時に渡された値から型が自動推論されます。<code>extends</code>で制約をかけると、「どんな型でも受け取れるが、最低限これらのプロパティは持っている」という設計ができます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">generics.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">// 制約なし: どんな型でもそのまま返す
+function identity&lt;T&gt;(value: T): T {
+  return value;
+}
+
+// 制約あり: idプロパティを持つ型に限定する
+function findById&lt;T extends { id: number }&gt;(items: T[], id: number): T | undefined {
+  return items.find((item) =&gt; item.id === id);
+}
+
+const users = [{ id: 1, name: "太郎" }, { id: 2, name: "花子" }];
+const found = findById(users, 1); // Tは自動的に { id: number; name: string } と推論される</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>APIレスポンスの共通ラッパー<code>type ApiResponse&lt;T&gt; = { data: T; meta: { total: number } }</code>のように、ジェネリクスを使うとエンドポイントごとに型定義をコピペせずに済みます。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-1-a</span><h4>配列の先頭N件を返すジェネリック関数</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>任意の型の配列を受け取り、先頭<code>n</code>件を返す<code>take&lt;T&gt;(items: T[], n: number): T[]</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function take&lt;T&gt;(items: T[], n: number): T[] {
+  return items.slice(0, n);
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-1-b</span><h4>制約付きジェネリクスでキー指定の並び替えを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>sortByKey&lt;T, K extends keyof T&gt;(items: T[], key: K): T[]</code>を実装してください。<code>key</code>で指定したプロパティの値（数値または文字列）で昇順に並び替えます。<code>keyof T</code>を使うことで、存在しないプロパティ名を渡すとコンパイルエラーになるようにしてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function sortByKey&lt;T, K extends keyof T&gt;(items: T[], key: K): T[] {
+  return [...items].sort((a, b) =&gt; {
+    const av = a[key];
+    const bv = b[key];
+    if (av &lt; bv) return -1;
+    if (av &gt; bv) return 1;
+    return 0;
+  });
+}
+
+// 呼び出し例
+sortByKey(users, "name"); // OK
+// sortByKey(users, "age"); // usersにageが無ければコンパイルエラー</code></pre>
+              </div>
+              <p><code>[...items].sort(...)</code>のようにスプレッドでコピーしてからソートすることで、元の配列を破壊しない（副作用のない）関数になります。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-2-2" data-lesson-id="2-2">
+        <div class="lesson-head">
+          <h3>2-2. 高階関数とユーティリティ型の組み合わせ</h3>
+          <button class="lesson-check-btn" data-lesson-id="2-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>関数を引数や戻り値として扱う「高階関数」は、TypeScriptでは関数の型もきちんと表現できます。組み込みのUtility Types（<code>Partial</code>, <code>Pick</code>, <code>Omit</code>など）と組み合わせると、既存の型から柔軟に新しい型を作れます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">higher-order.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">type User = { id: number; name: string; email: string; age: number };
+
+// Partial: すべてのプロパティを省略可能にする（更新用DTOなどでよく使う）
+function updateUser(id: number, patch: Partial&lt;User&gt;): void { /* ... */ }
+updateUser(1, { name: "新しい名前" }); // 他のプロパティは省略できる
+
+// Pick: 特定のプロパティだけを抜き出す
+type UserSummary = Pick&lt;User, "id" | "name"&gt;;
+
+// Omit: 特定のプロパティを除いた型を作る
+type UserWithoutEmail = Omit&lt;User, "email"&gt;;
+
+// 高階関数: 関数を返す関数
+function withLogging&lt;Args extends unknown[], R&gt;(
+  fn: (...args: Args) =&gt; R
+): (...args: Args) =&gt; R {
+  return (...args: Args) =&gt; {
+    console.log("call with", args);
+    return fn(...args);
+  };
+}
+
+const add = (a: number, b: number) =&gt; a + b;
+const loggedAdd = withLogging(add); // (a: number, b: number) =&gt; number として推論される</code></pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-2-a</span><h4>PickとOmitでDTOを作る</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>次の<code>Product</code>型から、「一覧表示用（id, name, priceだけ）」の<code>ProductListItem</code>を<code>Pick</code>で、「作成リクエスト用（idを除いたもの）」の<code>CreateProductInput</code>を<code>Omit</code>で、それぞれ作成してください。</p>
+            <div class="code-block">
+              <pre><code class="language-typescript">type Product = {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  stock: number;
+};</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type ProductListItem = Pick&lt;Product, "id" | "name" | "price"&gt;;
+type CreateProductInput = Omit&lt;Product, "id"&gt;;</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-2-b</span><h4>関数を1回だけ実行するonceを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>渡した関数を「初回呼び出し時だけ実行し、以降は最初の戻り値をキャッシュして返す」<code>once&lt;Args extends unknown[], R&gt;(fn: (...args: Args) =&gt; R): (...args: Args) =&gt; R</code>を実装してください。</p>
+            <div class="exercise-hint"><b>ヒント:</b> クロージャで「実行済みかどうか」と「キャッシュした戻り値」を保持します。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function once&lt;Args extends unknown[], R&gt;(
+  fn: (...args: Args) =&gt; R
+): (...args: Args) =&gt; R {
+  let called = false;
+  let cache: R;
+
+  return (...args: Args): R =&gt; {
+    if (!called) {
+      cache = fn(...args);
+      called = true;
+    }
+    return cache;
+  };
+}
+
+// 呼び出し例
+const initOnce = once(() =&gt; {
+  console.log("初期化処理を実行");
+  return { ready: true };
+});
+initOnce(); // "初期化処理を実行" と出力
+initOnce(); // 何も出力されず、キャッシュされた値が返る</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール2完了の目安: <code>Partial</code>/<code>Pick</code>/<code>Omit</code>を使い分けられて、高階関数の型を自分で書ければOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 3
+    ========================================================= -->
+    <section class="module-section" id="m-3">
+      <div class="module-heading"><span class="num">MODULE 03</span><h2>高度な型操作</h2></div>
+      <p class="module-lead">組み込みのUtility Typesが「どう実装されているか」を知ると、自分で必要な型を組み立てられるようになります。</p>
+
+      <section class="lesson" id="l-3-1" data-lesson-id="3-1">
+        <div class="lesson-head">
+          <h3>3-1. Mapped Typesと自作Utility Types</h3>
+          <button class="lesson-check-btn" data-lesson-id="3-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>Mapped Typesは「既存の型のすべてのプロパティに対して、同じ変換を適用する」仕組みです。実は<code>Partial&lt;T&gt;</code>や<code>Readonly&lt;T&gt;</code>もMapped Typesで実装されています。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">mapped-types.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">// 標準ライブラリのPartialの実装（簡略版）
+type MyPartial&lt;T&gt; = {
+  [K in keyof T]?: T[K];
+};
+
+// 標準ライブラリのReadonlyの実装（簡略版）
+type MyReadonly&lt;T&gt; = {
+  readonly [K in keyof T]: T[K];
+};
+
+// 自作: すべてのプロパティをnull許容にする
+type Nullable&lt;T&gt; = {
+  [K in keyof T]: T[K] | null;
+};
+
+type User = { id: number; name: string };
+type NullableUser = Nullable&lt;User&gt;;
+// { id: number | null; name: string | null }</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>フォームの入力値は「すべて未確定」な状態を扱うことが多いため、<code>Partial&lt;T&gt;</code>や自作の<code>Nullable&lt;T&gt;</code>で「未入力を許容する型」を作っておくと、フォーム用の型とAPI送信用の型をきれいに分離できます。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-1-a</span><h4>Requiredを自作する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>標準の<code>Required&lt;T&gt;</code>と同じ働きをする<code>MyRequired&lt;T&gt;</code>（すべてのプロパティを必須にするMapped Type）を実装してください。</p>
+            <div class="exercise-hint"><b>ヒント:</b> オプショナル修飾子<code>?</code>を打ち消すには<code>-?</code>を使います。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type MyRequired&lt;T&gt; = {
+  [K in keyof T]-?: T[K];
+};
+
+type PartialUser = { id?: number; name?: string };
+type FullUser = MyRequired&lt;PartialUser&gt;;
+// { id: number; name: string }</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-1-b</span><h4>特定のキーだけ変更可能にするMutableを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>全プロパティが<code>readonly</code>な型<code>T</code>から、指定したキー<code>K</code>だけ書き込み可能に戻す<code>Mutable&lt;T, K extends keyof T&gt;</code>を実装してください。</p>
+            <div class="exercise-hint"><b>ヒント:</b> <code>Omit</code>で対象外のプロパティを残しつつ、対象プロパティだけ<code>-readonly</code>を付けたMapped Typeを交差型(&amp;)で合成します。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type Mutable&lt;T, K extends keyof T&gt; = Omit&lt;T, K&gt; &amp; {
+  -readonly [P in K]: T[P];
+};
+
+type Config = {
+  readonly host: string;
+  readonly port: number;
+  readonly debug: boolean;
+};
+
+type EditablePort = Mutable&lt;Config, "port"&gt;;
+// host, debugはreadonlyのまま、portだけ書き換え可能になる</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-1-c</span><h4>keyofと組み合わせてキー配列を検証する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>User</code>型のキー名の配列だけを許可する<code>pickFields&lt;T, K extends keyof T&gt;(obj: T, keys: K[]): Pick&lt;T, K&gt;</code>を実装してください。存在しないキー名を渡すとコンパイルエラーになることを確認してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function pickFields&lt;T, K extends keyof T&gt;(obj: T, keys: K[]): Pick&lt;T, K&gt; {
+  const result = {} as Pick&lt;T, K&gt;;
+  for (const key of keys) {
+    result[key] = obj[key];
+  }
+  return result;
+}
+
+// 呼び出し例
+const user = { id: 1, name: "太郎", email: "t@example.com" };
+const summary = pickFields(user, ["id", "name"]);
+// pickFields(user, ["id", "age"]); // "age"が存在しないためコンパイルエラー</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-3-2" data-lesson-id="3-2">
+        <div class="lesson-head">
+          <h3>3-2. Conditional Types・infer・Template Literal Types</h3>
+          <button class="lesson-check-btn" data-lesson-id="3-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>Conditional Types（<code>T extends U ? X : Y</code>）は「型レベルのif文」です。<code>infer</code>キーワードと組み合わせると、複雑な型から一部分だけを取り出せます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">conditional-types.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">// 型レベルのif文
+type IsString&lt;T&gt; = T extends string ? true : false;
+type A = IsString&lt;"hello"&gt;; // true
+type B = IsString&lt;42&gt;;      // false
+
+// infer: 関数の戻り値の型を取り出す（標準のReturnTypeの簡略版）
+type MyReturnType&lt;F&gt; = F extends (...args: never[]) =&gt; infer R ? R : never;
+
+function createUser() {
+  return { id: 1, name: "太郎" };
+}
+type CreatedUser = MyReturnType&lt;typeof createUser&gt;;
+// { id: number; name: string }
+
+// Template Literal Types: 文字列の「形」を型で表現する
+type EventName = `on${Capitalize&lt;"click" | "hover" | "focus"&gt;}`;
+// "onClick" | "onHover" | "onFocus"</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>Template Literal Typesは、CSSのプロパティ名やAPIのルーティングパス（<code>`/users/${number}`</code>など）を型として厳密に表現したいときに便利です。ただし複雑にしすぎるとコンパイルが遅くなることがあるので、使いどころは絞りましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-2-a</span><h4>配列の要素型を取り出すUnwrapArrayを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>infer</code>を使って、配列型からその要素の型を取り出す<code>UnwrapArray&lt;T&gt;</code>を実装してください（<code>T</code>が配列でなければ<code>T</code>自身を返します）。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type UnwrapArray&lt;T&gt; = T extends (infer U)[] ? U : T;
+
+type A = UnwrapArray&lt;string[]&gt;; // string
+type B = UnwrapArray&lt;number&gt;;   // number（配列でないのでそのまま）</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-2-b</span><h4>Template Literal TypesでCSSのpxユニット型を作る</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>数値に<code>"px"</code>が付いた文字列だけを許可する型<code>PxValue</code>（例: <code>"10px"</code>）を、Template Literal Typesを使って定義してください。そのうえで、<code>PxValue</code>を受け取って数値部分だけを取り出す<code>toNumber(value: PxValue): number</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type PxValue = `${number}px`;
+
+function toNumber(value: PxValue): number {
+  return Number(value.replace("px", ""));
+}
+
+const width: PxValue = "10px"; // OK
+// const height: PxValue = "10rem"; // コンパイルエラー
+toNumber(width); // 10</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール3完了の目安: <code>infer</code>を使った型が読み書きできればOKです。ここまでくれば型システムの応用は卒業レベルです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 4
+    ========================================================= -->
+    <section class="module-section" id="m-4">
+      <div class="module-heading"><span class="num">MODULE 04</span><h2>非同期処理とエラーハンドリング</h2></div>
+      <p class="module-lead">async/awaitの書き方自体はJavaScriptと同じですが、TypeScriptでは「戻り値の型」と「失敗した場合の型」まで設計するのがポイントです。</p>
+
+      <section class="lesson" id="l-4-1" data-lesson-id="4-1">
+        <div class="lesson-head">
+          <h3>4-1. Promise・async/awaitの型付け</h3>
+          <button class="lesson-check-btn" data-lesson-id="4-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>async</code>関数の戻り値は自動的に<code>Promise&lt;T&gt;</code>にラップされます。<code>Promise.all</code>を使うと複数の非同期処理を並行に実行でき、それぞれの型がタプルとして正しく推論されます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">async-basics.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">async function fetchUser(id: number): Promise&lt;{ id: number; name: string }&gt; {
+  const res = await fetch(`/api/users/${id}`);
+  if (!res.ok) {
+    throw new Error(`failed to fetch user ${id}: ${res.status}`);
+  }
+  return res.json();
+}
+
+// 複数の非同期処理を並行実行し、それぞれの型が保たれる
+async function loadDashboard(userId: number) {
+  const [user, orders] = await Promise.all([
+    fetchUser(userId),
+    fetchOrders(userId),
+  ]);
+  // userは { id: number; name: string }、ordersはOrder[] として推論される
+  return { user, orders };
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b>複数の非同期処理を<code>await</code>を1つずつ直列に書くと、本来並行にできる処理まで直列化されて遅くなります。互いに依存しない処理は<code>Promise.all</code>でまとめましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-1-a</span><h4>直列処理を並行処理に書き換える</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次のコードは<code>fetchProfile</code>と<code>fetchSettings</code>が互いに依存していないのに直列実行されています。<code>Promise.all</code>を使って並行実行に書き換えてください。</p>
+            <div class="code-block">
+              <pre><code class="language-typescript">async function loadPage(userId: number) {
+  const profile = await fetchProfile(userId);
+  const settings = await fetchSettings(userId);
+  return { profile, settings };
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">async function loadPage(userId: number) {
+  const [profile, settings] = await Promise.all([
+    fetchProfile(userId),
+    fetchSettings(userId),
+  ]);
+  return { profile, settings };
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-1-b</span><h4>タイムアウト付きfetchを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>指定したミリ秒以内にレスポンスが返らなければ<code>Error("timeout")</code>で失敗する<code>fetchWithTimeout(url: string, timeoutMs: number): Promise&lt;Response&gt;</code>を、<code>Promise.race</code>を使って実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function fetchWithTimeout(url: string, timeoutMs: number): Promise&lt;Response&gt; {
+  const timeout = new Promise&lt;never&gt;((_, reject) =&gt; {
+    setTimeout(() =&gt; reject(new Error("timeout")), timeoutMs);
+  });
+
+  return Promise.race([fetch(url), timeout]);
+}</code></pre>
+              </div>
+              <p><code>Promise&lt;never&gt;</code>は「成功することはなく、必ず失敗する（または永遠に解決しない）」Promiseの戻り値の型です。<code>Promise.race</code>の型推論と相性がよく使われます。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-4-2" data-lesson-id="4-2">
+        <div class="lesson-head">
+          <h3>4-2. Result型パターンでの安全なエラーハンドリング</h3>
+          <button class="lesson-check-btn" data-lesson-id="4-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>throw</code>による例外は、関数のシグネチャだけでは「何が失敗しうるか」が分かりません。Rustなどの言語で使われる<strong>Result型パターン</strong>をTypeScriptに輸入すると、成功/失敗を型として明示できます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">result.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">type Result&lt;T, E&gt; =
+  | { ok: true; value: T }
+  | { ok: false; error: E };
+
+function parseAge(input: string): Result&lt;number, string&gt; {
+  const age = Number(input);
+  if (Number.isNaN(age)) {
+    return { ok: false, error: `"${input}" is not a number` };
+  }
+  if (age &lt; 0 || age &gt; 150) {
+    return { ok: false, error: `${age} is out of valid range` };
+  }
+  return { ok: true, value: age };
+}
+
+// 呼び出し側は必ずok分岐を処理させられる
+const result = parseAge("28");
+if (result.ok) {
+  console.log(result.value); // number
+} else {
+  console.error(result.error); // string
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>フォームバリデーションのような「失敗が想定内」の処理はResult型で表現し、ネットワーク障害のような「本当に例外的な失敗」だけをthrowにする、と使い分けると呼び出し側のコードが読みやすくなります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-2-a</span><h4>メールアドレスのバリデーションをResult型で書く</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>「<code>@</code>を含む」という簡易ルールでメールアドレスを検証する<code>validateEmail(input: string): Result&lt;string, string&gt;</code>を実装してください。成功時は入力値をそのまま<code>value</code>として返します。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function validateEmail(input: string): Result&lt;string, string&gt; {
+  if (!input.includes("@")) {
+    return { ok: false, error: "メールアドレスの形式が正しくありません" };
+  }
+  return { ok: true, value: input };
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-2-b</span><h4>複数のResultを合成するcombineを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p><code>Result&lt;T, E&gt;</code>の配列を受け取り、すべて成功していれば<code>{ ok: true, value: T[] }</code>を、1つでも失敗していれば最初のエラーを<code>{ ok: false, error: E }</code>として返す<code>combine&lt;T, E&gt;(results: Result&lt;T, E&gt;[]): Result&lt;T[], E&gt;</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">function combine&lt;T, E&gt;(results: Result&lt;T, E&gt;[]): Result&lt;T[], E&gt; {
+  const values: T[] = [];
+  for (const result of results) {
+    if (!result.ok) {
+      return result; // { ok: false; error: E } をそのまま返す
+    }
+    values.push(result.value);
+  }
+  return { ok: true, value: values };
+}</code></pre>
+              </div>
+              <p>フォームの複数フィールドを一括バリデーションするときなどに、この<code>combine</code>のような関数が役立ちます。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール4完了の目安: <code>Promise.all</code>で並行化でき、Result型パターンの利点を説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 5
+    ========================================================= -->
+    <section class="module-section" id="m-5">
+      <div class="module-heading"><span class="num">MODULE 05</span><h2>実務で使う型設計パターン</h2></div>
+      <p class="module-lead">「型を書く」から「型で設計する」へ。フロントエンドでもバックエンドでも使う定番パターンを扱います。</p>
+
+      <section class="lesson" id="l-5-1" data-lesson-id="5-1">
+        <div class="lesson-head">
+          <h3>5-1. Discriminated Unionとブランド型</h3>
+          <button class="lesson-check-btn" data-lesson-id="5-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>Discriminated Union（タグ付き合併型）は、共通の「タグ用プロパティ（<code>kind</code>や<code>type</code>など）」を持つ複数の型を1つのUnionにまとめるパターンです。UIの状態管理（ローディング/成功/失敗）で頻出します。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">discriminated-union.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">type FetchState&lt;T&gt; =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; data: T }
+  | { status: "error"; message: string };
+
+function render&lt;T&gt;(state: FetchState&lt;T&gt;): string {
+  switch (state.status) {
+    case "idle": return "待機中";
+    case "loading": return "読み込み中...";
+    case "success": return `取得成功: ${JSON.stringify(state.data)}`;
+    case "error": return `エラー: ${state.message}`;
+  }
+}</code></pre>
+        </div>
+        <p>ブランド型は「見た目は同じ型（例: <code>number</code>や<code>string</code>）だが、意味的には別物」を区別するテクニックです。<code>UserId</code>と<code>ProductId</code>を両方<code>number</code>で扱っていると、引数の渡し間違いをコンパイラが検出できません。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">branded-types.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">type UserId = number &amp; { readonly __brand: "UserId" };
+type ProductId = number &amp; { readonly __brand: "ProductId" };
+
+function toUserId(id: number): UserId {
+  return id as UserId;
+}
+
+function getUser(id: UserId) { /* ... */ }
+
+const userId = toUserId(1);
+const productId = 1 as unknown as ProductId;
+
+getUser(userId);    // OK
+// getUser(productId); // コンパイルエラー: ProductIdはUserIdではない
+// getUser(1);          // コンパイルエラー: ただのnumberも受け付けない</code></pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-1-a</span><h4>信号機の状態をDiscriminated Unionで再設計する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>非同期処理の「未実行/実行中/成功（件数を含む）/失敗（理由を含む）」を表す<code>SubmitState</code>をDiscriminated Unionで定義し、それぞれの状態に応じたボタンのラベルを返す<code>buttonLabel(state: SubmitState): string</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type SubmitState =
+  | { status: "idle" }
+  | { status: "submitting" }
+  | { status: "success"; count: number }
+  | { status: "failed"; reason: string };
+
+function buttonLabel(state: SubmitState): string {
+  switch (state.status) {
+    case "idle": return "送信する";
+    case "submitting": return "送信中...";
+    case "success": return `${state.count}件送信しました`;
+    case "failed": return `再送信（${state.reason}）`;
+  }
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-1-b</span><h4>金額をブランド型で表現する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>「円建て金額」を表すブランド型<code>Yen</code>を定義し、<code>number</code>から<code>Yen</code>へ変換する<code>toYen(value: number): Yen</code>、2つの<code>Yen</code>を加算する<code>addYen(a: Yen, b: Yen): Yen</code>を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type Yen = number &amp; { readonly __brand: "Yen" };
+
+function toYen(value: number): Yen {
+  return value as Yen;
+}
+
+function addYen(a: Yen, b: Yen): Yen {
+  return toYen(a + b);
+}
+
+const price = toYen(1000);
+const tax = toYen(100);
+const total = addYen(price, tax); // 1100 as Yen</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-5-2" data-lesson-id="5-2">
+        <div class="lesson-head">
+          <h3>5-2. 型安全なAPIクライアント設計</h3>
+          <button class="lesson-check-btn" data-lesson-id="5-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>APIのエンドポイントごとにレスポンス型がバラバラだと、呼び出し側で型の対応関係を手動で管理することになります。「エンドポイント名から戻り値の型を導く」設計にしておくと、型の対応漏れをコンパイラがチェックしてくれます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">api-client.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">// エンドポイントと戻り値の型を1つのマップで管理する
+type ApiRoutes = {
+  "/users": { id: number; name: string }[];
+  "/users/me": { id: number; name: string; email: string };
+  "/products": { id: number; price: number }[];
+};
+
+async function apiGet&lt;Path extends keyof ApiRoutes&gt;(
+  path: Path
+): Promise&lt;ApiRoutes[Path]&gt; {
+  const res = await fetch(path as string);
+  return res.json();
+}
+
+// 呼び出し側は文字列を書くだけで、戻り値の型が自動的に確定する
+const users = await apiGet("/users");       // { id: number; name: string }[]
+const me = await apiGet("/users/me");       // { id: number; name: string; email: string }
+// const bad = await apiGet("/unknown");    // コンパイルエラー: ApiRoutesに存在しないパス</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>この設計はtRPCやOpenAPIから型を自動生成するツールの考え方の基礎にもなっています。エンドポイントが増えるほど「型マップに1行追加するだけで型安全になる」メリットが大きくなります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-2-a</span><h4>ApiRoutesにエンドポイントを追加する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>上記の<code>ApiRoutes</code>に、<code>"/orders/:id"</code>相当のパス<code>"/orders/1"</code>のようなものは今回は考えず、単純に<code>"/orders"</code>（戻り値: <code>{ id: number; total: number }[]</code>）を追加してください。そのうえで<code>apiGet("/orders")</code>を呼び出すコードを書いてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type ApiRoutes = {
+  "/users": { id: number; name: string }[];
+  "/users/me": { id: number; name: string; email: string };
+  "/products": { id: number; price: number }[];
+  "/orders": { id: number; total: number }[];
+};
+
+const orders = await apiGet("/orders"); // { id: number; total: number }[]</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-2-b</span><h4>POST用の型マップを設計する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>「リクエストボディの型」と「レスポンスの型」の両方をエンドポイントごとに管理する<code>ApiPostRoutes</code>型（<code>"/users"</code>キーに<code>{ body: { name: string }; response: { id: number; name: string } }</code>）を定義し、それを使う<code>apiPost&lt;Path extends keyof ApiPostRoutes&gt;(path: Path, body: ApiPostRoutes[Path]["body"]): Promise&lt;ApiPostRoutes[Path]["response"]&gt;</code>の型シグネチャだけを書いてください（実装のfetch部分は簡略化してOKです）。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">type ApiPostRoutes = {
+  "/users": {
+    body: { name: string };
+    response: { id: number; name: string };
+  };
+};
+
+async function apiPost&lt;Path extends keyof ApiPostRoutes&gt;(
+  path: Path,
+  body: ApiPostRoutes[Path]["body"]
+): Promise&lt;ApiPostRoutes[Path]["response"]&gt; {
+  const res = await fetch(path as string, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  return res.json();
+}
+
+// 呼び出し例: bodyの形も、戻り値の型も自動でチェックされる
+const created = await apiPost("/users", { name: "太郎" });</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール5完了の目安: Discriminated Unionとブランド型の使いどころを説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 6
+    ========================================================= -->
+    <section class="module-section" id="m-6">
+      <div class="module-heading"><span class="num">MODULE 06</span><h2>クラス・モジュール設計とNode.js実務</h2></div>
+      <p class="module-lead">TypeScriptのクラス機能と、プロジェクト全体の型安全性を支える設定まわりを扱います。</p>
+
+      <section class="lesson" id="l-6-1" data-lesson-id="6-1">
+        <div class="lesson-head">
+          <h3>6-1. 抽象クラス・インターフェース設計</h3>
+          <button class="lesson-check-btn" data-lesson-id="6-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>interface</code>は「形」だけを定義し実装を持てません。<code>abstract class</code>は共通実装を持ちつつ、一部を子クラスに実装させられます。「共通処理があるならabstract class、契約だけ決めたいならinterface」が基本方針です。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">abstract-class.ts</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-typescript">abstract class PaymentProcessor {
+  // 共通のテンプレート処理
+  process(amount: number): void {
+    this.validate(amount);
+    this.charge(amount);
+    console.log(`${amount}円の決済が完了しました`);
+  }
+
+  protected validate(amount: number): void {
+    if (amount &lt;= 0) throw new Error("amount must be positive");
+  }
+
+  // サブクラスに実装を強制する
+  protected abstract charge(amount: number): void;
+}
+
+class CreditCardProcessor extends PaymentProcessor {
+  protected charge(amount: number): void {
+    console.log(`クレジットカードで${amount}円を課金`);
+  }
+}
+
+class CreditCardProcessor2 extends PaymentProcessor {
+  protected charge(amount: number): void {
+    console.log(`コンビニ決済で${amount}円を課金`);
+  }
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>これはJavaのTemplate Methodパターンと同じ考え方です。共通の処理の流れ（validate → charge → ログ出力）を親クラスで固定し、可変な部分だけをサブクラスに実装させることで、処理の流れの一貫性を保証できます。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-1-a</span><h4>通知の抽象クラスを設計する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>共通処理として「送信前にログを出す」→「送信する」→「送信後にログを出す」という流れを持つ<code>abstract class Notifier</code>を実装してください。実際の送信処理（<code>protected abstract deliver(message: string): void</code>）だけをサブクラス<code>EmailNotifier</code>で実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-typescript">abstract class Notifier {
+  send(message: string): void {
+    console.log(`[send開始] ${message}`);
+    this.deliver(message);
+    console.log(`[send完了] ${message}`);
+  }
+
+  protected abstract deliver(message: string): void;
+}
+
+class EmailNotifier extends Notifier {
+  protected deliver(message: string): void {
+    console.log(`メール送信: ${message}`);
+  }
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-1-b</span><h4>interfaceとabstract classを使い分ける</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>「複数の無関係なクラスに共通の振る舞い（例: <code>Comparable</code>のような比較機能）だけを持たせたい」場合と、「共通のロジックを1箇所にまとめて重複をなくしたい」場合、それぞれ<code>interface</code>と<code>abstract class</code>のどちらが適しているか、理由とあわせて答えてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>前者（共通の振る舞いだけを持たせたい）は<code>interface</code>が適しています。TypeScriptのクラスは複数の<code>interface</code>を実装できるため、無関係な継承階層のクラスにも横断的に「契約」を持たせられます。後者（共通ロジックをまとめたい）は<code>abstract class</code>が適しています。実装コードそのものを共有でき、テンプレートメソッドパターンのような「流れの固定」も表現できます。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-6-2" data-lesson-id="6-2">
+        <div class="lesson-head">
+          <h3>6-2. モジュール分割とtsconfig実務Tips</h3>
+          <button class="lesson-check-btn" data-lesson-id="6-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>型定義は「使う場所の近く」ではなく「意味のまとまり」でファイルを分けると、プロジェクトが大きくなっても迷子になりません。よくある構成は次の通りです。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">project-structure.txt</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-none">src/
+  types/
+    user.ts        // ドメインの型定義（User, UserId など）
+    api.ts         // API通信共通の型（ApiResponse&lt;T&gt; など）
+  services/
+    user-service.ts
+  utils/
+    result.ts      // Result&lt;T, E&gt; など汎用の型・関数</code></pre>
+        </div>
+        <p>実務でまず有効化すべき<code>tsconfig.json</code>のオプションは次の3つです。これらをオフにしたまま開発すると、TypeScriptの型チェックの恩恵の多くが失われます。</p>
+        <table>
+          <thead><tr><th>オプション</th><th>効果</th></tr></thead>
+          <tbody>
+            <tr><td><code>strict</code></td><td>厳格な型チェックをまとめて有効化する（実質必須）</td></tr>
+            <tr><td><code>noUncheckedIndexedAccess</code></td><td><code>arr[i]</code>や<code>obj[key]</code>の結果に<code>undefined</code>の可能性を含める</td></tr>
+            <tr><td><code>noImplicitOverride</code></td><td>親クラスのメソッドを上書きする際に<code>override</code>を必須にし、タイプミスによる意図しない新規メソッド化を防ぐ</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>noUncheckedIndexedAccess</code>を有効にしていないと、<code>const first = arr[0]</code>は要素が存在しなくても<code>undefined</code>を許容しない型になり、実行時エラーの温床になります。新規プロジェクトでは最初からオンにしておきましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-2-a</span><h4>noUncheckedIndexedAccessの効果を説明する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>次のコードは<code>noUncheckedIndexedAccess</code>が有効な場合、なぜコンパイルエラーになるか説明し、安全な書き方に直してください。</p>
+            <div class="code-block">
+              <pre><code class="language-typescript">function firstChar(items: string[]): string {
+  return items[0].charAt(0); // items[0]がundefinedの可能性
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>理由: <code>items</code>が空配列の場合、<code>items[0]</code>は実行時に<code>undefined</code>になりますが、<code>noUncheckedIndexedAccess</code>を付けないTypeScriptはこれを型上考慮しません。有効にすると<code>items[0]</code>の型は<code>string | undefined</code>となり、<code>.charAt</code>の呼び出しがコンパイルエラーになります。</p>
+              <div class="code-block">
+                <pre><code class="language-typescript">function firstChar(items: string[]): string {
+  const first = items[0];
+  if (first === undefined) {
+    throw new Error("items is empty");
+  }
+  return first.charAt(0);
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-2-b</span><h4>overrideキーワードでタイプミスを防ぐ</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次のコードには「親クラスのメソッドをオーバーライドしたつもりが、メソッド名のタイプミスで新しいメソッドを追加してしまっている」バグがあります。<code>noImplicitOverride</code>が有効ならどちらの行がコンパイルエラーになるか指摘し、正しいコードに直してください。</p>
+            <div class="code-block">
+              <pre><code class="language-typescript">abstract class Notifier {
+  abstract deliver(message: string): void;
+}
+
+class SmsNotifier extends Notifier {
+  delvier(message: string): void { // "deliver" のタイプミス
+    console.log(`SMS: ${message}`);
+  }
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p><code>delvier</code>は<code>deliver</code>のタイプミスで、抽象メソッドをオーバーライドできておらず、無関係な新メソッドとして定義されてしまっています。<code>override</code>キーワードを付けると、対応する親クラスのメンバーが存在しない場合にコンパイルエラーとして検出できます。</p>
+              <div class="code-block">
+                <pre><code class="language-typescript">class SmsNotifier extends Notifier {
+  override deliver(message: string): void {
+    console.log(`SMS: ${message}`);
+  }
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール6完了の目安: <code>strict</code>系オプションの意義を説明できればOKです。これで講座は修了です、お疲れさまでした！</div>
+    </section>
+
+    <div class="course-footer-nav">
+      <a class="prev" href="../java/index.html"><span class="label">前の講座</span>← Java 実務力養成講座</a>
+      <a class="next" href="../react/index.html"><span class="label">次の講座</span>React 実務力養成講座 →</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="../js/course.js"></script>
+</body>
+</html>

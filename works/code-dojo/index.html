@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CODE DOJO — Java / TypeScript / React 中級〜上級講座</title>
+<meta name="description" content="現場でよく使う書き方を軸にした、Java・TypeScript・Reactの中級〜上級講座。解説はコンパクトに、自分の手で考えて解く演習を豊富に収録。スマホ・タブレット対応。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%F0%9F%A5%8B%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-raise: #12151d;
+  --bg-card: #161a24;
+  --line: #262c3a;
+  --ink: #e7e9f0;
+  --ink-soft: #a7adc0;
+  --ink-mute: #6b7286;
+  --accent: #5ee6c8;
+  --accent-ink: #06231d;
+  --java: #f2a35c;
+  --ts: #5b9dff;
+  --react: #61dafb;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(ellipse 70% 40% at 50% -5%, rgba(94,230,200,0.10), transparent 65%),
+    var(--bg);
+  color: var(--ink);
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img, svg { max-width: 100%; display: block; }
+.mono { font-family: "JetBrains Mono", monospace; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- header ---------- */
+header.top {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(11,13,18,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 900; letter-spacing: 0.02em; font-size: 15px; }
+.brand .mark { font-size: 19px; }
+.back-link {
+  font-size: 12.5px; color: var(--ink-mute);
+  border: 1px solid var(--line); padding: 6px 12px; border-radius: 100px;
+}
+.back-link:hover { color: var(--ink); border-color: var(--accent); }
+
+/* ---------- hero ---------- */
+.hero { padding: 80px 0 60px; text-align: center; }
+.hero .kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; font-weight: 700; color: var(--accent);
+  background: rgba(94,230,200,0.10); border: 1px solid rgba(94,230,200,0.3);
+  padding: 6px 14px; border-radius: 100px; margin-bottom: 22px;
+}
+.hero h1 {
+  font-size: clamp(30px, 5.5vw, 52px);
+  line-height: 1.3;
+  font-weight: 900;
+  margin-bottom: 18px;
+}
+.hero h1 .accent { color: var(--accent); }
+.hero .lead {
+  color: var(--ink-soft); font-size: 15.5px;
+  max-width: 640px; margin: 0 auto 34px;
+}
+.hero .stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.stat-pill {
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 20px; min-width: 108px;
+}
+.stat-pill b { display: block; font-size: 21px; font-family: "JetBrains Mono", monospace; }
+.stat-pill span { font-size: 11.5px; color: var(--ink-mute); }
+
+/* ---------- courses ---------- */
+.section { padding: 20px 0 70px; }
+.section-head { text-align: center; margin-bottom: 40px; }
+.section-head .eyebrow { font-size: 12px; color: var(--ink-mute); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+.section-head h2 { font-size: 26px; font-weight: 900; }
+
+.course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.course-card {
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 28px 24px 24px; display: flex; flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.course-card:hover { transform: translateY(-4px); border-color: var(--card-accent, var(--accent)); }
+.course-card.java   { --card-accent: var(--java); }
+.course-card.ts      { --card-accent: var(--ts); }
+.course-card.react   { --card-accent: var(--react); }
+
+.course-card .icon-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.course-card .emoji { font-size: 34px; }
+.course-card .level-badge {
+  font-size: 11px; font-weight: 700; color: var(--card-accent);
+  background: rgba(94, 230, 200, 0.12);
+  background: color-mix(in srgb, var(--card-accent) 16%, transparent);
+  border: 1px solid var(--card-accent);
+  border: 1px solid color-mix(in srgb, var(--card-accent) 40%, transparent);
+  padding: 4px 10px; border-radius: 100px;
+}
+.course-card h3 { font-size: 19px; margin-bottom: 4px; }
+.course-card .subtitle { font-size: 12.5px; color: var(--card-accent); font-weight: 700; margin-bottom: 14px; font-family: "JetBrains Mono", monospace; }
+.course-card p.desc { color: var(--ink-soft); font-size: 13.5px; margin-bottom: 18px; flex: 1; }
+.course-card .meta-row { display: flex; gap: 16px; margin-bottom: 20px; font-size: 12px; color: var(--ink-mute); }
+.course-card .meta-row b { color: var(--ink); font-family: "JetBrains Mono", monospace; }
+.course-card ul.skills { list-style: none; margin-bottom: 22px; }
+.course-card ul.skills li {
+  font-size: 12.5px; color: var(--ink-soft); padding-left: 18px; position: relative; margin-bottom: 7px;
+}
+.course-card ul.skills li::before {
+  content: "›"; position: absolute; left: 0; color: var(--card-accent); font-weight: 700;
+}
+.course-card .cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--card-accent); color: #06110f; font-weight: 700; font-size: 13.5px;
+  padding: 12px; border-radius: 10px; margin-top: auto;
+}
+.course-card:hover .cta { filter: brightness(1.08); }
+
+/* ---------- how-to ---------- */
+.howto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.howto-card {
+  background: var(--bg-raise); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+}
+.howto-card .num { font-family: "JetBrains Mono", monospace; color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.howto-card h4 { font-size: 15px; margin-bottom: 8px; }
+.howto-card p { font-size: 13px; color: var(--ink-mute); }
+
+/* ---------- footer ---------- */
+footer.bottom { border-top: 1px solid var(--line); padding: 34px 0; text-align: center; }
+footer.bottom p { color: var(--ink-mute); font-size: 12.5px; }
+footer.bottom a.top-return { color: var(--accent); font-weight: 700; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .course-grid { grid-template-columns: 1fr; }
+  .howto-grid { grid-template-columns: 1fr; }
+  .hero { padding: 56px 0 44px; }
+}
+@media (max-width: 560px) {
+  .wrap { padding: 0 16px; }
+  .hero .stats { gap: 10px; }
+  .stat-pill { min-width: 92px; padding: 10px 14px; }
+  .course-card { padding: 22px 18px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark">🥋</span> CODE DOJO</a>
+    <a class="back-link" href="../../index.html">← Site Collection に戻る</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="kicker">🎓 中級 〜 上級向け・自習型プログラミング講座</span>
+    <h1>手を動かして覚える、<br><span class="accent">実務レベル</span>のコードの書き方。</h1>
+    <p class="lead">
+      Java・TypeScript・Reactの3講座を用意しました。基礎文法の説明は最小限にして、
+      現場でよく使う設計パターンや落とし穴の解説と、<strong>自分の頭で考えて解く演習問題</strong>を中心に構成しています。
+      進捗はブラウザに自動保存されるので、続きから何度でも学習できます。
+    </p>
+    <div class="stats">
+      <div class="stat-pill"><b>3</b><span>コース</span></div>
+      <div class="stat-pill"><b>18</b><span>モジュール</span></div>
+      <div class="stat-pill"><b>74</b><span>演習問題</span></div>
+      <div class="stat-pill"><b>0円</b><span>すべて無料</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Courses</div>
+      <h2>3つの講座から選ぶ</h2>
+    </div>
+    <div class="course-grid">
+
+      <a class="course-card java" href="java/index.html">
+        <div class="icon-row">
+          <span class="emoji">☕</span>
+          <span class="level-badge">中級 〜 上級</span>
+        </div>
+        <h3>Java 実務力養成講座</h3>
+        <div class="subtitle mono">JAVA / OOP / CONCURRENCY</div>
+        <p class="desc">ジェネリクス・Stream APIから、デザインパターン、例外設計、並行処理、テストの考え方まで。バックエンド開発の現場で本当に使う知識を一本の道場に。</p>
+        <div class="meta-row"><span><b>6</b> モジュール</span><span><b>25</b> 演習</span></div>
+        <ul class="skills">
+          <li>ジェネリクス・Stream APIを使いこなす</li>
+          <li>SOLID原則と代表的デザインパターン</li>
+          <li>並行処理(Executor / CompletableFuture)</li>
+        </ul>
+        <span class="cta">講座を始める →</span>
+      </a>
+
+      <a class="course-card ts" href="typescript/index.html">
+        <div class="icon-row">
+          <span class="emoji">🔷</span>
+          <span class="level-badge">中級 〜 上級</span>
+        </div>
+        <h3>TypeScript 実務力養成講座</h3>
+        <div class="subtitle mono">TYPESCRIPT / TYPE SYSTEM</div>
+        <p class="desc">型システムを武器にする講座。Union/ジェネリクスから、Mapped Types・Conditional Typesなどの高度な型操作、実務でのAPI設計パターンまで扱います。</p>
+        <div class="meta-row"><span><b>6</b> モジュール</span><span><b>25</b> 演習</span></div>
+        <ul class="skills">
+          <li>高度な型操作(Mapped / Conditional Types)</li>
+          <li>型安全な非同期処理とエラーハンドリング</li>
+          <li>実務で使う型設計パターン</li>
+        </ul>
+        <span class="cta">講座を始める →</span>
+      </a>
+
+      <a class="course-card react" href="react/index.html">
+        <div class="icon-row">
+          <span class="emoji">⚛️</span>
+          <span class="level-badge">中級 〜 上級</span>
+        </div>
+        <h3>React 実務力養成講座</h3>
+        <div class="subtitle mono">REACT / HOOKS / PATTERNS</div>
+        <p class="desc">Hooksを深く理解し、パフォーマンス最適化・状態管理設計・実務的なコンポーネント設計パターンまでを演習形式で身につける講座です。</p>
+        <div class="meta-row"><span><b>6</b> モジュール</span><span><b>24</b> 演習</span></div>
+        <ul class="skills">
+          <li>useEffect / useMemo / useCallbackの正しい使い方</li>
+          <li>カスタムフックによるロジックの再利用</li>
+          <li>状態管理設計とコンポーネント分割</li>
+        </ul>
+        <span class="cta">講座を始める →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How to use</div>
+      <h2>この講座の使い方</h2>
+    </div>
+    <div class="howto-grid">
+      <div class="howto-card">
+        <div class="num">01</div>
+        <h4>解説を読む</h4>
+        <p>各レッスンは要点を絞った解説から始まります。実務での使いどころや、やりがちなミスも合わせて紹介しています。</p>
+      </div>
+      <div class="howto-card">
+        <div class="num">02</div>
+        <h4>自分の環境で解く</h4>
+        <p>演習問題は説明を読めば解ける難易度です。答えを見る前に、自分のエディタで実際にコードを書いてみましょう。</p>
+      </div>
+      <div class="howto-card">
+        <div class="num">03</div>
+        <h4>解答例と見比べる</h4>
+        <p>「解答例を見る」を開くと模範解答が出ます。自分の書き方との違いを比べることで理解が定着します。進捗は自動保存されます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bottom">
+  <div class="wrap">
+    <p>CODE DOJO — Java / TypeScript / React 中級〜上級講座</p>
+    <p style="margin-top:6px;"><a class="top-return" href="../../index.html">← Site Collection の作品一覧へ戻る</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

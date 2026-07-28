@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java 実務力養成講座 | CODE DOJO</title>
+<meta name="description" content="ジェネリクス・Stream API・デザインパターン・例外設計・並行処理・テストまで。Java中級者が実務レベルに上がるための講座。演習問題と解答例つき。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%E2%98%95%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="../css/course.css">
+</head>
+<body class="course-java" data-course="java">
+
+<header class="course-topbar">
+  <button id="sidebarMenuBtn" class="topbar-menu-btn" aria-label="目次メニューを開く">☰</button>
+  <a class="topbar-back" href="../index.html">← 講座一覧</a>
+  <div class="topbar-title">☕ Java 実務力養成講座</div>
+  <div class="topbar-progress">
+    <div class="topbar-progress-bar"><div class="topbar-progress-fill" id="progressFill"></div></div>
+    <span class="topbar-progress-label" id="progressLabel">0 / 25 完了</span>
+  </div>
+</header>
+<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+<div class="course-shell">
+  <aside class="course-sidebar">
+    <div class="sidebar-intro">
+      <span class="badge-lang">☕ JAVA・中級〜上級</span>
+      <h1>Java 実務力養成講座</h1>
+      <p>全6モジュール・12レッスン・25演習</p>
+    </div>
+    <nav aria-label="目次">
+
+      <div class="toc-module is-open" data-module="1">
+        <button class="toc-module-head"><span class="toc-module-num">01</span>ジェネリクスと型安全な設計<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-1-1" data-lesson-id="1-1"><span class="toc-check"></span>ジェネリッククラスとメソッド</a></li>
+          <li><a href="#l-1-2" data-lesson-id="1-2"><span class="toc-check"></span>境界ワイルドカードと型消去</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="2">
+        <button class="toc-module-head"><span class="toc-module-num">02</span>Stream APIとコレクション操作<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-2-1" data-lesson-id="2-1"><span class="toc-check"></span>Streamの生成とmap/filter/reduce</a></li>
+          <li><a href="#l-2-2" data-lesson-id="2-2"><span class="toc-check"></span>Collectors応用とOptional</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="3">
+        <button class="toc-module-head"><span class="toc-module-num">03</span>OOP設計とデザインパターン<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-3-1" data-lesson-id="3-1"><span class="toc-check"></span>SOLID・Strategy・Factory</a></li>
+          <li><a href="#l-3-2" data-lesson-id="3-2"><span class="toc-check"></span>Builder・Observer・Singleton</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="4">
+        <button class="toc-module-head"><span class="toc-module-num">04</span>例外設計とエラーハンドリング<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-4-1" data-lesson-id="4-1"><span class="toc-check"></span>独自例外クラスの設計</a></li>
+          <li><a href="#l-4-2" data-lesson-id="4-2"><span class="toc-check"></span>try-with-resourcesと例外の握りつぶし防止</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="5">
+        <button class="toc-module-head"><span class="toc-module-num">05</span>並行処理の基礎と実務<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-5-1" data-lesson-id="5-1"><span class="toc-check"></span>Thread・ExecutorServiceの基本</a></li>
+          <li><a href="#l-5-2" data-lesson-id="5-2"><span class="toc-check"></span>CompletableFutureとスレッドセーフ設計</a></li>
+        </ul>
+      </div>
+
+      <div class="toc-module" data-module="6">
+        <button class="toc-module-head"><span class="toc-module-num">06</span>実務API活用とテスト<span class="toc-module-caret">›</span></button>
+        <ul class="toc-lessons">
+          <li><a href="#l-6-1" data-lesson-id="6-1"><span class="toc-check"></span>java.timeとNIO.2ファイルI/O</a></li>
+          <li><a href="#l-6-2" data-lesson-id="6-2"><span class="toc-check"></span>JUnit5とテスト設計の基本</a></li>
+        </ul>
+      </div>
+
+    </nav>
+  </aside>
+
+  <main class="course-main">
+
+    <div class="course-hero">
+      <span class="badge-lang">☕ JAVA・中級〜上級</span>
+      <h1>Java 実務力養成講座</h1>
+      <p class="lead">
+        文法の基礎は理解している方向けに、実務のコードで頻出する書き方を凝縮しました。
+        ジェネリクスとStream APIから、デザインパターン、例外設計、並行処理、テストの考え方まで。
+        各レッスンは短い解説 + 演習問題という構成で、手を動かしながら定着させます。
+      </p>
+      <div class="stat-row">
+        <div class="stat-chip"><b>6</b><span>モジュール</span></div>
+        <div class="stat-chip"><b>12</b><span>レッスン</span></div>
+        <div class="stat-chip"><b>25</b><span>演習問題</span></div>
+      </div>
+      <div class="how-to">
+        <b>進め方:</b> 解説を読んだら、まず自分の手元のIDEで演習を解いてみてください。「解答例を見る」は自分なりの答えを書いたあとに開くのがおすすめです。レッスン見出し横の「完了にする」を押すと進捗がブラウザに保存されます。
+      </div>
+    </div>
+
+    <!-- ========================================================
+         MODULE 1
+    ========================================================= -->
+    <section class="module-section" id="m-1">
+      <div class="module-heading"><span class="num">MODULE 01</span><h2>ジェネリクスと型安全な設計</h2></div>
+      <p class="module-lead">コレクションやリポジトリ層で必ず使うジェネリクス。「なんとなく &lt;T&gt; を書く」から「意図を持って設計する」レベルに引き上げます。</p>
+
+      <section class="lesson" id="l-1-1" data-lesson-id="1-1">
+        <div class="lesson-head">
+          <h3>1-1. ジェネリッククラスとメソッド</h3>
+          <button class="lesson-check-btn" data-lesson-id="1-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>ジェネリクスは「型をあとから決められるようにする仕組み」です。<code>Object</code>で何でも受け取る設計と違い、コンパイル時に型が保証されるため、実行時の<code>ClassCastException</code>を防げます。クラスだけでなく、メソッド単体にも型パラメータを持たせられます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">Box.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">public class Box&lt;T&gt; {
+    private T content;
+
+    public void set(T content) {
+        this.content = content;
+    }
+
+    public T get() {
+        return content;
+    }
+}
+
+// メソッド単体のジェネリクス（クラスとは独立して型パラメータを持てる）
+public class Pair {
+    public static &lt;A, B&gt; boolean sameClass(A a, B b) {
+        return a.getClass().equals(b.getClass());
+    }
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>リポジトリ層の共通処理（<code>findById</code>や<code>save</code>など）を<code>interface Repository&lt;T, ID&gt;</code>のような形で抽象化しておくと、エンティティが増えても実装をコピペせずに済みます。Spring Data JPAの<code>JpaRepository&lt;T, ID&gt;</code>もこの考え方です。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-1-a</span><h4>ジェネリックなスタックを実装する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>任意の型を格納できるスタック<code>SimpleStack&lt;T&gt;</code>を実装してください。<code>push(T item)</code>、<code>pop()</code>（空なら<code>IllegalStateException</code>を投げる）、<code>peek()</code>、<code>isEmpty()</code>を持たせます。内部の保持には<code>java.util.ArrayList</code>を使ってかまいません。</p>
+            <div class="exercise-hint"><b>ヒント:</b> フィールドは<code>private final List&lt;T&gt; items = new ArrayList&lt;&gt;();</code>のように宣言します。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <div class="code-block-head"><span class="fname mono">SimpleStack.java</span><button class="copy-btn">コピー</button></div>
+                <pre><code class="language-java">public class SimpleStack&lt;T&gt; {
+    private final List&lt;T&gt; items = new ArrayList&lt;&gt;();
+
+    public void push(T item) {
+        items.add(item);
+    }
+
+    public T pop() {
+        if (isEmpty()) {
+            throw new IllegalStateException("stack is empty");
+        }
+        return items.remove(items.size() - 1);
+    }
+
+    public T peek() {
+        if (isEmpty()) {
+            throw new IllegalStateException("stack is empty");
+        }
+        return items.get(items.size() - 1);
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
+}</code></pre>
+              </div>
+              <p><code>ArrayList</code>の末尾操作はO(1)なので、末尾をスタックの先頭とみなすのが定石です。先頭(index 0)を使うと要素移動が発生し、パフォーマンスが落ちます。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-1-b</span><h4>2つの値を安全に入れ替えるユーティリティ</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>配列の2要素を入れ替える汎用メソッド<code>static &lt;T&gt; void swap(T[] array, int i, int j)</code>をユーティリティクラス<code>ArrayUtils</code>に実装してください。型は問いません（<code>Integer[]</code>でも<code>String[]</code>でも動くこと）。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <div class="code-block-head"><span class="fname mono">ArrayUtils.java</span><button class="copy-btn">コピー</button></div>
+                <pre><code class="language-java">public final class ArrayUtils {
+    private ArrayUtils() {}
+
+    public static &lt;T&gt; void swap(T[] array, int i, int j) {
+        T tmp = array[i];
+        array[i] = array[j];
+        array[j] = tmp;
+    }
+}</code></pre>
+              </div>
+              <p>ユーティリティクラスはインスタンス化する意味がないため、<code>private</code>コンストラクタで生成を禁止するのが定石です。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-1-2" data-lesson-id="1-2">
+        <div class="lesson-head">
+          <h3>1-2. 境界ワイルドカードと型消去</h3>
+          <button class="lesson-check-btn" data-lesson-id="1-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>List&lt;Integer&gt;</code>は<code>List&lt;Number&gt;</code>のサブタイプではありません。これがジェネリクスの「非変」という性質です。この制約を緩めるのが境界ワイルドカードで、<strong>PECS原則（Producer Extends, Consumer Super）</strong>で使い分けます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">Wildcards.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">// Producer（値を「取り出す」側）は extends
+public static double sumOf(List&lt;? extends Number&gt; numbers) {
+    double sum = 0;
+    for (Number n : numbers) {
+        sum += n.doubleValue();
+    }
+    return sum;
+}
+
+// Consumer（値を「入れる」側）は super
+public static void fillWithZero(List&lt;? super Integer&gt; list, int count) {
+    for (int i = 0; i &lt; count; i++) {
+        list.add(0);
+    }
+}</code></pre>
+        </div>
+        <p>また、ジェネリクスの型情報は<strong>コンパイル時にのみ存在</strong>し、実行時にはすべて消去されます（型消去）。そのため<code>new T()</code>や<code>instanceof List&lt;String&gt;</code>のような記述はできません。実行時に型を扱いたい場合は<code>Class&lt;T&gt;</code>を引数として渡す設計が定番です。</p>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>List&lt;Object&gt;</code>と<code>List&lt;?&gt;</code>を混同しがちですが、前者は「Objectしか入れられない」、後者は「何が入っているか分からないので基本的に読み取り専用として扱う」という全く違う意味です。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-2-a</span><h4>PECS原則でコピーメソッドを書く</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>src</code>から<code>dest</code>へ全要素をコピーする<code>static &lt;T&gt; void copyAll(List&lt;? extends T&gt; src, List&lt;? super T&gt; dest)</code>を実装してください。<code>copyAll(List&lt;Integer&gt; の値, List&lt;Number&gt; の入れ物)</code>のような呼び出しが型エラーなくコンパイルできることを確認してください。</p>
+            <div class="exercise-hint"><b>ヒント:</b> <code>src</code>からは読み取るだけ、<code>dest</code>へは書き込むだけ、という役割を意識するとPECSがそのまま当てはまります。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <div class="code-block-head"><span class="fname mono">CopyUtils.java</span><button class="copy-btn">コピー</button></div>
+                <pre><code class="language-java">public static &lt;T&gt; void copyAll(List&lt;? extends T&gt; src, List&lt;? super T&gt; dest) {
+    for (T item : src) {
+        dest.add(item);
+    }
+}
+
+// 呼び出し例
+List&lt;Integer&gt; ints = List.of(1, 2, 3);
+List&lt;Number&gt; numbers = new ArrayList&lt;&gt;();
+copyAll(ints, numbers); // OK: IntegerはNumberのサブタイプ</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 1-2-b</span><h4>型消去の影響を説明する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次のコードはコンパイルエラーになります。理由をコメントで説明したうえで、<code>Class&lt;T&gt;</code>を引数で受け取る方式に書き換えて、正しく動く<code>createInstance</code>メソッドを完成させてください。</p>
+            <div class="code-block">
+              <pre><code class="language-java">public static &lt;T&gt; T createInstance() {
+    return new T(); // コンパイルエラー
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>理由: ジェネリクスの型パラメータ<code>T</code>は実行時には消去されており、JVMは「<code>T</code>が具体的に何のクラスか」を知る手段がないため、<code>new T()</code>を実体化できません。</p>
+              <div class="code-block">
+                <div class="code-block-head"><span class="fname mono">Factory.java</span><button class="copy-btn">コピー</button></div>
+                <pre><code class="language-java">public static &lt;T&gt; T createInstance(Class&lt;T&gt; type) throws Exception {
+    return type.getDeclaredConstructor().newInstance();
+}
+
+// 呼び出し例
+User user = createInstance(User.class);</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール1完了の目安: PECS原則を人に説明できて、なぜ<code>new T()</code>が書けないか理解できていればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 2
+    ========================================================= -->
+    <section class="module-section" id="m-2">
+      <div class="module-heading"><span class="num">MODULE 02</span><h2>Stream APIとコレクション操作の実務パターン</h2></div>
+      <p class="module-lead">for文をStreamに置き換えるだけでなく、「実務で読みやすいStreamの書き方」と「やってはいけない使い方」を押さえます。</p>
+
+      <section class="lesson" id="l-2-1" data-lesson-id="2-1">
+        <div class="lesson-head">
+          <h3>2-1. Streamの生成とmap/filter/reduce</h3>
+          <button class="lesson-check-btn" data-lesson-id="2-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>Streamは「コレクションに対する処理のパイプライン」です。<code>filter</code>で絞り込み、<code>map</code>で変換し、<code>collect</code>や<code>reduce</code>で集約する、という3段階で考えると設計しやすくなります。中間操作（<code>filter</code>, <code>map</code>など）は遅延評価され、終端操作（<code>collect</code>, <code>forEach</code>など）が呼ばれて初めて実行されます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">StreamBasics.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">List&lt;Employee&gt; employees = ...;
+
+// 30歳以上の社員の名前一覧を取得
+List&lt;String&gt; names = employees.stream()
+        .filter(e -&gt; e.getAge() &gt;= 30)
+        .map(Employee::getName)
+        .toList(); // Java 16+
+
+// 給与の合計
+int totalSalary = employees.stream()
+        .mapToInt(Employee::getSalary)
+        .sum();
+
+// reduceで最も給与が高い社員を求める
+Optional&lt;Employee&gt; topEarner = employees.stream()
+        .reduce((a, b) -&gt; a.getSalary() &gt;= b.getSalary() ? a : b);</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b>Streamは<strong>一度しか消費できません</strong>。同じStreamに対して2回<code>collect</code>すると<code>IllegalStateException</code>になります。使い回したい場合は、都度<code>list.stream()</code>のようにコレクションから作り直してください。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-1-a</span><h4>注文リストから合計金額を求める</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>次の<code>Order</code>レコードのリストに対し、<code>status</code>が<code>"PAID"</code>のものだけを対象に、<code>price * quantity</code>の合計金額を求めるコードをStreamで書いてください。</p>
+            <div class="code-block">
+              <pre><code class="language-java">record Order(String status, int price, int quantity) {}
+
+List&lt;Order&gt; orders = List.of(
+    new Order("PAID", 1200, 2),
+    new Order("CANCELLED", 500, 1),
+    new Order("PAID", 800, 3)
+);</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">int total = orders.stream()
+        .filter(o -&gt; o.status().equals("PAID"))
+        .mapToInt(o -&gt; o.price() * o.quantity())
+        .sum();
+// 1200*2 + 800*3 = 4800</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-1-b</span><h4>単語の出現数トップ3を求める</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>List&lt;String&gt; words</code>から、それぞれの単語の「文字数」の合計を求める代わりに、<strong>文字数が5文字以上の単語だけを大文字化してリストにする</strong>コードをStreamで実装してください。重複は除去し、アルファベット順に並べてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">List&lt;String&gt; result = words.stream()
+        .filter(w -&gt; w.length() &gt;= 5)
+        .map(String::toUpperCase)
+        .distinct()
+        .sorted()
+        .toList();</code></pre>
+              </div>
+              <p><code>distinct()</code>と<code>sorted()</code>はどちらも中間操作ですが、内部的に全要素をバッファする必要があるため、巨大なStreamでは順序とコストに注意しましょう。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-2-2" data-lesson-id="2-2">
+        <div class="lesson-head">
+          <h3>2-2. Collectors応用とOptionalの正しい使い方</h3>
+          <button class="lesson-check-btn" data-lesson-id="2-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>実務のStreamで一番よく使うのが<code>Collectors.groupingBy</code>と<code>Collectors.toMap</code>です。集計処理をfor文で書くよりも、意図が読みやすくなります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">CollectorsDemo.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">// 部署ごとに社員をグルーピング
+Map&lt;String, List&lt;Employee&gt;&gt; byDept = employees.stream()
+        .collect(Collectors.groupingBy(Employee::getDepartment));
+
+// 部署ごとの平均給与
+Map&lt;String, Double&gt; avgSalaryByDept = employees.stream()
+        .collect(Collectors.groupingBy(
+                Employee::getDepartment,
+                Collectors.averagingInt(Employee::getSalary)));
+
+// idをキーにしたMapを作る（キー重複時は例外になる点に注意）
+Map&lt;Long, Employee&gt; byId = employees.stream()
+        .collect(Collectors.toMap(Employee::getId, e -&gt; e));</code></pre>
+        </div>
+        <p><code>Optional</code>は「値がないかもしれない」ことを型で表現する仕組みです。<strong>フィールドやメソッド引数には使わない</strong>のが原則で、あくまで「戻り値」として使います。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">OptionalDemo.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">public Optional&lt;Employee&gt; findById(long id) {
+    return employees.stream()
+            .filter(e -&gt; e.getId() == id)
+            .findFirst();
+}
+
+// 悪い例: get()をいきなり呼ぶとNoSuchElementExceptionの危険
+Employee e = findById(99).get();
+
+// 良い例: orElseThrowで意図を明示する
+Employee e2 = findById(99)
+        .orElseThrow(() -&gt; new NoSuchElementException("employee not found: 99"));
+
+// 値があれば使う、なければ何もしない
+findById(1).ifPresent(emp -&gt; System.out.println(emp.getName()));</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b><code>Optional.isPresent()</code>のあとに<code>get()</code>を呼ぶ書き方はほぼ不要です。<code>map</code>・<code>orElse</code>・<code>orElseGet</code>・<code>orElseThrow</code>を組み合わせれば、if文なしで安全に値を扱えます。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-2-a</span><h4>部署ごとの人数を集計する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p><code>List&lt;Employee&gt;</code>から、部署名をキー、人数をvalueとした<code>Map&lt;String, Long&gt;</code>を<code>Collectors.groupingBy</code>と<code>Collectors.counting()</code>を組み合わせて作成してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">Map&lt;String, Long&gt; countByDept = employees.stream()
+        .collect(Collectors.groupingBy(
+                Employee::getDepartment,
+                Collectors.counting()));</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-2-b</span><h4>Optionalチェーンでニックネームを取得する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>findById(long)</code>が<code>Optional&lt;Employee&gt;</code>を返すとして、<code>Employee</code>には<code>Optional&lt;String&gt; getNickname()</code>があります。id指定で社員を検索し、ニックネームがあればそれを、なければ<code>getName()</code>を、社員自体が見つからなければ<code>"unknown"</code>を返す1行の式を、if文を使わずに書いてください。</p>
+            <div class="exercise-hint"><b>ヒント:</b> <code>Optional#flatMap</code>を使うと、<code>Optional</code>の中の<code>Optional</code>を平坦化できます。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">String label = findById(id)
+        .flatMap(emp -&gt; emp.getNickname().or(() -&gt; Optional.of(emp.getName())))
+        .orElse("unknown");</code></pre>
+              </div>
+              <p><code>Optional#or</code>（Java 9+）は「空だったら別のOptionalを供給する」ためのメソッドで、<code>orElse</code>と違い値を必ずOptionalのまま扱えます。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 2-2-c</span><h4>不変なOptionalフィールドを持つDTOのリファクタリング</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>次のクラスには実務でよくあるアンチパターンがあります。問題点を指摘し、<code>Optional</code>をフィールドに使わない設計に書き換えてください。</p>
+            <div class="code-block">
+              <pre><code class="language-java">public class UserProfile {
+    private Optional&lt;String&gt; middleName; // フィールドにOptional
+
+    public UserProfile(Optional&lt;String&gt; middleName) {
+        this.middleName = middleName;
+    }
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>問題点: <code>Optional</code>は<code>Serializable</code>を実装しておらず、フィールドに使うとシリアライズできません。また呼び出し側が<code>null</code>を渡すとその時点でNPEになり、Optionalの「安全に空を表現する」メリットが失われます。</p>
+              <div class="code-block">
+                <pre><code class="language-java">public class UserProfile {
+    private final String middleName; // nullを許容するフィールドとして扱う
+
+    public UserProfile(String middleName) {
+        this.middleName = middleName; // nullでもOK
+    }
+
+    // 取得時にOptionalへ変換して公開する
+    public Optional&lt;String&gt; getMiddleName() {
+        return Optional.ofNullable(middleName);
+    }
+}</code></pre>
+              </div>
+              <p>「フィールドや引数は素の型（nullを許容）、メソッドの戻り値だけOptionalで包む」というのが実務での定石です。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール2完了の目安: <code>groupingBy</code>で集計できて、<code>Optional</code>をフィールドに使わない理由を説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 3
+    ========================================================= -->
+    <section class="module-section" id="m-3">
+      <div class="module-heading"><span class="num">MODULE 03</span><h2>オブジェクト指向設計とデザインパターン</h2></div>
+      <p class="module-lead">パターン名を覚えることが目的ではなく、「if/switchの分岐が増え続けるコード」をどう設計し直すか、という視点で学びます。</p>
+
+      <section class="lesson" id="l-3-1" data-lesson-id="3-1">
+        <div class="lesson-head">
+          <h3>3-1. SOLID原則とStrategy・Factory Method</h3>
+          <button class="lesson-check-btn" data-lesson-id="3-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>SOLIDのうち実務で特に効いてくるのは<strong>単一責任の原則（SRP）</strong>と<strong>開放閉鎖の原則（OCP）</strong>です。「割引ロジックを条件分岐で足していく」ようなコードは、Strategyパターンで書き換えると新しい割引を追加してもif文を触らずに済みます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">DiscountStrategy.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">public interface DiscountStrategy {
+    int apply(int price);
+}
+
+public class NoDiscount implements DiscountStrategy {
+    public int apply(int price) { return price; }
+}
+
+public class PercentDiscount implements DiscountStrategy {
+    private final int percent;
+    public PercentDiscount(int percent) { this.percent = percent; }
+    public int apply(int price) { return price * (100 - percent) / 100; }
+}
+
+public class Order {
+    private final DiscountStrategy discount;
+    public Order(DiscountStrategy discount) { this.discount = discount; }
+    public int finalPrice(int price) { return discount.apply(price); }
+}</code></pre>
+        </div>
+        <p>Factory Methodは「どの実装クラスを生成するか」の判断をカプセル化するパターンです。呼び出し側は具象クラスを意識せずインターフェースだけを扱えます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">NotifierFactory.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">public interface Notifier {
+    void send(String message);
+}
+
+public class NotifierFactory {
+    public static Notifier create(String channel) {
+        return switch (channel) {
+            case "email" -&gt; new EmailNotifier();
+            case "sms" -&gt; new SmsNotifier();
+            default -&gt; throw new IllegalArgumentException("unknown channel: " + channel);
+        };
+    }
+}</code></pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-1-a</span><h4>料金計算をStrategyパターンに書き換える</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次のif文だらけの<code>calcShippingFee</code>を、Strategyパターンを使って書き換えてください。地域は<code>"STANDARD"</code>, <code>"REMOTE"</code>, <code>"OVERSEAS"</code>の3種類です。</p>
+            <div class="code-block">
+              <pre><code class="language-java">public int calcShippingFee(String region, int weight) {
+    if (region.equals("STANDARD")) {
+        return 500 + weight * 10;
+    } else if (region.equals("REMOTE")) {
+        return 1500 + weight * 15;
+    } else if (region.equals("OVERSEAS")) {
+        return 3000 + weight * 30;
+    }
+    throw new IllegalArgumentException("unknown region");
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">public interface ShippingFeeStrategy {
+    int calc(int weight);
+}
+
+public class StandardShipping implements ShippingFeeStrategy {
+    public int calc(int weight) { return 500 + weight * 10; }
+}
+public class RemoteShipping implements ShippingFeeStrategy {
+    public int calc(int weight) { return 1500 + weight * 15; }
+}
+public class OverseasShipping implements ShippingFeeStrategy {
+    public int calc(int weight) { return 3000 + weight * 30; }
+}
+
+public class ShippingFeeStrategyFactory {
+    public static ShippingFeeStrategy of(String region) {
+        return switch (region) {
+            case "STANDARD" -&gt; new StandardShipping();
+            case "REMOTE" -&gt; new RemoteShipping();
+            case "OVERSEAS" -&gt; new OverseasShipping();
+            default -&gt; throw new IllegalArgumentException("unknown region");
+        };
+    }
+}
+
+// 呼び出し側
+int fee = ShippingFeeStrategyFactory.of(region).calc(weight);</code></pre>
+              </div>
+              <p>新しい地域が増えても、既存クラスを変更せずに新しい<code>ShippingFeeStrategy</code>実装を追加するだけで済みます。これがOCP（開放閉鎖の原則）です。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-1-b</span><h4>単一責任の原則違反を見つける</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>次の<code>UserService</code>クラスはSRP（単一責任の原則）に違反しています。何が問題か指摘し、責任ごとにクラスを分割した設計を提案してください（コードは短くて構いません）。</p>
+            <div class="code-block">
+              <pre><code class="language-java">public class UserService {
+    public void register(String email, String password) {
+        // 1. バリデーション
+        if (!email.contains("@")) throw new IllegalArgumentException("invalid email");
+        // 2. パスワードのハッシュ化
+        String hashed = hash(password);
+        // 3. DB保存
+        jdbcTemplate.update("INSERT INTO users ...", email, hashed);
+        // 4. メール送信
+        mailClient.send(email, "登録ありがとうございます");
+    }
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>問題点: バリデーション・パスワードのハッシュ化・永続化・通知という4つの異なる責任が1メソッドに詰め込まれています。仕様変更（例: メール文面の変更）のたびに<code>UserService</code>全体を触ることになり、テストも書きにくくなります。</p>
+              <div class="code-block">
+                <pre><code class="language-java">public class UserService {
+    private final UserValidator validator;
+    private final PasswordHasher hasher;
+    private final UserRepository repository;
+    private final WelcomeMailSender mailSender;
+
+    public void register(String email, String password) {
+        validator.validate(email, password);
+        String hashed = hasher.hash(password);
+        User user = repository.save(new User(email, hashed));
+        mailSender.send(user);
+    }
+}</code></pre>
+              </div>
+              <p><code>UserService</code>は「登録という流れの調整役」に徹し、個々の責任は専用クラスに委譲します。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-3-2" data-lesson-id="3-2">
+        <div class="lesson-head">
+          <h3>3-2. Builder・Observer・スレッドセーフなSingleton</h3>
+          <button class="lesson-check-btn" data-lesson-id="3-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>コンストラクタの引数が4つ5つと増えてきたら、Builderパターンの出番です。JavaではLombokの<code>@Builder</code>が有名ですが、まずは素の実装を理解しておきましょう。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">User.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">public class User {
+    private final String name;
+    private final int age;
+    private final String email;
+
+    private User(Builder b) {
+        this.name = b.name;
+        this.age = b.age;
+        this.email = b.email;
+    }
+
+    public static class Builder {
+        private String name;
+        private int age;
+        private String email;
+
+        public Builder name(String name) { this.name = name; return this; }
+        public Builder age(int age) { this.age = age; return this; }
+        public Builder email(String email) { this.email = email; return this; }
+
+        public User build() { return new User(this); }
+    }
+}
+
+// 呼び出し例
+User user = new User.Builder()
+        .name("山田太郎")
+        .age(28)
+        .email("yamada@example.com")
+        .build();</code></pre>
+        </div>
+        <p>Observerパターンは「状態変化を複数の相手に通知する」仕組みで、GUIのイベントリスナーやPub/Subの基礎になります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">StockTicker.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">public interface PriceListener {
+    void onPriceChanged(int newPrice);
+}
+
+public class StockTicker {
+    private final List&lt;PriceListener&gt; listeners = new ArrayList&lt;&gt;();
+    private int price;
+
+    public void subscribe(PriceListener listener) {
+        listeners.add(listener);
+    }
+
+    public void updatePrice(int newPrice) {
+        this.price = newPrice;
+        for (PriceListener l : listeners) {
+            l.onPriceChanged(newPrice);
+        }
+    }
+}</code></pre>
+        </div>
+        <p>Singletonは「インスタンスを1つに保証したい」ときに使いますが、マルチスレッド環境では初期化のタイミングでバグを生みやすいパターンでもあります。<strong>enumを使った実装</strong>が最もシンプルで安全です。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">AppConfig.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">public enum AppConfig {
+    INSTANCE;
+
+    private final Map&lt;String, String&gt; settings = new ConcurrentHashMap&lt;&gt;();
+
+    public String get(String key) {
+        return settings.get(key);
+    }
+}
+
+// 呼び出し例
+AppConfig.INSTANCE.get("timeout");</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>if (instance == null) instance = new AppConfig();</code>という素朴なSingletonは、複数スレッドが同時にこの行を実行するとインスタンスが2つ作られる可能性があります。enum、または<code>synchronized</code>を使った遅延初期化（double-checked locking）が必要です。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-2-a</span><h4>HTTPリクエスト設定オブジェクトをBuilderで実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>url</code>（必須）、<code>method</code>（省略時は<code>"GET"</code>）、<code>timeoutMs</code>（省略時は<code>3000</code>）、<code>headers</code>（<code>Map&lt;String,String&gt;</code>、省略時は空）を持つ<code>HttpRequestConfig</code>をBuilderパターンで実装してください。<code>url</code>が設定されないまま<code>build()</code>された場合は<code>IllegalStateException</code>を投げてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">public class HttpRequestConfig {
+    private final String url;
+    private final String method;
+    private final int timeoutMs;
+    private final Map&lt;String, String&gt; headers;
+
+    private HttpRequestConfig(Builder b) {
+        this.url = b.url;
+        this.method = b.method;
+        this.timeoutMs = b.timeoutMs;
+        this.headers = b.headers;
+    }
+
+    public static class Builder {
+        private String url;
+        private String method = "GET";
+        private int timeoutMs = 3000;
+        private final Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
+
+        public Builder url(String url) { this.url = url; return this; }
+        public Builder method(String method) { this.method = method; return this; }
+        public Builder timeoutMs(int timeoutMs) { this.timeoutMs = timeoutMs; return this; }
+        public Builder header(String key, String value) { this.headers.put(key, value); return this; }
+
+        public HttpRequestConfig build() {
+            if (url == null) {
+                throw new IllegalStateException("url is required");
+            }
+            return new HttpRequestConfig(this);
+        }
+    }
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 3-2-b</span><h4>カート合計金額の変化を通知するObserverを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p><code>ShoppingCart</code>クラスがアイテム追加のたびに合計金額を計算し、登録された<code>CartTotalListener</code>すべてに新しい合計金額を通知する仕組みを実装してください。<code>CartTotalListener</code>は<code>void onTotalChanged(int newTotal)</code>を持つ関数型インターフェースとします。</p>
+            <div class="exercise-hint"><b>ヒント:</b> 関数型インターフェースにすればラムダ式でリスナーを登録でき、呼び出し側のコードがすっきりします。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">@FunctionalInterface
+public interface CartTotalListener {
+    void onTotalChanged(int newTotal);
+}
+
+public class ShoppingCart {
+    private final List&lt;Integer&gt; itemPrices = new ArrayList&lt;&gt;();
+    private final List&lt;CartTotalListener&gt; listeners = new ArrayList&lt;&gt;();
+
+    public void subscribe(CartTotalListener listener) {
+        listeners.add(listener);
+    }
+
+    public void addItem(int price) {
+        itemPrices.add(price);
+        int total = itemPrices.stream().mapToInt(Integer::intValue).sum();
+        listeners.forEach(l -&gt; l.onTotalChanged(total));
+    }
+}
+
+// 呼び出し例（ラムダでリスナー登録）
+ShoppingCart cart = new ShoppingCart();
+cart.subscribe(total -&gt; System.out.println("合計: " + total + "円"));
+cart.addItem(1000);
+cart.addItem(500); // → 合計: 1500円 と出力</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール3完了の目安: 「なぜこのパターンを使うか」を自分の言葉でメリットと一緒に説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 4
+    ========================================================= -->
+    <section class="module-section" id="m-4">
+      <div class="module-heading"><span class="num">MODULE 04</span><h2>例外設計とエラーハンドリングの実務</h2></div>
+      <p class="module-lead">「とりあえずtry-catchで囲む」から卒業し、意図が伝わる例外設計を身につけます。</p>
+
+      <section class="lesson" id="l-4-1" data-lesson-id="4-1">
+        <div class="lesson-head">
+          <h3>4-1. 独自例外クラスの設計</h3>
+          <button class="lesson-check-btn" data-lesson-id="4-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>JavaにはCheck例外（<code>Exception</code>直系）とUnchecked例外（<code>RuntimeException</code>系）があります。実務では「呼び出し側が回復できる可能性がある」ものだけをChecked例外にし、それ以外はUnchecked例外にする、という判断基準が広く使われています。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">Exceptions.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">// 回復可能: 呼び出し側が「在庫を待つ」「別商品を選ぶ」など対処できる
+public class OutOfStockException extends Exception {
+    public OutOfStockException(String productId) {
+        super("out of stock: " + productId);
+    }
+}
+
+// 回復不能に近い: プログラミングミスやデータ不整合
+public class InvalidOrderStateException extends RuntimeException {
+    public InvalidOrderStateException(String message) {
+        super(message);
+    }
+}</code></pre>
+        </div>
+        <p>例外には「原因（cause）」を必ず連結しましょう。<code>e.getMessage()</code>だけでは、元々どこで何が起きたのか追跡できなくなります。</p>
+        <div class="code-block">
+          <pre><code class="language-java">try {
+    paymentClient.charge(orderId, amount);
+} catch (PaymentClientException e) {
+    // causeを渡さないと、元のスタックトレースが失われる
+    throw new PaymentFailedException("payment failed for order " + orderId, e);
+}</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>例外メッセージには「何のIDで」「何をしようとして」失敗したかを必ず含めましょう。ログ検索やバグ調査のスピードが大きく変わります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-1-a</span><h4>残高不足を表す例外を設計する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>銀行口座の出金処理で「残高不足」を表す<code>InsufficientBalanceException</code>を設計してください。呼び出し側が不足額を取得できるように、<code>shortage</code>フィールドと<code>getShortage()</code>メソッドを持たせてください。Checked/Uncheckedどちらにすべきかも、理由とあわせて答えてください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">public class InsufficientBalanceException extends Exception {
+    private final int shortage;
+
+    public InsufficientBalanceException(int shortage) {
+        super("insufficient balance, shortage=" + shortage);
+        this.shortage = shortage;
+    }
+
+    public int getShortage() {
+        return shortage;
+    }
+}</code></pre>
+              </div>
+              <p>残高不足は「チャージすれば再試行できる」回復可能なケースなので、呼び出し元にキャッチを強制できるChecked例外が適しています。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-1-b</span><h4>原因を握りつぶしている例外変換を修正する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>次のコードには原因の情報が失われるバグがあります。修正してください。</p>
+            <div class="code-block">
+              <pre><code class="language-java">try {
+    repository.save(entity);
+} catch (SQLException e) {
+    throw new DataAccessException("save failed"); // 原因が渡っていない
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">try {
+    repository.save(entity);
+} catch (SQLException e) {
+    throw new DataAccessException("save failed", e); // causeを渡す
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-4-2" data-lesson-id="4-2">
+        <div class="lesson-head">
+          <h3>4-2. try-with-resourcesと例外の握りつぶし防止</h3>
+          <button class="lesson-check-btn" data-lesson-id="4-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>AutoCloseable</code>を実装したリソース（<code>Connection</code>, <code>FileInputStream</code>など）は、必ず<code>try-with-resources</code>で扱いましょう。<code>finally</code>で手動closeするより簡潔で、closeの呼び忘れも防げます。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">TryWithResources.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">// 複数リソースもセミコロン区切りで書ける。宣言と逆順にcloseされる
+try (var in = new FileInputStream("input.txt");
+     var out = new FileOutputStream("output.txt")) {
+    in.transferTo(out);
+} catch (IOException e) {
+    throw new UncheckedIOException(e);
+}</code></pre>
+        </div>
+        <p>もう一つの実務での鉄則は「<strong>catchブロックを空にしない</strong>」ことです。何もしない<code>catch (Exception e) {}</code>は、障害の原因を見えなくする最悪のパターンです。</p>
+        <div class="code-block">
+          <pre><code class="language-java">// アンチパターン: エラーがなかったことになる
+try {
+    riskyOperation();
+} catch (Exception e) {
+    // 何もしない
+}
+
+// 最低限、ログには残す
+try {
+    riskyOperation();
+} catch (Exception e) {
+    log.warn("riskyOperation failed, falling back to default", e);
+}</code></pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-2-a</span><h4>手動close処理をtry-with-resourcesに書き換える</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>次のコードをtry-with-resources構文に書き換えてください。</p>
+            <div class="code-block">
+              <pre><code class="language-java">BufferedReader reader = null;
+try {
+    reader = new BufferedReader(new FileReader("data.csv"));
+    return reader.readLine();
+} finally {
+    if (reader != null) {
+        reader.close();
+    }
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">try (BufferedReader reader = new BufferedReader(new FileReader("data.csv"))) {
+    return reader.readLine();
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 4-2-b</span><h4>自作リソースクラスにAutoCloseableを実装する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>処理の開始と終了をログに出す<code>Stopwatch</code>クラスを、<code>try (var sw = new Stopwatch("処理名")) { ... }</code>という形でtry-with-resourcesに対応させてください。<code>close()</code>で経過時間をミリ秒で表示します。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">public class Stopwatch implements AutoCloseable {
+    private final String label;
+    private final long startNanos = System.nanoTime();
+
+    public Stopwatch(String label) {
+        this.label = label;
+        System.out.println("[start] " + label);
+    }
+
+    @Override
+    public void close() {
+        long elapsedMs = (System.nanoTime() - startNanos) / 1_000_000;
+        System.out.println("[done] " + label + " (" + elapsedMs + "ms)");
+    }
+}
+
+// 呼び出し例
+try (var sw = new Stopwatch("バッチ処理")) {
+    heavyBatchJob();
+}</code></pre>
+              </div>
+              <p><code>close()</code>で例外を投げる可能性がなければ、<code>throws Exception</code>を宣言しない方が呼び出し側のcatchが減って扱いやすくなります。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール4完了の目安: Checked/Uncheckedの使い分け基準と、causeを渡す理由を説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 5
+    ========================================================= -->
+    <section class="module-section" id="m-5">
+      <div class="module-heading"><span class="num">MODULE 05</span><h2>並行処理の基礎と実務</h2></div>
+      <p class="module-lead">Threadを直接newする機会は実務では少なく、ExecutorServiceやCompletableFutureを使うのが標準です。まずは仕組みの理解から。</p>
+
+      <section class="lesson" id="l-5-1" data-lesson-id="5-1">
+        <div class="lesson-head">
+          <h3>5-1. Thread・ExecutorServiceの基本</h3>
+          <button class="lesson-check-btn" data-lesson-id="5-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>スレッドを都度<code>new Thread()</code>で作ると、生成コストが高く、数の制御もできません。<code>ExecutorService</code>でスレッドプールを使い回すのが実務での基本です。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">ExecutorDemo.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">ExecutorService executor = Executors.newFixedThreadPool(4);
+
+List&lt;Future&lt;Integer&gt;&gt; futures = new ArrayList&lt;&gt;();
+for (int i = 0; i &lt; 10; i++) {
+    int taskId = i;
+    futures.add(executor.submit(() -&gt; heavyCalculation(taskId)));
+}
+
+int total = 0;
+for (Future&lt;Integer&gt; f : futures) {
+    total += f.get(); // 結果が出るまでブロックする
+}
+
+executor.shutdown(); // 使い終わったら必ずshutdownする</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="icon">⚠️</span>
+          <div class="body"><b>やりがちなミス</b><code>executor.shutdown()</code>を呼び忘れると、非デーモンスレッドが残り続けてアプリケーションが終了しなくなります。<code>try-with-resources</code>対応の<code>ExecutorService</code>（Java 19+の<code>AutoCloseable</code>実装）や、<code>finally</code>での<code>shutdown</code>を徹底しましょう。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-1-a</span><h4>複数URLのステータスを並行取得する（擬似コード）</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>List&lt;String&gt; urls</code>それぞれに対して<code>int checkStatus(String url)</code>（時間のかかるダミー処理と考えてよい）を並行実行し、全結果を<code>List&lt;Integer&gt;</code>として集める処理を、固定4スレッドの<code>ExecutorService</code>を使って実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">ExecutorService executor = Executors.newFixedThreadPool(4);
+try {
+    List&lt;Future&lt;Integer&gt;&gt; futures = urls.stream()
+            .map(url -&gt; executor.submit(() -&gt; checkStatus(url)))
+            .toList();
+
+    List&lt;Integer&gt; results = new ArrayList&lt;&gt;();
+    for (Future&lt;Integer&gt; f : futures) {
+        results.add(f.get());
+    }
+    return results;
+} finally {
+    executor.shutdown();
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-1-b</span><h4>スレッドプールのサイズ選定を説明する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>「CPUバウンドな処理（計算中心）」と「I/Oバウンドな処理（DBアクセスや外部API呼び出し）」とで、適切なスレッドプールサイズの考え方がなぜ異なるのか、2〜3行で説明してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <p>CPUバウンドな処理はCPUコア数を超えてスレッドを増やしても、コンテキストスイッチのオーバーヘッドが増えるだけで性能は上がりにくいため、コア数前後に抑えます。一方I/Oバウンドな処理はスレッドが「待っている」時間が長く、その間CPUは空いているため、コア数より多いスレッド数（例: コア数の数倍）にすることでスループットを上げられます。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-5-2" data-lesson-id="5-2">
+        <div class="lesson-head">
+          <h3>5-2. CompletableFutureとスレッドセーフな設計</h3>
+          <button class="lesson-check-btn" data-lesson-id="5-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p><code>CompletableFuture</code>は、非同期処理を「チェーン」で組み立てられる仕組みです。複数の非同期処理を組み合わせたいとき、<code>Future#get()</code>で毎回ブロックするより読みやすく効率的なコードになります。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">CompletableFutureDemo.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">// ユーザー情報と注文履歴を並行取得し、両方そろってから合成する
+CompletableFuture&lt;User&gt; userFuture =
+        CompletableFuture.supplyAsync(() -&gt; userClient.fetch(userId));
+CompletableFuture&lt;List&lt;Order&gt;&gt; ordersFuture =
+        CompletableFuture.supplyAsync(() -&gt; orderClient.fetchAll(userId));
+
+CompletableFuture&lt;UserPage&gt; pageFuture = userFuture.thenCombine(
+        ordersFuture,
+        (user, orders) -&gt; new UserPage(user, orders));
+
+UserPage page = pageFuture.join(); // 結果を待つ（例外はCompletionExceptionに包まれる）</code></pre>
+        </div>
+        <p>複数スレッドから共有される可変状態は、<code>synchronized</code>か、<code>java.util.concurrent</code>のスレッドセーフなコレクション（<code>ConcurrentHashMap</code>など）で保護します。<code>volatile</code>は「他スレッドからの可視性」だけを保証し、複合操作（読み取り→計算→書き込み）の原子性は保証しない点に注意しましょう。</p>
+        <div class="code-block">
+          <pre><code class="language-java">// NG: volatileだけではインクリメントの原子性が保証されない
+private volatile int counter = 0;
+public void increment() { counter++; } // 実は read-modify-write の複合操作
+
+// OK: AtomicIntegerを使う
+private final AtomicInteger counter = new AtomicInteger();
+public void increment() { counter.incrementAndGet(); }</code></pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-2-a</span><h4>2つの非同期処理をthenCombineで合成する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>CompletableFuture&lt;Integer&gt; priceFuture</code>（商品価格）と<code>CompletableFuture&lt;Double&gt; taxRateFuture</code>（税率）を合成し、税込価格（<code>Integer</code>、小数点以下切り捨て）を返す<code>CompletableFuture&lt;Integer&gt;</code>を作成してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">CompletableFuture&lt;Integer&gt; totalFuture = priceFuture.thenCombine(
+        taxRateFuture,
+        (price, taxRate) -&gt; (int) (price * (1 + taxRate)));</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 5-2-b</span><h4>複数スレッドから安全にカウントするクラスを実装する</h4><span class="diff diff-hard">発展</span></div>
+          <div class="exercise-body">
+            <p>複数スレッドから<code>record(String key)</code>が呼ばれ、キーごとの呼び出し回数を数える<code>AccessCounter</code>クラスを、スレッドセーフに実装してください。<code>get(String key)</code>で現在のカウントを取得できるようにします。</p>
+            <div class="exercise-hint"><b>ヒント:</b> <code>ConcurrentHashMap&lt;String, AtomicInteger&gt;</code>と<code>computeIfAbsent</code>の組み合わせが定番です。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">public class AccessCounter {
+    private final ConcurrentHashMap&lt;String, AtomicInteger&gt; counts = new ConcurrentHashMap&lt;&gt;();
+
+    public void record(String key) {
+        counts.computeIfAbsent(key, k -&gt; new AtomicInteger()).incrementAndGet();
+    }
+
+    public int get(String key) {
+        AtomicInteger count = counts.get(key);
+        return count == null ? 0 : count.get();
+    }
+}</code></pre>
+              </div>
+              <p><code>computeIfAbsent</code>は「キーがなければ生成して登録」を1つの原子的な操作として行えるため、自前でnullチェック+putするより安全です。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール5完了の目安: <code>ExecutorService</code>を安全に使えて、なぜ<code>volatile</code>だけでは不十分か説明できればOKです。</div>
+    </section>
+
+    <!-- ========================================================
+         MODULE 6
+    ========================================================= -->
+    <section class="module-section" id="m-6">
+      <div class="module-heading"><span class="num">MODULE 06</span><h2>実務でよく使うAPIとテスト</h2></div>
+      <p class="module-lead">日付処理・ファイルI/O・テストの3つは、どんな業務アプリでもほぼ確実に必要になります。</p>
+
+      <section class="lesson" id="l-6-1" data-lesson-id="6-1">
+        <div class="lesson-head">
+          <h3>6-1. java.timeとNIO.2ファイルI/O</h3>
+          <button class="lesson-check-btn" data-lesson-id="6-1"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>古い<code>Date</code>/<code>Calendar</code>は可変でスレッドセーフではなく、実務では<code>java.time</code>パッケージ（<code>LocalDate</code>, <code>LocalDateTime</code>, <code>Duration</code>, <code>Period</code>）を使います。すべて不変（イミュータブル）オブジェクトです。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">JavaTimeDemo.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">LocalDate today = LocalDate.now();
+LocalDate deadline = today.plusDays(30);
+
+Period diff = Period.between(today, deadline);
+System.out.println(diff.getDays() + "日後");
+
+LocalDateTime start = LocalDateTime.of(2026, 7, 1, 9, 0);
+LocalDateTime end = LocalDateTime.now();
+Duration elapsed = Duration.between(start, end);
+System.out.println(elapsed.toHours() + "時間経過");
+
+// フォーマット
+DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
+System.out.println(today.format(fmt));</code></pre>
+        </div>
+        <p>ファイルI/Oも同様に、<code>java.io.File</code>より<code>java.nio.file.Path</code> / <code>Files</code>を使うのが現代的な書き方です。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">NioDemo.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">Path path = Path.of("data", "report.csv");
+
+// 1行ずつ読む（try-with-resourcesでStreamをclose）
+try (Stream&lt;String&gt; lines = Files.lines(path, StandardCharsets.UTF_8)) {
+    long errorCount = lines.filter(line -&gt; line.contains("ERROR")).count();
+}
+
+// 書き込み（親ディレクトリがなければ事前にcreateDirectoriesする）
+Files.createDirectories(path.getParent());
+Files.writeString(path, "id,name\n1,taro\n", StandardCharsets.UTF_8);</code></pre>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-1-a</span><h4>会員の年齢を計算する</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>生年月日<code>LocalDate birthday</code>から、現在の満年齢を求める<code>int calcAge(LocalDate birthday)</code>を実装してください。</p>
+            <div class="exercise-hint"><b>ヒント:</b> <code>Period.between(start, end)</code>の<code>getYears()</code>が満年齢に相当します。</div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">public int calcAge(LocalDate birthday) {
+    return Period.between(birthday, LocalDate.now()).getYears();
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-1-b</span><h4>ログファイルからエラー行数を集計する</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p><code>Path logFile</code>を1行ずつ読み込み、<code>"ERROR"</code>を含む行数と<code>"WARN"</code>を含む行数を、それぞれ集計して<code>Map&lt;String, Long&gt;</code>（キーは<code>"ERROR"</code>と<code>"WARN"</code>）として返す処理を実装してください。</p>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">public Map&lt;String, Long&gt; countLevels(Path logFile) throws IOException {
+    try (Stream&lt;String&gt; lines = Files.lines(logFile, StandardCharsets.UTF_8)) {
+        List&lt;String&gt; all = lines.toList();
+        long errorCount = all.stream().filter(l -&gt; l.contains("ERROR")).count();
+        long warnCount = all.stream().filter(l -&gt; l.contains("WARN")).count();
+        return Map.of("ERROR", errorCount, "WARN", warnCount);
+    }
+}</code></pre>
+              </div>
+              <p>Streamは一度しか消費できないため、複数回<code>filter</code>したい場合は先に<code>toList()</code>でリスト化しておくのがポイントです。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="lesson" id="l-6-2" data-lesson-id="6-2">
+        <div class="lesson-head">
+          <h3>6-2. JUnit5とテスト設計の基本</h3>
+          <button class="lesson-check-btn" data-lesson-id="6-2"><span class="box"></span><span class="label">完了にする</span></button>
+        </div>
+        <p>テストは「AAAパターン（Arrange - Act - Assert）」で書くと読みやすくなります。準備・実行・検証をコメントやメソッド分割で明確に分けましょう。</p>
+        <div class="code-block">
+          <div class="code-block-head"><span class="fname mono">DiscountCalculatorTest.java</span><button class="copy-btn">コピー</button></div>
+          <pre><code class="language-java">class DiscountCalculatorTest {
+
+    @Test
+    void tenPercentDiscount_appliesCorrectly() {
+        // Arrange
+        DiscountCalculator calculator = new DiscountCalculator();
+
+        // Act
+        int result = calculator.applyPercent(1000, 10);
+
+        // Assert
+        assertEquals(900, result);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "1000, 0, 1000",
+        "1000, 50, 500",
+        "1000, 100, 0"
+    })
+    void variousPercentages(int price, int percent, int expected) {
+        DiscountCalculator calculator = new DiscountCalculator();
+        assertEquals(expected, calculator.applyPercent(price, percent));
+    }
+
+    @Test
+    void negativePercent_throwsException() {
+        DiscountCalculator calculator = new DiscountCalculator();
+        assertThrows(IllegalArgumentException.class,
+                () -&gt; calculator.applyPercent(1000, -10));
+    }
+}</code></pre>
+        </div>
+        <p>外部のDB・API呼び出しなど「差し替えたい依存」はインターフェースにしておくと、テスト時にモック（偽物の実装やMockitoのようなモックライブラリ）に差し替えられます。</p>
+        <div class="code-block">
+          <pre><code class="language-java">// インターフェースに依存しているので、テスト時はモック実装を注入できる
+public class OrderService {
+    private final PaymentGateway paymentGateway;
+
+    public OrderService(PaymentGateway paymentGateway) {
+        this.paymentGateway = paymentGateway;
+    }
+
+    public void checkout(Order order) {
+        paymentGateway.charge(order.total());
+    }
+}
+
+// テストコードでは本物のPaymentGatewayの代わりに、
+// 常にtrueを返すだけのテスト用実装や、Mockitoの mock(PaymentGateway.class) を注入する</code></pre>
+        </div>
+        <div class="callout">
+          <span class="icon">💡</span>
+          <div class="body"><b>実務Tips</b>1つの<code>@Test</code>メソッドでは1つの振る舞いだけを検証しましょう。複数のassertを詰め込むと、どの検証で失敗したのか分かりにくくなります。</div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-2-a</span><h4>AAAパターンでテストを書く</h4><span class="diff diff-basic">基礎確認</span></div>
+          <div class="exercise-body">
+            <p>次の<code>TaxCalculator</code>に対するJUnit5のテストを、AAAパターンのコメント付きで1つ書いてください。仕様は「価格1000円、税率10%のとき、税込価格は1100円」です。</p>
+            <div class="code-block">
+              <pre><code class="language-java">public class TaxCalculator {
+    public int withTax(int price, double taxRate) {
+        return (int) (price * (1 + taxRate));
+    }
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">@Test
+void withTax_calculatesCorrectly() {
+    // Arrange
+    TaxCalculator calculator = new TaxCalculator();
+
+    // Act
+    int result = calculator.withTax(1000, 0.10);
+
+    // Assert
+    assertEquals(1100, result);
+}</code></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head"><span class="ex-num">EX 6-2-b</span><h4>@ParameterizedTestで境界値をまとめてテストする</h4><span class="diff diff-mid">応用</span></div>
+          <div class="exercise-body">
+            <p>次の<code>isAdult(int age)</code>（18歳以上ならtrue）に対して、17・18・19歳の3パターンを<code>@ParameterizedTest</code>と<code>@CsvSource</code>を使って1つのテストメソッドにまとめてください。</p>
+            <div class="code-block">
+              <pre><code class="language-java">public boolean isAdult(int age) {
+    return age &gt;= 18;
+}</code></pre>
+            </div>
+          </div>
+          <details class="solution">
+            <summary>解答例を見る</summary>
+            <div class="solution-body">
+              <div class="code-block">
+                <pre><code class="language-java">@ParameterizedTest
+@CsvSource({
+    "17, false",
+    "18, true",
+    "19, true"
+})
+void isAdult_boundaryValues(int age, boolean expected) {
+    assertEquals(expected, service.isAdult(age));
+}</code></pre>
+              </div>
+              <p>境界値（17→18への切り替わり）を必ずテストケースに含めるのが、実務でのバグを減らす基本です。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <div class="module-done-banner">✅ モジュール6完了の目安: AAAパターンでテストが書けて、依存をインターフェース化する理由を説明できればOKです。これで講座は修了です、お疲れさまでした！</div>
+    </section>
+
+    <div class="course-footer-nav">
+      <a class="prev" href="../index.html"><span class="label">戻る</span>講座一覧へ</a>
+      <a class="next" href="../typescript/index.html"><span class="label">次の講座</span>TypeScript 実務力養成講座 →</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="../js/course.js"></script>
+</body>
+</html>
