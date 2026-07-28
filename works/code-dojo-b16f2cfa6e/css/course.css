@@ -381,6 +381,18 @@ img, svg { max-width: 100%; display: block; }
 .callout .body b { display: block; color: var(--ink); margin-bottom: 3px; font-size: 13px; }
 .callout .body { color: var(--ink-soft); }
 .callout.warn { background: var(--warn-soft); border-color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+.callout.why {
+  background: rgba(155, 140, 255, 0.10);
+  border-color: #9b8cff;
+  border-color: color-mix(in srgb, #9b8cff 35%, transparent);
+}
+.callout.why .body b { color: #b7acff; }
+.callout.eli5 {
+  background: rgba(255, 179, 102, 0.10);
+  border-color: #ffb366;
+  border-color: color-mix(in srgb, #ffb366 35%, transparent);
+}
+.callout.eli5 .body b { color: #ffcf9e; }
 
 /* コードブロック */
 .code-block {

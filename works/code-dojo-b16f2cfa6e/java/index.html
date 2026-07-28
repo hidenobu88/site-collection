@@ -143,6 +143,14 @@ public class Pair {
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>リポジトリ層の共通処理（<code>findById</code>や<code>save</code>など）を<code>interface Repository&lt;T, ID&gt;</code>のような形で抽象化しておくと、エンティティが増えても実装をコピペせずに済みます。Spring Data JPAの<code>JpaRepository&lt;T, ID&gt;</code>もこの考え方です。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>Object</code>で受け取る設計だと「入れたときの型」と「取り出すときの型」をプログラマが頭の中で覚えておくしかなく、間違えても<strong>コンパイラは教えてくれません</strong>。実行時に初めて<code>ClassCastException</code>で気づくことになります。ジェネリクスは「この箱にはこの型しか入らない」という約束をコンパイラに教えるので、間違いをビルドの瞬間に検出できます。バグは「実行して初めて気づく」より「書いた瞬間に気づく」ほうが直す手間が圧倒的に小さいのです。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍎</span>
+          <div class="body"><b>たとえ話</b>ラベルのない箱がたくさんあると想像してください。中に何を入れたか忘れて、後で開けたら「リンゴだと思ったらミカンだった」ということが起こります。ジェネリクスは、箱に「この箱はリンゴ専用」というラベルを貼るようなものです。ラベルがあれば、開ける前から中身がわかりますし、誰かが間違ってミカンを入れようとしたら、その場で「この箱はリンゴ専用だよ」と教えてもらえます。<code>Box&lt;T&gt;</code>の<code>T</code>は、まさにこの「あとから決めるラベル」の部分です。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 1-1-a</span><h4>ジェネリックなスタックを実装する</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -241,6 +249,14 @@ public static void fillWithZero(List&lt;? super Integer&gt; list, int count) {
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>List&lt;Object&gt;</code>と<code>List&lt;?&gt;</code>を混同しがちですが、前者は「Objectしか入れられない」、後者は「何が入っているか分からないので基本的に読み取り専用として扱う」という全く違う意味です。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>もし<code>List&lt;Integer&gt;</code>を<code>List&lt;Number&gt;</code>として自由に渡せてしまうと、受け取った側は「これは<code>Number</code>のリストだ」と信じて<code>Double</code>を追加できてしまいます。しかし実体は<code>Integer</code>専用のリストなので、あとで取り出すときに<code>ClassCastException</code>が起きます。Javaはこの矛盾を防ぐために代入を「非変」にしていて、その代わりワイルドカードで「読むだけ(<code>? extends</code>)」「書くだけ(<code>? super</code>)」を明示できるようにしています。型消去も同様に、実行時には<code>T</code>の正体が残っていないため、コンパイラだけが型の整合性をチェックできる仕組みになっています。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍇</span>
+          <div class="body"><b>たとえ話</b>「リンゴ専用の箱」を「くだもの箱です」と偽って友達に渡したとします。友達は「くだもの箱だから」とブドウを入れてしまうかもしれません。でも本当はリンゴ専用箱なので、あとでリンゴだけを取り出そうとした人がブドウに驚いてしまいます。だからJavaは最初から「リンゴ専用箱をくだもの箱として渡す」ことを禁止しています。その代わり「見るだけ(取り出すだけ)ならいいよ」「入れるだけならいいよ」という2つの特別なルール(ワイルドカード)を用意しているのです。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 1-2-a</span><h4>PECS原則でコピーメソッドを書く</h4><span class="diff diff-mid">応用</span></div>
@@ -334,6 +350,14 @@ Optional&lt;Employee&gt; topEarner = employees.stream()
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b>Streamは<strong>一度しか消費できません</strong>。同じStreamに対して2回<code>collect</code>すると<code>IllegalStateException</code>になります。使い回したい場合は、都度<code>list.stream()</code>のようにコレクションから作り直してください。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>for文で「絞り込み」「変換」「集計」を1つのループに詰め込むと、1つのループの中で複数の関心事が混ざり、途中に変数がいくつも登場して読みづらくなります。Streamは各処理を<code>filter</code>・<code>map</code>・<code>collect</code>という独立した部品に分割するので、「どこで何をしているか」が見出しのように並びます。また中間操作が遅延評価されるのは、無駄な計算をしないためです。たとえば巨大なリストから最初の1件だけ欲しい場合、<code>filter().findFirst()</code>は条件に合う要素が見つかった時点で残りの要素を処理せずに済みます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🏭</span>
+          <div class="body"><b>たとえ話</b>ベルトコンベアの工場を想像してください。リンゴが次々に流れてきます(Stream)。まず傷んだリンゴだけを取り除く係の人がいます(<code>filter</code>)。次にリンゴの皮をむく係の人がいます(<code>map</code>)。最後に全部の重さを合計する係の人がいます(<code>reduce</code>)。それぞれの係は自分の仕事だけをすればよく、途中の係を入れ替えても他の係の仕事には影響しません。for文で全部を1人でやろうとすると、その1人が「傷んでるかチェックしつつ皮もむきつつ重さも足す」という3つの仕事を同時に抱えてしまい、間違いが起きやすくなります。</div>
         </div>
 
         <div class="exercise">
@@ -430,6 +454,14 @@ findById(1).ifPresent(emp -&gt; System.out.println(emp.getName()));</code></pre>
         <div class="callout">
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b><code>Optional.isPresent()</code>のあとに<code>get()</code>を呼ぶ書き方はほぼ不要です。<code>map</code>・<code>orElse</code>・<code>orElseGet</code>・<code>orElseThrow</code>を組み合わせれば、if文なしで安全に値を扱えます。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>Optional</code>は「戻り値として、値があるかもしれないし無いかもしれないことを、呼び出し側に強制的に意識させる」ために作られた型です。フィールドや引数に使ってしまうと、結局そのフィールドの中身が<code>null</code>かどうかは呼び出し側で毎回チェックする羽目になり、しかも<code>Optional</code>自体が<code>null</code>で渡ってくる可能性まで生まれてしまい、二重に不安な状態になります。「入口(引数・フィールド)は素の型でnullを許容し、出口(戻り値)だけOptionalで包む」と決めておくと、ルールが1つに統一されて迷いません。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🎁</span>
+          <div class="body"><b>たとえ話</b><code>Optional</code>は「もしかしたら何か入っているかもしれない箱」を人に渡すときに使う、いわば「今すぐ開けて確認してね」という付箋のようなものです。友達に「お菓子が入ってるかもしれない箱だよ」と渡すのは自然ですが、自分の机の引き出し(フィールド)の中に「もしかしたら箱」をそのままずっとしまっておくのは変ですよね。引き出しの中身は、最初から「お菓子があるかないか」を直接知っていればいいだけなのです。</div>
         </div>
 
         <div class="exercise">
@@ -561,6 +593,14 @@ public class NotifierFactory {
         };
     }
 }</code></pre>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>if/switchで分岐を書くと、新しい条件が増えるたびに「その巨大な1つのメソッド」を直接書き換えることになります。修正のたびに既存の条件分岐すべてを読み直す必要があり、コピペミスや、既存条件を壊すリスクが生まれます。Strategy/Factoryパターンでは「条件ごとの処理」をそれぞれ独立した小さなクラスに分けるため、新しい条件を追加するときは<strong>新しいクラスを1つ足すだけ</strong>で済み、既存のクラスには一切触れません。「触らないコードは壊れない」というのが、この設計が実務で好まれる最大の理由です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🏪</span>
+          <div class="body"><b>たとえ話</b>お店の「割引ルール」で考えてみましょう。最初は「学生証を見せたら10%引き」だけでした。そこに「お年寄りは20%引き」「会員証を見せたら5%引き」…とルールがどんどん増えていくと、レジ係が覚える手順書(if文)がどんどん長く複雑になり、間違いも起きやすくなります。その代わりに「割引カード」を用意して、お客さんが持っているカードの種類に応じて、そのカードに書かれた計算をするだけにすれば、新しい種類のカードが増えても、レジ係の基本の仕事(既存のコード)は何も変える必要がありません。</div>
         </div>
 
         <div class="exercise">
@@ -700,6 +740,14 @@ User user = new User.Builder()
         .email("yamada@example.com")
         .build();</code></pre>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>コンストラクタの引数が並ぶだけだと、呼び出す側は「3番目の引数は年齢だったか、それともメールだったか」を覚えておかないといけません。順番を1つ間違えても、型さえ合っていればコンパイルは通ってしまい、実行するまでバグに気づけないことすらあります。Builderは<code>.name(...)</code>や<code>.age(...)</code>のように<strong>名前付きで1つずつ設定</strong>できるので、順番を間違えようがなく、省略した項目にはデフォルト値を持たせられます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍔</span>
+          <div class="body"><b>たとえ話</b>ハンバーガー屋さんで注文するとき、「3番、5番、2番」と番号だけで注文すると、店員さんも自分も「あれ、3番ってチーズバーガーだっけポテトだっけ」と混乱します。それより「チーズバーガーください、ピクルス抜きで、ドリンクはコーラで」と1つずつ名前で注文するほうが、間違えにくいですよね。Builderパターンは、まさにこの「1つずつ名前で注文できるレジ」のような仕組みです。</div>
+        </div>
         <p>Observerパターンは「状態変化を複数の相手に通知する」仕組みで、GUIのイベントリスナーやPub/Subの基礎になります。</p>
         <div class="code-block">
           <div class="code-block-head"><span class="fname mono">StockTicker.java</span><button class="copy-btn">コピー</button></div>
@@ -723,6 +771,14 @@ public class StockTicker {
     }
 }</code></pre>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>もし通知する側(<code>StockTicker</code>)が「誰に通知するか」をあらかじめ全部知っていないといけない設計だったら、新しい通知先が増えるたびに通知する側のコードを書き換える必要が出てきます。Observerパターンでは「通知したい人はここに登録してね」という窓口(<code>subscribe</code>)だけを用意しておき、通知する側は登録されている相手の中身を気にせず、ただ「変わったよ」と伝えるだけにします。これにより、通知する側とされる側が互いの詳細を知らなくても協調できます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📢</span>
+          <div class="body"><b>たとえ話</b>学校の校内放送を思い浮かべてください。先生が「今日は集会があります」と放送すると、教室にいる生徒みんなが一斉にその情報を受け取れます。先生は「1組のAさん、Bさん、2組のCさん…」と1人ずつ電話をかける必要はありません。新しく転校してきた生徒(新しいlistener)も、放送を聞ける場所にいるだけで自動的に情報が届きます。</div>
+        </div>
         <p>Singletonは「インスタンスを1つに保証したい」ときに使いますが、マルチスレッド環境では初期化のタイミングでバグを生みやすいパターンでもあります。<strong>enumを使った実装</strong>が最もシンプルで安全です。</p>
         <div class="code-block">
           <div class="code-block-head"><span class="fname mono">AppConfig.java</span><button class="copy-btn">コピー</button></div>
@@ -742,6 +798,14 @@ AppConfig.INSTANCE.get("timeout");</code></pre>
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>if (instance == null) instance = new AppConfig();</code>という素朴なSingletonは、複数スレッドが同時にこの行を実行するとインスタンスが2つ作られる可能性があります。enum、または<code>synchronized</code>を使った遅延初期化（double-checked locking）が必要です。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>「<code>instance</code>が<code>null</code>かどうかを確認してから作る」という手順は、実は「確認」と「作成」という2つの動作でできています。2つのスレッドがほぼ同時にこの手順を実行すると、両方とも「確認」の時点ではまだ<code>null</code>に見えてしまい、両方が「作成」を実行してインスタンスが2つできてしまいます。<code>enum</code>を使ったSingletonは、JVMがクラスを読み込むタイミングで<strong>最初から1つだけ</strong>インスタンスを用意する仕組みを使うため、この「確認してから作る」という危険な2段階の隙間そのものが存在しません。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🏥</span>
+          <div class="body"><b>たとえ話</b>学校に「保健室の先生は1人だけ」というルールがあるとします。もし「保健室に先生がいるか確認して、いなければ先生を呼ぶ」という手順を2人の生徒がほぼ同時にやってしまうと、2人とも「先生いない!」と思い込んで、それぞれ別の先生を呼んでしまうかもしれません。<code>enum</code>を使ったSingletonは、「そもそも学校に先生を1人だけ、最初から登録しておく」ようなものです。生徒が何回同時に確認しても、先生が増えることは絶対にありません。</div>
         </div>
 
         <div class="exercise">
@@ -863,6 +927,14 @@ public class InvalidOrderStateException extends RuntimeException {
     }
 }</code></pre>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>もし「プログラマのミス」まで含めてすべての例外をChecked例外にしてしまうと、あらゆるメソッドに<code>try-catch</code>を書く必要が出てきます。呼び出し側は「回復できるかもしれない例外」も「そもそも直しようがないバグ」も同じように<code>catch</code>で囲むことになり、本当に注意すべき例外がその他大勢に埋もれてしまいます。「呼び出し側が何かしら対処できるか」で仕分けることで、<strong>本当に対処が必要な場面だけ</strong>コンパイラがcatchを強制してくれるようになります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🛒</span>
+          <div class="body"><b>たとえ話</b>お使いを頼まれたときの2つの困りごとを比べてみましょう。「行った店が閉まっていた」なら、別の店を探すという対処ができます(在庫切れ=回復可能)。でも「そもそも財布を家に忘れた」なら、その場でお使い自体をやり直すしかありません(プログラムのバグ=回復不能)。前者は「必ず対応方法を考えてね」と念を押す必要がある(Checked例外)一方、後者はいちいち身構えるよりも、根本原因(忘れ物グセ)を直すべき問題です(Unchecked例外)。</div>
+        </div>
         <p>例外には「原因（cause）」を必ず連結しましょう。<code>e.getMessage()</code>だけでは、元々どこで何が起きたのか追跡できなくなります。</p>
         <div class="code-block">
           <pre><code class="language-java">try {
@@ -875,6 +947,14 @@ public class InvalidOrderStateException extends RuntimeException {
         <div class="callout">
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>例外メッセージには「何のIDで」「何をしようとして」失敗したかを必ず含めましょう。ログ検索やバグ調査のスピードが大きく変わります。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>cause</code>を渡さずに新しい例外を投げ直すと、元の例外が持っていた「本当はどのクラスのどの行でエラーが起きたか」というスタックトレースの情報が消えてしまいます。表面上のメッセージだけが残り、調査する人は「payment failedとしか分からないけど、どこで何が原因だったの?」と手探りで調べ直すことになります。<code>cause</code>を渡すのは、いわば「元の記録をそのまま添付する」行為です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📞</span>
+          <div class="body"><b>たとえ話</b>伝言ゲームを思い出してください。最初の人が言った詳しい内容を忘れて、最後の人に「なんかエラーがあったらしいよ」とだけ伝えると、聞いた人はどこで何が起きたのか全く分かりません。<code>cause</code>を渡すというのは、「最初の人が言ったことをメモに書き残して、そのメモも一緒に渡す」ようなものです。これがあれば、最後の人でも最初に何が起きたかをたどれます。</div>
         </div>
 
         <div class="exercise">
@@ -947,6 +1027,14 @@ try (var in = new FileInputStream("input.txt");
     throw new UncheckedIOException(e);
 }</code></pre>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>ファイルやデータベース接続などのリソースはOSが管理する「限りある席」のようなもので、使い終わったら必ず返却(close)しないと、席がどんどん埋まっていき、いずれ新しい接続すら開けなくなります。<code>finally</code>で手動closeする方法は書けますが、書き忘れや、closeの前に例外で処理が飛んでしまうミスが起きがちです。<code>try-with-resources</code>は、コンパイラが自動的に「必ずcloseする」コードを生成してくれるため、人間のうっかりミスが入り込む余地がなくなります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📚</span>
+          <div class="body"><b>たとえ話</b>図書館で本を借りたら、必ず返す約束(close)がありますよね。「読み終わったら自分で返しに行く」と覚えておく(finallyで手動close)のは、うっかり忘れてしまうことがあります。それより、返却口に本を置くだけで自動的に返却される「自動返却ボックス」(try-with-resources)のほうが、絶対に返し忘れることがなくて安心です。</div>
+        </div>
         <p>もう一つの実務での鉄則は「<strong>catchブロックを空にしない</strong>」ことです。何もしない<code>catch (Exception e) {}</code>は、障害の原因を見えなくする最悪のパターンです。</p>
         <div class="code-block">
           <pre><code class="language-java">// アンチパターン: エラーがなかったことになる
@@ -962,6 +1050,14 @@ try {
 } catch (Exception e) {
     log.warn("riskyOperation failed, falling back to default", e);
 }</code></pre>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>空の<code>catch</code>ブロックは「エラーが起きたという事実そのものを消してしまう」行為です。本番環境で障害が起きたとき、ログに何も残っていなければ「いつ・どこで・何が」原因なのか、後から調査する手がかりが一切なくなります。最低限ログに残しておけば、あとで問題が表面化したときに「あの時ここで例外が握りつぶされていた」と気づける道が残ります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🙈</span>
+          <div class="body"><b>たとえ話</b>お皿を割ってしまったのに、誰にも言わずに黙って片付けてしまうところを想像してください。その場はバレませんが、後で「お皿が1枚足りない」と誰かが気づいたとき、いつ・なぜ割れたのか誰も分からず困ってしまいます。せめて「さっき割っちゃった、ごめんね」と一言メモを残しておけば(ログに残す)、後から状況を理解できます。</div>
         </div>
 
         <div class="exercise">
@@ -1065,6 +1161,14 @@ executor.shutdown(); // 使い終わったら必ずshutdownする</code></pre>
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>executor.shutdown()</code>を呼び忘れると、非デーモンスレッドが残り続けてアプリケーションが終了しなくなります。<code>try-with-resources</code>対応の<code>ExecutorService</code>（Java 19+の<code>AutoCloseable</code>実装）や、<code>finally</code>での<code>shutdown</code>を徹底しましょう。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>スレッドはOSに「専用の作業員を1人雇う」ようなもので、生成にも破棄にもそれなりのコストがかかります。処理のたびに<code>new Thread()</code>していると、そのコストを毎回払うことになり、しかも同時に動くスレッドの数を制御できないため、大量のリクエストが来た瞬間にスレッドが無限に増えてマシンが悲鳴を上げてしまいます。<code>ExecutorService</code>は「決まった人数の作業員をあらかじめ確保しておき、仕事が来るたびに空いている人に振り分ける」仕組みなので、コストと同時実行数の両方をコントロールできます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">👨‍🍳</span>
+          <div class="body"><b>たとえ話</b>レストランの厨房で、注文が入るたびに新しいシェフを雇い、料理が終わったら解雇する…というのはとても非効率ですよね(newのたびにThread生成)。それより「4人のシェフを固定で雇っておいて、注文が来るたびに空いているシェフに割り振る」ほうが、無駄がなく効率的です(ExecutorService)。シェフの人数(スレッドプールのサイズ)を増やしすぎても、狭い厨房では逆にぶつかり合って邪魔になることもあります。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 5-1-a</span><h4>複数URLのステータスを並行取得する（擬似コード）</h4><span class="diff diff-mid">応用</span></div>
@@ -1137,6 +1241,14 @@ public void increment() { counter++; } // 実は read-modify-write の複合操�
 // OK: AtomicIntegerを使う
 private final AtomicInteger counter = new AtomicInteger();
 public void increment() { counter.incrementAndGet(); }</code></pre>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>counter++</code>は1つの命令に見えて、実際は「今の値を読む→1を足す→書き戻す」という3段階の作業です。2つのスレッドがほぼ同時に「読む」を行うと、両方とも同じ古い値を読んでしまい、片方の「+1」がなかったことになります。<code>volatile</code>は「書き込んだ値が他のスレッドからすぐ見える」ことしか保証しないため、この「読む→計算→書く」という一連の流れ自体を安全にする力はありません。<code>AtomicInteger</code>は、この一連の流れを1つの操作として途中で割り込まれないように保証してくれます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🐷</span>
+          <div class="body"><b>たとえ話</b>貯金箱に2人が同時に「今100円あるから101円にしよう」と思って、それぞれ101円になるように硬貨を入れてしまうと、本当は102円になるはずが101円のままになってしまいます(1回分の+1が消えた)。<code>AtomicInteger</code>は「1人ずつ順番に、必ず最新の金額を確認してから入れる」というルールを厳格に守ってくれる、いわば「番号札を配る貯金箱」のようなものです。</div>
         </div>
 
         <div class="exercise">
@@ -1232,6 +1344,14 @@ try (Stream&lt;String&gt; lines = Files.lines(path, StandardCharsets.UTF_8)) {
 Files.createDirectories(path.getParent());
 Files.writeString(path, "id,name\n1,taro\n", StandardCharsets.UTF_8);</code></pre>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>古い<code>Date</code>は「値を後から書き換えられる」可変オブジェクトです。あるメソッドに<code>Date</code>を渡したら、渡した先でその<code>Date</code>の中身を書き換えられてしまい、呼び出し元が持っている変数まで意図せず変わってしまう…というバグが実務では頻発しました。<code>LocalDate</code>などは「変更したいときは必ず新しいオブジェクトを作って返す」設計(イミュータブル)なので、一度作った値は誰にも書き換えられず、複数スレッドから同時に読んでも安全です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📝</span>
+          <div class="body"><b>たとえ話</b>昔の<code>Date</code>は「みんなで回し書きする1枚の紙」のようなもので、誰かが日付を書き換えると、その紙を見ている他の人にも変更が伝わってしまいます。<code>LocalDate</code>は「一度書いたら消せないメモ用紙」のようなもので、変更したいときは新しいメモ用紙にコピーして書き直します。だから、あるメモを他の人が見ていても、いつの間にか勝手に内容が変わっている心配がありません。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 6-1-a</span><h4>会員の年齢を計算する</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -1316,6 +1436,14 @@ Files.writeString(path, "id,name\n1,taro\n", StandardCharsets.UTF_8);</code></pr
     }
 }</code></pre>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>準備・実行・検証を混ぜて書くと、テストが失敗したときに「そもそも準備が間違っていたのか、実行結果がおかしいのか、検証の仕方が間違っているのか」を読み解くのに時間がかかります。AAAで段落を分けておくと、半年後にこのテストを読み返した自分や同僚が、どこで何をしているかを一瞬で把握できます。テストコードは「書く時間」より「後で読む回数」のほうが圧倒的に多いので、読みやすさへの投資は割に合います。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🧪</span>
+          <div class="body"><b>たとえ話</b>理科の実験レポートを書くとき、「①材料をそろえる→②実験する→③結果を確認する」の順番で書くと、誰が読んでも分かりやすいですよね。もし材料の説明と実験の様子と結果がごちゃまぜに書かれていたら、先生も「どこまでが準備でどこからが結果なの?」と混乱してしまいます。AAAパターンは、まさにこの「実験レポートの決まった書き方」をテストコードに当てはめたものです。</div>
+        </div>
         <p>外部のDB・API呼び出しなど「差し替えたい依存」はインターフェースにしておくと、テスト時にモック（偽物の実装やMockitoのようなモックライブラリ）に差し替えられます。</p>
         <div class="code-block">
           <pre><code class="language-java">// インターフェースに依存しているので、テスト時はモック実装を注入できる
@@ -1337,6 +1465,14 @@ public class OrderService {
         <div class="callout">
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>1つの<code>@Test</code>メソッドでは1つの振る舞いだけを検証しましょう。複数のassertを詰め込むと、どの検証で失敗したのか分かりにくくなります。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>本物の<code>PaymentGateway</code>を使ってテストすると、テストを実行するたびに本当にお金が動いてしまうかもしれませんし、外部の決済サービスがメンテナンス中だとテストそのものが失敗してしまいます。それでは「自分のコードが正しいか」を確かめたいのに、関係ない外部要因でテストが不安定になってしまいます。依存先をインターフェースにしておけば、本物の代わりに「本物のふりをする偽物(モック)」を差し込めるので、外部の都合に左右されずに何度でも安全にテストできます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🚒</span>
+          <div class="body"><b>たとえ話</b>消防訓練で本物の火を使わないのと同じ発想です。本物の火(本物の決済サービス)を使ったら、訓練のたびに家が燃えてしまいます。その代わりに「訓練用の煙」や「練習用の道具」(モック)を使えば、本番さながらの練習を、何度でも安全に繰り返せます。</div>
         </div>
 
         <div class="exercise">

@@ -141,6 +141,14 @@ const event: NamedEvent = { name: "リリース会", createdAt: new Date() };</c
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b><code>string</code>で状態を表すより、Literal Typesの合併型にしておくと、タイプミス（<code>"pendign"</code>など）をコンパイル時に検出できます。API通信のstatusフィールドなどに積極的に使いましょう。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>現実のデータには「AかBのどちらか」（例: 支払い済みかキャンセルか）や、「AとBの両方の性質を持つ」（例: 一般ユーザーの情報も管理者権限も両方持つ）という形が非常によく登場します。これを普通の<code>string</code>や1つのオブジェクト型だけで表現しようとすると、「本当はこの値しか来ないはず」という前提がコード上のどこにも書かれず、実行時になって初めて想定外の値に気づくことになります。UnionとIntersectionは、こうした「現実の形」をそのままコンパイラに教えるための道具です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🥤</span>
+          <div class="body"><b>たとえ話</b>自動販売機のボタンを思い浮かべてください。ボタンに書かれている飲み物は「コーラ・お茶・水」のどれかだけです(Union型)。もし「好きな飲み物名を紙に書いてください」という方式だったら、"コーラ"のつもりで"コーラー"と書き間違えても、機械はその間違いに気づけません。ボタン方式(Literal Typesの合併)なら、そもそも存在しない飲み物は選べないので、間違えようがないのです。Intersectionは「メガネをかけたサッカー選手」のように、2つの特徴を両方持つ人を1人で表すイメージです。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 1-1-a</span><h4>信号の色をLiteral Typesで表現する</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -225,6 +233,14 @@ function printLength(value: unknown) {
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>any</code>を使うとNarrowingの恩恵がすべて失われます。外部から来る未知のデータには<code>any</code>ではなく<code>unknown</code>を使い、型ガードで絞り込んでから使いましょう。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>unknown</code>は「何が来るか分からないので、確認するまでは何もさせない」型です。一方<code>any</code>は「型チェックを丸ごとお休みする」型で、確認せずに何でも操作できてしまいます。<code>typeof</code>や<code>in</code>、ユーザー定義型ガードは、その「確認作業」そのものです。確認が済んだ範囲だけ、コンパイラはその型に応じた操作を許可してくれます。<code>any</code>を使うと、この「確認してから使う」という安全装置ごと外してしまうことになります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📦</span>
+          <div class="body"><b>たとえ話</b>知らない人から届いた荷物(<code>unknown</code>)を想像してください。開けて中身を確認する前に食べたりしませんよね。「中身を確認してから、それが食べ物だと分かって初めて食べる」というのが型ガードの考え方です。<code>any</code>は「確認しないで何でも口に入れていいよ」と言っているようなもので、実は危険な考え方なのです。</div>
         </div>
 
         <div class="exercise">
@@ -316,6 +332,14 @@ const found = findById(users, 1); // Tは自動的に { id: number; name: string
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>APIレスポンスの共通ラッパー<code>type ApiResponse&lt;T&gt; = { data: T; meta: { total: number } }</code>のように、ジェネリクスを使うとエンドポイントごとに型定義をコピペせずに済みます。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>制約なしのジェネリクス<code>&lt;T&gt;</code>は「何でも受け取れるが、中身については何も分からないので何もできない箱」です。<code>&lt;T extends { id: number }&gt;</code>のように制約を付けると、「中身が何であれ、<code>id</code>というプロパティだけは必ず持っている」ということをコンパイラに保証させられます。これにより「自由に何でも受け取れる」柔軟さを保ちながら、必要な操作（<code>id</code>での検索など）だけは安全に行えるようになります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🪪</span>
+          <div class="body"><b>たとえ話</b>「なんでも屋さん」に「IDカードだけは見せてね」とお願いする場面を想像してください。相手が犬でも猫でもロボットでも構いませんが、「IDカードを持っていること」だけは保証されています。だからIDカードを使った仕事（名前を探す、番号で照合するなど）は安心して頼めますよね。<code>T extends { id: number }</code>は、まさに「中身は自由だけど、このIDカードだけは絶対に持っている」という約束なのです。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 2-1-a</span><h4>配列の先頭N件を返すジェネリック関数</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -395,6 +419,14 @@ function withLogging&lt;Args extends unknown[], R&gt;(
 
 const add = (a: number, b: number) =&gt; a + b;
 const loggedAdd = withLogging(add); // (a: number, b: number) =&gt; number として推論される</code></pre>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>Partial</code>や<code>Omit</code>がなければ、更新用の型・作成用の型・一覧表示用の型を、元の型からそれぞれコピペで作ることになります。すると元の型にプロパティを1つ追加したとき、コピペした先すべてを手作業で直す必要が生まれ、直し忘れがバグの温床になります。Utility Typesは「元の型を単一の情報源(Single Source of Truth)として、そこから必要な形だけを自動的に導く」ための仕組みです。高階関数も同様に、元の関数を書き換えずに「ログ出力」のような共通処理を後から付け加えられます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">👕</span>
+          <div class="body"><b>たとえ話</b>洋服の「サイズ違いバージョン」を毎回一から作るのは大変ですよね。それより「元のデザインから袖だけ短くする」(<code>Omit</code>で一部を取り除く)、「全部のボタンを外せるようにする」(<code>Partial</code>で全部省略可能にする)というように、元のデザイン(元の型)を土台にして一部だけ変えるほうが効率的です。高階関数は「同じ服に後からワッペンを縫い付ける」ようなもので、元の服自体は変えずに新しい機能を追加できます。</div>
         </div>
 
         <div class="exercise">
@@ -500,6 +532,14 @@ type NullableUser = Nullable&lt;User&gt;;
         <div class="callout">
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>フォームの入力値は「すべて未確定」な状態を扱うことが多いため、<code>Partial&lt;T&gt;</code>や自作の<code>Nullable&lt;T&gt;</code>で「未入力を許容する型」を作っておくと、フォーム用の型とAPI送信用の型をきれいに分離できます。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>標準の<code>Partial</code>や<code>Readonly</code>がどう実装されているかを知ると、「既存の型のすべてのプロパティに、同じ変換を機械的に適用する」という一般化されたテクニックそのものを学べます。これが分かれば、標準に無い変換(nullを許容する、readonlyを外すなど)も自分で組み立てられるようになります。車輪の再発明をするのではなく、「車輪の仕組みを理解して、自分の車に合わせて調整する」というのがMapped Typesを学ぶ意味です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📋</span>
+          <div class="body"><b>たとえ話</b>クラス全員の連絡帳に、同じハンコを1つずつ押していく作業を想像してください。<code>keyof T</code>で「クラスの名簿(プロパティの一覧)」を取得し、名簿にある全員(すべてのキー)に同じ処理を適用します。<code>Partial</code>は「全員の連絡帳に『提出は任意です』というハンコを押す」、<code>Readonly</code>は「全員の連絡帳に『書き換え禁止』のハンコを押す」ようなものです。</div>
         </div>
 
         <div class="exercise">
@@ -608,6 +648,14 @@ type EventName = `on${Capitalize&lt;"click" | "hover" | "focus"&gt;}`;
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>Template Literal Typesは、CSSのプロパティ名やAPIのルーティングパス（<code>`/users/${number}`</code>など）を型として厳密に表現したいときに便利です。ただし複雑にしすぎるとコンパイルが遅くなることがあるので、使いどころは絞りましょう。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>型の世界にも「場合分け」が必要な場面があります(例: 配列ならその中身の型を、そうでなければそのままの型を使いたい)。<code>infer</code>は「まだ分からない部分」を一時的に名前を付けて置いておき、条件が成立したときにその名前で型を取り出すためのキーワードです。これがあることで、既存の複雑な型(関数の戻り値、配列の中身など)から必要な部分だけを抜き出す、汎用的な型ユーティリティを自分で組み立てられるようになります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🎁</span>
+          <div class="body"><b>たとえ話</b>福袋を思い浮かべてください。「もし箱の形が四角なら中身はぬいぐるみ、丸なら中身はお菓子」というルールがConditional Typesです。<code>infer</code>は、「開けてみないと分からない中身を、いったん『なぞの中身』というラベルを貼って置いておき、開けたときにそのラベルの名前で呼び出せるようにする」付箋のようなものです。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 3-2-a</span><h4>配列の要素型を取り出すUnwrapArrayを実装する</h4><span class="diff diff-mid">応用</span></div>
@@ -690,6 +738,14 @@ async function loadDashboard(userId: number) {
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b>複数の非同期処理を<code>await</code>を1つずつ直列に書くと、本来並行にできる処理まで直列化されて遅くなります。互いに依存しない処理は<code>Promise.all</code>でまとめましょう。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>await</code>を1行ずつ並べると、1つ目の処理が終わるまで2つ目は絶対に始まりません。しかし2つの処理が互いの結果を必要としないなら、同時に始めても何の問題もないはずです。<code>Promise.all</code>は「みんな同時にスタートして、全員がゴールするまで待つ」という並行実行を、型情報(それぞれの戻り値の型)を保ったまま行うための仕組みです。依存関係がないのに直列に書くのは、待たなくていい時間をわざわざ待っているのと同じです。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🏃</span>
+          <div class="body"><b>たとえ話</b>学校で「宿題を集める係」と「給食を配る係」が、本当は同時に作業できるのに、わざわざ「宿題を集め終わってから給食を配り始める」という順番を律儀に守っている状態を想像してください(直列)。実際は2つの係が同時に動けば、全体にかかる時間はぐっと短くなります(並行)。<code>Promise.all</code>は「よーい、ドン!」の合図でみんな一斉にスタートし、全員がゴールしたら次に進む、という笛の役割をしています。</div>
         </div>
 
         <div class="exercise">
@@ -778,6 +834,14 @@ if (result.ok) {
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>フォームバリデーションのような「失敗が想定内」の処理はResult型で表現し、ネットワーク障害のような「本当に例外的な失敗」だけをthrowにする、と使い分けると呼び出し側のコードが読みやすくなります。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>throw</code>による例外は、関数のシグネチャ(型)のどこにも「この関数はエラーを投げるかもしれない」という情報が現れません。呼び出す側はドキュメントを読むか、実際に動かして例外に遭遇するまで気づけないことがあります。Result型は「成功か失敗か」を戻り値の型そのものに組み込むので、呼び出し側は<code>ok</code>による分岐を書かない限りコンパイラに怒られる形になり、エラー処理の書き忘れを防げます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🎰</span>
+          <div class="body"><b>たとえ話</b>ガチャガチャを回すと、必ず「当たり」か「はずれ」のどちらかが出てきますよね。Result型は「必ずこのどちらかの結果が返ってくるよ」と保証してくれる仕組みです。一方<code>throw</code>は「たまに何の前触れもなく機械が止まって、何も出てこなくなる」ようなもので、受け取る側はいつ止まるか分からないまま身構えていないと対応できません。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 4-2-a</span><h4>メールアドレスのバリデーションをResult型で書く</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -858,6 +922,14 @@ function render&lt;T&gt;(state: FetchState&lt;T&gt;): string {
   }
 }</code></pre>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>複数の「かもしれない状態」をバラバラの型で扱うと、それぞれの状態にどんなプロパティがあるかを呼び出し側が毎回覚えておく必要があります。共通の<code>status</code>のようなタグを持つUnionにまとめておくと、<code>switch</code>で分岐した瞬間、その分岐の中で「今は<code>data</code>が確実に存在する」「今は<code>message</code>が確実に存在する」とコンパイラが自動的に絞り込んでくれます。状態ごとに必要な情報が変わるUIの実装(ローディング中/成功/失敗)と、この仕組みは非常に相性がよいのです。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🚦</span>
+          <div class="body"><b>たとえ話</b>信号機を思い浮かべてください。「赤・黄・青」という共通の分類(<code>status</code>のようなタグ)があって、それぞれの色ごとに「止まれ」「注意」「進め」という決まった意味が紐づいています。Discriminated Unionは、まさにこの「タグを見れば、そのあとに続く情報の中身が自動的に分かる」という仕組みをプログラムの型として表現したものです。</div>
+        </div>
         <p>ブランド型は「見た目は同じ型（例: <code>number</code>や<code>string</code>）だが、意味的には別物」を区別するテクニックです。<code>UserId</code>と<code>ProductId</code>を両方<code>number</code>で扱っていると、引数の渡し間違いをコンパイラが検出できません。</p>
         <div class="code-block">
           <div class="code-block-head"><span class="fname mono">branded-types.ts</span><button class="copy-btn">コピー</button></div>
@@ -876,6 +948,14 @@ const productId = 1 as unknown as ProductId;
 getUser(userId);    // OK
 // getUser(productId); // コンパイルエラー: ProductIdはUserIdではない
 // getUser(1);          // コンパイルエラー: ただのnumberも受け付けない</code></pre>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>UserId</code>も<code>ProductId</code>も、実体はどちらもただの<code>number</code>です。TypeScriptの型システムは「構造が同じなら同じ型として扱う」という考え方(構造的型付け)が基本なので、何も工夫しなければ<code>ProductId</code>の値を<code>UserId</code>が必要な場所に渡せてしまいます。ブランド型は、実在しない<code>__brand</code>という目印のプロパティを型だけに追加することで、「構造は同じでも意味が違う」ことを人工的にコンパイラへ教える工夫です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🔑</span>
+          <div class="body"><b>たとえ話</b>見た目が全く同じ鍵が2本あるとします(どちらも<code>number</code>という意味)。でも実際には「家の鍵」と「車の鍵」で使い道が違いますよね。ブランド型は、見た目は同じ鍵でも「これは家専用」「これは車専用」という刻印を付けておくようなものです。間違えて車の鍵で家を開けようとしたら、刻印を見た瞬間に「これは違う鍵だ」とすぐに気づけます。</div>
         </div>
 
         <div class="exercise">
@@ -964,6 +1044,14 @@ const me = await apiGet("/users/me");       // { id: number; name: string; email
         <div class="callout">
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>この設計はtRPCやOpenAPIから型を自動生成するツールの考え方の基礎にもなっています。エンドポイントが増えるほど「型マップに1行追加するだけで型安全になる」メリットが大きくなります。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>エンドポイントごとに戻り値の型をその都度手動で管理していると、サーバー側の仕様が変わったときにクライアント側の型を直し忘れても誰も気づけません。実行して初めて「想定と違うデータが来た」と気づくことになります。1つの型マップ(<code>ApiRoutes</code>)にパスと戻り値の対応をまとめておけば、パスを指定した瞬間に戻り値の型が自動的に決まり、存在しないパスへのアクセスもコンパイル時にエラーとして検出できます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍽️</span>
+          <div class="body"><b>たとえ話</b>レストランのメニュー表を思い浮かべてください。メニュー表(<code>ApiRoutes</code>)に「オムライスを頼んだらオムライスが出てくる」とはっきり書いてあれば、注文する人もお店の人も迷いません。もしメニュー表がなく、口頭で毎回「これ頼んだら何が出てくるんだっけ?」と確認しないといけないとしたら、注文ミスや行き違いが起きやすくなりますよね。</div>
         </div>
 
         <div class="exercise">
@@ -1073,6 +1161,14 @@ class CreditCardProcessor2 extends PaymentProcessor {
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>これはJavaのTemplate Methodパターンと同じ考え方です。共通の処理の流れ（validate → charge → ログ出力）を親クラスで固定し、可変な部分だけをサブクラスに実装させることで、処理の流れの一貫性を保証できます。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>interface</code>は「形(契約)だけ」を決めるので、継承関係がまったく無関係なクラス同士にも横断的に同じ約束を持たせられます。<code>abstract class</code>は共通の処理そのもの(実装コード)を持てるので、同じ手順を毎回コピペする必要がなくなり、手順の一部を直したいときも親クラス1箇所を直すだけで済みます。「契約だけ決めたいか、処理そのものを共有したいか」で使い分けるのが基本です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍛</span>
+          <div class="body"><b>たとえ話</b><code>interface</code>は「電池で動くおもちゃはみんな乾電池のサイズが同じ」という「規格」だけを決めるルールです。中身がロボットでも車でも構いません。<code>abstract class</code>は「カレーの作り方のレシピ」のようなもので、「野菜を切る→炒める→煮込む」という流れは全部共通、「何のルウを使うか」だけを各家庭(サブクラス)が自由に選べる、というイメージです。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 6-1-a</span><h4>通知の抽象クラスを設計する</h4><span class="diff diff-mid">応用</span></div>
@@ -1146,6 +1242,14 @@ class EmailNotifier extends Notifier {
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>noUncheckedIndexedAccess</code>を有効にしていないと、<code>const first = arr[0]</code>は要素が存在しなくても<code>undefined</code>を許容しない型になり、実行時エラーの温床になります。新規プロジェクトでは最初からオンにしておきましょう。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>strict</code>系のオプションをオフにしたままだと、TypeScriptは「型を書いてはいるけれど、実質的にはJavaScriptとほとんど変わらない緩いチェック」しかしてくれません。<code>noUncheckedIndexedAccess</code>のようなオプションは、「配列の範囲外アクセス」という実務で本当によく起きるバグの種を、実行前のコンパイル段階で検出できるようにしてくれます。オプションをオンにする一手間が、本番環境での思わぬ<code>undefined</code>エラーを大きく減らします。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🔍</span>
+          <div class="body"><b>たとえ話</b><code>strict</code>モードをオンにするのは、先生に「答案を隅から隅までちゃんとチェックしてね」とお願いするようなものです。オフのままだと、先生は大きな間違いしか見てくれず、細かい見落とし(空の箱から何かを取り出そうとするような小さなミス)を見逃してしまいます。厳しくチェックしてもらったほうが、本番でのテスト(実行)前にミスに気づけますよね。</div>
         </div>
 
         <div class="exercise">

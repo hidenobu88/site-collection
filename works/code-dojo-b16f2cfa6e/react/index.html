@@ -151,6 +151,14 @@ const [isLoading, setIsLoading] = useState(false);</code></pre>
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b>オブジェクトのstateを更新するとき、<code>setPosition({ x: 10 })</code>のように書くと<code>y</code>が消えてしまいます。<code>useState</code>の更新は<strong>マージではなく置き換え</strong>なので、<code>setPosition((prev) =&gt; ({ ...prev, x: 10 }))</code>のようにスプレッドで既存の値を保持する必要があります。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>setCount(count + 1)</code>の<code>count</code>は、そのイベントハンドラが呼ばれた瞬間に確定した「そのときの値」であり、Reactは複数の更新をまとめて処理する（バッチ処理）ため、3回連続で呼んでも同じ古い<code>count</code>を使った「同じ計算」を3回行うだけになりがちです。関数形式の<code>(prev) =&gt; prev + 1</code>は、実際に適用される直前の最新の値を毎回受け取るため、連続で呼んでも正しく積み上がります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🖊️</span>
+          <div class="body"><b>たとえ話</b>黒板に書いてある数字を、3人が同時に「今の数字に1を足して書き直して」と頼まれた場面を想像してください。3人とも「黒板に書いてある今の数字(たとえば3)」を最初に見てから、それぞれ同時に4と書き込んでしまうと、3回頼んでも結局4のままです。それより「今書いてある数字が何であれ、それに1を足してね」というやり方なら、1人ずつ確実に処理されて3回分ちゃんと増えていきます。<code>(prev) =&gt; prev + 1</code>は、まさにこの後者のやり方です。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 1-1-a</span><h4>非同期処理後のカウントアップを安全に書く</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -252,6 +260,14 @@ const [isLoading, setIsLoading] = useState(false);</code></pre>
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>cancelled</code>フラグを立てずに<code>setResults</code>だけ呼んでいると、「Aの検索結果を取得中にBに検索し直した」場合、Aのレスポンスが後から返ってきてBの結果を上書きしてしまう競合状態（レースコンディション）が起こります。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>useEffect</code>は「Reactの外側の世界（通信・タイマー・DOM操作など）と同期する」ための仕組みです。依存配列は「このEffectが何に基づいて動いているか」の宣言であり、含めるべき値を省略すると、Reactはその値が変わったことに気づかず、古い情報のままEffectを動かし続けてしまいます。クリーンアップ関数は「次のEffectが始まる前に、前回のEffectの後片付けをする」ための仕組みで、これが無いと、先に投げた古いリクエストの結果が、後から届いた新しい結果を上書きしてしまうことがあります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📮</span>
+          <div class="body"><b>たとえ話</b>図書館で本を借りるとき、欲しい本のタイトルが変わったら、もう一度違う本を借りに行き直しますよね(依存配列にqueryを入れる)。もし「最初に頼んだタイトル」だけをずっと覚えていて二度と確認しないと(空の依存配列)、いつまでも最初の古い本のことしか気にかけられません。クリーンアップは、新しい本を借りに行く前に「今借りている本を返却する」作業です。返却せずに何冊も借り続けると、後から届いた本が先に届いた古い本に上書きされてしまうような混乱が起きます。</div>
         </div>
 
         <div class="exercise">
@@ -372,6 +388,14 @@ const SearchButton = memo(function SearchButton({ onClick }: { onClick: () =&gt;
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>「このコンポーネントが遅い」と体感する前に最適化するのはコストに見合わないことが多いです。React DevTools Profilerで実際に再レンダリングのコストを計測してから、必要な箇所にだけメモ化を入れましょう。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b><code>useMemo</code>や<code>useCallback</code>自体にも「前回の依存値と今回の依存値を比較する」というコストがかかります。ごく軽い計算にまでメモ化を付けると、その比較コストのほうが計算そのもののコストより高くつき、かえって遅くなることさえあります。メモ化が本当に効果を発揮するのは「計算そのものが重い場合」か「参照の同一性が重要な場合(memo化した子コンポーネントへのpropsなど)」に限られます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">➕</span>
+          <div class="body"><b>たとえ話</b>「2+2」のような簡単な足し算をするたびに、「あれ、これ前にも計算したっけ?」とメモを確認する手間をかけるのは、逆に面倒ですよね。それより毎回サッと計算したほうが速いです。でも、何百人ものテストの点数をきれいに並べ替える(重い処理)場合は、「同じデータならもう一度並べ替えなくていいよ」と覚えておく(メモ化)ことに、はっきりとした意味が出てきます。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 2-1-a</span><h4>合計金額の計算をuseMemoで最適化する</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -451,6 +475,14 @@ function UserTable({ users }: { users: User[] }) {
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>memo</code>で子をラップしても、親がその都度<code>{ ... }</code>や<code>() =&gt; {}</code>のようなオブジェクト・関数リテラルをpropsとして渡していると、毎回「新しい参照」が生成されるため<code>memo</code>の浅い比較は必ず「変化あり」と判定します。<code>useMemo</code>/<code>useCallback</code>とセットで初めて効果を発揮します。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>Reactは親が再レンダリングされると、原則として子も連鎖的に再レンダリングします。<code>memo</code>は「propsが(浅い比較で)変わっていなければ、その手間をスキップする」仕組みです。しかし、オブジェクトや関数のリテラルをその場で作って渡すと、中身が同じでも「新しく作られた別のもの」として扱われるため、比較は必ず「変わった」と判定されてしまいます。だから<code>useMemo</code>/<code>useCallback</code>で参照そのものを安定させて初めて、<code>memo</code>は本来の効果を発揮できます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍱</span>
+          <div class="body"><b>たとえ話</b>双子のきょうだいが毎日全く同じメニューのお弁当を持ってきているのに、先生が「昨日と同じお弁当かな?」を、中身を1つずつ確認するのではなく「同じお弁当箱かどうか」だけで判断しているとします。メニューが同じでも、毎回新しいお弁当箱に詰め替えて持ってきたら、先生は「違う箱だ、変わった!」と勘違いしてしまいます。中身が同じなら同じお弁当箱を使い回す(<code>useMemo</code>/<code>useCallback</code>で参照を保つ)ことで、先生は正しく「変わっていない」と気づけるのです。</div>
         </div>
 
         <div class="exercise">
@@ -571,6 +603,14 @@ function Modal() {
         <div class="callout">
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>返り値をオブジェクトにするか配列にするかは、「呼び出し側で名前を変えたいか」で判断します。<code>useState</code>のように必ず2つセットで分割代入するものは配列、<code>useToggle</code>のように一部だけ使うことが多いものはオブジェクトが向いています。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>似たような<code>useState</code>と<code>useEffect</code>の組み合わせを複数のコンポーネントにコピペしていると、片方にバグ修正を入れてもコピペ先すべてには反映されず、直し忘れが生まれます。カスタムフックに切り出すと「ロジックの本体は1箇所」になり、修正は1箇所で済み、コンポーネント自体は「見た目の表示」に専念できるようになります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📖</span>
+          <div class="body"><b>たとえ話</b>給食当番の手順(配膳して、片付ける)を、クラスごとに先生がそれぞれ独自のメモに書いて教えているとします。手順が1つ変わるたびに、全クラスの先生のメモを1枚ずつ書き直して回らないといけません。それより「給食当番マニュアル」を1つだけ作って、みんながそれを見るようにすれば、変更はマニュアル1つを直すだけで済みます。カスタムフックは、まさにこの「共通マニュアル」の役割を果たします。</div>
         </div>
 
         <div class="exercise">
@@ -696,6 +736,14 @@ function UserProfile({ userId }: { userId: number }) {
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>実務では自前実装よりも、キャッシュ・再取得・重複排除まで面倒を見てくれるTanStack Query（旧React Query）やSWRを使うのが一般的です。ただしそれらのライブラリの内部でも、ここで学んだ「状態の型設計」と同じ考え方が使われています。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>データ取得には「読み込み中/成功/失敗」という共通のパターンと、「コンポーネントが先に別の対象を表示し直したときに、古いレスポンスで新しい状態を上書きしてしまう」という共通の落とし穴があります。これを毎回コンポーネントごとに書いていると、対応漏れが起きやすくなります。1つのカスタムフックにこの「型で表現された状態遷移」をまとめておけば、データ取得を行うすべての場所で同じ安全さが自動的に保証されます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📦</span>
+          <div class="body"><b>たとえ話</b>宅配便を注文するたびに、「届くまで待つ→届いたか確認する→もし業者が来る前に引っ越したら受け取りをキャンセルする」という手順を毎回一から考えるのは大変です。宅配ロッカーのような「共通の受け取りシステム」を1つ用意しておけば(カスタムフック)、何を注文しても同じ安全な手順で受け取れて、引っ越し(古いリクエストのキャンセル)も自動でやってくれます。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 3-2-a</span><h4>再取得できるrefetch機能を追加する</h4><span class="diff diff-mid">応用</span></div>
@@ -819,6 +867,14 @@ function Cart() {
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>Discriminated Unionでアクション型を定義しておくと、<code>switch</code>文のそれぞれのcase内で<code>action</code>のプロパティが自動的に絞り込まれます（TypeScript講座モジュール5の内容そのものです）。ReduxやZustandの設計思想もこの延長線上にあります。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>1つの状態に対して複数の更新パターンがあり、それぞれのロジックが絡み合っている場合、バラバラの<code>useState</code>とその場しのぎの更新処理で管理すると、「どの操作がどのstateにどう影響するか」を追うのが難しくなります。<code>useReducer</code>は「起こりうる操作(アクション)の種類」と「それぞれの結果」を1つの関数に集約するので、状態がどう変化するかを1箇所読むだけで把握できるようになります。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🥤</span>
+          <div class="body"><b>たとえ話</b>自動販売機を思い浮かべてください。「コーラのボタンを押す」「お茶のボタンを押す」「お釣りボタンを押す」など、いろんな操作がありますが、実際に中で何が起こるかを決めているのは、自動販売機の中にある1つの制御装置(reducer)です。ボタン(アクション)がたくさんあっても、「何が起きるか」を決める場所が1箇所にまとまっていれば、もし変な動きをしたときも、直すべき場所がすぐに分かります。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 4-1-a</span><h4>Todoリストのreducerを実装する</h4><span class="diff diff-mid">応用</span></div>
@@ -939,6 +995,14 @@ function useTheme() {
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>value={{ theme, toggleTheme }}</code>のようにインラインでオブジェクトを作ると、Providerが再レンダリングされるたびに新しい参照が生成され、Contextを購読する全コンポーネントが不要に再レンダリングされます。<code>useMemo</code>で安定させましょう。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>propsを何段も下のコンポーネントへ渡し続けると、途中のコンポーネントは自分では使わない値をただ中継するためだけに受け取ることになり、コードの見通しが悪くなります(プロップドリリング)。Contextは「木構造のどの深さからでも直接値を取り出せる棚」を用意する仕組みです。ただしContextの値が変わるたびに、それを購読しているコンポーネント全部が再レンダリングされるため、「本当に広い範囲で必要な値」だけに使うべきで、何でもかんでもContext化すると、逆に再レンダリングのコストが増えてしまいます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">📌</span>
+          <div class="body"><b>たとえ話</b>教室の一番後ろの席の子にプリントを配るのに、前から1人ずつ手渡しでリレーしていくと(プロップドリリング)、途中の全員がプリントを一瞬持つことになり、時間もかかります。それより「掲示板」に貼っておいて、必要な子がいつでも見に行けるようにする(Context)ほうが早いですよね。でも、掲示板の内容を変えるたびに「クラス全員が確認しに行かないといけない」としたら、それはそれで大変です。だから本当にクラス全体で必要な情報だけを掲示板に貼るべきなのです。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 4-2-a</span><h4>ログインユーザー情報のContextを実装する</h4><span class="diff diff-mid">応用</span></div>
@@ -1051,6 +1115,14 @@ function SignupForm() {
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>入力した瞬間からエラーを表示すると「まだ何も入力していないのに赤字が出る」体験になりがちです。<code>touched</code>（そのフィールドを一度でも触ったか）を管理し、「touchedかつエラーがある場合だけ表示する」のが定番の折衷案です。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>入力欄を表示した瞬間からエラーを出してしまうと、ユーザーはまだ何も入力していないのに「間違っています」と怒られたような気持ちになります。<code>touched</code>(そのフィールドに一度でも触れたか)を記録しておき、「触ったあとにまだエラーがある場合だけ」表示することで、リアルタイムに間違いを教えてくれる親切さと、入力前から責められない心地よさを両立できます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">✏️</span>
+          <div class="body"><b>たとえ話</b>先生が「まだノートに何も書いていないのに、赤ペンで『間違ってるよ』と印をつける」のは変ですよね。一度書いてみてから初めて添削するのが自然です。<code>touched</code>は「その欄に一度でも手を付けたかどうか」を覚えておく付箋のようなもので、「触った後にまだ間違っている場合だけ」赤字を出すようにしているのです。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 5-1-a</span><h4>パスワード確認フィールドのバリデーションを追加する</h4><span class="diff diff-basic">基礎確認</span></div>
@@ -1146,6 +1218,14 @@ function ContactForm() {
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>disabled</code>属性だけに頼っていると、フォーム外からの二重送信（例えばEnterキー連打がイベントキューに溜まっている場合など）を防ぎきれないことがあります。<code>handleSubmit</code>関数の冒頭でも状態をチェックする「二重の防御」が安全です。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>送信ボタンを連打すると、サーバーに同じリクエストが複数回届き、二重登録や二重課金のようなバグにつながります。「今送信中かどうか」という状態を持ち、送信中はボタンを無効化しつつ、関数の内部でも二重にチェックすることで、見た目とロジックの両面から二重送信を防げます。楽観的UIは、サーバーの返事を待たずに先に見た目を変えることで体感速度を上げつつ、失敗したときは元に戻すことでユーザーに嘘をつかない設計です。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍔</span>
+          <div class="body"><b>たとえ話</b>レストランで注文ボタンを焦って何度も連打してしまうと、同じ料理が何皿も届いてしまうかもしれません(二重送信)。「ただいま注文を受け付けています、少々お待ちください」という札を出しておけば(送信中の状態でボタンを無効化)、間違えて連打しても追加注文にはなりません。楽観的UIは、「いいね」ボタンを押した瞬間にハートが赤くなる(サーバーの返事を待たずに先に見た目を変える)ようなもので、もし後で「実は失敗していました」と分かったら、こっそり元の色に戻すイメージです。</div>
         </div>
 
         <div class="exercise">
@@ -1275,6 +1355,14 @@ function UserListPage() {
           <span class="icon">💡</span>
           <div class="body"><b>実務Tips</b>この分割の一番のメリットは、<code>UserListView</code>を単体でStorybookに表示したり、ロジックなしでスナップショットテストできる点です。「このコンポーネントをテストするのにAPIのモックが必要」と感じたら、分割のサインです。</div>
         </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>データ取得とロジックを持つ部分と、見た目だけを担当する部分が1つのコンポーネントに混ざっていると、見た目を1つ変えたいだけなのに、通信処理やロジックまで気にしながらコードを読む必要が出てきます。分けておけば、見た目側はpropsさえ渡せばどんな状況でも表示を確認でき、テストやデザイン変更がしやすくなります。ロジック側をカスタムフックに切り出すことで、「このコンポーネントは何をするものか」を一言で説明できる粒度に保てます。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">🍽️</span>
+          <div class="body"><b>たとえ話</b>料理番組を思い浮かべてください。「食材を仕入れて下ごしらえする人」(ロジック・カスタムフック)と、「お皿に盛り付けて見た目よく提供する人」(見た目のコンポーネント)が分かれていると、盛り付けだけ変えたいときは盛り付け担当だけに相談すればよく、食材の仕入れ担当に迷惑をかけません。1人が全部やろうとすると、盛り付けを少し変えたいだけなのに、仕入れの手順まで気にしないといけなくなってしまいます。</div>
+        </div>
 
         <div class="exercise">
           <div class="exercise-head"><span class="ex-num">EX 6-1-a</span><h4>ロジックと見た目を分離する</h4><span class="diff diff-mid">応用</span></div>
@@ -1380,6 +1468,14 @@ function Dashboard() {
         <div class="callout warn">
           <span class="icon">⚠️</span>
           <div class="body"><b>やりがちなミス</b><code>ErrorBoundary</code>はレンダリング中の例外しか捕まえられません。イベントハンドラ内の例外（<code>onClick</code>など）や<code>async</code>処理中の例外は捕まえられないため、それらは通常のtry/catchで扱う必要があります。</div>
+        </div>
+        <div class="callout why">
+          <span class="icon">🤔</span>
+          <div class="body"><b>なぜこうなるのか</b>1つの小さな部品(ウィジェット)がエラーを起こしただけで、アプリ全体が真っ白な画面になってしまうのは、体験として最悪です。<code>ErrorBoundary</code>で「壊れてもよい範囲」をあらかじめ区切っておくことで、被害をその部分だけに閉じ込め、それ以外の部分は問題なく動き続けられます。もしアプリ全体を1つの<code>ErrorBoundary</code>で囲んだだけだと、結局「1箇所の不具合で全部道連れ」というリスクは残ったままです。</div>
+        </div>
+        <div class="callout eli5">
+          <span class="icon">💡</span>
+          <div class="body"><b>たとえ話</b>家の電気のブレーカーを思い浮かべてください。もし家全体に1つのブレーカーしかなかったら、キッチンの電子レンジがショートしただけで家中の電気が消えてしまいます。でも部屋ごとにブレーカーが分かれていれば、キッチンの電気だけが落ちて、リビングや寝室の電気はちゃんと点いたままです。ウィジェットごとに<code>ErrorBoundary</code>を用意するのは、まさにこの「部屋ごとのブレーカー」と同じ考え方です。</div>
         </div>
 
         <div class="exercise">
