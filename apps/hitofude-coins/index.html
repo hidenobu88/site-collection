@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>一筆書きコインズ - レトロ一筆書きタップパズル</title>
+<meta name="description" content="コインが光る順番を記憶してタップする、レトロ昭和・平成風の一筆書きパズルゲーム。全40ステージをランダム自動生成、通常モードとランキング付きタイムアタックの2種類で遊べます。スマホ・タブレット対応。">
+<meta name="theme-color" content="#150f28">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E%F0%9F%AA%99%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="crt-overlay" aria-hidden="true"></div>
+<a href="../../index.html" class="top-link">↑ TOPページへ</a>
+<button id="muteBtn" class="mute-btn" aria-label="サウンド切り替え">🔊</button>
+
+<div class="cabinet">
+  <div class="screen-frame">
+
+    <!-- タイトル画面 -->
+    <section id="scr-title" class="screen active">
+      <p class="eyebrow">RETRO PUZZLE ARCADE</p>
+      <h1 class="logo">一筆書き<span class="star">★</span>コインズ</h1>
+      <p class="subtitle">ONE STROKE COIN ROAD</p>
+      <div class="coin-deco" aria-hidden="true">🪙 🪙 🪙</div>
+      <button class="btn btn-primary blink" id="btnStart">▶ PUSH START</button>
+      <div class="title-sub-actions">
+        <button class="btn btn-sub" id="btnHowTo">あそびかた</button>
+        <button class="btn btn-sub" id="btnRankingTop">🏆 ランキング</button>
+      </div>
+      <p class="credit">HIDENOBU GAMES 2026 &copy; ALL RIGHTS RESERVED</p>
+    </section>
+
+    <!-- モード選択 -->
+    <section id="scr-modeselect" class="screen">
+      <h2 class="scr-title">モードをえらぶ</h2>
+      <div class="mode-cards">
+        <button class="mode-card" data-mode="normal" type="button">
+          <span class="mode-icon">🎯</span>
+          <span class="mode-name">通常モード</span>
+          <span class="mode-desc">じっくり40ステージ攻略。ミスしても何度でも再挑戦OK。</span>
+        </button>
+        <button class="mode-card" data-mode="timeattack" type="button">
+          <span class="mode-icon">⏱️</span>
+          <span class="mode-name">タイムアタック</span>
+          <span class="mode-desc">クリアタイムを競う早解き勝負。ランキングに記録が残る。</span>
+        </button>
+      </div>
+      <button class="btn btn-back" data-back="scr-title" type="button">← もどる</button>
+    </section>
+
+    <!-- ステージ選択 -->
+    <section id="scr-stageselect" class="screen">
+      <h2 class="scr-title" id="stageSelectTitle">ステージをえらぶ</h2>
+      <div class="stage-grid" id="stageGrid"></div>
+      <div class="stage-select-actions">
+        <button class="btn btn-sub" id="btnResetProgress" type="button">🔄 進行状況をリセット</button>
+        <button class="btn btn-back" data-back="scr-modeselect" type="button">← もどる</button>
+      </div>
+    </section>
+
+    <!-- ゲーム画面 -->
+    <section id="scr-game" class="screen">
+      <div class="game-hud">
+        <div class="hud-item"><span class="hud-label">STAGE</span><span class="hud-value" id="hudStage">1</span></div>
+        <div class="hud-item"><span class="hud-label">MODE</span><span class="hud-value" id="hudMode">NORMAL</span></div>
+        <div class="hud-item hud-timer"><span class="hud-label">TIME</span><span class="hud-value" id="hudTimer">00:00.00</span></div>
+        <div class="hud-item"><span class="hud-label">COIN</span><span class="hud-value" id="hudProgress">0/0</span></div>
+        <button class="btn btn-quit" id="btnQuit" aria-label="ステージをやめる" type="button">✕</button>
+      </div>
+      <div class="board-wrap">
+        <div class="board" id="board">
+          <svg id="pathSvg" class="path-svg" aria-hidden="true"></svg>
+          <div class="coin-grid" id="coinGrid"></div>
+        </div>
+        <div class="preview-banner" id="previewBanner">おぼえて!</div>
+        <div class="countdown" id="countdown"></div>
+      </div>
+    </section>
+
+    <!-- 結果画面 -->
+    <section id="scr-result" class="screen">
+      <h2 class="result-title" id="resultTitle">STAGE CLEAR!</h2>
+      <div class="result-body" id="resultBody"></div>
+      <div class="result-actions" id="resultActions"></div>
+    </section>
+
+    <!-- ランキング画面 -->
+    <section id="scr-ranking" class="screen">
+      <h2 class="scr-title">ランキング 🏆</h2>
+      <div class="ranking-stage-picker" id="rankingPicker"></div>
+      <div class="ranking-table-wrap" id="rankingTableWrap"></div>
+      <button class="btn btn-back" data-back="scr-title" type="button">← もどる</button>
+    </section>
+
+  </div>
+</div>
+
+<!-- あそびかたモーダル -->
+<div class="modal" id="howtoModal">
+  <div class="modal-card">
+    <h2>あそびかた</h2>
+    <ol class="howto-list">
+      <li>コインが光る順番をよく見て覚えよう。</li>
+      <li>光り終わったら、覚えた順番どおりにコインをタップ！</li>
+      <li>ちがうコインを押したり、順番を間違えると<b>即ゲームオーバー</b>。</li>
+      <li>道はナナメには進めない（上下左右のみ）。つながり方をよく見て！</li>
+      <li>ステージは遊ぶたびにランダム生成。何度でも新鮮に遊べます。</li>
+    </ol>
+    <p class="howto-note">通常モードはじっくり40ステージ攻略、タイムアタックはクリアタイムでランキングに挑戦！</p>
+    <button id="closeHowto" class="btn btn-primary" type="button">わかった！</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
