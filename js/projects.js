@@ -281,7 +281,6 @@ const PROJECTS = [
     emoji: "🍶",
     image: "images/sake-shop.png",
     date: "2026.07",
-    featured: true,
   },
   {
     title: "FLORIA GARDENS フローリア・ガーデンズ — 花と光のテーマパーク",
@@ -292,10 +291,10 @@ const PROJECTS = [
     emoji: "🌸",
     image: "images/reoma-website.png",
     date: "2026.07",
-    featured: true,
+    pageBreakAfter: true,  // 4ページ目はここまで（6件）
   },
   {
-    // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています
+    // ※「すべて」で最後に表示させたいので、このカードは配列の末尾に置いています（5ページ目に単独表示）
     title: "かわいいクイズランド — ○×クイズアプリ",
     description: "ディズニー○×クイズ(全20問・ランダム出題)、パズル、タイマーの3つの遊びを収録したパステルかわいいWebアプリ。このままブラウザで遊べます。本体は問題管理CRUD付きのフルスタック構成(Java / Spring Boot / PostgreSQL)。",
     url: "apps/quiz-claude/app/index.html",
