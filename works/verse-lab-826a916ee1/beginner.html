@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>初級編 | Verse Lab — ゼロからわかるVerse言語</title>
+<meta name="description" content="Verse言語の初級編。式・変数・型・関数・条件分岐・くり返し・配列とマップまで、小学生でもわかるたとえ話でやさしく解説。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d0f17'/><text x='50' y='66' font-size='54' text-anchor='middle' fill='%234ADE80' font-family='monospace' font-weight='bold'>V</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>body.has-toc{ } .page-layout{ } .chapter{--accent-lv:var(--lv-beginner);}</style>
+</head>
+<body class="has-toc">
+
+<div class="progress-bar"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">V</span>
+      <span>Verse Lab<span class="brand-sub">やさしいVerse言語学習サイト(非公開)</span></span>
+    </a>
+    <nav class="level-nav">
+      <a class="level-chip" data-lv="top" href="index.html">🏠 トップ</a>
+      <a class="level-chip is-active" data-lv="beginner" href="beginner.html">🌱 初級</a>
+      <a class="level-chip" data-lv="intermediate" href="intermediate.html">⚙️ 中級</a>
+      <a class="level-chip" data-lv="advanced" href="advanced.html">🚀 上級</a>
+    </nav>
+    <button class="menu-btn" aria-label="目次を開く"><span></span></button>
+  </div>
+</header>
+
+<div class="toc-overlay"></div>
+
+<div class="page-layout">
+  <aside class="toc-col">
+    <div class="toc-card">
+      <div class="toc-title">🌱 初級編 目次</div>
+      <nav class="toc-list">
+        <a href="#ch01">01. Verseってどんな言語?</a>
+        <a href="#ch02">02. すべてが「式」という考え方</a>
+        <a href="#ch03">03. 変数と定数──名前つきの箱</a>
+        <a href="#ch04">04. 基本のデータ型</a>
+        <a href="#ch05">05. 演算子で計算する</a>
+        <a href="#ch06">06. 関数という「魔法の機械」</a>
+        <a href="#ch07">07. 条件分岐 if / else</a>
+        <a href="#ch08">08. くり返し for / loop</a>
+        <a href="#ch09">09. 配列とマップ</a>
+        <a href="#ch10">10. 文字列を組み立てる</a>
+        <a href="#ch11">11. まとめ & 次のステップ</a>
+      </nav>
+      <div class="toc-progress">
+        <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
+        <div class="toc-progress-track"><div class="toc-progress-fill"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content-col">
+    <div class="page-hero">
+      <span class="level-badge beginner">🌱 初級編 · LEVEL 1</span>
+      <h1>プログラミングがはじめてでも大丈夫。<br>Verseの世界に足を踏み入れよう。</h1>
+      <p class="lead">
+        この章では、Verseというプログラミング言語の「見た目」と「基本ルール」を身につけます。
+        専門用語が出てきたら、必ずすぐそばに小学生でもわかるたとえ話を置いています。急がず、ひとつずつ読み進めましょう。
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">🕐 読了目安 <b>25分</b></div>
+        <div class="hero-stat">📖 全<b>11</b>章</div>
+        <div class="hero-stat">🧪 コード例 <b>18</b>個</div>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <section class="chapter" id="ch01">
+      <div class="chapter-eyebrow"><span class="chapter-num">01</span><span class="chapter-diff">やさしい</span></div>
+      <h2>Verseってどんな言語?</h2>
+      <p>
+        Verse(ヴァース)は、Epic Games社が開発したプログラミング言語です。もともとは「Fortnite」の中で、
+        誰でも自分だけのミニゲームを作れる「UEFN(Unreal Editor for Fortnite)」のために生まれました。
+        今後はUnreal Engine全体でも使えるようになる、注目の新言語です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる Verse</div>
+        <p>
+          プログラミング言語を「料理のレシピを書くための言葉」だと考えてみましょう。<br>
+          既存の言語(たとえばC++やPython)は、何十年も前に決まったレシピの書き方を少しずつ直しながら使っています。
+          一方でVerseは、「これからの100年、みんなで同じ大きなキッチン(メタバース)を使い続けるなら、
+          最初から使いやすいレシピの書き方を作り直そう」という発想で、<strong>ゼロから設計された新しいレシピの書き方</strong>です。
+        </p>
+      </div>
+
+      <p>Verseには、開発チームが大切にしている3つの合言葉があります。</p>
+      <div class="card-grid">
+        <div class="info-card">
+          <div class="info-card-icon">🧱</div>
+          <h4>It's Just Code(全部ふつうのコード)</h4>
+          <p>むずかしく見える機能も、特別な魔法の構文ではなく、いつもの部品の組み合わせで表現されます。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🔁</div>
+          <h4>Just One Language(言語はひとつだけ)</h4>
+          <p>「先に処理される特別なコード」と「あとで実行されるコード」の区別がありません。見たままが全てです。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🌍</div>
+          <h4>Metaverse First(みんなで使う世界が最優先)</h4>
+          <p>たくさんの人が同時に遊ぶ、ひとつの大きな世界で動くことを前提に設計されています。</p>
+        </div>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">📘</div>
+        <div class="callout-body">
+          <div class="callout-title">このサイトの元ネタについて</div>
+          <p>このサイトはEpic Games公式の学習書「<code>Book of Verse</code>」の内容をベースに、専門用語をすべて日常のたとえ話に置き換えて再構成したものです。正確さはそのままに、わかりやすさを大幅にアップさせています。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="chapter" id="ch02">
+      <div class="chapter-eyebrow"><span class="chapter-num">02</span><span class="chapter-diff">やさしい</span></div>
+      <h2>すべてが「式」という考え方</h2>
+      <p>
+        Verseを理解するうえで、いちばん大切な考え方がこれです──<strong>Verseでは、コードのほとんどすべてが「式(しき)」</strong>だということ。
+        式とは、「実行すると必ず何かの値になるもの」のことです。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる「式」</div>
+        <p>
+          自動販売機を思い浮かべてください。<strong>お金を入れてボタンを押す</strong>という「操作」をすると、
+          <strong>缶ジュースが出てくる</strong>という「結果」が必ず返ってきますよね。
+        </p>
+        <p>
+          Verseでは、if文もfor文も、そして関数の呼び出しも、すべてがこの自動販売機のように「何かを実行すると、値が出てくる」仕組みになっています。
+          他の多くの言語では「if文は値を返さない特別な命令」ですが、Verseでは<strong>if式そのものが値になる</strong>のです。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># if式がそのまま「値」になる例
+Message := if (Score >= 60) then "合格" else "不合格"
+Print(Message)</code></pre>
+      </div>
+
+      <p>
+        <code>if (条件) then 値A else 値B</code> という書き方で、条件がtrueなら値A、falseなら値Bが「式の答え」として返ってきます。
+        自動販売機に「合格ボタン」と「不合格ボタン」があって、点数という名のコインを入れたら、どちらかの答えがコトンと出てくるイメージです。
+      </p>
+
+      <div class="callout tip">
+        <div class="callout-icon">✨</div>
+        <div class="callout-body">
+          <div class="callout-title">なぜこれが便利なの?</div>
+          <p>「値を返す部品」をどんどん組み合わせられるので、コードがブロック遊びのように組み立てやすくなります。この考え方は中級・上級に進むほど威力を発揮します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="chapter" id="ch03">
+      <div class="chapter-eyebrow"><span class="chapter-num">03</span><span class="chapter-diff">やさしい</span></div>
+      <h2>変数と定数──名前つきの箱</h2>
+      <p>
+        プログラムの中でデータを覚えておくには、「変数(へんすう)」を使います。Verseでは、箱に「開け閉めできる箱」と
+        「一度閉じたら二度と開かない箱」の2種類があると考えるとわかりやすいです。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 変数</div>
+        <p>
+          <strong>不変(変えられない)の値</strong>は、「油性ペンで名前を書いた開かずのカプセル」です。一度中身を入れたら、二度と変えられません。<br>
+          <strong>可変(変えられる)の値</strong>は、「鍵つきロッカー」です。鍵(<code>var</code>という魔法の言葉)を持っていれば、何度でも中身を入れ替えられます。
+        </p>
+        <p>
+          Verseでは<strong>「基本は開かずのカプセル」</strong>がルールです。うっかり中身を書き換えてバグを生む事故を防ぐため、
+          変えたいときだけ、はっきりと「これはロッカーです」と宣言する必要があります。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># 開かずのカプセル(不変)。 := で「型を推測しながら」中身を決める
+PlayerName := "ゆうた"
+MaxScore : int = 100        # 型を自分で書いてもよい
+
+# 鍵つきロッカー(可変)。var を付けて宣言する
+var Coins : int = 225
+set Coins += 100            # set を使うと中身を書き換えられる
+Print("所持コイン: {Coins}")  # → 325</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>書き方</th><th>意味</th><th>あとで書き換え</th></tr></thead>
+          <tbody>
+            <tr><td><code>Name := 値</code></td><td>不変(型は自動で推測)</td><td>❌ できない</td></tr>
+            <tr><td><code>Name:型 = 値</code></td><td>不変(型を自分で指定)</td><td>❌ できない</td></tr>
+            <tr><td><code>var Name:型 = 値</code></td><td>可変(型指定は必須)</td><td>✅ <code>set</code>で可能</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">つまずきポイント</div>
+          <p><code>var</code>で変数を作るときは、<code>:=</code>(型を自動で決める書き方)が使えません。必ず<code>var Name:型 = 値</code>のように、型をはっきり書く必要があります。</p>
+        </div>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-tag">✏️ ミニクイズ</div>
+        <div class="quiz-q">Q. 一度決めたら絶対に変えられない値のことを、このサイトでは何のたとえ話で説明した?</div>
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">A</span>鍵つきロッカー</button>
+          <button class="quiz-choice" data-correct="true"><span class="qc-mark">B</span>開かずのカプセル</button>
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">C</span>宅配ボックス</button>
+        </div>
+        <div class="quiz-explain">正解は<b>B</b>。「開かずのカプセル」は不変の値、「鍵つきロッカー」は<code>var</code>を使った可変の値でしたね。</div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="chapter" id="ch04">
+      <div class="chapter-eyebrow"><span class="chapter-num">04</span><span class="chapter-diff">やさしい</span></div>
+      <h2>基本のデータ型</h2>
+      <p>箱(変数)に何を入れられるかを決めるのが「型」です。Verseの基本の型を、身近なものにたとえて覚えましょう。</p>
+
+      <div class="card-grid">
+        <div class="info-card">
+          <div class="info-card-icon">🔢</div>
+          <h4><code>int</code> 整数</h4>
+          <p>おはじきの「数」のように、割り切れる整数だけを表します。例: <code>225</code>、<code>-3</code></p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">💧</div>
+          <h4><code>float</code> 小数</h4>
+          <p>コップに入った水の「量」のように、細かい端数まで表せる数です。例: <code>98.6</code></p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🍕</div>
+          <h4><code>rational</code> 分数</h4>
+          <p>ピザを3等分したときの「1切れぶん」のように、割り算の答えを丸めずぴったり正確に持てる数です。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🚦</div>
+          <h4><code>logic</code> 真偽値</h4>
+          <p>信号機の「進め/止まれ」のように、<code>true</code>か<code>false</code>の2択だけを表します。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📛</div>
+          <h4><code>string</code> 文字列</h4>
+          <p>名前が書かれた「短冊」のように、文字の並びを表します。例: <code>"ゆうた"</code></p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">Coins : int      = 225
+Health : float   = 98.6
+Half   : rational = 5 / 2       # 割り算は正確な分数になる(2.5に丸められない)
+IsAlive : logic  = true
+PlayerName : string = "ゆうた"
+
+# rational は Floor / Ceil で整数に変換できる
+Floor(Half)   # → 2 (切り捨て)
+Ceil(Half)    # → 3 (切り上げ)</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🍕</div>
+        <div class="callout-body">
+          <div class="callout-title">なぜ rational(分数)が必要なの?</div>
+          <p><code>float</code>(小数)はコンピューターの中で「だいたい」の値になってしまうことがあります。ピザを3人で分けるときに「1/3切れ」を正確に持ちたい場合は、丸め誤差の出ない<code>rational</code>が活躍します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="chapter" id="ch05">
+      <div class="chapter-eyebrow"><span class="chapter-num">05</span><span class="chapter-diff">やさしい</span></div>
+      <h2>演算子で計算する</h2>
+      <p>演算子は「電卓のボタン」です。数字や値を組み合わせて、新しい値を作ります。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>記号</th><th>意味</th><th>例</th></tr></thead>
+          <tbody>
+            <tr><td><code>+ - * /</code></td><td>足す・引く・かける・割る</td><td><code>3 + 4</code> → <code>7</code></td></tr>
+            <tr><td><code>= &lt;&gt;</code></td><td>等しい・等しくない</td><td><code>3 = 3</code> → <code>true</code></td></tr>
+            <tr><td><code>&lt; &lt;= &gt; &gt;=</code></td><td>大小比較</td><td><code>5 &gt; 3</code> → <code>true</code></td></tr>
+            <tr><td><code>and / or / not</code></td><td>論理のかけ算・たし算・反転</td><td><code>true and false</code> → <code>false</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">var Coins : int = 100
+set Coins += 50           # Coins = Coins + 50 の短縮形
+set Coins -= 20           # 引く
+
+IsRich := Coins > 100 and Coins &lt; 1000
+Print("お金持ち判定: {IsRich}")</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🧮</div>
+        <div class="callout-body">
+          <div class="callout-title">豆知識: 文字列や配列も「+」でつなげられる</div>
+          <p><code>"おはよう" + "ございます"</code>のように、<code>+</code>は文字列の連結にも使えます。電卓のボタンが、文房具のノリのように働くイメージです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="chapter" id="ch06">
+      <div class="chapter-eyebrow"><span class="chapter-num">06</span><span class="chapter-diff">やさしい</span></div>
+      <h2>関数という「魔法の機械」</h2>
+      <p>
+        関数は、材料(引数)を入れると決まった手順で加工して、結果(戻り値)を出してくれる「機械」です。
+        一度作れば、何度でも同じ手順を呼び出せます。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 関数</div>
+        <p>
+          ジューススタンドのミキサーを想像してください。<strong>りんごを入れると、りんごジュースが出てくる</strong>。<strong>バナナを入れると、バナナジュースが出てくる</strong>。
+          「何を入れるか(引数)」によって、「何が出てくるか(戻り値)」が変わる、決まった手順の機械です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># Fruit(材料)を受け取り、string(ジュース名)を返す機械
+MakeJuice(Fruit : string) : string =
+    "{Fruit}ジュース"
+
+Print(MakeJuice("りんご"))   # → りんごジュース
+
+# 2つの材料を受け取る機械
+Add(X : int, Y : int) : int = X + Y
+Print(Add(3, 4))              # → 7
+
+# 複数の手順がある機械はブロックで書く
+Greet(Name : string) : string =
+    Message := "ようこそ、{Name}さん!"
+    Message                    # 最後の式が「機械の出力」になる</code></pre>
+      </div>
+
+      <p>
+        関数の書き方は <code>関数名(材料名:型, ...) : 戻り値の型 = 手順</code> という形が基本です。
+        手順が複数行になるときは、最後に書いた式がそのまま「機械の出力」になります。これも「すべてが式」の考え方の延長です。
+      </p>
+
+      <div class="quiz">
+        <div class="quiz-tag">✏️ ミニクイズ</div>
+        <div class="quiz-q">Q. 関数を「ジューススタンドのミキサー」にたとえたとき、「引数」にあたるのはどれ?</div>
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">A</span>できあがったジュース</button>
+          <button class="quiz-choice" data-correct="true"><span class="qc-mark">B</span>入れる果物</button>
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">C</span>ミキサー本体</button>
+        </div>
+        <div class="quiz-explain">正解は<b>B</b>。ミキサーに入れる果物が「引数(材料)」、出てくるジュースが「戻り値(結果)」でしたね。</div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section class="chapter" id="ch07">
+      <div class="chapter-eyebrow"><span class="chapter-num">07</span><span class="chapter-diff">やさしい</span></div>
+      <h2>条件分岐 if / else</h2>
+      <p>
+        条件によって行動を変えたいときに使うのが<code>if</code>式です。天気予報を見て服を選ぶときの、頭の中の判断とそっくりです。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる if</div>
+        <p>
+          「もし雨が降っていたら、傘を持つ。そうでなければ、日傘か何も持たない。」<br>
+          これがそのままVerseの <code>if ... else ...</code> です。「もし(if)」の後ろの条件が成立するかどうかで、進む道が分かれます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">Age : int = 12
+
+if (Age >= 20):
+    Print("大人料金です")
+else:
+    Print("こども料金です")
+
+# 複数の条件をカンマでつなげると「すべて成立したら」の意味になる
+if (Age >= 6, Age &lt; 12):
+    Print("小学生ですね!")</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🔍</div>
+        <div class="callout-body">
+          <div class="callout-title">先取り予告</div>
+          <p>実はVerseの<code>if</code>は、単なる条件分岐以上のことができる、とても奥深い仕組みです。「条件」の部分に入れられるのは<code>true/false</code>だけではありません。詳しくは<a href="intermediate.html#ch01">中級編・第1章「失敗という考え方」</a>で解説します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section class="chapter" id="ch08">
+      <div class="chapter-eyebrow"><span class="chapter-num">08</span><span class="chapter-diff">やさしい</span></div>
+      <h2>くり返し for / loop</h2>
+      <p>同じ処理を何度もくり返したいときに使うのが、<code>for</code>と<code>loop</code>です。</p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる くり返し</div>
+        <p>
+          <code>for</code>は「クラス全員の名簿を、上から順番に1人ずつ呼んでいく」イメージです。名簿(配列)の人数ぶんだけ、自動でくり返します。<br>
+          <code>loop</code>は「タイマーが鳴るまで縄跳びを跳び続ける」イメージ。自分で「もうやめ!」(<code>break</code>)と言わない限り、永遠にくり返します。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">Members := array{"たろう", "はなこ", "けんじ"}
+
+# for: 配列の中身をひとつずつ取り出す
+for (Name : Members):
+    Print("こんにちは、{Name}さん")
+
+# loop: 自分で止めるまで無限にくり返す
+var JumpCount : int = 0
+loop:
+    set JumpCount += 1
+    Print("{JumpCount}回目のジャンプ!")
+    if (JumpCount >= 10):
+        break                # 10回跳んだら終了</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🛑</div>
+        <div class="callout-body">
+          <div class="callout-title">つまずきポイント</div>
+          <p><code>loop</code>は<code>break</code>で止めるのを忘れると「永遠に終わらない縄跳び」になってしまいます。<code>loop</code>を書いたら、必ずどこかに終わる条件(<code>break</code>)があるか確認しましょう。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 -->
+    <section class="chapter" id="ch09">
+      <div class="chapter-eyebrow"><span class="chapter-num">09</span><span class="chapter-diff">やさしい〜ふつう</span></div>
+      <h2>配列とマップ</h2>
+      <p>複数のデータをまとめて持ちたいときに使う、2種類の「収納ボックス」を紹介します。</p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 配列とマップ</div>
+        <p>
+          <strong>配列(array)</strong>は「下駄箱」です。1番、2番、3番…と番号(インデックス)が決まっていて、順番に靴(データ)が並んでいます。<br>
+          <strong>マップ(map)</strong>は「国語辞典」です。「りんご」という見出し語(キー)を引くと、「赤い果物」という意味(値)が出てきます。番号ではなく、名前で中身を探せます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># 配列(下駄箱) ── 順番に並んだ同じ型のデータ
+Fruits : []string = array{"りんご", "ばなな", "みかん"}
+Print(Fruits[0])              # → りんご (0番目から数える)
+
+# マップ(辞書) ── 見出し語(キー)から値を引く
+Scores : [string]int = map{
+    "たろう" => 90,
+    "はなこ" => 85
+}
+Print(Scores["たろう"])       # → 90</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>配列(array)</th><th>マップ(map)</th></tr></thead>
+          <tbody>
+            <tr><td>たとえ</td><td>下駄箱(番号で探す)</td><td>辞書(言葉で探す)</td></tr>
+            <tr><td>探し方</td><td><code>Fruits[0]</code></td><td><code>Scores["たろう"]</code></td></tr>
+            <tr><td>向いている場面</td><td>順番が意味を持つデータ</td><td>名前で素早く検索したいデータ</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="chapter" id="ch10">
+      <div class="chapter-eyebrow"><span class="chapter-num">10</span><span class="chapter-diff">やさしい</span></div>
+      <h2>文字列を組み立てる</h2>
+      <p>
+        変数の中身を文章に埋め込みたいときは、波かっこ<code>{ }</code>を使った「文字列補間(ほかん)」がとても便利です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 文字列補間</div>
+        <p>
+          学校のプリントの「穴埋め問題」を思い出してください。「わたしの名前は（　　）です。」の空欄に名前を書き込むように、
+          <code>"わたしの名前は{Name}です"</code>と書くだけで、<code>{Name}</code>の部分が自動的に変数の中身に置き換わります。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">PlayerName := "ゆうた"
+Score : int = 95
+
+# { } の中に変数名を書くだけで自動的に埋め込まれる
+Message := "{PlayerName}さんのスコアは{Score}点です!"
+Print(Message)  # → ゆうたさんのスコアは95点です!</code></pre>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section class="chapter" id="ch11">
+      <div class="chapter-eyebrow"><span class="chapter-num">11</span><span class="chapter-diff">まとめ</span></div>
+      <h2>まとめ & 次のステップ</h2>
+      <p>おつかれさまでした!初級編で学んだことを振り返りましょう。</p>
+
+      <div class="cheat-grid">
+        <div class="cheat-card">
+          <h5># 変数</h5>
+          <pre>Name := "値"           # 不変
+var N:int = 0          # 可変
+set N = 1               # 書き換え</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 関数</h5>
+          <pre>F(X:int):int = X * 2</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 条件分岐</h5>
+          <pre>if (X > 0):
+    Print("正の数")
+else:
+    Print("0以下")</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># くり返し</h5>
+          <pre>for (V : Array):
+    Print(V)</pre>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🎉</div>
+        <div class="callout-body">
+          <div class="callout-title">ここまで来れば土台は完璧です</div>
+          <p>「式」「変数」「関数」「条件分岐」「くり返し」「配列・マップ」は、どのプログラミング言語でも使う共通の土台です。ここから先は、いよいよ<strong>Verseならではの考え方</strong>に入っていきます。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="chapter-pagenav">
+      <a href="index.html" class="pagenav-link">
+        <div class="pagenav-dir">← BACK</div>
+        <div class="pagenav-title">トップページへ戻る</div>
+      </a>
+      <a href="intermediate.html" class="pagenav-link next">
+        <div class="pagenav-dir">NEXT →</div>
+        <div class="pagenav-title">中級編:Verseらしい考え方を身につける</div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>内容はEpic Games公式「Book of Verse」を参考に、わかりやすく再構成したものです。</p>
+  <span class="footer-badge">Verse Lab · Personal Study Notes</span>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>上級編 | Verse Lab — ゼロからわかるVerse言語</title>
+<meta name="description" content="Verse言語の上級編。エフェクトシステム、並行処理(sync/race/rush/branch/spawn)、Live Variables、永続化データ、型システム上級までをたとえ話で徹底解説。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d0f17'/><text x='50' y='66' font-size='54' text-anchor='middle' fill='%23B78BFF' font-family='monospace' font-weight='bold'>V</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>.chapter{--accent-lv:var(--lv-advanced);}</style>
+</head>
+<body class="has-toc">
+
+<div class="progress-bar"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">V</span>
+      <span>Verse Lab<span class="brand-sub">やさしいVerse言語学習サイト(非公開)</span></span>
+    </a>
+    <nav class="level-nav">
+      <a class="level-chip" data-lv="top" href="index.html">🏠 トップ</a>
+      <a class="level-chip" data-lv="beginner" href="beginner.html">🌱 初級</a>
+      <a class="level-chip" data-lv="intermediate" href="intermediate.html">⚙️ 中級</a>
+      <a class="level-chip is-active" data-lv="advanced" href="advanced.html">🚀 上級</a>
+    </nav>
+    <button class="menu-btn" aria-label="目次を開く"><span></span></button>
+  </div>
+</header>
+
+<div class="toc-overlay"></div>
+
+<div class="page-layout">
+  <aside class="toc-col">
+    <div class="toc-card">
+      <div class="toc-title">🚀 上級編 目次</div>
+      <nav class="toc-list">
+        <a href="#ch01">01. エフェクトという成分表示</a>
+        <a href="#ch02">02. computes〜transactsの階層</a>
+        <a href="#ch03">03. decidesと失敗の伝播</a>
+        <a href="#ch04">04. suspendsと非同期の基本</a>
+        <a href="#ch05">05. sync ── 全員そろうまで待つ</a>
+        <a href="#ch06">06. race ── 早い者勝ち</a>
+        <a href="#ch07">07. rush ── 一番乗りを見ながら継続</a>
+        <a href="#ch08">08. branch と spawn</a>
+        <a href="#ch09">09. 協調的キャンセル</a>
+        <a href="#ch10">10. defer とリソース管理</a>
+        <a href="#ch11">11. トランザクションとロールバック</a>
+        <a href="#ch12">12. Live Variables</a>
+        <a href="#ch13">13. await / upon / when / batch</a>
+        <a href="#ch14">14. Refinement Types</a>
+        <a href="#ch15">15. メタタイプ</a>
+        <a href="#ch16">16. モジュールとパス</a>
+        <a href="#ch17">17. 永続化可能な型</a>
+        <a href="#ch18">18. 実践: ミニゲームの状態管理</a>
+        <a href="#ch19">19. チートシート & まとめ</a>
+      </nav>
+      <div class="toc-progress">
+        <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
+        <div class="toc-progress-track"><div class="toc-progress-fill"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content-col">
+    <div class="page-hero">
+      <span class="level-badge advanced">🚀 上級編 · LEVEL 3</span>
+      <h1>メタバースを支えるしくみ ──<br>時間と副作用を、正面から手なずける。</h1>
+      <p class="lead">
+        上級編では、Verseが「メタバース時代の言語」と呼ばれる理由そのものに迫ります。
+        <strong>関数の副作用を型で管理するエフェクトシステム</strong>と、<strong>データレースの起きない並行処理</strong>、
+        <strong>自動で再計算されるLive Variables</strong>。どれもUEFNで本格的なゲームを作るときに欠かせない知識です。
+        少し難しく感じても、いつも通りたとえ話とセットで進めるので大丈夫です。
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">🕐 読了目安 <b>70分</b></div>
+        <div class="hero-stat">📖 全<b>19</b>章</div>
+        <div class="hero-stat">🧪 コード例 <b>35+</b>個</div>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <section class="chapter" id="ch01">
+      <div class="chapter-eyebrow"><span class="chapter-num">01</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>エフェクトという「成分表示ラベル」</h2>
+      <p>
+        Verseの関数には、名前・引数・戻り値の他に、もうひとつ大事な情報が書かれています。それが<strong>エフェクト(効果)</strong>です。
+        「この関数は、実行中に何をする可能性があるか」を、<code>&lt; &gt;</code>で囲んで宣言します。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる エフェクト</div>
+        <p>
+          スーパーで売っているお菓子の袋の裏にある「成分表示ラベル」を思い浮かべてください。
+          「小麦・卵・乳成分を含みます」と書かれていれば、アレルギーがある人はひと目で避けられますよね。
+        </p>
+        <p>
+          Verseのエフェクトも同じ役目です。<code>&lt;reads&gt;</code>と書かれていれば「この関数はゲームの状態を読み取ります」、
+          <code>&lt;writes&gt;</code>なら「状態を書き換えます」と、<strong>関数の中身を1行も読まなくても、何をする関数かパッケージの外側からわかる</strong>のです。
+          そしてコンパイラが、この表示が嘘になっていないかを厳密にチェックしてくれます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">CalculateDamage(Base : float, Mult : float)&lt;computes&gt; : float =
+    Base * Mult                    # 何も読み書きしない、純粋な計算
+
+GetStatus(P : player)&lt;reads&gt; : string =
+    if (P.Health &gt; 50.0): "元気" else "負傷中"   # 状態を読むだけ
+
+HealPlayer(P : player, Amount : float)&lt;transacts&gt; : void =
+    set P.Health = Min(P.Health + Amount, 100.0)  # 状態を書き換える</code></pre>
+      </div>
+
+      <p>エフェクトには大きく3つの「家族」があります。この地図を頭に入れておくと、これから先の章がすべてつながって見えてきます。</p>
+
+      <div class="card-grid">
+        <div class="info-card">
+          <div class="info-card-icon">📦</div>
+          <h4>Heapファミリー</h4>
+          <p><code>computes / reads / writes / transacts</code> ── メモリの読み書きに関する成分表示。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🎲</div>
+          <h4>Cardinalityファミリー</h4>
+          <p><code>decides</code> ── 「失敗するかもしれない」という成分表示。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">⏳</div>
+          <h4>Suspensionファミリー</h4>
+          <p><code>suspends</code> ── 「時間をまたいで一時停止するかもしれない」という成分表示。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="chapter" id="ch02">
+      <div class="chapter-eyebrow"><span class="chapter-num">02</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>computes 〜 transacts の階層</h2>
+      <p>Heapファミリーの4つは、権限の強さの階段になっています。</p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 権限の階段</div>
+        <p>
+          図書館の利用証を思い浮かべてください。<strong>「館内閲覧のみ」証</strong>では本を読むだけ。<strong>「貸出可」証</strong>があれば本を持ち帰って書き込みもできる──というように、
+          できることの範囲が段階的に広がっていきますよね。
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>エフェクト</th><th>たとえ</th><th>できること</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;computes&gt;</code></td><td>電卓を使うだけ</td><td>純粋な計算のみ。何も読み書きしない</td></tr>
+            <tr><td><code>&lt;reads&gt;</code></td><td>館内閲覧のみの利用証</td><td>状態の読み取りが許可される</td></tr>
+            <tr><td><code>&lt;writes&gt;</code></td><td>書き込み許可の利用証</td><td>状態の変更が許可される</td></tr>
+            <tr><td><code>&lt;transacts&gt;</code>(既定)</td><td>フル権限の利用証</td><td>読み取り・書き込み・確保すべて許可</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        重要なのは、この階段が「<strong>制限が少ない関数は、制限が多い場所でも代わりに使える</strong>」というサブタイピングの関係にあることです。
+        「純粋な計算しかしない関数」は、「読み取りをしてもよい」という場所に渡しても何の問題もありませんよね。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">PureAdd(X : int)&lt;computes&gt; : int = X + 1
+
+# 「computes以上の権限を持つ関数ならOK」という場所にも、
+# 一番権限の弱い computes 関数を渡せる
+F : type{_(:int)&lt;computes&gt;&lt;decides&gt; : int} = PureAdd   # 有効</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🚫</div>
+        <div class="callout-body">
+          <div class="callout-title">ルール: 同じ指定子を2つ書けない</div>
+          <p><code>&lt;computes&gt;&lt;computes&gt;</code>のような重複はエラーになります。また<code>&lt;suspends&gt;</code>と<code>&lt;decides&gt;</code>は組み合わせられません。「一時停止するかもしれない」と「失敗するかもしれない」は、Verseでは意図的に別の枠組みとして扱われているためです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="chapter" id="ch03">
+      <div class="chapter-eyebrow"><span class="chapter-num">03</span><span class="chapter-diff">ふつう</span></div>
+      <h2>decides エフェクトと失敗の伝播</h2>
+      <p>
+        中級編で学んだ「失敗」の考え方は、<code>&lt;decides&gt;</code>というエフェクトとして関数の成分表示に現れます。
+        そしてこの成分表示は、まるでバケツリレーのように<strong>呼び出し元へ伝わっていきます</strong>。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># AttemptPurchase は自分自身が「失敗するかもしれない」ので &lt;decides&gt; を宣言
+AttemptPurchase(Cost : int)&lt;transacts&gt;&lt;decides&gt; : void =
+    set PlayerGold = PlayerGold - Cost   # 一旦、暫定的に引いてみる
+    PlayerGold &gt;= 0                       # マイナスならここで失敗</code></pre>
+      </div>
+
+      <p>
+        <code>AttemptPurchase</code>を呼び出す側の関数もまた、この失敗の可能性を受け止める(<code>&lt;decides&gt;</code>を宣言するか、
+        <code>if</code>で失敗コンテキストに包む)必要があります。成分表示が正直に連鎖していくことで、
+        「どこかで失敗が握りつぶされて、気づかないバグになる」事故を未然に防いでいます。
+      </p>
+
+      <div class="callout danger">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">「失敗」と「実行時エラー」は別物</div>
+          <p><code>Err("メッセージ")</code>で発生させる実行時エラーは、鍵が回らなかっただけの「失敗」とは違い、<strong>回復不可能な致命的な異常</strong>を表します。コールスタックを伝って処理が強制終了するため、「本当に続行不可能なとき」だけに使うべき、最後の手段です。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="chapter" id="ch04">
+      <div class="chapter-eyebrow"><span class="chapter-num">04</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>suspends と非同期処理の基本</h2>
+      <p>
+        普通の関数は「一瞬(1フレーム)で処理が終わる」ことが前提です。しかし「3秒待つ」「アニメーションが終わるまで待つ」といった、
+        <strong>時間をまたぐ処理</strong>をしたい関数には、<code>&lt;suspends&gt;</code>という成分表示が必要です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる suspends</div>
+        <p>
+          電子レンジでお弁当を温めているところを思い浮かべてください。「温め始める」というボタンを押した瞬間に処理は終わりません。
+          <strong>チンと鳴るまでの間、その場に立ち止まって待つ</strong>必要があります。<code>&lt;suspends&gt;</code>が付いた関数は、
+          この「電子レンジの前で待っている時間」を表現できる関数、というわけです。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">PlaySequence()&lt;suspends&gt; : void =
+    PlayAnimation(Dance)
+    Sleep(2.0)                  # 2秒間、実行を一時停止する
+    PlaySound(FanfareSound)</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">📡</div>
+        <div class="callout-body">
+          <div class="callout-title">suspendsも伝播する</div>
+          <p><code>&lt;decides&gt;</code>と同じように、<code>&lt;suspends&gt;</code>な関数を呼び出す関数自身も<code>&lt;suspends&gt;</code>を宣言する必要があります。「電子レンジの前で待つ人を呼びに行った人も、結局は一緒に待つことになる」というわけです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="chapter" id="ch05">
+      <div class="chapter-eyebrow"><span class="chapter-num">05</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>並行処理 ① sync ── 全員そろうまで待つ</h2>
+      <p>
+        Verseの並行処理は「構造化並行処理」という設計で、<strong>並行タスクの寿命が、必ずコードの見た目のブロックに収まる</strong>ようになっています。
+        4つの主な仲間、<code>sync / race / rush / branch</code>と、少し特殊な<code>spawn</code>を順番に見ていきましょう。まずは<code>sync</code>です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる sync</div>
+        <p>
+          運動会の「大縄跳びリレー」を思い浮かべてください。すべてのチームが縄跳びを跳び終えるまで、次の種目には進めません。
+          <strong>全員がそろうまで、全体が待つ</strong>──これが<code>sync</code>です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">Results := sync:
+    LoadTexture()
+    LoadSound()
+    LoadModel()
+
+# 3つすべてのロードが完了してから、ここに到達する
+ProcessData(Results(0), Results(1), Results(2))</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🎮</div>
+        <div class="callout-body">
+          <div class="callout-title">向いている場面</div>
+          <p>ゲーム開始時に「テクスチャ・サウンド・モデル」など、複数の準備を同時並行で進め、<strong>すべてが終わってから次に進みたい</strong>ときに最適です。1つずつ順番に待つより、ずっと速く準備が終わります。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="chapter" id="ch06">
+      <div class="chapter-eyebrow"><span class="chapter-num">06</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>並行処理 ② race ── 早い者勝ち</h2>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる race</div>
+        <p>
+          文字通り「徒競走」です。3人が同時にヨーイドンでスタートし、<strong>1着になった選手が決まった瞬間、まだ走っている他の選手たちはそこで棄権</strong>させられます。
+          <code>race</code>は、最初に完了した処理の結果だけを受け取り、残りは自動的にキャンセルされます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">Winner := race:
+    SlowOperation()
+    FastOperation()
+    MediumOperation()
+
+# FastOperationの結果を受け取り、他の2つは自動キャンセルされている</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">⏱️</div>
+        <div class="callout-body">
+          <div class="callout-title">タイムアウト処理の定番パターン</div>
+          <p><code>race</code>は「本来やりたい処理」と「制限時間のSleep」を競わせることで、<strong>タイムアウト機能</strong>を簡単に実装できます。制限時間の方が先にゴールしたら、本来の処理は自動的に打ち切られます。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section class="chapter" id="ch07">
+      <div class="chapter-eyebrow"><span class="chapter-num">07</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>並行処理 ③ rush ── 一番乗りを見ながら、他も走らせ続ける</h2>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる rush</div>
+        <p>
+          宿題と部活の朝練を同時に進める学生を想像してください。<strong>「とりあえず宿題が終わった時点で一旦チェックを受けるけれど、
+          朝練のランニングメニューはそのまま続けさせる」</strong>──<code>rush</code>は、最初の完了は教えてくれつつも、
+          <code>race</code>と違って<strong>残りのタスクをキャンセルせず、裏側で走らせ続けます</strong>。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">FirstResult := rush:
+    LongBackgroundTask()   # 時間がかかるが、最後までやり切ってほしい
+    QuickCheck()            # すぐ終わる確認作業
+
+# QuickCheckの結果を先に受け取れるが、LongBackgroundTaskは裏で継続中</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <div class="callout-title">向いている場面</div>
+          <p>「素早い応答性がほしいけれど、時間のかかる処理も最後までちゃんと終わらせたい」という場面。ただしループの本体で直接使うことはできない、という制約があります。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section class="chapter" id="ch08">
+      <div class="chapter-eyebrow"><span class="chapter-num">08</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>並行処理 ④ branch と spawn ── バックグラウンド任務</h2>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる branch と spawn</div>
+        <p>
+          <strong>branch</strong>は「打ち上げ花火」です。導火線に火をつけたら、その場で結果を見届けずに次の作業に進みます。
+          花火は勝手に打ち上がりますが、<strong>その場面(スコープ)が終わったら、花火自体も自動的に片付けられます</strong>。<br>
+          <strong>spawn</strong>は「独立した長期プロジェクト」です。担当者(呼び出し元の処理)がすでに退社していても、
+          プロジェクト自体は<strong>スコープをまたいで生き続けます</strong>。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># branch: 花火を打ち上げて、その場はすぐ先に進む
+branch:
+    PlayBackgroundEffect()
+    UpdateSystemAsync()
+# ここにはすぐ到達する(バックグラウンドはまだ実行中)
+
+# spawn: スコープを超えて独立して生き続けるタスクを作る
+BackgroundTask : task(int) = spawn{ LongRunningWork() }
+
+# task型が持つ操作
+BackgroundTask.Cancel()          # キャンセルを依頼する
+Result : int = BackgroundTask.Await()   # 完了を待って結果を受け取る</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>キーワード</th><th>たとえ</th><th>いつ使う</th></tr></thead>
+          <tbody>
+            <tr><td><code>sync</code></td><td>大縄跳びリレー(全員待つ)</td><td>複数の初期化処理をまとめて待ちたいとき</td></tr>
+            <tr><td><code>race</code></td><td>徒競走(1着以外は失格)</td><td>タイムアウトなど、最速の結果だけ欲しいとき</td></tr>
+            <tr><td><code>rush</code></td><td>宿題と朝練を並行(両方やり切る)</td><td>速い応答と完全な処理、両方ほしいとき</td></tr>
+            <tr><td><code>branch</code></td><td>打ち上げ花火(発射して次へ)</td><td>結果を待たずに背景処理をしたいとき</td></tr>
+            <tr><td><code>spawn</code></td><td>独立した長期プロジェクト</td><td>スコープをまたいで生き続く常駐処理</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-tag">✏️ ミニクイズ</div>
+        <div class="quiz-q">Q. 「制限時間3秒以内に敵を倒せなければタイムアウト」を実装したい。どのキーワードが最適?</div>
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">A</span><code>sync</code></button>
+          <button class="quiz-choice" data-correct="true"><span class="qc-mark">B</span><code>race</code></button>
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">C</span><code>spawn</code></button>
+        </div>
+        <div class="quiz-explain">正解は<b>B</b>。「敵を倒す処理」と「3秒のSleep」を<code>race</code>で競わせれば、先にゴールした方の結果だけが採用される、典型的なタイムアウトパターンになります。</div>
+      </div>
+    </section>
+
+    <!-- 09 -->
+    <section class="chapter" id="ch09">
+      <div class="chapter-eyebrow"><span class="chapter-num">09</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>協調的キャンセル ── 律儀な職人のように</h2>
+      <p>
+        <code>race</code>で負けたタスクや、<code>Cancel()</code>を呼ばれたタスクは、実は<strong>その瞬間に即座には止まりません</strong>。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 協調的キャンセル</div>
+        <p>
+          職人さんに「もう作業をやめてください」と伝えても、<strong>ノコギリを動かしている途中でいきなり手を止めたりはしません</strong>よね。
+          「キリのいいところ(次の作業の切れ目)まで来たら、やめます」と応じるのが自然です。
+          Verseのキャンセルもこれと同じ<strong>「協調的」</strong>な仕組みです。タスクは、あらかじめ決められた「中断ポイント」
+          (<code>Sleep</code>や関数呼び出しなど)に来たときだけ、「あ、キャンセルされてる」と気づいて止まります。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">ResponsiveLoop()&lt;suspends&gt; : void =
+    for (I := 0..10000):
+        ExpensiveOperation(I)
+        Sleep(0.0)          # 中断ポイント。ここでキャンセル信号をチェックする</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🪚</div>
+        <div class="callout-body">
+          <div class="callout-title">中断ポイントがないと、止まれない</div>
+          <p>もし重い処理の中に<code>Sleep</code>や関数呼び出しなどの中断ポイントが一切なければ、キャンセルを頼んでもすぐには反応してくれません。時間のかかるループには、こまめに中断ポイントを挟むのが良い設計です。また、親タスクがキャンセルされると、その子タスクにもキャンセルが自動的に伝わっていきます。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="chapter" id="ch10">
+      <div class="chapter-eyebrow"><span class="chapter-num">10</span><span class="chapter-diff">ふつう</span></div>
+      <h2>defer とリソース管理</h2>
+      <p>
+        「使ったら必ず片付ける」処理を、忘れずに実行してくれるのが<code>defer</code>です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる defer</div>
+        <p>
+          学校の「教室の電気を消す当番」のようなものです。用事が急に入って教室を飛び出すことになっても(キャンセルや早期リターンが起きても)、
+          <code>defer</code>で予約しておいた「電気を消す」という後片付けは、教室を出るタイミングで必ず実行されます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">ProcessWithTimeout()&lt;suspends&gt; : void =
+    race:
+        block:
+            Resource := AcquireResource()
+            defer:
+                ReleaseResource(Resource)   # 途中でキャンセルされても必ず実行
+            LongTask(Resource)
+        block:
+            Sleep(10.0)                     # 10秒経ったらタイムアウト</code></pre>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section class="chapter" id="ch11">
+      <div class="chapter-eyebrow"><span class="chapter-num">11</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>トランザクションとロールバック</h2>
+      <p>
+        <code>&lt;transacts&gt;</code>エフェクトを持つ関数の中で行った変更は、もし<strong>途中で失敗したら、まるで最初から何も起きなかったかのように取り消されます</strong>。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる トランザクション</div>
+        <p>
+          ゲームで強敵に挑む前に、必ず<strong>セーブ</strong>してから挑みますよね。もし負けてしまったら、<strong>ロードしてやり直せば、挑戦前の状態にきれいに巻き戻ります</strong>。
+          <code>&lt;transacts&gt;</code>の中身は、この「セーブ→挑戦→失敗したら自動ロード」を、Verseが裏側で自動的にやってくれる仕組みです。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">AttemptPurchase(Cost : int)&lt;transacts&gt;&lt;decides&gt; : void =
+    set PlayerGold = PlayerGold - Cost   # 暫定的に所持金を減らす(仮の変更)
+    PlayerGold &gt;= 0                       # マイナスになったら…
+
+# ↑ もし失敗したら、PlayerGoldは「減らす前」の状態に自動で巻き戻る。
+#   「所持金だけ減って、商品は手に入らない」という中途半端な事故が起きない。</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🛡️</div>
+        <div class="callout-body">
+          <div class="callout-title">なぜこれが重要なのか</div>
+          <p>他の多くの言語では「途中まで処理が進んだ状態で例外が起きて、データが中途半端に壊れる」というバグがよく起きます。Verseはこの問題を、言語の仕組みそのもので根本から解決しています。これは「投機的実行(Speculative Execution)」とも呼ばれます。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section class="chapter" id="ch12">
+      <div class="chapter-eyebrow"><span class="chapter-num">12</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>Live Variables ── 自動で計算し直される変数</h2>
+      <p>
+        普通の変数は、一度計算したら値は固定です。しかし<strong>Live Variables</strong>を使うと、
+        「元になる値が変わったら、自動的に再計算される変数」を作れます。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる Live Variables</div>
+        <p>
+          表計算ソフト(エクセル)のセルを思い浮かべてください。<strong>B1セルに「=A1+1」という数式を入れておくと、
+          A1の値を変えるたびに、B1は手で計算し直さなくても自動で更新</strong>されますよね。
+          Live Variablesは、まさにこの「数式が入ったセル」をプログラムの変数として使えるようにしたものです。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">var X : int = 0
+var Y : int = 0
+
+set live X = Y + 1   # X は Y を「数式」として追いかけるようになる
+set Y = 5
+Print(X)               # → 6 (Yが変わると、Xも自動で追従する)</code></pre>
+      </div>
+
+      <p>宣言の仕方にはいくつかバリエーションがあります。</p>
+      <div class="code-block">
+        <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+        <pre><code class="language-verse">var live X : int = Exp     # 可変なリアクティブ変数として宣言
+live Y : int = Exp          # 不変なリアクティブ変数として宣言
+set live X = Exp            # 既存の変数にリアクティブ性を後付け</code></pre>
+      </div>
+
+      <p>ゲームでよくある「上限・下限のあるHPバー」も、Live Variablesで自然に表現できます。</p>
+      <div class="code-block">
+        <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+        <pre><code class="language-verse">clamp := class:
+    var Lower : int = 0
+    var Upper : int = 100
+    Evaluate(Value : int)&lt;reads&gt; : int =
+        if (Value &lt; Upper) then
+            if (Value &gt; Lower) then Value else Lower
+        else Upper
+
+# Health に値を入れると、自動的に0〜100の範囲に丸められる
+var BaseHealth-&gt;Health : clamp.Evaluate = 50
+set Health = 120     # BaseHealthは120になるが、Health自体は100で頭打ち</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">📏</div>
+        <div class="callout-body">
+          <div class="callout-title">依存関係は実行時に決まる</div>
+          <p>「数式(条件式)がどの変数に依存しているか」は、コンパイル時ではなく<strong>実行時に動的に決まります</strong>。<code>if (Z &gt; 0) then X else Y</code>という数式なら、<code>Z</code>の値によって「Xを見張る」か「Yを見張る」かが切り替わります。またこの数式に<code>&lt;writes&gt;</code>エフェクトを持たせることはできません──あくまで「見張って再計算するだけ」の存在だからです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section class="chapter" id="ch13">
+      <div class="chapter-eyebrow"><span class="chapter-num">13</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>await / upon / when / batch</h2>
+      <p>Live Variablesと組み合わせて使う、時間・条件に関する4つの便利な仲間を紹介します。</p>
+
+      <div class="card-grid">
+        <div class="info-card">
+          <div class="info-card-icon">⏰</div>
+          <h4><code>await</code></h4>
+          <p>目覚まし時計のように、<strong>条件が満たされるまでその場で待ち続け</strong>、満たされたら1回だけ先に進みます。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🚨</div>
+          <h4><code>upon</code></h4>
+          <p>ホームセキュリティのセンサーのように、<strong>条件が最初にtrueになった瞬間、1回だけ</strong>コードを実行します。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📹</div>
+          <h4><code>when</code></h4>
+          <p>常時監視カメラのように、<strong>条件がtrueである間、変化のたびに何度でも</strong>コードを実行し続けます。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🧾</div>
+          <h4><code>batch</code></h4>
+          <p>スーパーのレジのように、<strong>複数の変更をまとめてから、最後に1回だけ会計(通知)</strong>します。</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># await: Xが変化するまで待って、1回だけ先に進む
+await{X &lt;&gt; OldX}
+Print("Xが変わった: {X}")
+
+# upon: HPが0以下になった瞬間、1回だけ死亡フラグを立てる
+upon(Health &lt;= 0):
+    set IsDead = true
+
+# when: スコアが変わるたびに、表示用の値を更新し続ける
+when(Score):
+    set DisplayedScore = Score
+
+# batch: XとYをまとめて更新し、途中経過では反応させない
+batch:
+    set X = 2
+    set Y = 10
+# ここでようやく、リアクティブな反応がまとめて1回発生する</code></pre>
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section class="chapter" id="ch14">
+      <div class="chapter-eyebrow"><span class="chapter-num">14</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>Refinement Types ── 値の範囲を絞る鋳型</h2>
+      <p>
+        型に「この範囲の値しか許さない」という追加ルールを持たせられるのが<strong>Refinement Types(改良型)</strong>です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる Refinement Types</div>
+        <p>
+          金属加工の「鋳型(いがた)」を思い浮かべてください。溶けた金属を流し込んでも、<strong>鋳型の形からはみ出た部分は作れません</strong>。
+          Refinement Typesは、まさに「この範囲の値しか通さない鋳型」を型として定義できる機能です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># 0.0以上1.0以下の値しか受け付けない「鋳型」
+percent := type{_X : float where 0.0 &lt;= _X, _X &lt;= 1.0}
+
+Opacity : percent = 0.5     # OK -- 鋳型の範囲内
+# BadOpacity : percent = 1.5  # コンパイルは通っても実行時に失敗する</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">📐</div>
+        <div class="callout-body">
+          <div class="callout-title">制約に書けるのは「リテラル」だけ</div>
+          <p>鋳型のルールに書けるのは<code>0.0</code>や<code>1.0</code>のような、その場に直接書かれた値(リテラル)だけです。変数や関数呼び出しを条件に混ぜることはできません。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section class="chapter" id="ch15">
+      <div class="chapter-eyebrow"><span class="chapter-num">15</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>メタタイプ ── 「型そのもの」を値として扱う</h2>
+      <p>
+        Verseでは型そのものを値として持ち運べます(<code>type</code>型)。これをさらに便利に使うための3つの道具があります。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる メタタイプ</div>
+        <p>
+          図鑑の「動物」のページを思い浮かべてください。<code>subtype(animal)</code>は「動物図鑑に載っているすべての種類(犬・猫・鳥…)」を指す言葉です。
+          しかし<strong>「動物」という抽象的な概念そのものは、実際に1匹連れてくることはできません</strong>。<br>
+          一方<code>concrete_subtype(animal)</code>は、「実際にペットショップで購入できる、具体的な種類」だけに絞り込んだリストです。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># subtype(T): Tの仲間である「型」を値として表す
+AnimalType : subtype(animal) = dog
+
+# concrete_subtype(T): 実際にインスタンス化できる具体的な型
+EntityType : concrete_subtype(entity) = player
+NewEntity := EntityType{}          # 実際に「作れる」
+
+# castable_subtype(T): &lt;castable&gt;マーク付きの型限定
+ComponentType : castable_subtype(component) = physics_component</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🧬</div>
+        <div class="callout-body">
+          <div class="callout-title">何がうれしいのか</div>
+          <p>「実行時に、どの敵キャラを生成するかを動的に切り替えたい」といったケースで活躍します。コンパイル時の型安全性を保ったまま、実行時のポリモーフィズム(多態性)を実現できるのがメタタイプの強みです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 16 -->
+    <section class="chapter" id="ch16">
+      <div class="chapter-eyebrow"><span class="chapter-num">16</span><span class="chapter-diff">ふつう</span></div>
+      <h2>モジュールとパス</h2>
+      <p>
+        コードが大きくなってくると、整理整頓が欠かせません。Verseでは<strong>フォルダ構造そのものが、そのままモジュール構造になります</strong>。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる モジュール</div>
+        <p>
+          学校の「教室配置図」を思い浮かべてください。「3階の3組の教室」のように、建物の物理的な位置がそのまま所属を表しますよね。
+          Verseのモジュールも同じで、<strong>フォルダを作るだけで、それがそのまま1つのモジュール(名前空間)になります</strong>。
+          同じフォルダの中の<code>.verse</code>ファイルは、全部「同じ教室の生徒」として扱われます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># モジュールの定義(コロン構文)
+GameConfig := module:
+    MaxPlayers&lt;public&gt; : int = 100
+
+# using で他のモジュールを読み込む(ファイルの先頭に書く)
+using { /Verse.org/Random }
+using { /Fortnite.com/Devices }
+
+GenerateValue() : float =
+    GetRandomFloat(0.0, 1.0)
+
+# 名前がぶつかったときは、(モジュール名:)で明示する
+using { CombatModule }
+using { MagicModule }
+
+ProcessDamage() : void =
+    PhysicalDamage := (CombatModule:)CalculateDamage(100.0)
+    MagicalDamage  := (MagicModule:)CalculateDamage(100.0)</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🗂️</div>
+        <div class="callout-body">
+          <div class="callout-title">パスはグローバルな住所</div>
+          <p><code>/YourGame/Player/Inventory</code>のような形式で、世界中のどのモジュールも一意に指し示せます。<code>/Verse.org/Verse</code>は言語のコア機能、<code>/Fortnite.com/Devices</code>はFortnite連携機能のように、公式モジュールにも同じ命名ルールが使われています。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 17 -->
+    <section class="chapter" id="ch17">
+      <div class="chapter-eyebrow"><span class="chapter-num">17</span><span class="chapter-diff">ふつう</span></div>
+      <h2>永続化可能な型 ── セーブデータの金庫</h2>
+      <p>
+        プレイヤーの進行状況を「ゲームを終了しても消えない」ように保存するための仕組みが<strong>Persistable Types</strong>です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 永続化</div>
+        <p>
+          銀行の貸金庫を思い浮かべてください。あなたが帰宅しても(ゲームを終了しても)、貸金庫の中身(セーブデータ)は次に来店したとき(次にログインしたとき)もそのまま残っています。
+          ただし貸金庫には「持ち込めるものの決まりごと」があるように、<strong>永続化できるデータにも厳格なルール</strong>があります。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># &lt;persistable&gt;な構造体を定義する
+player_stats := struct&lt;persistable&gt;:
+    Level : int = 1
+    Experience : int = 0
+    GamesPlayed : int = 0
+
+# プレイヤーごとにデータを紐づける weak_map として保存する
+PlayerData : weak_map(player, player_stats) = map{}
+
+GetOrCreateStats(Player : player) : player_stats =
+    if (Existing := PlayerData[Player]):
+        Existing
+    else:
+        NewStats := player_stats{}
+        if (set PlayerData[Player] = NewStats) {}
+        NewStats</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>永続化できるもの</th><th>永続化できないもの</th></tr></thead>
+          <tbody>
+            <tr><td>int / float / logic / string / char</td><td><code>any</code> / <code>comparable</code> / <code>type</code></td></tr>
+            <tr><td>array / map / option / tuple(中身も永続化可能なら)</td><td><code>rational</code> / 関数型</td></tr>
+            <tr><td><code>&lt;persistable&gt;</code>かつ<code>&lt;final&gt;</code>な構造体・クラス</td><td>継承ありのクラス / インターフェース型</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🏦</div>
+        <div class="callout-body">
+          <div class="callout-title">スキーマは「あとから変えにくい」</div>
+          <p>公開後にセーブデータの形を大きく変更するのは、実際の銀行の金庫のルールを後から変えるのと同じくらい大変です。設計段階で項目をよく吟味し、シンプルな値には<code>struct</code>を優先しましょう(<code>class</code>より制約が少なく軽量です)。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 18 -->
+    <section class="chapter" id="ch18">
+      <div class="chapter-eyebrow"><span class="chapter-num">18</span><span class="chapter-diff">実践</span></div>
+      <h2>実践: ミニゲームの状態管理パターン</h2>
+      <p>
+        上級編で学んだ知識を総動員して、「制限時間内に的をタップするミニゲーム」のコントローラーを設計してみましょう。
+        <strong>enum</strong>で状態を表現し、<strong>race</strong>でタイムアウトを実現し、<strong>defer</strong>で後片付けをし、
+        <strong>Live Variables</strong>でUI表示を自動同期させます。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — mini_game.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># ゲームの状態は今後増える可能性を考えて open にしておく
+game_state := enum&lt;open&gt;:
+    Ready
+    Playing
+    Cleared
+    TimeUp
+
+mini_game := class:
+    var State : game_state = game_state.Ready
+    var Score : int = 0
+
+    # UIの表示用テキストは Score を自動で追いかける(Live Variables)
+    var live ScoreText : string = "スコア: {Score}"
+
+    RunRound(TimeLimitSeconds : float)&lt;suspends&gt; : void =
+        set State = game_state.Playing
+        defer:
+            Print("ラウンド終了処理を実行しました")   # 必ず後片付けされる
+
+        # 「的をタップし切る」処理と「制限時間」を競わせる
+        race:
+            block:
+                PlayUntilCleared()
+                set State = game_state.Cleared
+            block:
+                Sleep(TimeLimitSeconds)
+                set State = game_state.TimeUp
+
+        case (State):
+            game_state.Cleared => Print("クリア! {ScoreText}")
+            game_state.TimeUp  => Print("時間切れ…")
+            _                    => Print("予期しない状態です")
+
+    PlayUntilCleared()&lt;suspends&gt; : void =
+        loop:
+            Sleep(0.1)              # 中断ポイント(協調的キャンセルに対応)
+            set Score += 10
+            if (Score &gt;= 100):
+                break</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🎮</div>
+        <div class="callout-body">
+          <div class="callout-title">この例に詰まっている考え方</div>
+          <p><code>race</code>による「クリアかタイムアウトか」の競争、<code>defer</code>による確実な後片付け、<code>&lt;suspends&gt;</code>の伝播、Live Variablesによる自動UI更新、<code>enum&lt;open&gt;</code>とcase式による将来を見据えた状態管理──ここまで学んできたすべての要素が、実際の1つの機能の中で自然に組み合わさっています。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 19 -->
+    <section class="chapter" id="ch19">
+      <div class="chapter-eyebrow"><span class="chapter-num">19</span><span class="chapter-diff">まとめ</span></div>
+      <h2>チートシート & まとめ</h2>
+      <p>お疲れさまでした!これで初級・中級・上級のすべてを走り抜けました。最後に、上級編の要点を一枚のチートシートにまとめます。</p>
+
+      <div class="cheat-grid">
+        <div class="cheat-card">
+          <h5># エフェクトの階段</h5>
+          <pre>computes → reads
+        → writes → transacts
++ decides(失敗) / suspends(時間)</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 並行処理</h5>
+          <pre>sync   全員待つ
+race   一番だけ、他は中止
+rush   一番を見つつ全員継続
+branch 発射して次へ(スコープ内)
+spawn  スコープ超えて独立</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># Live Variables</h5>
+          <pre>set live X = Y + 1
+await{条件}   一度だけ待つ
+upon(条件):    一度だけ実行
+when(条件):    毎回実行</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 永続化</h5>
+          <pre>s := struct&lt;persistable&gt;:
+    V:int = 0
+Data:weak_map(player,s)=map{}</pre>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🏁</div>
+        <div class="callout-body">
+          <div class="callout-title">おめでとうございます!</div>
+          <p>これで、公式ドキュメント「Book of Verse」の主要な内容をひと通りやさしい言葉で学び終えました。次の一歩としては、実際にUEFNを起動して、このサイトのコード例を少しずつ書き換えながら動かしてみるのが一番の近道です。困ったときは、いつでもこのサイトの各章に立ち戻ってきてくださいね。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="chapter-pagenav">
+      <a href="intermediate.html" class="pagenav-link">
+        <div class="pagenav-dir">← BACK</div>
+        <div class="pagenav-title">中級編:Verseらしい考え方を身につける</div>
+      </a>
+      <a href="index.html" class="pagenav-link next">
+        <div class="pagenav-dir">TOP →</div>
+        <div class="pagenav-title">トップページへ戻る</div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>内容はEpic Games公式「Book of Verse」(<a href="https://verselang.github.io/book/" target="_blank" rel="noopener">verselang.github.io/book</a>)を参考に、わかりやすく再構成したものです。</p>
+  <span class="footer-badge">Verse Lab · Personal Study Notes</span>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

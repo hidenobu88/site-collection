@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>中級編 | Verse Lab — ゼロからわかるVerse言語</title>
+<meta name="description" content="Verse言語の中級編。失敗(Failure)という考え方、Optional、構造体、列挙型、クラス、インターフェース、型システム入門までをたとえ話でじっくり解説。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d0f17'/><text x='50' y='66' font-size='54' text-anchor='middle' fill='%233FD9EA' font-family='monospace' font-weight='bold'>V</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>.chapter{--accent-lv:var(--lv-intermediate);}</style>
+</head>
+<body class="has-toc">
+
+<div class="progress-bar"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">V</span>
+      <span>Verse Lab<span class="brand-sub">やさしいVerse言語学習サイト(非公開)</span></span>
+    </a>
+    <nav class="level-nav">
+      <a class="level-chip" data-lv="top" href="index.html">🏠 トップ</a>
+      <a class="level-chip" data-lv="beginner" href="beginner.html">🌱 初級</a>
+      <a class="level-chip is-active" data-lv="intermediate" href="intermediate.html">⚙️ 中級</a>
+      <a class="level-chip" data-lv="advanced" href="advanced.html">🚀 上級</a>
+    </nav>
+    <button class="menu-btn" aria-label="目次を開く"><span></span></button>
+  </div>
+</header>
+
+<div class="toc-overlay"></div>
+
+<div class="page-layout">
+  <aside class="toc-col">
+    <div class="toc-card">
+      <div class="toc-title">⚙️ 中級編 目次</div>
+      <nav class="toc-list">
+        <a href="#ch01">01. 「失敗」という発明</a>
+        <a href="#ch02">02. Optional型 ── 福袋</a>
+        <a href="#ch03">03. if式の複数条件チェーン</a>
+        <a href="#ch04">04. for式でふるいにかける</a>
+        <a href="#ch05">05. and / or / not とフォールバック</a>
+        <a href="#ch06">06. 構造体(struct)</a>
+        <a href="#ch07">07. 列挙型(enum)</a>
+        <a href="#ch08">08. クラス(class)と継承</a>
+        <a href="#ch09">09. インターフェース(interface)</a>
+        <a href="#ch10">10. コピーか、共有か</a>
+        <a href="#ch11">11. 名前付き引数とデフォルト値</a>
+        <a href="#ch12">12. 拡張メソッド</a>
+        <a href="#ch13">13. ジェネリック関数入門</a>
+        <a href="#ch14">14. サブタイピング入門</a>
+        <a href="#ch15">15. アクセス指定子</a>
+        <a href="#ch16">16. 実践: インベントリシステム</a>
+        <a href="#ch17">17. まとめ & 次のステップ</a>
+      </nav>
+      <div class="toc-progress">
+        <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
+        <div class="toc-progress-track"><div class="toc-progress-fill"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content-col">
+    <div class="page-hero">
+      <span class="level-badge intermediate">⚙️ 中級編 · LEVEL 2</span>
+      <h1>ここからが本番。<br>Verseにしかない考え方を、じっくり体に染み込ませる。</h1>
+      <p class="lead">
+        中級編では、「なぜVerseはこんな設計にしたのか」という<strong>Verseらしさの核心</strong>に踏み込みます。
+        特に最初の6つの章で扱う「失敗(Failure)」という考え方は、Verseという言語そのものの心臓部です。
+        少し長い章立てですが、ひとつずつ、たとえ話とセットでゆっくり理解していきましょう。
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">🕐 読了目安 <b>55分</b></div>
+        <div class="hero-stat">📖 全<b>17</b>章</div>
+        <div class="hero-stat">🧪 コード例 <b>30+</b>個</div>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <section class="chapter" id="ch01">
+      <div class="chapter-eyebrow"><span class="chapter-num">01</span><span class="chapter-diff">中級のキモ</span></div>
+      <h2>Verse最大の発明「失敗(Failure)」という考え方</h2>
+      <p>
+        多くのプログラミング言語では、「うまくいかなかったこと」は<strong>例外(エラー)</strong>として扱われ、
+        プログラムが止まったり、けたたましい警告が出たりします。ですがVerseは違います。
+        Verseでは「うまくいかなかったこと」は<strong>異常事態ではなく、ごくふつうの結果のひとつ</strong>として扱われます。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる「失敗」</div>
+        <p>
+          玄関の鍵を思い浮かべてください。ポケットの中にたくさんの鍵があって、ひとつずつ鍵穴に試していくとします。
+          <strong>鍵が回れば「成功」、回らなければ「失敗」</strong>。回らなかったからといって、家が爆発したりサイレンが鳴ったりはしませんよね。
+          ただ「あ、これじゃなかった」と、次の鍵を試すだけです。
+        </p>
+        <p>
+          Verseの「失敗」もこれと同じ感覚です。<strong>式(コード)を実行してみて、「値が出てくる(成功)」か「何も出てこない(失敗)」かのどちらか</strong>。
+          それだけのことであり、プログラムが壊れたわけではありません。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">42       # つねに成功する式。値は 42
+false?   # つねに失敗する式(?は「クエリ演算子」)
+true?    # つねに成功する式</code></pre>
+      </div>
+
+      <p>
+        クエリ演算子<code>?</code>は、値を「失敗する可能性のある式」に変換する道具です。配列の範囲外アクセスや、
+        マップに存在しないキーでの検索なども、実は自然に「失敗しうる式」になっています。
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-card bad">
+          <div class="compare-label">😵 他の言語でありがちな考え方</div>
+          <pre>try {
+  value = riskyOperation()
+} catch (error) {
+  // エラー処理...
+}</pre>
+        </div>
+        <div class="compare-card good">
+          <div class="compare-label">✅ Verseの考え方</div>
+          <pre>if (Value := RiskyOperation[]):
+    # 成功したときだけここが動く
+else:
+    # 失敗した(鍵が回らなかった)だけ</pre>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🧠</div>
+        <div class="callout-body">
+          <div class="callout-title">この考え方がなぜ優れているのか</div>
+          <p>「検証(チェック)」と「実行」を1つの式で同時に行えるため、コードの意図がとても明確になり、うっかりチェックを忘れるバグが激減します。この章の考え方は、これから先すべての中級・上級の内容の土台になります。</p>
+        </div>
+      </div>
+
+      <div class="disclosure">
+        <button class="disclosure-btn"><span>🔬 もっと詳しく: 「決定する(decides)」関数とは?</span><span class="d-icon">+</span></button>
+        <div class="disclosure-body"><div class="disclosure-inner">
+          <p>関数自身が「失敗するかもしれない」ことを宣言するときは、<code>&lt;decides&gt;</code>という目印(エフェクト)を付けます。</p>
+          <div class="code-block">
+            <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+            <pre><code class="language-verse">ValidateAge(Age : int)&lt;decides&gt; : int =
+    Age &gt;= 0        # 0未満なら、ここで失敗して終わり
+    Age &lt;= 150       # 150より大きくても失敗
+    Age               # すべて通過したら Age を返して成功</code></pre>
+          </div>
+          <p>比較演算子は、この「決定コンテキスト」の中では「左の値を返すか、失敗するか」という2択の道具として働きます。エフェクトについては<a href="advanced.html#ch01">上級編・第1章</a>でさらに詳しく扱います。</p>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="chapter" id="ch02">
+      <div class="chapter-eyebrow"><span class="chapter-num">02</span><span class="chapter-diff">中級のキモ</span></div>
+      <h2>Optional型(<code>?T</code>) ── 福袋のたとえ</h2>
+      <p>
+        「値があるかもしれないし、ないかもしれない」というデータを表すための型が<strong>Optional(オプション型)</strong>です。
+        書き方は、型の前に<code>?</code>を付けて<code>?int</code>や<code>?string</code>のように表します。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる Optional</div>
+        <p>
+          福袋を思い出してください。買うまで中身はわかりません。<strong>「何か入っている福袋」もあれば、「空の福袋」</strong>もある、という状態です。
+          Optional型の変数は、まさにこの福袋そのもの。開けてみるまで、中に値があるかどうかわかりません。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">HasPrize : ?int = option{42}   # 中身入りの福袋(42が入っている)
+Empty    : ?int = false        # 空の福袋
+
+# ? 演算子で袋を「開けて」中身を取り出す(失敗する可能性がある操作)
+if (Prize := HasPrize?):
+    Print("あたり! {Prize}")
+else:
+    Print("今回ははずれ")
+
+# option{式} は、式が失敗したら自動的に「空の福袋」に変換してくれる
+Result := option{RiskyComputation[]}</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🎁</div>
+        <div class="callout-body">
+          <div class="callout-title">Optionalと「失敗」の関係</div>
+          <p>実はOptional型は、前の章で学んだ「失敗」という考え方を「値」として持ち運べる形にしたものです。<code>?</code>で袋を開ける操作そのものが「失敗しうる式」になっています。</p>
+        </div>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-tag">✏️ ミニクイズ</div>
+        <div class="quiz-q">Q. <code>?int</code>型の変数を「開けて」中身を取り出すために使う記号はどれ?</div>
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">A</span><code>!</code></button>
+          <button class="quiz-choice" data-correct="true"><span class="qc-mark">B</span><code>?</code></button>
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">C</span><code>*</code></button>
+        </div>
+        <div class="quiz-explain">正解は<b>B</b>。<code>?</code>は「クエリ演算子」と呼ばれ、Optionalな福袋を開けて中身を取り出す(あるいは失敗する)操作に使います。</div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="chapter" id="ch03">
+      <div class="chapter-eyebrow"><span class="chapter-num">03</span><span class="chapter-diff">中級のキモ</span></div>
+      <h2>if式の複数条件チェーン</h2>
+      <p>
+        「失敗」の考え方が本当に輝くのは、<code>if</code>式の中です。カンマ区切りで複数の失敗しうる式を並べると、
+        <strong>「前の式が成功したら、次の式に進む」という階段のような処理</strong>を、驚くほど短く書けます。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 条件チェーン</div>
+        <p>
+          障害物競走を思い浮かべてください。1つ目のハードルを飛び越えられた選手だけが、2つ目のハードルに挑戦できます。
+          1つでも引っかかったら、そこでコースアウト(<code>else</code>行き)。<code>if</code>のカンマは、まさにこのハードルの連なりです。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">if (Player := GetPlayerByName[Name],      # ハードル1: プレイヤーが見つかるか
+    Score  := GetPlayerScore[Player],      # ハードル2: スコアが取得できるか
+    Score  &gt; 100):                        # ハードル3: 100点より上か
+    Print("ハイスコア達成者です!")
+else:
+    Print("条件を満たしませんでした")</code></pre>
+      </div>
+
+      <p>
+        すごいのは、2つ目のハードル(<code>GetPlayerScore[Player]</code>)が、1つ目のハードルで手に入れた<code>Player</code>という結果を
+        そのまま使えるところです。ひとつの流れるような文章のように「検索して → その結果を使って検索して → その結果を判定する」と書けます。
+      </p>
+    </section>
+
+    <!-- 04 -->
+    <section class="chapter" id="ch04">
+      <div class="chapter-eyebrow"><span class="chapter-num">04</span><span class="chapter-diff">ふつう</span></div>
+      <h2>for式でふるいにかける</h2>
+      <p>
+        <code>for</code>式にも、失敗しうる式をカンマで追加できます。すると、<strong>条件に合わなかった要素だけを自動でスキップ</strong>する
+        「ふるい分け(フィルタリング)」ができるようになります。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる for のふるい</div>
+        <p>
+          砂場で砂金探しをするとき、ザル(ふるい)を使いますよね。粗い砂利はザルの外に落ちていき、金色に光る小さな粒だけが残ります。
+          <code>for</code>のカンマ以降の条件は、まさにこの「ザル」の役目を果たします。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">Inventory := array{"棒", "鉄の剣", "パン", "光る盾"}
+
+# 「武器」と判定でき、なおかつダメージが50より大きい物だけを残す
+for (ItemName : Inventory, IsWeapon[ItemName], Damage := GetDamage[ItemName], Damage &gt; 50):
+    Print("強力な武器を発見: {ItemName}")</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🎯</div>
+        <div class="callout-body">
+          <div class="callout-title">for は実は「値を作る式」でもある</div>
+          <p><code>for</code>の結果を変数に代入すると、条件を通過した要素だけを集めた新しい配列が返ってきます。これは初級編の「すべては式」という考え方が、ここでも活きている良い例です。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="chapter" id="ch05">
+      <div class="chapter-eyebrow"><span class="chapter-num">05</span><span class="chapter-diff">ふつう</span></div>
+      <h2>and / or / not とフォールバック</h2>
+      <p>失敗という考え方は、論理演算子<code>and</code> <code>or</code> <code>not</code>とも自然に噛み合います。</p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる or のフォールバック</div>
+        <p>
+          高校受験の第一志望・第二志望・第三志望を思い出してください。「第一志望がダメだったら、第二志望を試す。それもダメなら第三志望」。
+          <code>or</code>でつなげた式は、まさにこの「志望校フォールバック」です。<strong>最初に成功したものが、そのまま採用</strong>されます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># 一番手に入れたいメイン武器がダメなら、サブ、それもダメなら初期装備
+Weapon := PrimaryWeapon[] or SecondaryWeapon[] or DefaultWeapon?
+
+# 経路探索の例: 一番効率のいい方法から順に試す
+FindPath(Start : location, End : location)&lt;decides&gt; : path =
+    DirectPath[Start, End] or
+    PathAroundObstacles[Start, End] or
+    ComplexPathfinding[Start, End]</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>演算子</th><th>たとえ</th><th>成立する条件</th></tr></thead>
+          <tbody>
+            <tr><td><code>and</code></td><td>入試の必須科目すべて合格</td><td>両方とも成功したときだけ成功</td></tr>
+            <tr><td><code>or</code></td><td>志望校フォールバック</td><td>どちらか一方でも成功すればOK</td></tr>
+            <tr><td><code>not</code></td><td>「不合格ではない」への言い換え</td><td>成功⇔失敗をひっくり返す</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="chapter" id="ch06">
+      <div class="chapter-eyebrow"><span class="chapter-num">06</span><span class="chapter-diff">ふつう</span></div>
+      <h2>構造体(struct) ── データのカード</h2>
+      <p>
+        いくつかのデータをひとまとめにして、名前をつけて扱いたいときに使うのが<strong>構造体(struct)</strong>です。
+        構造体はメソッドを持たない、純粋な「データの入れ物」です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる struct</div>
+        <p>
+          トレーディングカードゲームの「ステータスカード」を思い浮かべてください。攻撃力・防御力・HPが書かれたカードです。
+          このカードを友達に見せて「コピーしていいよ」と渡すと、<strong>相手はまったく同じ内容の"別のカード"</strong>を手に入れます。
+          あなたのカードに後から書き込みをしても、友達のコピーには一切影響しません。構造体はこの「コピーされるカード」の性質を持っています。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">player_stats := struct:
+    Level : int = 1
+    HP    : int = 100
+    Attack : int = 10
+
+# フィールド名を指定してインスタンスを作る(名前付き引数のような書き方)
+MyStats := player_stats{Level := 5, HP := 150}
+DefaultStats := player_stats{}          # すべてデフォルト値のまま
+
+# コピーの性質を確認する
+var Original : player_stats = player_stats{Level := 5}
+var Copy : player_stats = Original       # ここで「深いコピー」が発生
+set Copy.Level = 10
+Print(Original.Level)                     # → 5 (Originalは変化しない!)</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">📝</div>
+        <div class="callout-body">
+          <div class="callout-title">構造体のフィールドはデフォルトで公開&不変</div>
+          <p>構造体のフィールドは、特別な指定がなければ「誰からでも読める」「作られた後は書き換えられない」状態です。書き換えたい場合は<code>var</code>付きの変数に構造体そのものを入れ、丸ごと新しいコピーで<code>set</code>する必要があります。</p>
+        </div>
+      </div>
+
+      <p>構造体はジェネリック(型パラメータ)にも対応しています。「どんな型でも包める箱」を1つ定義できます。</p>
+      <div class="code-block">
+        <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+        <pre><code class="language-verse">wrapper(t : type) := struct:
+    Value : t
+
+IntWrapped    := wrapper(int){Value := 42}
+StringWrapped := wrapper(string){Value := "こんにちは"}</code></pre>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section class="chapter" id="ch07">
+      <div class="chapter-eyebrow"><span class="chapter-num">07</span><span class="chapter-diff">ふつう</span></div>
+      <h2>列挙型(enum) ── open と closed</h2>
+      <p>
+        「取りうる値がいくつかに決まっている」データを表すのが<strong>列挙型(enum)</strong>です。
+        マジックナンバー(意味のわからない謎の数字)を避けられる、とても大切な道具です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる enum の open / closed</div>
+        <p>
+          <strong>信号機の色</strong>(赤・黄・青)は、これから先も絶対に増えません。これが<code>enum&lt;closed&gt;</code>(閉じた列挙型)です。すべてのパターンを安心して網羅できます。<br>
+          一方で、<strong>「これから追加されるかもしれない職業リスト」</strong>は、将来ゲームアップデートで新しい職業が増えるかもしれません。これが<code>enum&lt;open&gt;</code>(開いた列挙型)です。「まだ知らない未来の値」に備えて、必ず「その他」の受け皿を用意しておく必要があります。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">day_of_week := enum&lt;closed&gt;:   # デフォルトは closed。もう増えない前提
+    Monday
+    Tuesday
+    Wednesday
+
+weapon_type := enum&lt;open&gt;:      # 将来アップデートで追加されるかもしれない
+    Sword
+    Bow
+
+# パターンマッチング(case式)
+DescribeWeapon(W : weapon_type) : string =
+    case (W):
+        weapon_type.Sword => "白兵戦向きの武器"
+        weapon_type.Bow   => "遠距離向きの武器"
+        _                 => "未知の新武器"   # openなので必須の受け皿</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <div class="callout-title">型と値を混同しない</div>
+          <p><code>weapon_type</code>自体は「型」で、<code>weapon_type.Sword</code>が実際の「値」です。「箱の設計図」と「箱の中身」くらい別物、と覚えておきましょう。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section class="chapter" id="ch08">
+      <div class="chapter-eyebrow"><span class="chapter-num">08</span><span class="chapter-diff">中級のキモ</span></div>
+      <h2>クラス(class)と継承</h2>
+      <p>
+        構造体が「コピーされるカード」だったのに対して、<strong>クラス(class)</strong>は挙動をあわせ持つ「実体」です。
+        そしてクラスには構造体にはない、決定的な違いがあります──<strong>コピーではなく「共有」</strong>されるのです。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる class(参照セマンティクス)</div>
+        <p>
+          テレビゲームのコントローラーを2人で回し持ちしていると考えてください。<strong>コントローラーが2つあっても、操作しているキャラクターは1体だけ</strong>です。
+          1人がキャラクターにダメージを与えれば、もう1人の画面でも同じキャラクターのHPが減っています。
+          クラスの変数をコピーしても、それは「同じキャラクターを指す、新しいコントローラー」が増えるだけで、キャラクター自体は増えません。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">character := class:
+    Name : string
+    var Health : int = 100
+
+    TakeDamage(Amount : int) : void =
+        set Health = Max(0, Health - Amount)
+
+Player1 := character{Name := "ゆうた"}
+Player2 := Player1            # コントローラーが増えるだけ、キャラは同じ
+
+Player2.TakeDamage(30)
+Print(Player1.Health)          # → 70 (Player1側にも影響する!)</code></pre>
+      </div>
+
+      <p>クラスは単一継承(1つの親クラスだけ)をサポートしています。「動物 → 犬」のような家系図をコードで表現できます。</p>
+      <div class="code-block">
+        <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+        <pre><code class="language-verse">entity := class:
+    var Position : vector3 = vector3{}
+
+# character は entity を「継承」している(entityの機能をすべて引き継ぐ)
+character := class(entity):
+    Name : string
+
+    Move(Delta : vector3) : void =
+        Print("{Name}が移動しました")
+
+# メソッドをオーバーライド(上書き)し、親の実装も呼び出す例
+base := class:
+    Greet() : void = Print("私は生き物です")
+
+derived := class(base):
+    Greet&lt;override&gt;() : void =
+        (super:)Greet()             # 親の処理も実行しつつ
+        Print("その中でも、私は犬です")</code></pre>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-tag">✏️ ミニクイズ</div>
+        <div class="quiz-q">Q. クラスのインスタンスを別の変数にコピーすると、何が起きる?</div>
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">A</span>まったく別の新しい実体が作られる</button>
+          <button class="quiz-choice" data-correct="true"><span class="qc-mark">B</span>同じ実体を指す、新しい参照(コントローラー)が増える</button>
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">C</span>エラーになる</button>
+        </div>
+        <div class="quiz-explain">正解は<b>B</b>。クラスは「参照セマンティクス」なので、コピーしても中身は共有されたままです。これが構造体との一番の違いでしたね。</div>
+      </div>
+    </section>
+
+    <!-- 09 -->
+    <section class="chapter" id="ch09">
+      <div class="chapter-eyebrow"><span class="chapter-num">09</span><span class="chapter-diff">ふつう</span></div>
+      <h2>インターフェース(interface)</h2>
+      <p>
+        インターフェースは、「このクラスはこの機能を必ず持っています」という<strong>約束(契約)</strong>を定義するものです。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる interface</div>
+        <p>
+          家庭用コンセントの規格を思い浮かべてください。ドライヤーだろうと掃除機だろうと炊飯器だろうと、
+          <strong>プラグの形(規格)さえ合っていれば、メーカーが違っても同じコンセントに挿せます</strong>。
+          インターフェースは、この「差込口の規格」です。中身がどんなクラスであっても、同じ規格(インターフェース)を実装していれば、同じように扱えます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># 「ダメージを受けられる」という規格(コンセントの形)を定義
+damageable := interface:
+    TakeDamage(Amount : int)&lt;transacts&gt; : void
+    MaxHealth : int = 100          # デフォルト実装も持てる
+
+# character クラスは damageable の規格を実装(プラグの形を合わせる)
+character := class(damageable):
+    var Health : int = 100
+
+    TakeDamage&lt;override&gt;(Amount : int)&lt;transacts&gt; : void =
+        set Health = Max(0, Health - Amount)
+
+# 樽や壁など、character と無関係な物でも同じ規格を実装できる
+barrel := class(damageable):
+    var Health : int = 30
+    TakeDamage&lt;override&gt;(Amount : int)&lt;transacts&gt; : void =
+        set Health = Max(0, Health - Amount)</code></pre>
+      </div>
+
+      <p>
+        クラスは親を1つしか持てませんが(単一継承)、<strong>インターフェースはいくつでも同時に実装</strong>できます。
+        「ダメージを受けられる」規格と「持ち上げられる」規格を、両方同時に満たすオブジェクトも作れるということです。
+      </p>
+
+      <div class="callout note">
+        <div class="callout-icon">🔌</div>
+        <div class="callout-body">
+          <div class="callout-title">名前がぶつかったら?</div>
+          <p>2つのインターフェースに同じ名前のメソッドがあるときは、<code>(インターフェース名:)メソッド名</code>のように「どちらの規格の話か」をはっきり書いて区別します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="chapter" id="ch10">
+      <div class="chapter-eyebrow"><span class="chapter-num">10</span><span class="chapter-diff">中級のキモ</span></div>
+      <h2>コピーか、共有か ── struct と class の使い分け</h2>
+      <p>ここまでの内容を整理しましょう。この違いを体に染み込ませておくと、後々のバグをかなり防げます。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>構造体(struct)</th><th>クラス(class)</th></tr></thead>
+          <tbody>
+            <tr><td>たとえ</td><td>コピーされるトレーディングカード</td><td>複数人で回し持つコントローラー</td></tr>
+            <tr><td>代入したら</td><td>まったく別の複製が作られる</td><td>同じ実体を指す参照が増える</td></tr>
+            <tr><td>メソッド</td><td>持てない(データだけ)</td><td>持てる</td></tr>
+            <tr><td>継承</td><td>できない</td><td>単一継承ができる</td></tr>
+            <tr><td>向いている場面</td><td>座標、色、ステータス値など「値」そのもの</td><td>プレイヤー、敵キャラなど「同一性」が大事なもの</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🧭</div>
+        <div class="callout-body">
+          <div class="callout-title">選び方の目安</div>
+          <p>「これは2つあったら"別物"として扱いたい(例: 2人のプレイヤー)」なら<strong>class</strong>。「これは中身が同じなら"同じ値"として扱いたい(例: 同じ座標(3,4))」なら<strong>struct</strong>、と考えるとスムーズです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section class="chapter" id="ch11">
+      <div class="chapter-eyebrow"><span class="chapter-num">11</span><span class="chapter-diff">ふつう</span></div>
+      <h2>名前付き引数とデフォルト値</h2>
+      <p>関数を呼び出すとき、引数に名前をつけて渡せる仕組みがあります。順番を気にせず、必要な項目だけを指定できます。</p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 名前付き引数</div>
+        <p>
+          ハンバーガーショップの「カスタムオーダー用紙」を思い浮かべてください。「ピクルス抜き」「チーズ増し」のように、
+          <strong>変えたい項目だけチェックを入れれば、それ以外は標準(デフォルト)のまま</strong>作ってもらえますよね。名前付き引数もこれと同じ感覚です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># ?を付けた引数が「名前付き引数」。デフォルト値も指定できる
+Log(Message : string, ?Level : int = 1, ?Color : string = "white") : string =
+    "[Lv{Level}] {Message} ({Color})"
+
+Log("起動しました")                       # デフォルトのまま
+Log("警告です", ?Level := 2)              # Levelだけカスタム(チーズ増しのように)
+Log("危険!", ?Level := 3, ?Color := "red") # 複数項目カスタム</code></pre>
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section class="chapter" id="ch12">
+      <div class="chapter-eyebrow"><span class="chapter-num">12</span><span class="chapter-diff">ふつう</span></div>
+      <h2>拡張メソッド</h2>
+      <p>
+        すでにある型(<code>int</code>のような組み込みの型でさえも)に、あとから新しい機能を追加できるのが<strong>拡張メソッド</strong>です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 拡張メソッド</div>
+        <p>
+          スマートフォンに、あとから「バンカーリング」や「カード収納ケース」を後付けするイメージです。スマホ本体を作り直さなくても、
+          便利な機能を外側からペタッと追加できますよね。拡張メソッドは、既存の型に対する「便利な後付けアクセサリ」です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># int型に「2倍にする」という機能を後付けする
+(N : int).Double() : int = N * 2
+
+X := 5
+Y := X.Double()          # → 10 (まるで元から備わっていた機能のように呼べる)</code></pre>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section class="chapter" id="ch13">
+      <div class="chapter-eyebrow"><span class="chapter-num">13</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>ジェネリック関数入門</h2>
+      <p>
+        「どんな型が来ても対応できる、万能な関数」を作れる仕組みが<strong>ジェネリック(型パラメータ)</strong>です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる ジェネリック関数</div>
+        <p>
+          空港の「万能変換プラグ」を思い浮かべてください。日本のプラグでも、アメリカのプラグでも、ヨーロッパのプラグでも挿せる、形を選ばない変換アダプターです。
+          ジェネリック関数は、<code>int</code>が来ても<code>string</code>が来ても、同じロジックを適用できる「型を選ばない関数」です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># t という「型そのもの」を引数のように受け取る
+Identity(X : t where t : type) : t = X
+
+Identity(42)          # t は int になる
+Identity("こんにちは")  # t は string になる
+
+# 関数のオーバーロード: 同じ名前でも型ごとに別の処理を書ける
+Process(Value : int)    : string = "整数です: {Value}"
+Process(Value : float)  : string = "小数です: {Value}"</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🔧</div>
+        <div class="callout-body">
+          <div class="callout-title">where句で条件をつける</div>
+          <p><code>where t : subtype(comparable)</code>のように書くと、「どんな型でもいいわけではなく、比較できる型限定」のように制限をかけられます。工具箱の中でも「ネジ回し系だけ」のように、使える道具の範囲を絞るイメージです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section class="chapter" id="ch14">
+      <div class="chapter-eyebrow"><span class="chapter-num">14</span><span class="chapter-diff">やや難しい</span></div>
+      <h2>サブタイピング入門 ── 型の親子関係</h2>
+      <p>
+        「Aという型は、Bという型の"仲間"として扱える」という関係を<strong>サブタイプ</strong>と呼びます。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる サブタイプ</div>
+        <p>
+          「犬は動物である」という関係を思い浮かべてください。<strong>「動物を1匹連れてきて」と言われたら、犬を連れていっても文句は言われません</strong>。
+          犬は動物のサブタイプ(仲間)だからです。しかし逆に「犬を1匹連れてきて」と言われた場面に、得体のしれない生き物(動物)を連れていくのはNGですよね。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">GetRat(X : rational) : void = Print("有理数として扱いました")
+
+MyInt : int = -10
+GetRat(MyInt)     # OK -- int は rational の「仲間(サブタイプ)」
+
+vehicle := class:
+    Speed : float = 0.0
+
+car := class(vehicle):
+    NumDoors : int = 4
+
+sports_car := class(car):
+    Turbo : logic = true
+
+# sports_car は car の仲間、car は vehicle の仲間
+# つまり sports_car は vehicle が必要な場所でも使える</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🔄</div>
+        <div class="callout-body">
+          <div class="callout-title">型変換はいつも「はっきりと」</div>
+          <p>Verseでは「なんとなく自動で変換される」ことがありません。<code>int</code>から<code>float</code>への変換でさえ、<code>MyInt * 1.0</code>のように意図をはっきり示す必要があります。「思っていたのと違う値になっていた」という事故を防ぐためのルールです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section class="chapter" id="ch15">
+      <div class="chapter-eyebrow"><span class="chapter-num">15</span><span class="chapter-diff">ふつう</span></div>
+      <h2>アクセス指定子 ── 誰が見て・触れるか</h2>
+      <p>クラスやモジュールの中身を「誰から見えるようにするか」を決めるのがアクセス指定子です。</p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる アクセス指定子</div>
+        <p>
+          自分の家を思い浮かべてください。<strong>玄関(public)</strong>は誰でも訪ねてこられます。
+          <strong>日記(private)</strong>は自分しか読めません。<strong>家族専用のリビング(protected)</strong>は、家族(継承したクラス)だけが入れます。
+          <strong>マンションの共用施設(internal)</strong>は、同じマンション(モジュール)の住人だけが使えます。
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>指定子</th><th>たとえ</th><th>見える範囲</th></tr></thead>
+          <tbody>
+            <tr><td><code>public</code></td><td>玄関</td><td>どこからでもアクセス可能</td></tr>
+            <tr><td><code>protected</code></td><td>家族専用リビング</td><td>自分自身と、継承した子クラスだけ</td></tr>
+            <tr><td><code>internal</code>(既定)</td><td>マンションの共用施設</td><td>同じモジューノの中だけ</td></tr>
+            <tr><td><code>private</code></td><td>自分の日記</td><td>定義した直後のスコープだけ</td></tr>
+            <tr><td><code>scoped{...}</code></td><td>特定の友人だけに見せる合鍵</td><td>指定したモジュール同士だけ</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">inventory := class:
+    var Items&lt;private&gt; : []item = array{}   # 自分の日記(外から直接いじれない)
+
+    AddItem&lt;public&gt;(NewItem : item) : void =  # 玄関(誰でも呼べる)
+        set Items += array{NewItem}</code></pre>
+      </div>
+    </section>
+
+    <!-- 16 -->
+    <section class="chapter" id="ch16">
+      <div class="chapter-eyebrow"><span class="chapter-num">16</span><span class="chapter-diff">実践</span></div>
+      <h2>実践: シンプルなインベントリシステムを作る</h2>
+      <p>
+        ここまで学んだ<strong>struct・enum・class・失敗・Optional</strong>を組み合わせて、ゲームでおなじみの
+        「持ち物リスト(インベントリ)」を実際に作ってみましょう。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — inventory_demo.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse"># アイテムの種類。今後増える可能性があるので open にしておく
+item_category := enum&lt;open&gt;:
+    Weapon
+    Potion
+    Key
+
+# 1つのアイテムを表す「カード」。値としてコピーされてよいので struct
+item := struct:
+    Name     : string = ""
+    Category : item_category = item_category.Potion
+    Count    : int = 1
+
+# 持ち物リストそのものは「同一性」が大事なので class
+inventory := class:
+    var Items&lt;private&gt; : []item = array{}
+
+    # 追加する。同名アイテムがあれば個数を増やす(失敗してもよい設計)
+    AddItem&lt;public&gt;(NewItem : item) : void =
+        if (ExistingIndex := Items.Find[NewItem]):
+            # 見つかった場合(ここでは簡略化のため個数だけ表示)
+            Print("{NewItem.Name} をすでに持っています")
+        else:
+            set Items += array{NewItem}
+            Print("{NewItem.Name} を入手した!")
+
+    # ポーションだけを取り出す(for式のふるい分けを活用)
+    GetPotions&lt;public&gt;()&lt;transacts&gt; : []item =
+        for (I : Items, I.Category = item_category.Potion):
+            I
+
+MyBag := inventory{}
+MyBag.AddItem(item{Name := "伝説の剣", Category := item_category.Weapon})
+MyBag.AddItem(item{Name := "薬草", Category := item_category.Potion, Count := 3})
+
+for (P : MyBag.GetPotions()):
+    Print("回復アイテム: {P.Name}")</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🏗️</div>
+        <div class="callout-body">
+          <div class="callout-title">設計のポイントを振り返る</div>
+          <p><code>item</code>は「コピーされてよいカード」だから<strong>struct</strong>、<code>inventory</code>は「唯一無二の持ち物袋」だから<strong>class</strong>、将来アイテム種類が増える前提だから<code>item_category</code>は<strong>open</strong>な列挙型にしています。それぞれ、この章で学んだ「使い分けの感覚」がそのまま活きています。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 17 -->
+    <section class="chapter" id="ch17">
+      <div class="chapter-eyebrow"><span class="chapter-num">17</span><span class="chapter-diff">まとめ</span></div>
+      <h2>まとめ & 次のステップ</h2>
+      <p>中級編、お疲れさまでした。ここまで来れば、Verseで書かれた実際のコードの多くが読めるようになっているはずです。</p>
+
+      <div class="cheat-grid">
+        <div class="cheat-card">
+          <h5># 失敗とOptional</h5>
+          <pre>if (V := Risky[]):
+    Use(V)
+A : ?int = option{42}</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># struct vs class</h5>
+          <pre>p := struct: X:int = 0   # コピー
+c := class:  var X:int=0 # 共有</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># enum</h5>
+          <pre>e := enum&lt;open&gt;:
+    A
+    B</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># interface</h5>
+          <pre>i := interface:
+    F():void
+c := class(i):
+    F&lt;override&gt;():void = {}</pre>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🚀</div>
+        <div class="callout-body">
+          <div class="callout-title">いよいよ上級編へ</div>
+          <p>次は、Verseが「メタバース時代の言語」と呼ばれる理由そのもの──<strong>エフェクトシステム、並行処理、リアクティブなLive Variables</strong>を扱います。UEFNで本格的なゲームを作るための最後のピースです。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="chapter-pagenav">
+      <a href="beginner.html" class="pagenav-link">
+        <div class="pagenav-dir">← BACK</div>
+        <div class="pagenav-title">初級編:Verseの世界にはじめて触れる</div>
+      </a>
+      <a href="advanced.html" class="pagenav-link next">
+        <div class="pagenav-dir">NEXT →</div>
+        <div class="pagenav-title">上級編:メタバース開発の最前線へ</div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>内容はEpic Games公式「Book of Verse」を参考に、わかりやすく再構成したものです。</p>
+  <span class="footer-badge">Verse Lab · Personal Study Notes</span>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
