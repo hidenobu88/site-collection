@@ -59,7 +59,11 @@
         <a href="#ch16">16. モジュールとパス</a>
         <a href="#ch17">17. 永続化可能な型</a>
         <a href="#ch18">18. 実践: ミニゲームの状態管理</a>
-        <a href="#ch19">19. チートシート & まとめ</a>
+        <a href="#ch19">19. シーングラフ応用</a>
+        <a href="#ch20">20. 島内取引 基礎編</a>
+        <a href="#ch21">21. 島内取引 応用編</a>
+        <a href="#ch22">22. 集大成: 全アセット統合ミニゲーム</a>
+        <a href="#ch23">23. チートシート & まとめ</a>
       </nav>
       <div class="toc-progress">
         <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
@@ -79,9 +83,9 @@
         少し難しく感じても、いつも通りたとえ話とセットで進めるので大丈夫です。
       </p>
       <div class="hero-stats">
-        <div class="hero-stat">🕐 読了目安 <b>70分</b></div>
-        <div class="hero-stat">📖 全<b>19</b>章</div>
-        <div class="hero-stat">🧪 コード例 <b>35+</b>個</div>
+        <div class="hero-stat">🕐 読了目安 <b>100分</b></div>
+        <div class="hero-stat">📖 全<b>23</b>章</div>
+        <div class="hero-stat">🧪 コード例 <b>50+</b>個</div>
       </div>
     </div>
 
@@ -920,7 +924,368 @@ mini_game := class:
 
     <!-- 19 -->
     <section class="chapter" id="ch19">
-      <div class="chapter-eyebrow"><span class="chapter-num">19</span><span class="chapter-diff">まとめ</span></div>
+      <div class="chapter-eyebrow"><span class="chapter-num">19</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>シーングラフ応用 ── なめらかなアニメーション制御</h2>
+      <p>
+        中級編では<code>MoveToEase</code>で2点間を往復させました。ここでは本格的な<strong>Scene Graph</strong>の仕組みを使い、
+        「現在地を記録して呼び戻す」テクニックと、「複数の経由地点を一気に登録して自動再生する」テクニックの2つを身につけます。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる キーフレームアニメーション</div>
+        <p>
+          パラパラ漫画(紙芝居)を思い出してください。1枚1枚の絵を「キーフレーム」として順番に並べておけば、
+          めくるスピードを調整するだけで、複雑な動きも滑らかに再生できますよね。
+        </p>
+        <p>
+          Verseの<strong>keyframed_movement_component</strong>は、まさにこの「紙芝居めくり係」です。
+          「どこに(Transform)」「どれくらいの時間で(Duration)」「どんな速度変化で(Easing)」動くかを1枚ずつのカードにして
+          まとめて登録(<code>SetKeyframes</code>)すれば、あとは<code>Play()</code>の合図ひとつで、続けて自動再生してくれます。
+        </p>
+      </div>
+
+      <h3><span class="h3-emoji">📍</span>まず基本: 現在地を記録して呼び戻す</h3>
+      <p>
+        いちばんシンプルな応用は、「今の位置を記録しておき、あとで正確にそこへ戻す」パターンです。チェックポイントやリセット機能でよく使われます。
+      </p>
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Creative }
+using { /Verse.org/Simulation }
+
+checkpoint_prop_device := class(creative_device):
+    @editable
+    Door : creative_prop = creative_prop{}
+
+    var SavedTransform : transform = transform{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        # 今の姿勢(位置・回転)をまるごと記録しておく
+        set SavedTransform = Door.GetGlobalTransform()
+
+    ResetDoor() : void =
+        # 記録しておいた姿勢に、ワンコマンドで正確に戻す
+        Door.SetGlobalTransform(SavedTransform)</code></pre>
+      </div>
+
+      <h3><span class="h3-emoji">🎞️</span>応用: 複数の経由地点を自動再生する</h3>
+      <p>巡回する敵の足場や、複数の停留所を回るエレベーターは、キーフレームをまとめて登録するとシンプルに書けます。</p>
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — patrol_platform_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Creative }
+using { /Verse.org/SceneGraph/KeyframedMovement }
+using { /Verse.org/Simulation }
+
+patrol_platform_device := class(creative_device):
+    # UEFNの詳細パネルで、プロップに追加した「Keyframed Movement」コンポーネントを割り当てる
+    @editable
+    Movement : keyframed_movement_component = keyframed_movement_component{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        Keyframes : []keyframed_movement_delta = array{
+            keyframed_movement_delta{                                     # 停留所1
+                Transform := transform{Translation := vector3{X := 0.0, Y := 0.0, Z := 0.0}},
+                Duration := 2.0, Easing := move_to_ease_type.EaseInOut
+            },
+            keyframed_movement_delta{                                     # 停留所2
+                Transform := transform{Translation := vector3{X := 500.0, Y := 0.0, Z := 300.0}},
+                Duration := 2.5, Easing := move_to_ease_type.EaseInOut
+            },
+            keyframed_movement_delta{                                     # 停留所3
+                Transform := transform{Translation := vector3{X := 500.0, Y := 500.0, Z := 300.0}},
+                Duration := 2.5, Easing := move_to_ease_type.EaseInOut
+            }
+        }
+        Movement.SetKeyframes(Keyframes)
+        Movement.Play()   # 停留所1→2→3の順に、自動でなめらかに巡回する</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🛠️</div>
+        <div class="callout-body">
+          <div class="callout-title">この分野はアップデートが速い</div>
+          <p>Scene Graph関連のAPIはUEFNの中でも比較的新しく、細かいプロパティ名やコンポーネントの取得方法がバージョンごとに調整されることがあります。骨組みの考え方(キーフレーム配列を作って<code>SetKeyframes</code>→<code>Play</code>)は変わりませんが、実際にUEFNで書くときはVerseエディタのオートコンプリート(Ctrl+Space)で最新の候補を確認する習慣をつけましょう。</p>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🎬</div>
+        <div class="callout-body">
+          <div class="callout-title">Play/Pauseと他の技術の組み合わせ</div>
+          <p><code>Movement.Play()</code>や<code>Movement.Pause()</code>は、<a href="#ch12">12章のLive Variables</a>と組み合わせれば「プレイヤーがボタンを押している間だけ足場が動く」ような仕掛けも作れますし、<a href="#ch08">08章のbranch</a>と組み合わせれば「巡回を止めずにバックグラウンドで動かし続ける」設計も可能です。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 20 -->
+    <section class="chapter" id="ch20">
+      <div class="chapter-eyebrow"><span class="chapter-num">20</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>島内取引 基礎編 ── 商品棚を作る</h2>
+      <p>
+        UEFNには、自分のアイランドの中で<strong>V-Bucksと引き換えにアイテムを販売できる「In-Island Transactions(島内取引)」</strong>
+        という仕組みがあります。2025年12月から、開発者は自分のアイランドから直接アイテムを販売できるようになりました。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 島内取引</div>
+        <p>
+          文化祭の模擬店を思い浮かべてください。お店に並んだ商品には、値札(<code>Price</code>)と引換券(<strong>entitlement</strong>)があります。<br>
+          <strong>Durable(耐久型)</strong>の商品は、一度買った鉛筆のように<strong>ずっと使い続けられるもの</strong>。<br>
+          <strong>Consumable(消費型)</strong>の商品は、かき氷の食券のように<strong>使ったらなくなるもの</strong>です。
+        </p>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🆕</div>
+        <div class="callout-body">
+          <div class="callout-title">できたばかりの新機能です</div>
+          <p>島内取引は2025年に登場したばかりの新しい仕組みで、細かいクラス名やイベントの受け渡し方は今後のUEFNアップデートで調整される可能性があります。骨組みの考え方(entitlementで商品を定義し、entitlement_offerで値札を付け、GetEntitlementChangedEventで支払いを確認する)を押さえたうえで、実際に書くときはUEFNのプロジェクトブラウザにある「In-Island Transactions Feature Example」というお手本プロジェクトも一緒に確認すると確実です。</p>
+        </div>
+      </div>
+
+      <h3><span class="h3-emoji">🎫</span>商品(entitlement)を定義する</h3>
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/IslandTransactions }
+
+# 「耐久型」の商品券: 一度買えば、ずっと持っておける
+golden_pickaxe_entitlement := class(entitlement):
+    Consumable : logic = false   # false = Durable(耐久型)
+
+# 「消費型」の商品券: 使うとインベントリから消える
+healing_potion_entitlement := class(entitlement):
+    Consumable : logic = true    # true = Consumable(消費型)
+    MaxCount : int = 5           # 一度に最大5個まで所持できる</code></pre>
+      </div>
+
+      <h3><span class="h3-emoji">🏷️</span>値札(offer)を用意する</h3>
+      <div class="code-block">
+        <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+        <pre><code class="language-verse">golden_pickaxe_offer&lt;public&gt; := class(entitlement_offer):
+    Name : string = "黄金のツルハシ"
+    ShortDescription : string = "キラキラ光る特別なツルハシ"
+    Description : string = "収穫の音がゴージャスになる、見た目だけの特別アイテムです。"
+    EntitlementType : subtype(entitlement) = golden_pickaxe_entitlement
+    Price : int = 500     # V-Bucks。50〜5000の範囲で、50刻みで指定する</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🎪</div>
+        <div class="callout-body">
+          <div class="callout-title">まとめ売り(bundle_offer)もできる</div>
+          <p>複数の商品をまとめてお得に売りたいときは<code>entitlement_offer</code>の代わりに<code>bundle_offer</code>を使います。福袋のように、複数のオファーをひとつの商品としてまとめられます(入れ子は最大5階層まで)。</p>
+        </div>
+      </div>
+
+      <h3><span class="h3-emoji">🛍️</span>お店を開く(購入UIを表示する)</h3>
+      <div class="code-block">
+        <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+        <pre><code class="language-verse">shop_device := class(creative_device):
+    @editable
+    ShopButton : button_device = button_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ShopButton.InteractedWithEvent.Subscribe(OnShopButtonPressed)
+
+    OnShopButtonPressed(Agent : agent) : void =
+        ShowOffersDialog(Agent, array{golden_pickaxe_offer{}})   # 模擬店の陳列棚を開く</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Durable(耐久型)</th><th>Consumable(消費型)</th></tr></thead>
+          <tbody>
+            <tr><td>たとえ</td><td>一度買った鉛筆</td><td>かき氷の食券</td></tr>
+            <tr><td>使ったら</td><td>ずっと持ち続けられる</td><td>個数が減っていく</td></tr>
+            <tr><td>購入回数</td><td>基本1回のみ(MaxCountは自動で1)</td><td><code>MaxCount</code>まで複数回購入可能</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 21 -->
+    <section class="chapter" id="ch21">
+      <div class="chapter-eyebrow"><span class="chapter-num">21</span><span class="chapter-diff">上級のキモ</span></div>
+      <h2>島内取引 応用編 ── 購入を検知してごほうびを渡す</h2>
+      <p>
+        商品棚を作っただけでは、まだお店は完成しません。<strong>「本当に支払いが完了したか」を確実に確認してから</strong>、
+        ごほうびを手渡す必要があります。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 誠実なレジ係</div>
+        <p>
+          模擬店の店員さんを思い浮かべてください。「お客さんが払ったって言ってたから、たぶん大丈夫だろう」と商品を渡すのは危険です。
+          誠実な店員さんは、<strong>レジの記録(領収書)を見て、本当に支払いが記録されたことを確認してから</strong>商品を渡しますよね。
+        </p>
+        <p>
+          Verseでも同じで、<code>BuyOffer</code>を呼んだ「その場の結果」だけを信用するのではなく、
+          <strong><code>GetEntitlementChangedEvent</code>という「レジの記録係」からの通知</strong>を確認してから、ごほうびを渡すのが正しい作法です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — reward_shop_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/IslandTransactions }
+using { /Fortnite.com/Devices }
+using { /Verse.org/Simulation }
+
+reward_shop_device := class(creative_device):
+    @editable
+    ShopButton : button_device = button_device{}
+    @editable
+    BonusGranter : item_granter_device = item_granter_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ShopButton.InteractedWithEvent.Subscribe(OnShopButtonPressed)
+        # レジの記録係(購入完了通知)を、最初にひとつだけ登録しておく
+        GetEntitlementChangedEvent().Subscribe(OnEntitlementChanged)
+
+    OnShopButtonPressed(Agent : agent) : void =
+        ShowOffersDialog(Agent, array{golden_pickaxe_offer{}})
+
+    # 「本当に買えたとき」だけ、ここが呼ばれる
+    OnEntitlementChanged(Agent : agent, Entitlement : subtype(entitlement)) : void =
+        if (Entitlement = golden_pickaxe_entitlement):
+            BonusGranter.GrantItem(Agent)   # 領収書を確認してから、初めてごほうびを渡す
+            Print("購入ありがとうございます! ボーナスアイテムを渡しました")</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🔍</div>
+        <div class="callout-body">
+          <div class="callout-title">所持確認にはGetPurchasedEntitlementsを使う</div>
+          <p>「このプレイヤーはすでにこの商品を持っているか?」を確認したいときは<code>GetPurchasedEntitlements(Agent)</code>を使います。すでに持っている耐久アイテムを二重に売ってしまう事故を防げます。</p>
+        </div>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">⚡</div>
+        <div class="callout-body">
+          <div class="callout-title">この設計、どこかで見た形では?</div>
+          <p>「実行結果を直接信じず、確定した通知(イベント)を待ってから重要な処理を行う」という考え方は、<a href="#ch11">11章のトランザクションとロールバック</a>で学んだ「セーブ→挑戦→失敗したら自動ロード」の安全設計と同じ精神です。お金が関わる島内取引では、この慎重さがとくに重要になります。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 22 -->
+    <section class="chapter" id="ch22">
+      <div class="chapter-eyebrow"><span class="chapter-num">22</span><span class="chapter-diff">集大成</span></div>
+      <h2>集大成: 全アセット統合ミニゲーム</h2>
+      <p>
+        最後の実践では、これまで学んだ<strong>ボタン・トリガー・アイテム付与・テレポート・Scene Graph・島内取引</strong>のすべてを1つの
+        ミニゲームにまとめます。「制限時間内に動く足場を渡りきり、ゴールで報酬を受け取り、お店でボーナスアイテムも買える」という、
+        実際のUEFNアイランドでそのままテストできる規模の完成形です。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — grand_finale_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Devices }
+using { /Fortnite.com/Characters }
+using { /Fortnite.com/Creative }
+using { /Fortnite.com/IslandTransactions }
+using { /Verse.org/Simulation }
+
+course_state := enum&lt;open&gt;:
+    Ready
+    Running
+    Cleared
+    TimeUp
+
+grand_finale_device := class(creative_device):
+    @editable StartButton   : button_device      = button_device{}   # ①スタート合図
+    @editable FinishTrigger : trigger_device      = trigger_device{}  # ②ゴール判定
+    @editable MovingPlatform: creative_prop        = creative_prop{}  # ③動く足場(Scene Graph)
+    @editable RewardGranter : item_granter_device = item_granter_device{}  # ④クリア報酬
+    @editable ShopButton    : button_device       = button_device{}   # ⑤ボーナスショップ
+
+    var live State : course_state = course_state.Ready
+    var live StatusText : string = "スタートボタンを押してください"
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        StartButton.InteractedWithEvent.Subscribe(OnStart)
+        FinishTrigger.TriggeredEvent.Subscribe(OnFinish)
+        ShopButton.InteractedWithEvent.Subscribe(OnShop)
+        GetEntitlementChangedEvent().Subscribe(OnEntitlementChanged)
+
+    OnStart(Agent : agent) : void =
+        RunCourse(Agent)
+
+    RunCourse(Agent : agent)&lt;suspends&gt; : void =
+        set State = course_state.Running
+        set live StatusText = "足場を渡ってゴールを目指せ!"
+        defer:
+            Print("コースの後片付けをしました")   # 10章: defer
+
+        # ③足場をなめらかに往復させながら(スコープを抜けたら自動キャンセル)
+        branch:
+            MovingPlatform.MoveToEase(
+                vector3{X := 500.0, Y := 0.0, Z := 300.0}, IdentityRotation(),
+                vector3{X := 1.0, Y := 1.0, Z := 1.0}, 3.0,
+                move_to_ease_type.EaseInOut, animation_mode.PingPong)
+
+        # ゴールか、60秒のタイムアウトかを競わせる(6章: race)
+        race:
+            block:
+                # ②OnFinishがStateをClearedに書き換えるまで、ここで待つ(13章: await)
+                await{State = course_state.Cleared}
+            block:
+                Sleep(60.0)
+                if (State = course_state.Running):
+                    set State = course_state.TimeUp
+
+        case (State):
+            course_state.Cleared =>
+                set live StatusText = "クリア! ごほうびを渡します"
+                RewardGranter.GrantItem(Agent)                 # ④報酬付与
+                if (FortChar := Agent.GetFortCharacter[]):     # ゴール後に開始地点へ戻す
+                    if (FortChar.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 100.0}, IdentityRotation()]) {}
+            course_state.TimeUp =>
+                set live StatusText = "時間切れ…もう一度挑戦しよう"
+            _ =>
+                set live StatusText = "予期しない結果です"
+
+    # ②トリガーを踏んだ瞬間、レース中の待機(await)を解いてクリア扱いにする
+    OnFinish(MaybeAgent : ?agent) : void =
+        if (State = course_state.Running):
+            set State = course_state.Cleared
+
+    # ⑤ショップとentitlement購入検知(21章の応用そのまま)
+    OnShop(Agent : agent) : void =
+        ShowOffersDialog(Agent, array{golden_pickaxe_offer{}})
+
+    OnEntitlementChanged(Agent : agent, Entitlement : subtype(entitlement)) : void =
+        if (Entitlement = golden_pickaxe_entitlement):
+            Print("ボーナスアイテムを購入いただきありがとうございます!")</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🏆</div>
+        <div class="callout-body">
+          <div class="callout-title">この1本に詰まっている、サイト全体の学び</div>
+          <p><code>enum&lt;open&gt;</code>と<code>case</code>による状態管理(中級9章)、<code>branch</code>と<code>race</code>による並行処理(8・6章)、<code>defer</code>によるリソース管理(10章)、Live Variablesによる状態表示(12章)、<code>?fort_character</code>を扱うOptional(中級2章)、そして今回新しく学んだScene GraphとIn-Island Transactions。<strong>このサイト1冊で学んだことのすべてが、1つの実際に動くミニゲームの中に自然に組み合わさっています。</strong>ぜひUEFNの新規プロジェクトに貼り付けて、実際に足場を渡り、ボタンを押し、ショップを開いてみてください。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 23 -->
+    <section class="chapter" id="ch23">
+      <div class="chapter-eyebrow"><span class="chapter-num">23</span><span class="chapter-diff">まとめ</span></div>
       <h2>チートシート & まとめ</h2>
       <p>お疲れさまでした!これで初級・中級・上級のすべてを走り抜けました。最後に、上級編の要点を一枚のチートシートにまとめます。</p>
 
@@ -952,13 +1317,47 @@ when(条件):    毎回実行</pre>
     V:int = 0
 Data:weak_map(player,s)=map{}</pre>
         </div>
+        <div class="cheat-card">
+          <h5># デバイス配線</h5>
+          <pre>@editable B:button_device=button_device{}
+OnBegin&lt;override&gt;()&lt;suspends&gt;:void=
+  B.InteractedWithEvent.Subscribe(F)
+Granter.GrantItem(Agent)
+F.TeleportTo[Pos,Rot]</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># Scene Graph</h5>
+          <pre>Prop.TeleportTo[Pos,Rot]       # 瞬間
+Prop.MoveToEase(Pos,Rot,Scl,
+  Dur, EaseType, animation_mode.PingPong)
+Movement.SetKeyframes(Frames)
+Movement.Play()</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 島内取引</h5>
+          <pre>e := class(entitlement):
+  Consumable:logic = false
+o := class(entitlement_offer):
+  Price:int = 500
+ShowOffersDialog(Agent, array{o{}})
+GetEntitlementChangedEvent()
+  .Subscribe(OnBought)</pre>
+        </div>
       </div>
 
       <div class="callout tip">
         <div class="callout-icon">🏁</div>
         <div class="callout-body">
           <div class="callout-title">おめでとうございます!</div>
-          <p>これで、公式ドキュメント「Book of Verse」の主要な内容をひと通りやさしい言葉で学び終えました。次の一歩としては、実際にUEFNを起動して、このサイトのコード例を少しずつ書き換えながら動かしてみるのが一番の近道です。困ったときは、いつでもこのサイトの各章に立ち戻ってきてくださいね。</p>
+          <p>
+            これで、公式ドキュメント「Book of Verse」の主要な内容に加えて、UEFNの定番アセット(ボタン・トリガー・アイテム付与・テレポート)との連携、
+            Scene Graphによるアニメーション制御、そしてIn-Island Transactions(島内取引)によるアイテム販売まで、ひと通りやさしい言葉で学び終えました。
+          </p>
+          <p>
+            このサイト1つで、Verseの文法の基礎から、実際にUEFNの画面上でボタンを押し、足場を渡り、ショップでアイテムを買うところまでを
+            一直線につなげられたはずです。次の一歩としては、実際にUEFNを起動して、このサイトのコード例(とくに<a href="#ch22">22章の集大成ミニゲーム</a>)を
+            少しずつ書き換えながら動かしてみるのが一番の近道です。困ったときは、いつでもこのサイトの各章に立ち戻ってきてくださいね。
+          </p>
         </div>
       </div>
     </section>

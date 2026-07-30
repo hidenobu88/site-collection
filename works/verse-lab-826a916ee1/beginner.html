@@ -51,7 +51,8 @@
         <a href="#ch08">08. くり返し for / loop</a>
         <a href="#ch09">09. 配列とマップ</a>
         <a href="#ch10">10. 文字列を組み立てる</a>
-        <a href="#ch11">11. まとめ & 次のステップ</a>
+        <a href="#ch11">11. UEFNの部品とVerseをつなぐ</a>
+        <a href="#ch12">12. まとめ & 次のステップ</a>
       </nav>
       <div class="toc-progress">
         <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
@@ -69,9 +70,9 @@
         専門用語が出てきたら、必ずすぐそばに小学生でもわかるたとえ話を置いています。急がず、ひとつずつ読み進めましょう。
       </p>
       <div class="hero-stats">
-        <div class="hero-stat">🕐 読了目安 <b>25分</b></div>
-        <div class="hero-stat">📖 全<b>11</b>章</div>
-        <div class="hero-stat">🧪 コード例 <b>18</b>個</div>
+        <div class="hero-stat">🕐 読了目安 <b>32分</b></div>
+        <div class="hero-stat">📖 全<b>12</b>章</div>
+        <div class="hero-stat">🧪 コード例 <b>21</b>個</div>
       </div>
     </div>
 
@@ -549,7 +550,111 @@ Print(Message)  # → ゆうたさんのスコアは95点です!</code></pre>
 
     <!-- 11 -->
     <section class="chapter" id="ch11">
-      <div class="chapter-eyebrow"><span class="chapter-num">11</span><span class="chapter-diff">まとめ</span></div>
+      <div class="chapter-eyebrow"><span class="chapter-num">11</span><span class="chapter-diff">実践</span></div>
+      <h2>UEFNの部品とVerseをつなぐ</h2>
+      <p>
+        ここまでで、Verseという「言葉」の基本文法を覚えました。最後の仕上げに、実際のUEFN(Unreal Editor for Fortnite)の
+        ワールドに置ける<strong>ボタン</strong>や<strong>踏むと反応するエリア</strong>と、あなたが書いたコードをつなげてみましょう。
+        自分のコードで実際にゲームの中の物が動く瞬間は、プログラミングでいちばん楽しい瞬間です。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる デバイスとVerse</div>
+        <p>
+          UEFNに置く「ボタン」や「トリガー(踏むと反応するエリア)」は、電池が入っていないおもちゃのようなものです。
+          見た目はちゃんとしたボタンでも、配線(Verseコード)をつながないと何も起きません。
+        </p>
+        <p>
+          あなたが書く<code>creative_device</code>というクラスは、この「配線係」です。「このボタンが押されたら、この処理を実行してね」
+          という配線図を1枚書くだけで、ワールド中のボタンやトリガーに命が吹き込まれます。
+        </p>
+      </div>
+
+      <h3><span class="h3-emoji">🔘</span>ボタンを押したら反応させる</h3>
+      <p>
+        まずはUEFNの「Button Device(ボタン)」をワールドに1つ置いたと仮定して、押されたら文字を表示するだけの、いちばんシンプルな配線を書いてみましょう。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — my_first_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Devices }
+using { /Verse.org/Simulation }
+
+# creative_device を継承すると、UEFNのワールドに置ける「装置」になる
+my_first_device := class(creative_device):
+
+    # @editable を付けると、UEFNの画面上でボタンを「割り当て」できるようになる
+    @editable
+    MyButton : button_device = button_device{}
+
+    # OnBegin はゲーム開始時に自動で1回だけ呼ばれる、配線係の出社時刻
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        MyButton.InteractedWithEvent.Subscribe(OnButtonPressed)
+
+    # ボタンが押されるたびに、押した人(Agent)を連れて呼ばれる
+    OnButtonPressed(Agent : agent) : void =
+        Print("ボタンが押されました!")</code></pre>
+      </div>
+
+      <p>
+        このコードをUEFNのVerseデバイスとしてワールドに置き、詳細パネルで<code>MyButton</code>の欄に実際のボタンを割り当てるだけで、
+        <strong>ゲームを開始してそのボタンを押すと、すぐに動作を確認できます</strong>。
+      </p>
+
+      <h3><span class="h3-emoji">🚶</span>踏むと反応するエリア(トリガー)を使う</h3>
+      <p>
+        ボタンと並んでよく使われるのが「Trigger Device(トリガー)」です。プレイヤーがそのエリアに足を踏み入れるだけで反応します。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">my_trigger_device := class(creative_device):
+    @editable
+    FloorTrigger : trigger_device = trigger_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        FloorTrigger.TriggeredEvent.Subscribe(OnFloorStepped)
+
+    OnFloorStepped(MaybeAgent : ?agent) : void =
+        Print("誰かがエリアを踏みました!")</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🎁</div>
+        <div class="callout-body">
+          <div class="callout-title">見覚えのある「?」ではありませんか?</div>
+          <p>トリガーが送ってくる<code>?agent</code>は、実は04章で学んだ「型」の仲間で、「踏んだ人がいるかもしれないし、コード側から直接呼ばれて誰もいないかもしれない」福袋のような値です。この「?」の中身の取り出し方は、次の<a href="intermediate.html#ch02">中級編・第2章</a>でくわしく学びます。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>デバイス</th><th>反応するきっかけ</th><th>イベント名</th></tr></thead>
+          <tbody>
+            <tr><td>Button Device(ボタン)</td><td>プレイヤーが「使う」操作をする</td><td><code>InteractedWithEvent</code></td></tr>
+            <tr><td>Trigger Device(トリガー)</td><td>プレイヤーがエリアに入る/コードで発火</td><td><code>TriggeredEvent</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🔌</div>
+        <div class="callout-body">
+          <div class="callout-title">配線の基本パターンを覚えよう</div>
+          <p><strong>①@editableでデバイスを受け取る → ②OnBeginで.Subscribe(処理する関数)を登録する → ③関数の中に実際の処理を書く</strong>。この3ステップは、この先どんなデバイスを使っても変わらない「お決まりの型」です。中級編・上級編では、この型に乗せてアイテム付与やテレポート、プロップ(物体)を動かす処理を追加していきます。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section class="chapter" id="ch12">
+      <div class="chapter-eyebrow"><span class="chapter-num">12</span><span class="chapter-diff">まとめ</span></div>
       <h2>まとめ & 次のステップ</h2>
       <p>おつかれさまでした!初級編で学んだことを振り返りましょう。</p>
 
@@ -575,6 +680,14 @@ else:
           <h5># くり返し</h5>
           <pre>for (V : Array):
     Print(V)</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># デバイス配線の型</h5>
+          <pre>d := class(creative_device):
+  @editable B:button_device=button_device{}
+  OnBegin&lt;override&gt;()&lt;suspends&gt;:void=
+    B.InteractedWithEvent.Subscribe(F)
+  F(A:agent):void = Print("押された")</pre>
         </div>
       </div>
 

@@ -57,7 +57,9 @@
         <a href="#ch14">14. サブタイピング入門</a>
         <a href="#ch15">15. アクセス指定子</a>
         <a href="#ch16">16. 実践: インベントリシステム</a>
-        <a href="#ch17">17. まとめ & 次のステップ</a>
+        <a href="#ch17">17. デバイス実践: 付与とテレポート</a>
+        <a href="#ch18">18. シーングラフ基礎: プロップを動かす</a>
+        <a href="#ch19">19. まとめ & 次のステップ</a>
       </nav>
       <div class="toc-progress">
         <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
@@ -76,9 +78,9 @@
         少し長い章立てですが、ひとつずつ、たとえ話とセットでゆっくり理解していきましょう。
       </p>
       <div class="hero-stats">
-        <div class="hero-stat">🕐 読了目安 <b>55分</b></div>
-        <div class="hero-stat">📖 全<b>17</b>章</div>
-        <div class="hero-stat">🧪 コード例 <b>30+</b>個</div>
+        <div class="hero-stat">🕐 読了目安 <b>68分</b></div>
+        <div class="hero-stat">📖 全<b>19</b>章</div>
+        <div class="hero-stat">🧪 コード例 <b>35+</b>個</div>
       </div>
     </div>
 
@@ -844,7 +846,187 @@ for (P : MyBag.GetPotions()):
 
     <!-- 17 -->
     <section class="chapter" id="ch17">
-      <div class="chapter-eyebrow"><span class="chapter-num">17</span><span class="chapter-diff">まとめ</span></div>
+      <div class="chapter-eyebrow"><span class="chapter-num">17</span><span class="chapter-diff">実践</span></div>
+      <h2>デバイス実践: アイテム付与とテレポート</h2>
+      <p>
+        初級編の最後で、ボタンとVerseをつなぐ「配線の型」を学びました。ここでは中級編で身につけた
+        <strong>Optional(福袋)</strong>の知識を使って、実際にプレイヤーへ<strong>アイテムを渡し、別の場所へ瞬間移動させる</strong>装置を作ってみましょう。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 付与とテレポート</div>
+        <p>
+          「Item Granter Device(アイテム付与装置)」は、お祭りの<strong>福引きカウンターの店員さん</strong>です。ボタンという名の福引きガラガラを回すと、
+          店員さんがその場で景品を手渡してくれます。<br>
+          プレイヤーのテレポートは、ドラえもんの<strong>「どこでもドア」</strong>そのもの。ただしVerseでは、プレイヤー(<code>agent</code>)から
+          直接ワープさせるのではなく、<strong>「体」にあたる<code>fort_character</code>を取り出してから</strong>ドアをくぐらせます。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — warp_reward_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Devices }
+using { /Fortnite.com/Characters }
+using { /Verse.org/Simulation }
+
+warp_reward_device := class(creative_device):
+    @editable
+    RewardButton : button_device = button_device{}
+    @editable
+    RewardGranter : item_granter_device = item_granter_device{}
+
+    # ワープ先の座標(UEFNのDetailsパネルで数値を調整できる)
+    @editable
+    WarpDestination : vector3 = vector3{X := 0.0, Y := 0.0, Z := 300.0}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        RewardButton.InteractedWithEvent.Subscribe(OnRewardButtonPressed)
+
+    OnRewardButtonPressed(Agent : agent) : void =
+        RewardGranter.GrantItem(Agent)   # 福引きの景品(アイテム)を手渡す
+
+        # GetFortCharacter[] は ?fort_character、つまり「福袋」を返す
+        if (FortChar := Agent.GetFortCharacter[]):
+            # 中身(体)を取り出せた場合だけ、どこでもドアをくぐらせる
+            if (FortChar.TeleportTo[WarpDestination, IdentityRotation()]) {}</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🎁</div>
+        <div class="callout-body">
+          <div class="callout-title">なぜ if で包む必要があるの?</div>
+          <p><code>Agent.GetFortCharacter[]</code>は「プレイヤーがまだリスポーン中で、体が存在しないかもしれない」という理由でOptional(<code>?fort_character</code>)を返します。02章の福袋のたとえのとおり、<code>if (FortChar := ...)</code>で袋を開けてみて、中身があった場合だけ処理を進めているわけです。</p>
+        </div>
+      </div>
+
+      <p>複数のワープ先をランダムに選ぶ応用も、初級編で習った配列だけで実現できます。</p>
+
+      <div class="code-block">
+        <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+        <pre><code class="language-verse">@editable
+WarpPoints : []vector3 = array{}   # UEFN側で複数のワープ先を登録しておく
+
+OnRewardButtonPressed(Agent : agent) : void =
+    if (WarpPoints.Length &gt; 0, RandomIndex := GetRandomInt(0, WarpPoints.Length - 1)):
+        if (FortChar := Agent.GetFortCharacter[]):
+            if (FortChar.TeleportTo[WarpPoints[RandomIndex], IdentityRotation()]) {}</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">⚡</div>
+        <div class="callout-body">
+          <div class="callout-title">エフェクトの気配を感じ取ろう</div>
+          <p><code>TeleportTo</code>は実際には<code>&lt;decides&gt;&lt;reads&gt;&lt;writes&gt;</code>という複数のエフェクトを持つ関数です。「失敗するかもしれない(プレイスペースの外だと失敗)」「状態を読む」「状態を書き換える」という3つの性質が名前に表れています。エフェクトそのものの詳しい仕組みは<a href="advanced.html#ch01">上級編・第1章</a>で学びます。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 18 -->
+    <section class="chapter" id="ch18">
+      <div class="chapter-eyebrow"><span class="chapter-num">18</span><span class="chapter-diff">実践</span></div>
+      <h2>シーングラフ基礎: プロップを動かす</h2>
+      <p>
+        UEFNにワールドの一部として置く箱・扉・浮島などの物体を「<strong>Prop(プロップ)</strong>」と呼びます。
+        Verseコードから制御できるプロップは<code>creative_prop</code>という型で扱い、これを動かす仕組み全体を
+        UEFNの世界では「<strong>Scene Graph(シーングラフ)</strong>」と呼びます。ここでは、その最初の一歩を体験しましょう。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる Scene Graph</div>
+        <p>
+          <code>creative_prop</code>は、糸で吊るされた<strong>操り人形(マリオネット)</strong>です。Verseコードは、その人形の糸を握る操者。
+          「瞬間移動(<code>TeleportTo</code>)」は、糸をパッと持ち上げて人形を別の場所にワープさせるイメージ。
+          「なめらかな移動(<code>MoveToEase</code>)」は、糸をゆっくり一定のリズムで引っ張って、人形を優雅に歩かせるイメージです。
+        </p>
+      </div>
+
+      <h3><span class="h3-emoji">✨</span>瞬間移動させる(TeleportTo)</h3>
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Devices }
+using { /Fortnite.com/Creative }
+using { /Verse.org/Simulation }
+
+blink_prop_device := class(creative_device):
+    @editable
+    Box : creative_prop = creative_prop{}
+    @editable
+    PointA : vector3 = vector3{X := 0.0, Y := 0.0, Z := 0.0}
+    @editable
+    PointB : vector3 = vector3{X := 0.0, Y := 0.0, Z := 400.0}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        loop:
+            Sleep(2.0)
+            Box.TeleportTo[PointB, IdentityRotation()]   # パッとBへワープ
+            Sleep(2.0)
+            Box.TeleportTo[PointA, IdentityRotation()]   # パッとAへワープ</code></pre>
+      </div>
+
+      <h3><span class="h3-emoji">🎐</span>なめらかに往復させる(MoveToEase)</h3>
+      <p>
+        <code>MoveToEase</code>には<code>animation_mode.PingPong</code>という「自動で行ったり来たりし続ける」モードがあり、
+        <code>loop</code>や<code>Sleep</code>を自分で書かなくても、たった1回の呼び出しで浮遊プラットフォームが完成します。
+      </p>
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">floating_platform_device := class(creative_device):
+    @editable
+    Platform : creative_prop = creative_prop{}
+    @editable
+    TargetPoint : vector3 = vector3{X := 0.0, Y := 0.0, Z := 400.0}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        Platform.MoveToEase(
+            TargetPoint, IdentityRotation(), vector3{X := 1.0, Y := 1.0, Z := 1.0},
+            3.0,                          # 3秒かけて移動
+            move_to_ease_type.EaseInOut,  # ゆっくり加速→ゆっくり減速
+            animation_mode.PingPong)      # 到着したら自動で逆再生、を延々くり返す</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>TeleportTo</th><th>MoveToEase</th></tr></thead>
+          <tbody>
+            <tr><td>動き方</td><td>瞬間ワープ(パッと消えて現れる)</td><td>時間をかけてなめらかに移動</td></tr>
+            <tr><td>向いている場面</td><td>初期配置、ステージリセット</td><td>浮遊プラットフォーム、扉、エレベーター</td></tr>
+            <tr><td>主なパラメータ</td><td>Position, Rotation</td><td>Position, Rotation, Scale, Duration, EaseType, AnimationMode</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🧵</div>
+        <div class="callout-body">
+          <div class="callout-title">これはまだ入り口です</div>
+          <p>ここで紹介したのはScene Graphの基礎の基礎です。実際の本格的なアニメーション制御では、複数の経由地点(キーフレーム)をまとめて登録できる仕組みが用意されています。詳しくは<a href="advanced.html#ch19">上級編・第19章「シーングラフ応用」</a>で学びます。</p>
+        </div>
+      </div>
+
+      <div class="quiz">
+        <div class="quiz-tag">✏️ ミニクイズ</div>
+        <div class="quiz-q">Q. 到着したら自動で逆再生をくり返す、往復運動にぴったりのanimation_modeはどれ?</div>
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">A</span><code>OneShot</code></button>
+          <button class="quiz-choice" data-correct="true"><span class="qc-mark">B</span><code>PingPong</code></button>
+          <button class="quiz-choice" data-correct="false"><span class="qc-mark">C</span><code>EaseInOut</code></button>
+        </div>
+        <div class="quiz-explain">正解は<b>B</b>。<code>OneShot</code>は1回だけ再生、<code>EaseInOut</code>はそもそもanimation_modeではなくeaseの種類でしたね。往復には<code>PingPong</code>が最適です。</div>
+      </div>
+    </section>
+
+    <!-- 19 -->
+    <section class="chapter" id="ch19">
+      <div class="chapter-eyebrow"><span class="chapter-num">19</span><span class="chapter-diff">まとめ</span></div>
       <h2>まとめ & 次のステップ</h2>
       <p>中級編、お疲れさまでした。ここまで来れば、Verseで書かれた実際のコードの多くが読めるようになっているはずです。</p>
 
@@ -873,13 +1055,22 @@ c := class:  var X:int=0 # 共有</pre>
 c := class(i):
     F&lt;override&gt;():void = {}</pre>
         </div>
+        <div class="cheat-card">
+          <h5># デバイス実践</h5>
+          <pre>Granter.GrantItem(Agent)
+if (F := Agent.GetFortCharacter[]):
+  if (F.TeleportTo[Pos,Rot]) {}
+Prop.MoveToEase(Pos,Rot,Scl,3.0,
+  move_to_ease_type.EaseInOut,
+  animation_mode.PingPong)</pre>
+        </div>
       </div>
 
       <div class="callout tip">
         <div class="callout-icon">🚀</div>
         <div class="callout-body">
           <div class="callout-title">いよいよ上級編へ</div>
-          <p>次は、Verseが「メタバース時代の言語」と呼ばれる理由そのもの──<strong>エフェクトシステム、並行処理、リアクティブなLive Variables</strong>を扱います。UEFNで本格的なゲームを作るための最後のピースです。</p>
+          <p>次は、Verseが「メタバース時代の言語」と呼ばれる理由そのもの──<strong>エフェクトシステム、並行処理、リアクティブなLive Variables</strong>を扱います。さらに、Scene Graphを使った本格的なアニメーション制御と、島内取引(In-Island Transactions)でアイテムを販売する仕組みも学びます。UEFNで本格的なゲームを作るための最後のピースです。</p>
         </div>
       </div>
     </section>
