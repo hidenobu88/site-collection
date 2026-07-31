@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>VERSE道場破り — Verse言語 200本勝負</title>
+<meta name="description" content="Verse言語をとことん極めるための非公開ドリルアプリ。初級・中級・上級、合計200問。1問ごとに『師範の教え(解説+コード例)』を読んでから挑む、道場破り形式。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23160c08'/%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23C9A24B' stroke-width='4'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='%23E4483A' font-family='serif' font-weight='900'%3E道%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-bar-fill" id="topProgressFill"></div></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark">道</span>
+      <span class="brand-text">VERSE道場破り<span class="brand-sub">Verse言語 200本勝負(非公開)</span></span>
+    </a>
+    <a class="back-link" href="../../index.html">← Site Collection</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <span class="kicker">🥋 非公開の自主鍛錬場 · 誰にも共有しない、自分だけの200本勝負</span>
+    <h1>読んで、書いて、比べる。<br>それだけで<span class="accent">Verseの実力</span>は積み上がる。</h1>
+    <p class="lead">
+      すべての問題の直前に「師範の教え」――使う構文・関数・考え方の解説とコード例を置いています。<br class="br-pc">
+      それを読めば必ず解ける難易度なので、写経ではなく<strong>自分の頭で組み立てる</strong>ことを意識してください。<br class="br-pc">
+      初級から上級まで、じわじわと歯ごたえを増していきます。中級・上級はボリューム多めです。
+    </p>
+    <div class="stats">
+      <div class="stat-pill"><b>200</b><span>問</span></div>
+      <div class="stat-pill lv-b"><b>40</b><span>初級</span></div>
+      <div class="stat-pill lv-i"><b>80</b><span>中級</span></div>
+      <div class="stat-pill lv-a"><b>80</b><span>上級</span></div>
+      <div class="stat-pill"><b id="statCleared">0</b><span>クリア済み</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="control-bar" id="controlBar">
+  <div class="wrap control-inner">
+    <div class="tab-row" id="levelTabs">
+      <button class="tab is-active" data-lv="all">🔥 すべて <span class="tab-count" id="cntAll">200</span></button>
+      <button class="tab" data-lv="b">🌱 初級 <span class="tab-count" id="cntB">40</span></button>
+      <button class="tab" data-lv="i">⚔️ 中級 <span class="tab-count" id="cntI">80</span></button>
+      <button class="tab" data-lv="a">🐉 上級 <span class="tab-count" id="cntA">80</span></button>
+    </div>
+    <div class="filter-row">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="キーワードで検索(例: map / 並行処理 / interface)" autocomplete="off" />
+      </div>
+      <label class="toggle-check">
+        <input type="checkbox" id="onlyUndone" />
+        <span>未クリアのみ</span>
+      </label>
+      <div class="cat-select-wrap">
+        <select id="catSelect"><option value="">カテゴリで絞り込み</option></select>
+      </div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="listProgressFill"></div></div>
+  </div>
+</div>
+
+<main class="wrap main-col">
+  <div id="emptyState" class="empty-state" hidden>
+    <p>🥋 条件に一致する問題が見つかりませんでした。検索語やフィルタを変えてみてください。</p>
+  </div>
+  <div id="questionList" class="question-list"></div>
+</main>
+
+<section class="howto">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How to train</div>
+      <h2>この道場の歩き方</h2>
+    </div>
+    <div class="howto-grid">
+      <div class="howto-card">
+        <div class="num">01</div>
+        <h4>📖 師範の教えを読む</h4>
+        <p>各問題の直前にある解説とコード例が、その問題を解くための唯一のヒントです。ここを読み飛ばすと急に難しく感じるので、面倒でも必ず目を通しましょう。</p>
+      </div>
+      <div class="howto-card">
+        <div class="num">02</div>
+        <h4>✍️ 自分の手で書く</h4>
+        <p>UEFNのVerseエディタか、紙とペンでもOK。答えを見る前に、自分なりのコードを組み立ててみてください。間違えても構いません、それが一番身につきます。</p>
+      </div>
+      <div class="howto-card">
+        <div class="num">03</div>
+        <h4>✅ 模範解答と見比べてクリア</h4>
+        <p>「模範解答を見る」を開いて答え合わせ。納得できたら「クリア」にチェックを入れましょう。進捗はブラウザに自動保存されるので、いつでも続きから道場破りを再開できます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bottom">
+  <div class="wrap">
+    <p>VERSE道場破り — Verse言語 200本勝負(非公開・自主鍛錬用)</p>
+    <p class="foot-sub">全200問を制覇したら、あなたはもうVerseを恐れない。</p>
+    <p style="margin-top:10px;"><a class="top-return" href="../../index.html">← Site Collection の作品一覧へ戻る</a></p>
+  </div>
+</footer>
+
+<button class="fab-top" id="fabTop" aria-label="トップへ戻る">↑</button>
+
+<script src="js/data-beginner.js"></script>
+<script src="js/data-intermediate.js"></script>
+<script src="js/data-advanced.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
