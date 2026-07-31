@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>島内取引特別編 | Verse Lab — ゼロからわかるVerse言語</title>
+<meta name="description" content="UEFNのIn-Island Transactions(島内取引)を、たとえ話でゼロから。entitlement・offer・購入検知まで、単独ページで一直線に学べる特別編。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d0f17'/><text x='50' y='66' font-size='54' text-anchor='middle' fill='%23FFB454' font-family='monospace' font-weight='bold'>V</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>.chapter{--accent-lv:var(--orange);}</style>
+</head>
+<body class="has-toc">
+
+<div class="progress-bar"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">V</span>
+      <span>Verse Lab<span class="brand-sub">やさしいVerse言語学習サイト(非公開)</span></span>
+    </a>
+    <nav class="level-nav">
+      <a class="level-chip" data-lv="top" href="index.html">🏠 トップ</a>
+      <a class="level-chip" data-lv="beginner" href="beginner.html">🌱 初級</a>
+      <a class="level-chip" data-lv="intermediate" href="intermediate.html">⚙️ 中級</a>
+      <a class="level-chip" data-lv="advanced" href="advanced.html">🚀 上級</a>
+    </nav>
+    <button class="menu-btn" aria-label="目次を開く"><span></span></button>
+  </div>
+</header>
+
+<div class="toc-overlay"></div>
+
+<div class="page-layout">
+  <aside class="toc-col">
+    <div class="toc-card">
+      <div class="toc-title">🏝️ 島内取引特別編 目次</div>
+      <nav class="toc-list">
+        <a href="#ch01">01. 島内取引ってなに?</a>
+        <a href="#ch02">02. 商品(entitlement)を定義する</a>
+        <a href="#ch03">03. 値札(offer)をつくる</a>
+        <a href="#ch04">04. お店を開く</a>
+        <a href="#ch05">05. 応用: 支払いを確実に確認する</a>
+        <a href="#ch06">06. 応用: ごほうびと組み合わせる</a>
+        <a href="#ch07">07. まとめ & 演習チャレンジ</a>
+      </nav>
+      <div class="toc-progress">
+        <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
+        <div class="toc-progress-track"><div class="toc-progress-fill"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content-col">
+    <div class="page-hero">
+      <span class="level-badge intermediate" style="color:var(--orange);background:rgba(255,180,84,0.10);border-color:rgba(255,180,84,0.35);">🏝️ 特別編 · 単独で学べる</span>
+      <h1>文化祭の模擬店から始める、<br>V-Bucksショップの作り方。</h1>
+      <p class="lead">
+        このページは、上級編の中身から「In-Island Transactions(島内取引)」だけを取り出した単独コースです。
+        <strong>初級編を読み終えていれば</strong>、ゼロから理解できるように書いています。途中で<code>class</code>という言葉が出てきますが、
+        「型に名前をつけて仲間として扱う仕組み」くらいの理解でまずは大丈夫です(くわしくは<a href="intermediate.html#ch08">中級編・第8章</a>)。
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">🕐 読了目安 <b>25分</b></div>
+        <div class="hero-stat">📖 全<b>7</b>章</div>
+        <div class="hero-stat">📝 演習 <b>5</b>問</div>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <section class="chapter" id="ch01">
+      <div class="chapter-eyebrow"><span class="chapter-num">01</span><span class="chapter-diff">やさしい</span></div>
+      <h2>島内取引ってなに?</h2>
+      <p>
+        UEFNには、自分のアイランドの中で<strong>V-Bucksと引き換えにアイテムを販売できる「In-Island Transactions(島内取引)」</strong>
+        という仕組みがあります。2025年12月から、開発者は自分のアイランドから直接アイテムを販売できるようになりました。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 島内取引</div>
+        <p>
+          文化祭の模擬店を思い浮かべてください。お店に並んだ商品には、値札(<code>Price</code>)と引換券(<strong>entitlement</strong>)があります。<br>
+          <strong>Durable(耐久型)</strong>の商品は、一度買った鉛筆のように<strong>ずっと使い続けられるもの</strong>。<br>
+          <strong>Consumable(消費型)</strong>の商品は、かき氷の食券のように<strong>使ったらなくなるもの</strong>です。
+        </p>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🆕</div>
+        <div class="callout-body">
+          <div class="callout-title">できたばかりの新機能です</div>
+          <p>島内取引は2025年に登場したばかりの新しい仕組みで、細かいクラス名やイベントの受け渡し方は今後のUEFNアップデートで調整される可能性があります。骨組みの考え方を押さえたうえで、実際に書くときはUEFNのプロジェクトブラウザにある「In-Island Transactions Feature Example」というお手本プロジェクトも一緒に確認すると確実です。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Durable(耐久型)</th><th>Consumable(消費型)</th></tr></thead>
+          <tbody>
+            <tr><td>たとえ</td><td>一度買った鉛筆</td><td>かき氷の食券</td></tr>
+            <tr><td>使ったら</td><td>ずっと持ち続けられる</td><td>個数が減っていく</td></tr>
+            <tr><td>購入回数</td><td>基本1回のみ(MaxCountは自動で1)</td><td><code>MaxCount</code>まで複数回購入可能</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="chapter" id="ch02">
+      <div class="chapter-eyebrow"><span class="chapter-num">02</span><span class="chapter-diff">やさしい</span></div>
+      <h2>商品(entitlement)を定義する</h2>
+      <p>
+        お店に並べる商品は、<code>entitlement</code>という型の仲間として定義します。「これは何という商品で、耐久型か消費型か」を1つのクラスで表します。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/IslandTransactions }
+
+# 「耐久型」の商品券: 一度買えば、ずっと持っておける
+golden_pickaxe_entitlement := class(entitlement):
+    Consumable : logic = false   # false = Durable(耐久型)
+
+# 「消費型」の商品券: 使うとインベントリから消える
+healing_potion_entitlement := class(entitlement):
+    Consumable : logic = true    # true = Consumable(消費型)
+    MaxCount : int = 5           # 一度に最大5個まで所持できる</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">📦</div>
+        <div class="callout-body">
+          <div class="callout-title"><code>class(entitlement)</code>ってどういう意味?</div>
+          <p><code>golden_pickaxe_entitlement := class(entitlement):</code>は、「<code>golden_pickaxe_entitlement</code>という新しい商品券を、<code>entitlement</code>という商品券の仲間として作る」という意味です。動物図鑑にたとえるなら、「entitlement」という大きなカテゴリの中に「黄金のツルハシ」という具体的な商品を1つ追加しているイメージです。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題 01</div>
+        <p class="exercise-q">
+          「<b>speed_boost_entitlement</b>」という名前で、<b>消費型(Consumable = true)</b>、最大所持数<b>3個(MaxCount = 3)</b>の
+          スピードブーストの商品券を定義してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">speed_boost_entitlement := class(entitlement):
+    Consumable : logic = true
+    MaxCount : int = 3</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="chapter" id="ch03">
+      <div class="chapter-eyebrow"><span class="chapter-num">03</span><span class="chapter-diff">やさしい</span></div>
+      <h2>値札(offer)をつくる</h2>
+      <p>
+        商品券を定義しただけでは、まだ値段がついていません。値札にあたる<code>entitlement_offer</code>を作って、
+        名前・説明・値段(V-Bucks)を決めましょう。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">golden_pickaxe_offer&lt;public&gt; := class(entitlement_offer):
+    Name : string = "黄金のツルハシ"
+    ShortDescription : string = "キラキラ光る特別なツルハシ"
+    Description : string = "収穫の音がゴージャスになる、見た目だけの特別アイテムです。"
+    EntitlementType : subtype(entitlement) = golden_pickaxe_entitlement
+    Price : int = 500     # V-Bucks。50〜5000の範囲で、50刻みで指定する</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🎪</div>
+        <div class="callout-body">
+          <div class="callout-title">まとめ売り(bundle_offer)もできる</div>
+          <p>複数の商品をまとめてお得に売りたいときは<code>entitlement_offer</code>の代わりに<code>bundle_offer</code>を使います。福袋のように、複数のオファーをひとつの商品としてまとめられます(入れ子は最大5階層まで)。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題 02</div>
+        <p class="exercise-q">
+          演習01で作った<code>speed_boost_entitlement</code>用の値札を、<b>Name := "スピードブースト"</b>、
+          <b>Price := 150</b>(V-Bucks)として作ってみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">speed_boost_offer&lt;public&gt; := class(entitlement_offer):
+    Name : string = "スピードブースト"
+    ShortDescription : string = "しばらくの間、足が速くなる"
+    Description : string = "使用すると数秒間だけ移動速度がアップします。"
+    EntitlementType : subtype(entitlement) = speed_boost_entitlement
+    Price : int = 150</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="chapter" id="ch04">
+      <div class="chapter-eyebrow"><span class="chapter-num">04</span><span class="chapter-diff">ふつう</span></div>
+      <h2>お店を開く(購入ダイアログ)</h2>
+      <p>商品と値札ができたら、あとはプレイヤーに「陳列棚」を見せるだけです。ボタンと組み合わせてみましょう。</p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — shop_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Devices }
+using { /Verse.org/Simulation }
+
+shop_device := class(creative_device):
+    @editable
+    ShopButton : button_device = button_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ShopButton.InteractedWithEvent.Subscribe(OnShopButtonPressed)
+
+    OnShopButtonPressed(Agent : agent) : void =
+        ShowOffersDialog(Agent, array{golden_pickaxe_offer{}})   # 模擬店の陳列棚を開く</code></pre>
+      </div>
+
+      <p><code>ShowOffersDialog</code>の第2引数は配列なので、複数の商品を同時に並べることもできます。</p>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題 03</div>
+        <p class="exercise-q">
+          <code>ShowOffersDialog</code>の配列に<code>speed_boost_offer{}</code>も追加して、
+          <b>黄金のツルハシとスピードブーストの2商品</b>が同時に並ぶお店にしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">OnShopButtonPressed(Agent : agent) : void =
+    ShowOffersDialog(Agent, array{golden_pickaxe_offer{}, speed_boost_offer{}})</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="chapter" id="ch05">
+      <div class="chapter-eyebrow"><span class="chapter-num">05</span><span class="chapter-diff">応用</span></div>
+      <h2>応用: 支払いを確実に確認する</h2>
+      <p>
+        お店を開いただけでは、まだ完成ではありません。<strong>「本当に支払いが完了したか」を確実に確認してから</strong>、
+        次の処理(ごほうびを渡すなど)を行う必要があります。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる 誠実なレジ係</div>
+        <p>
+          模擬店の店員さんを思い浮かべてください。「お客さんが払ったって言ってたから、たぶん大丈夫だろう」と商品を渡すのは危険です。
+          誠実な店員さんは、<strong>レジの記録(領収書)を見て、本当に支払いが記録されたことを確認してから</strong>商品を渡しますよね。
+        </p>
+        <p>
+          Verseでも同じで、<code>BuyOffer</code>を呼んだ「その場の結果」だけを信用するのではなく、
+          <strong><code>GetEntitlementChangedEvent</code>という「レジの記録係」からの通知</strong>を確認するのが正しい作法です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">shop_device := class(creative_device):
+    @editable
+    ShopButton : button_device = button_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ShopButton.InteractedWithEvent.Subscribe(OnShopButtonPressed)
+        # レジの記録係(購入完了通知)を、最初にひとつだけ登録しておく
+        GetEntitlementChangedEvent().Subscribe(OnEntitlementChanged)
+
+    OnShopButtonPressed(Agent : agent) : void =
+        ShowOffersDialog(Agent, array{golden_pickaxe_offer{}})
+
+    # 「本当に買えたとき」だけ、ここが呼ばれる
+    OnEntitlementChanged(Agent : agent, Entitlement : subtype(entitlement)) : void =
+        if (Entitlement = golden_pickaxe_entitlement):
+            Print("購入ありがとうございます!")</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🔍</div>
+        <div class="callout-body">
+          <div class="callout-title">所持確認にはGetPurchasedEntitlementsを使う</div>
+          <p>「このプレイヤーはすでにこの商品を持っているか?」を確認したいときは<code>GetPurchasedEntitlements(Agent)</code>を使います。すでに持っている耐久アイテムを二重に売ってしまう事故を防げます。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題 04</div>
+        <p class="exercise-q">
+          <code>OnEntitlementChanged</code>の中で、<code>golden_pickaxe_entitlement</code>だけでなく
+          <b><code>speed_boost_entitlement</code>が買われたとき</b>にも「スピードブーストを購入いただきありがとうございます!」と表示するように、
+          条件分岐を追加してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">OnEntitlementChanged(Agent : agent, Entitlement : subtype(entitlement)) : void =
+    if (Entitlement = golden_pickaxe_entitlement):
+        Print("購入ありがとうございます!")
+    else:
+        if (Entitlement = speed_boost_entitlement):
+            Print("スピードブーストを購入いただきありがとうございます!")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="chapter" id="ch06">
+      <div class="chapter-eyebrow"><span class="chapter-num">06</span><span class="chapter-diff">応用</span></div>
+      <h2>応用: ごほうびと組み合わせる</h2>
+      <p>
+        支払いが確認できたら、初級・中級編で学んだ<code>item_granter_device</code>と組み合わせて、実際にごほうびを渡してみましょう。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — reward_shop_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">reward_shop_device := class(creative_device):
+    @editable
+    ShopButton : button_device = button_device{}
+    @editable
+    BonusGranter : item_granter_device = item_granter_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ShopButton.InteractedWithEvent.Subscribe(OnShopButtonPressed)
+        GetEntitlementChangedEvent().Subscribe(OnEntitlementChanged)
+
+    OnShopButtonPressed(Agent : agent) : void =
+        ShowOffersDialog(Agent, array{golden_pickaxe_offer{}})
+
+    OnEntitlementChanged(Agent : agent, Entitlement : subtype(entitlement)) : void =
+        if (Entitlement = golden_pickaxe_entitlement):
+            BonusGranter.GrantItem(Agent)   # 領収書を確認してから、初めてごほうびを渡す
+            Print("購入ありがとうございます! ボーナスアイテムを渡しました")</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🧩</div>
+        <div class="callout-body">
+          <div class="callout-title">初級編・中級編の知識がそのまま活きる</div>
+          <p><code>item_granter_device</code>と<code>button_device</code>の使い方は<a href="beginner.html#ch11">初級編・第11章</a>と<a href="intermediate.html#ch17">中級編・第17章</a>で学んだものと完全に同じです。島内取引は「決済の確認」という新しいピースが1つ増えるだけで、あとは今まで通りの部品の組み合わせでできています。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section class="chapter" id="ch07">
+      <div class="chapter-eyebrow"><span class="chapter-num">07</span><span class="chapter-diff">まとめ</span></div>
+      <h2>まとめ & 演習チャレンジ</h2>
+      <p>島内取引特別編は以上です。最後に総まとめとして、少し難しいチャレンジ問題に挑戦してみましょう。</p>
+
+      <div class="cheat-grid">
+        <div class="cheat-card">
+          <h5># 商品を定義</h5>
+          <pre>e := class(entitlement):
+  Consumable:logic = false</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 値札をつくる</h5>
+          <pre>o := class(entitlement_offer):
+  Name:string = "商品名"
+  Price:int = 500</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># お店を開く</h5>
+          <pre>ShowOffersDialog(Agent, array{o{}})</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 支払いを確認</h5>
+          <pre>GetEntitlementChangedEvent()
+  .Subscribe(OnBought)</pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 総合チャレンジ問題</div>
+        <p class="exercise-q">
+          「<b>vip_pass_entitlement</b>」(耐久型)という商品を定義し、値札「<b>vip_pass_offer</b>」(Name := "VIPパス", Price := 1000)を作成。
+          さらにボタンでお店を開き、<b>購入されたら<code>item_granter_device</code>でVIP専用アイテムを渡す</b>一連の流れを、
+          この章までの知識を組み合わせて実装してみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 02〜06章のコードを、名前だけ変えてそのままつなげれば完成します。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse — vip_shop_device.verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">vip_pass_entitlement := class(entitlement):
+    Consumable : logic = false
+
+vip_pass_offer&lt;public&gt; := class(entitlement_offer):
+    Name : string = "VIPパス"
+    ShortDescription : string = "特別エリアに入れる証"
+    Description : string = "購入すると、VIP専用エリアに入場できるようになります。"
+    EntitlementType : subtype(entitlement) = vip_pass_entitlement
+    Price : int = 1000
+
+vip_shop_device := class(creative_device):
+    @editable
+    ShopButton : button_device = button_device{}
+    @editable
+    VipItemGranter : item_granter_device = item_granter_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ShopButton.InteractedWithEvent.Subscribe(OnShopButtonPressed)
+        GetEntitlementChangedEvent().Subscribe(OnEntitlementChanged)
+
+    OnShopButtonPressed(Agent : agent) : void =
+        ShowOffersDialog(Agent, array{vip_pass_offer{}})
+
+    OnEntitlementChanged(Agent : agent, Entitlement : subtype(entitlement)) : void =
+        if (Entitlement = vip_pass_entitlement):
+            VipItemGranter.GrantItem(Agent)
+            Print("VIPパス購入ありがとうございます!")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🎉</div>
+        <div class="callout-body">
+          <div class="callout-title">お疲れさまでした!</div>
+          <p>これで島内取引の基礎から応用までを一直線に学び終えました。もっと深く学びたい方は、Scene Graphや並行処理と組み合わせた実践例が載っている<a href="advanced.html#ch20">上級編・第20章</a>や、<a href="advanced.html#ch22">集大成ミニゲーム(第22章)</a>もぜひ読んでみてください。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="chapter-pagenav">
+      <a href="scene-graph.html" class="pagenav-link">
+        <div class="pagenav-dir">← BACK</div>
+        <div class="pagenav-title">特別編: シーングラフを学ぶ</div>
+      </a>
+      <a href="index.html" class="pagenav-link next">
+        <div class="pagenav-dir">TOP →</div>
+        <div class="pagenav-title">トップページへ戻る</div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>内容はEpic Games公式「Book of Verse」およびUEFN公式ドキュメントを参考に、わかりやすく再構成したものです。</p>
+  <span class="footer-badge">Verse Lab · Personal Study Notes</span>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

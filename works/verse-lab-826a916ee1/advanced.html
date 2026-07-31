@@ -145,6 +145,24 @@ HealPlayer(P : player, Amount : float)&lt;transacts&gt; : void =
           <p><code>suspends</code> ── 「時間をまたいで一時停止するかもしれない」という成分表示。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          プレイヤー<code>P</code>の名前(<code>P.Name</code>)を読み取って挨拶文を作るだけの関数<code>GreetPlayer</code>に、
+          正しいエフェクト(<code>&lt;reads&gt;</code>)を付けてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">GreetPlayer(P : player)&lt;reads&gt; : string =
+    "ようこそ、{P.Name}さん!"</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 02 -->
@@ -197,6 +215,28 @@ F : type{_(:int)&lt;computes&gt;&lt;decides&gt; : int} = PureAdd   # 有効</cod
           <p><code>&lt;computes&gt;&lt;computes&gt;</code>のような重複はエラーになります。また<code>&lt;suspends&gt;</code>と<code>&lt;decides&gt;</code>は組み合わせられません。「一時停止するかもしれない」と「失敗するかもしれない」は、Verseでは意図的に別の枠組みとして扱われているためです。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          次の3つの関数それぞれに、いちばんふさわしいエフェクト(<code>computes</code>/<code>reads</code>/<code>writes</code>)を考えて付けてみましょう。
+          ①2つのfloatを掛け算するだけの関数 ②プレイヤーのHPを読み取るだけの関数 ③プレイヤーのスコアに10点加算する関数。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Multiply(A : float, B : float)&lt;computes&gt; : float = A * B
+
+GetHealth(P : player)&lt;reads&gt; : float = P.Health
+
+AddScore(P : player)&lt;writes&gt; : void =
+    set P.Score += 10</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 03 -->
@@ -230,6 +270,24 @@ AttemptPurchase(Cost : int)&lt;transacts&gt;&lt;decides&gt; : void =
         <div class="callout-body">
           <div class="callout-title">「失敗」と「実行時エラー」は別物</div>
           <p><code>Err("メッセージ")</code>で発生させる実行時エラーは、鍵が回らなかっただけの「失敗」とは違い、<strong>回復不可能な致命的な異常</strong>を表します。コールスタックを伝って処理が強制終了するため、「本当に続行不可能なとき」だけに使うべき、最後の手段です。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>&lt;transacts&gt;&lt;decides&gt;</code>を持つ関数<code>AttemptEnter</code>を作り、<b>年齢(Age)が18以上のときだけ成功して"入場OK"を返す</b>ようにしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">AttemptEnter(Age : int)&lt;transacts&gt;&lt;decides&gt; : string =
+    Age &gt;= 18   # 18未満ならここで失敗
+    "入場OK"</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -268,6 +326,29 @@ AttemptPurchase(Cost : int)&lt;transacts&gt;&lt;decides&gt; : void =
         <div class="callout-body">
           <div class="callout-title">suspendsも伝播する</div>
           <p><code>&lt;decides&gt;</code>と同じように、<code>&lt;suspends&gt;</code>な関数を呼び出す関数自身も<code>&lt;suspends&gt;</code>を宣言する必要があります。「電子レンジの前で待つ人を呼びに行った人も、結局は一緒に待つことになる」というわけです。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          「3秒カウントダウンしてから"スタート!"と表示する」<code>Countdown</code>関数を、<code>&lt;suspends&gt;</code>と<code>Sleep</code>を使って書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Countdown()&lt;suspends&gt; : void =
+    Print("3")
+    Sleep(1.0)
+    Print("2")
+    Sleep(1.0)
+    Print("1")
+    Sleep(1.0)
+    Print("スタート!")</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -310,6 +391,28 @@ ProcessData(Results(0), Results(1), Results(2))</code></pre>
           <p>ゲーム開始時に「テクスチャ・サウンド・モデル」など、複数の準備を同時並行で進め、<strong>すべてが終わってから次に進みたい</strong>ときに最適です。1つずつ順番に待つより、ずっと速く準備が終わります。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>OpenDoor()</code>、<code>PlaySound()</code>、<code>TurnOnLight()</code>という3つの処理を<code>sync</code>で並行実行し、
+          すべて終わったら「準備完了!」と表示するコードを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">sync:
+    OpenDoor()
+    PlaySound()
+    TurnOnLight()
+
+Print("準備完了!")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 06 -->
@@ -345,6 +448,29 @@ ProcessData(Results(0), Results(1), Results(2))</code></pre>
           <p><code>race</code>は「本来やりたい処理」と「制限時間のSleep」を競わせることで、<strong>タイムアウト機能</strong>を簡単に実装できます。制限時間の方が先にゴールしたら、本来の処理は自動的に打ち切られます。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          「なぞなぞに正解する処理(<code>WaitForAnswer()</code>)」と「<b>5秒のタイムアウト</b>」を<code>race</code>で競わせ、
+          先にゴールした方に応じてメッセージを出し分けるコードを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">race:
+    block:
+        WaitForAnswer()
+        Print("正解しました!")
+    block:
+        Sleep(5.0)
+        Print("時間切れです")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 07 -->
@@ -378,6 +504,25 @@ ProcessData(Results(0), Results(1), Results(2))</code></pre>
         <div class="callout-body">
           <div class="callout-title">向いている場面</div>
           <p>「素早い応答性がほしいけれど、時間のかかる処理も最後までちゃんと終わらせたい」という場面。ただしループの本体で直接使うことはできない、という制約があります。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          「時間のかかるセーブ処理(<code>SaveGameData()</code>)」と「すぐ終わるUI更新(<code>UpdateSaveIcon()</code>)」を
+          <code>rush</code>で組み合わせ、<b>UI更新の結果を先に受け取りつつ、セーブ処理も裏側で最後まで完了させる</b>コードを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">FirstDone := rush:
+    SaveGameData()      # 時間がかかるが最後までやり切る
+    UpdateSaveIcon()    # すぐ終わるので先に結果が返る</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -439,6 +584,26 @@ Result : int = BackgroundTask.Await()   # 完了を待って結果を受け取�
         </div>
         <div class="quiz-explain">正解は<b>B</b>。「敵を倒す処理」と「3秒のSleep」を<code>race</code>で競わせれば、先にゴールした方の結果だけが採用される、典型的なタイムアウトパターンになります。</div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>branch</code>を使って、「花火の演出(<code>PlayFireworks()</code>)」を打ち上げつつ、
+          その場ですぐに「Print("次の処理に進みます")」を実行するコードを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">branch:
+    PlayFireworks()
+
+Print("次の処理に進みます")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 09 -->
@@ -477,6 +642,26 @@ Result : int = BackgroundTask.Await()   # 完了を待って結果を受け取�
           <p>もし重い処理の中に<code>Sleep</code>や関数呼び出しなどの中断ポイントが一切なければ、キャンセルを頼んでもすぐには反応してくれません。時間のかかるループには、こまめに中断ポイントを挟むのが良い設計です。また、親タスクがキャンセルされると、その子タスクにもキャンセルが自動的に伝わっていきます。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          0〜4999まで数える<code>CountUp</code>という<code>&lt;suspends&gt;</code>関数を書き、<b>各回で<code>Sleep(0.0)</code>という中断ポイント</b>を挟んで、
+          途中でキャンセルされたときにすぐ反応できるようにしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">CountUp()&lt;suspends&gt; : void =
+    for (I := 0..4999):
+        Print("{I}")
+        Sleep(0.0)   # 中断ポイント。キャンセルされたらここで止まれる</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 10 -->
@@ -509,6 +694,27 @@ Result : int = BackgroundTask.Await()   # 完了を待って結果を受け取�
             LongTask(Resource)
         block:
             Sleep(10.0)                     # 10秒経ったらタイムアウト</code></pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          「ドアを開く(<code>OpenDoor()</code>)」→「中で作業する(<code>DoWork()</code>)」という処理の後に、
+          <code>defer</code>を使って<b>必ずドアを閉じる(<code>CloseDoor()</code>)</b>ようにしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">DoRoomWork()&lt;suspends&gt; : void =
+    OpenDoor()
+    defer:
+        CloseDoor()   # 途中で何が起きても、必ずドアを閉じる
+    DoWork()</code></pre>
+            </div>
+          </div></div>
+        </div>
       </div>
     </section>
 
@@ -546,6 +752,25 @@ Result : int = BackgroundTask.Await()   # 完了を待って結果を受け取�
         <div class="callout-body">
           <div class="callout-title">なぜこれが重要なのか</div>
           <p>他の多くの言語では「途中まで処理が進んだ状態で例外が起きて、データが中途半端に壊れる」というバグがよく起きます。Verseはこの問題を、言語の仕組みそのもので根本から解決しています。これは「投機的実行(Speculative Execution)」とも呼ばれます。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>AttemptPurchase</code>を参考に、<b>プレイヤーのHPを10消費してスキルを発動する</b><code>AttemptSkill</code>
+          (<code>&lt;transacts&gt;&lt;decides&gt;</code>)を書いてみましょう。HPが0未満になる場合は失敗し、自動的に巻き戻るようにします。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">AttemptSkill()&lt;transacts&gt;&lt;decides&gt; : void =
+    set PlayerHP -= 10   # 暫定的にHPを減らす
+    PlayerHP &gt;= 0          # マイナスになったら失敗、自動で巻き戻る</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -612,6 +837,28 @@ set Health = 120     # BaseHealthは120になるが、Health自体は100で頭�
           <p>「数式(条件式)がどの変数に依存しているか」は、コンパイル時ではなく<strong>実行時に動的に決まります</strong>。<code>if (Z &gt; 0) then X else Y</code>という数式なら、<code>Z</code>の値によって「Xを見張る」か「Yを見張る」かが切り替わります。またこの数式に<code>&lt;writes&gt;</code>エフェクトを持たせることはできません──あくまで「見張って再計算するだけ」の存在だからです。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Price</b>(var int)と、それに<b>常に10%の税を足した値</b>を自動計算する<b>PriceWithTax</b>を、<code>set live</code>で作ってみましょう。
+          <code>Price</code>を変えると<code>PriceWithTax</code>も自動で追従することを確認してください。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">var Price : int = 0
+var PriceWithTax : int = 0
+
+set live PriceWithTax = Price * 11 / 10
+set Price = 1000
+Print("{PriceWithTax}")   # → 1100</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 13 -->
@@ -666,6 +913,23 @@ batch:
     set Y = 10
 # ここでようやく、リアクティブな反応がまとめて1回発生する</code></pre>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>upon</code>を使って、<b>Coins(所持金)が1000以上になった瞬間だけ</b>「大金持ちの称号を獲得!」と1回だけ表示するコードを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">upon(Coins &gt;= 1000):
+    Print("大金持ちの称号を獲得!")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 14 -->
@@ -701,6 +965,25 @@ Opacity : percent = 0.5     # OK -- 鋳型の範囲内
         <div class="callout-body">
           <div class="callout-title">制約に書けるのは「リテラル」だけ</div>
           <p>鋳型のルールに書けるのは<code>0.0</code>や<code>1.0</code>のような、その場に直接書かれた値(リテラル)だけです。変数や関数呼び出しを条件に混ぜることはできません。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>0以上100以下</b>の整数しか受け付けない<code>percentage_int</code>という鋳型(Refinement Type)を作り、
+          <b>Score := 85</b>を代入してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">percentage_int := type{_X : int where 0 &lt;= _X, _X &lt;= 100}
+
+Score : percentage_int = 85</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -743,6 +1026,30 @@ ComponentType : castable_subtype(component) = physics_component</code></pre>
         <div class="callout-body">
           <div class="callout-title">何がうれしいのか</div>
           <p>「実行時に、どの敵キャラを生成するかを動的に切り替えたい」といったケースで活躍します。コンパイル時の型安全性を保ったまま、実行時のポリモーフィズム(多態性)を実現できるのがメタタイプの強みです。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>enemy</code>クラスと、それを継承した<code>goblin</code>クラスがあると仮定して、
+          <code>concrete_subtype(enemy)</code>型の変数<b>EnemyType</b>に<code>goblin</code>を入れ、<b>実際にインスタンス化</b>してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">enemy := class:
+    var HP : int = 100
+
+goblin := class(enemy):
+    var HP : int = 30
+
+EnemyType : concrete_subtype(enemy) = goblin
+NewEnemy := EnemyType{}   # 実際にゴブリンを1体生成できる</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -794,6 +1101,25 @@ ProcessDamage() : void =
         <div class="callout-body">
           <div class="callout-title">パスはグローバルな住所</div>
           <p><code>/YourGame/Player/Inventory</code>のような形式で、世界中のどのモジュールも一意に指し示せます。<code>/Verse.org/Verse</code>は言語のコア機能、<code>/Fortnite.com/Devices</code>はFortnite連携機能のように、公式モジュールにも同じ命名ルールが使われています。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>ShopName</b>(string, "verseショップ")と<b>TaxRate</b>(float, 0.1)を公開フィールドとして持つ、
+          <code>ShopConfig</code>というモジュールを定義してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">ShopConfig := module:
+    ShopName&lt;public&gt; : string = "verseショップ"
+    TaxRate&lt;public&gt; : float = 0.1</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -853,6 +1179,25 @@ GetOrCreateStats(Player : player) : player_stats =
         <div class="callout-body">
           <div class="callout-title">スキーマは「あとから変えにくい」</div>
           <p>公開後にセーブデータの形を大きく変更するのは、実際の銀行の金庫のルールを後から変えるのと同じくらい大変です。設計段階で項目をよく吟味し、シンプルな値には<code>struct</code>を優先しましょう(<code>class</code>より制約が少なく軽量です)。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>UnlockedSkins</b>(int, 所持スキン数)と<b>TotalPlayTime</b>(float, プレイ時間)を持つ<code>&lt;persistable&gt;</code>な
+          <code>save_data</code>構造体を定義してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">save_data := struct&lt;persistable&gt;:
+    UnlockedSkins : int = 0
+    TotalPlayTime : float = 0.0</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -918,6 +1263,29 @@ mini_game := class:
         <div class="callout-body">
           <div class="callout-title">この例に詰まっている考え方</div>
           <p><code>race</code>による「クリアかタイムアウトか」の競争、<code>defer</code>による確実な後片付け、<code>&lt;suspends&gt;</code>の伝播、Live Variablesによる自動UI更新、<code>enum&lt;open&gt;</code>とcase式による将来を見据えた状態管理──ここまで学んできたすべての要素が、実際の1つの機能の中で自然に組み合わさっています。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>mini_game</code>クラスに、<code>game_state.TimeUp</code>になった回数を数える<b>var TimeUpCount : int</b>を追加し、
+          <code>RunRound</code>の中で時間切れになったときにカウントアップするようにしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">var TimeUpCount : int = 0
+
+# case (State): の中に追加する
+case (State):
+    game_state.TimeUp =>
+        set TimeUpCount += 1
+        Print("時間切れ… (通算{TimeUpCount}回目)")</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -1021,6 +1389,36 @@ patrol_platform_device := class(creative_device):
           <p><code>Movement.Play()</code>や<code>Movement.Pause()</code>は、<a href="#ch12">12章のLive Variables</a>と組み合わせれば「プレイヤーがボタンを押している間だけ足場が動く」ような仕掛けも作れますし、<a href="#ch08">08章のbranch</a>と組み合わせれば「巡回を止めずにバックグラウンドで動かし続ける」設計も可能です。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>checkpoint_prop_device</code>を参考に、扉(<code>Door</code>)の<b>現在の姿勢を記録し、ボタンを押したら
+          記録した姿勢に戻す</b><code>door_reset_device</code>を作ってみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">door_reset_device := class(creative_device):
+    @editable
+    Door : creative_prop = creative_prop{}
+    @editable
+    ResetButton : button_device = button_device{}
+
+    var OriginalTransform : transform = transform{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        set OriginalTransform = Door.GetGlobalTransform()
+        ResetButton.InteractedWithEvent.Subscribe(OnReset)
+
+    OnReset(Agent : agent) : void =
+        Door.SetGlobalTransform(OriginalTransform)</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 20 -->
@@ -1110,6 +1508,32 @@ healing_potion_entitlement := class(entitlement):
           </tbody>
         </table>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>revive_scroll_entitlement</b>(消費型、MaxCount := 3)という商品と、その値札
+          <b>revive_scroll_offer</b>(Name := "蘇生の巻物", Price := 300)を定義してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">revive_scroll_entitlement := class(entitlement):
+    Consumable : logic = true
+    MaxCount : int = 3
+
+revive_scroll_offer&lt;public&gt; := class(entitlement_offer):
+    Name : string = "蘇生の巻物"
+    ShortDescription : string = "力尽きた仲間を復活させる"
+    Description : string = "戦闘不能になった仲間を、その場で復活させることができます。"
+    EntitlementType : subtype(entitlement) = revive_scroll_entitlement
+    Price : int = 300</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 21 -->
@@ -1176,6 +1600,26 @@ reward_shop_device := class(creative_device):
         <div class="callout-body">
           <div class="callout-title">この設計、どこかで見た形では?</div>
           <p>「実行結果を直接信じず、確定した通知(イベント)を待ってから重要な処理を行う」という考え方は、<a href="#ch11">11章のトランザクションとロールバック</a>で学んだ「セーブ→挑戦→失敗したら自動ロード」の安全設計と同じ精神です。お金が関わる島内取引では、この慎重さがとくに重要になります。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>reward_shop_device</code>を参考に、<b>revive_scroll_entitlement</b>(演習20で作成)が購入されたときに、
+          <code>item_granter_device</code>で蘇生スクロールを渡す<code>OnEntitlementChanged</code>を書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">OnEntitlementChanged(Agent : agent, Entitlement : subtype(entitlement)) : void =
+    if (Entitlement = revive_scroll_entitlement):
+        ScrollGranter.GrantItem(Agent)
+        Print("蘇生の巻物を購入いただきありがとうございます!")</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -1281,6 +1725,32 @@ grand_finale_device := class(creative_device):
           <p><code>enum&lt;open&gt;</code>と<code>case</code>による状態管理(中級9章)、<code>branch</code>と<code>race</code>による並行処理(8・6章)、<code>defer</code>によるリソース管理(10章)、Live Variablesによる状態表示(12章)、<code>?fort_character</code>を扱うOptional(中級2章)、そして今回新しく学んだScene GraphとIn-Island Transactions。<strong>このサイト1冊で学んだことのすべてが、1つの実際に動くミニゲームの中に自然に組み合わさっています。</strong>ぜひUEFNの新規プロジェクトに貼り付けて、実際に足場を渡り、ボタンを押し、ショップを開いてみてください。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>grand_finale_device</code>に、<b>クリア回数(var ClearCount : int)</b>を追加し、
+          <code>course_state.Cleared</code>になるたびにカウントアップして表示するように改造してみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 演習18で作った「TimeUpCount」と同じ考え方を、Clearedの方に応用します。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">var ClearCount : int = 0
+
+# case (State): の Cleared 分岐に追加する
+course_state.Cleared =>
+    set ClearCount += 1
+    set live StatusText = "クリア({ClearCount}回目)! ごほうびを渡します"
+    RewardGranter.GrantItem(Agent)
+    if (FortChar := Agent.GetFortCharacter[]):
+        if (FortChar.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 100.0}, IdentityRotation()]) {}</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 23 -->
@@ -1342,6 +1812,52 @@ o := class(entitlement_offer):
 ShowOffersDialog(Agent, array{o{}})
 GetEntitlementChangedEvent()
   .Subscribe(OnBought)</pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 最終チャレンジ問題</div>
+        <p class="exercise-q">
+          <b>①trigger_deviceを踏むと、②<code>&lt;transacts&gt;&lt;decides&gt;</code>な関数でスタミナを20消費し(0未満なら失敗)、
+          ③成功したら<code>creative_prop</code>をMoveToEaseでなめらかに1回だけ移動させる</b>という、ダッシュギミック
+          <code>dash_pad_device</code>を、この章までの知識だけで作ってみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: trigger_deviceのSubscribe(01章相当)、transacts&amp;decides(03章・11章)、MoveToEase(19章)を1つにまとめます。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse — dash_pad_device.verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">dash_pad_device := class(creative_device):
+    @editable
+    Pad : trigger_device = trigger_device{}
+    @editable
+    Platform : creative_prop = creative_prop{}
+
+    var Stamina : int = 100
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        Pad.TriggeredEvent.Subscribe(OnPadTriggered)
+
+    OnPadTriggered(MaybeAgent : ?agent) : void =
+        DoDash()
+
+    # ②スタミナ消費に失敗したら、何も動かさずに静かに終わる
+    ConsumeStamina()&lt;transacts&gt;&lt;decides&gt; : void =
+        set Stamina -= 20
+        Stamina &gt;= 0   # マイナスになったら失敗、自動で巻き戻る
+
+    DoDash()&lt;suspends&gt; : void =
+        if (ConsumeStamina[]):
+            # ③スタミナが足りていたときだけ、なめらかにダッシュ演出
+            Platform.MoveToEase(
+                vector3{X := 300.0, Y := 0.0, Z := 0.0}, IdentityRotation(),
+                vector3{X := 1.0, Y := 1.0, Z := 1.0}, 0.5,
+                move_to_ease_type.EaseOut, animation_mode.OneShot)
+        else:
+            Print("スタミナが足りません")</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
 

@@ -167,6 +167,23 @@ Print(Message)</code></pre>
           <p>「値を返す部品」をどんどん組み合わせられるので、コードがブロック遊びのように組み立てやすくなります。この考え方は中級・上級に進むほど威力を発揮します。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          上のコードを参考に、<b>Score</b>が<b>80以上なら"Sランク"、そうでなければ"Aランク"</b>を<b>Rank</b>という変数に入れて表示するコードを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Rank := if (Score &gt;= 80) then "Sランク" else "Aランク"
+Print(Rank)</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 03 -->
@@ -234,6 +251,24 @@ Print("所持コイン: {Coins}")  # → 325</code></pre>
         </div>
         <div class="quiz-explain">正解は<b>B</b>。「開かずのカプセル」は不変の値、「鍵つきロッカー」は<code>var</code>を使った可変の値でしたね。</div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Gems</b>という名前でint型の<b>可変</b>変数を作り、初期値<b>50</b>から<code>set</code>で<b>30</b>増やして、結果をPrintで表示してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">var Gems : int = 50
+set Gems += 30
+Print("{Gems}")   # → 80</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 04 -->
@@ -293,6 +328,29 @@ Ceil(Half)    # → 3 (切り上げ)</code></pre>
           <p><code>float</code>(小数)はコンピューターの中で「だいたい」の値になってしまうことがあります。ピザを3人で分けるときに「1/3切れ」を正確に持ちたい場合は、丸め誤差の出ない<code>rational</code>が活躍します。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Age</b>(int, 10)、<b>Height</b>(float, 140.5)、<b>IsStudent</b>(logic, true)の3つの変数を定義し、
+          それぞれPrintで表示してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Age : int = 10
+Height : float = 140.5
+IsStudent : logic = true
+
+Print("{Age}")
+Print("{Height}")
+Print("{IsStudent}")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 05 -->
@@ -331,6 +389,25 @@ Print("お金持ち判定: {IsRich}")</code></pre>
         <div class="callout-body">
           <div class="callout-title">豆知識: 文字列や配列も「+」でつなげられる</div>
           <p><code>"おはよう" + "ございます"</code>のように、<code>+</code>は文字列の連結にも使えます。電卓のボタンが、文房具のノリのように働くイメージです。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Price</b>(int, 800)という変数を作り、<b>10%引き</b>にした金額を<b>DiscountedPrice</b>に入れて表示してみましょう。
+          (<code>Price * 9 / 10</code>のように計算します)
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Price : int = 800
+DiscountedPrice := Price * 9 / 10
+Print("{DiscountedPrice}")   # → 720</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -388,6 +465,26 @@ Greet(Name : string) : string =
         </div>
         <div class="quiz-explain">正解は<b>B</b>。ミキサーに入れる果物が「引数(材料)」、出てくるジュースが「戻り値(結果)」でしたね。</div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          2つのint(<b>X</b>, <b>Y</b>)を受け取り、<b>大きい方の値</b>を返す関数<code>Bigger</code>を作ってみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: if式が「値になる」ことを思い出しましょう(02章)。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Bigger(X : int, Y : int) : int =
+    if (X &gt; Y) then X else Y
+
+Print(Bigger(3, 7))   # → 7</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 07 -->
@@ -428,6 +525,27 @@ if (Age >= 6, Age &lt; 12):
         <div class="callout-body">
           <div class="callout-title">先取り予告</div>
           <p>実はVerseの<code>if</code>は、単なる条件分岐以上のことができる、とても奥深い仕組みです。「条件」の部分に入れられるのは<code>true/false</code>だけではありません。詳しくは<a href="intermediate.html#ch01">中級編・第1章「失敗という考え方」</a>で解説します。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Temperature</b>(int)が<b>30以上なら"暑い"、そうでなければ"過ごしやすい"</b>とPrintするコードを書いてみましょう。Temperatureは35にしてください。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Temperature : int = 35
+
+if (Temperature &gt;= 30):
+    Print("暑い")
+else:
+    Print("過ごしやすい")</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -473,6 +591,26 @@ loop:
           <p><code>loop</code>は<code>break</code>で止めるのを忘れると「永遠に終わらない縄跳び」になってしまいます。<code>loop</code>を書いたら、必ずどこかに終わる条件(<code>break</code>)があるか確認しましょう。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>array{"りんご", "ばなな", "みかん"}</code>という配列を作り、<code>for</code>を使って
+          「<b>果物: 〇〇</b>」という形式で1つずつPrintしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Fruits := array{"りんご", "ばなな", "みかん"}
+
+for (Fruit : Fruits):
+    Print("果物: {Fruit}")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 09 -->
@@ -516,6 +654,28 @@ Print(Scores["たろう"])       # → 90</code></pre>
           </tbody>
         </table>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>"たろう" => 90</b>のマップに、あなた自身で<b>"はなこ" => 85</b>と<b>"けんじ" => 78</b>も加えた3人分の<code>Scores</code>マップを作り、
+          <b>"けんじ"</b>の点数だけをPrintしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Scores : [string]int = map{
+    "たろう" => 90,
+    "はなこ" => 85,
+    "けんじ" => 78
+}
+Print(Scores["けんじ"])   # → 78</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 10 -->
@@ -545,6 +705,27 @@ Score : int = 95
 # { } の中に変数名を書くだけで自動的に埋め込まれる
 Message := "{PlayerName}さんのスコアは{Score}点です!"
 Print(Message)  # → ゆうたさんのスコアは95点です!</code></pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>ShopName</b>(string, "verseショップ")と<b>ItemCount</b>(int, 12)を使い、
+          「<b>ようこそ、verseショップです。現在12個の商品があります。</b>」という文章を文字列補間で組み立ててみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">ShopName : string = "verseショップ"
+ItemCount : int = 12
+
+Message := "ようこそ、{ShopName}です。現在{ItemCount}個の商品があります。"
+Print(Message)</code></pre>
+            </div>
+          </div></div>
+        </div>
       </div>
     </section>
 
@@ -650,6 +831,35 @@ my_first_device := class(creative_device):
           <p><strong>①@editableでデバイスを受け取る → ②OnBeginで.Subscribe(処理する関数)を登録する → ③関数の中に実際の処理を書く</strong>。この3ステップは、この先どんなデバイスを使っても変わらない「お決まりの型」です。中級編・上級編では、この型に乗せてアイテム付与やテレポート、プロップ(物体)を動かす処理を追加していきます。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          この章のボタンのコードを参考に、<b>CountButton</b>というボタンを押すたびに、可変変数<b>PressCount</b>を1ずつ増やして
+          「<b>ボタンは〇〇回押されました</b>」と表示する<code>counter_device</code>を作ってみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 03章の<code>var</code>と<code>set</code>を組み合わせます。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">counter_device := class(creative_device):
+    @editable
+    CountButton : button_device = button_device{}
+
+    var PressCount : int = 0
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        CountButton.InteractedWithEvent.Subscribe(OnPressed)
+
+    OnPressed(Agent : agent) : void =
+        set PressCount += 1
+        Print("ボタンは{PressCount}回押されました")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 12 -->
@@ -688,6 +898,31 @@ else:
   OnBegin&lt;override&gt;()&lt;suspends&gt;:void=
     B.InteractedWithEvent.Subscribe(F)
   F(A:agent):void = Print("押された")</pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 総合チャレンジ問題</div>
+        <p class="exercise-q">
+          配列<code>Names := array{"ゆうた", "みお", "けん"}</code>を<code>for</code>でくり返し、
+          それぞれの名前に対して「<b>〇〇さん、こんにちは!</b>」というメッセージを作って返す関数<code>GreetAll</code>を作り、
+          結果を1件ずつPrintしてみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 06章の関数、08章のfor、10章の文字列補間をすべて組み合わせます。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Names := array{"ゆうた", "みお", "けん"}
+
+GreetAll(Name : string) : string =
+    "{Name}さん、こんにちは!"
+
+for (Name : Names):
+    Print(GreetAll(Name))</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
 

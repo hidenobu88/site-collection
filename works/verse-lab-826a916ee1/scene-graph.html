@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>シーングラフ特別編 | Verse Lab — ゼロからわかるVerse言語</title>
+<meta name="description" content="UEFNのScene Graphを、たとえ話でゼロから。TeleportTo・MoveToEase・キーフレームアニメーションまで、単独ページで一直線に学べる特別編。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d0f17'/><text x='50' y='66' font-size='54' text-anchor='middle' fill='%233FD9EA' font-family='monospace' font-weight='bold'>V</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>.chapter{--accent-lv:var(--cyan);}</style>
+</head>
+<body class="has-toc">
+
+<div class="progress-bar"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">V</span>
+      <span>Verse Lab<span class="brand-sub">やさしいVerse言語学習サイト(非公開)</span></span>
+    </a>
+    <nav class="level-nav">
+      <a class="level-chip" data-lv="top" href="index.html">🏠 トップ</a>
+      <a class="level-chip" data-lv="beginner" href="beginner.html">🌱 初級</a>
+      <a class="level-chip" data-lv="intermediate" href="intermediate.html">⚙️ 中級</a>
+      <a class="level-chip" data-lv="advanced" href="advanced.html">🚀 上級</a>
+    </nav>
+    <button class="menu-btn" aria-label="目次を開く"><span></span></button>
+  </div>
+</header>
+
+<div class="toc-overlay"></div>
+
+<div class="page-layout">
+  <aside class="toc-col">
+    <div class="toc-card">
+      <div class="toc-title">🎬 シーングラフ特別編 目次</div>
+      <nav class="toc-list">
+        <a href="#ch01">01. シーングラフってなに?</a>
+        <a href="#ch02">02. 瞬間移動させる(TeleportTo)</a>
+        <a href="#ch03">03. なめらかに動かす(MoveToEase)</a>
+        <a href="#ch04">04. 現在地を記録して呼び戻す</a>
+        <a href="#ch05">05. 応用: 複数地点を自動巡回する</a>
+        <a href="#ch06">06. まとめ & 演習チャレンジ</a>
+      </nav>
+      <div class="toc-progress">
+        <div class="toc-progress-label">読了率 <span class="toc-progress-pct">0%</span></div>
+        <div class="toc-progress-track"><div class="toc-progress-fill"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content-col">
+    <div class="page-hero">
+      <span class="level-badge intermediate">🎬 特別編 · 単独で学べる</span>
+      <h1>操り人形を操るように、<br>UEFNのプロップを自在に動かそう。</h1>
+      <p class="lead">
+        このページは、上級編の中身から「Scene Graph(シーングラフ)」だけを取り出した単独コースです。
+        <strong>初級編を読み終えていれば</strong>、中級・上級を先に読んでいなくてもゼロから理解できるように書いています。
+        ボタンやトリガーの基本(<a href="beginner.html#ch11">初級編・第11章</a>)がまだの方は、先にそちらをサッと読んでおくとより分かりやすくなります。
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">🕐 読了目安 <b>20分</b></div>
+        <div class="hero-stat">📖 全<b>6</b>章</div>
+        <div class="hero-stat">📝 演習 <b>5</b>問</div>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <section class="chapter" id="ch01">
+      <div class="chapter-eyebrow"><span class="chapter-num">01</span><span class="chapter-diff">やさしい</span></div>
+      <h2>シーングラフってなに?</h2>
+      <p>
+        UEFNでワールドに置く箱・扉・浮島などの物体を「<strong>Prop(プロップ)</strong>」と呼びます。Verseコードから
+        このプロップを制御する仕組み全体を、UEFNでは「<strong>Scene Graph(シーングラフ)</strong>」と呼びます。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる Scene Graph</div>
+        <p>
+          <code>creative_prop</code>は、糸で吊るされた<strong>操り人形(マリオネット)</strong>です。あなたが書くVerseコードは、
+          その糸を握る操者。「瞬間移動」は糸をパッと持ち上げてワープさせるイメージ、「なめらかな移動」は糸をゆっくり
+          一定のリズムで引っ張って優雅に歩かせるイメージです。
+        </p>
+      </div>
+
+      <p>プロップをVerseから動かすには、まずいつもの「配線係」を1枚用意します。</p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Creative }
+using { /Verse.org/Simulation }
+
+my_scene_device := class(creative_device):
+    # UEFNの詳細パネルで、動かしたいプロップをここに割り当てる
+    @editable
+    Box : creative_prop = creative_prop{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        Print("プロップの準備ができました")</code></pre>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">🔌</div>
+        <div class="callout-body">
+          <div class="callout-title">creative_deviceが初めての方へ</div>
+          <p><code>class(creative_device)</code>を継承した「配線係」に<code>@editable</code>でパーツを割り当て、<code>OnBegin</code>で処理を書く型は、ボタンやトリガーのときと完全に同じパターンです。詳しくは<a href="beginner.html#ch11">初級編・第11章</a>を参照してください。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="chapter" id="ch02">
+      <div class="chapter-eyebrow"><span class="chapter-num">02</span><span class="chapter-diff">やさしい</span></div>
+      <h2>瞬間移動させる(TeleportTo)</h2>
+      <p>
+        いちばんシンプルな動かし方は、<code>TeleportTo</code>です。指定した座標に、パッと一瞬でワープさせます。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — blink_prop_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Fortnite.com/Devices }
+using { /Fortnite.com/Creative }
+using { /Verse.org/Simulation }
+
+blink_prop_device := class(creative_device):
+    @editable
+    Box : creative_prop = creative_prop{}
+    @editable
+    ToggleButton : button_device = button_device{}
+
+    var IsAtPointB : logic = false
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ToggleButton.InteractedWithEvent.Subscribe(OnToggle)
+
+    OnToggle(Agent : agent) : void =
+        if (IsAtPointB?):
+            Box.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 0.0}, IdentityRotation()]
+        else:
+            Box.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 400.0}, IdentityRotation()]
+        set IsAtPointB = not IsAtPointB?</code></pre>
+      </div>
+
+      <p>
+        ボタンを押すたびに、プロップが2つの地点をパッパッと切り替わりながら移動します。<code>TeleportTo</code>は座標(<code>vector3</code>)と
+        向き(<code>rotation</code>)の2つだけを受け取る、いちばんシンプルな移動命令です。
+      </p>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題 01</div>
+        <p class="exercise-q">
+          上のコードを参考に、<b>Z := 400.0</b>の代わりに<b>X := 600.0</b>方向(横)にワープする<code>side_blink_device</code>を作ってみましょう。
+          ボタンを押すたびに、原点と横に600離れた地点を行き来するようにしてください。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">side_blink_device := class(creative_device):
+    @editable
+    Box : creative_prop = creative_prop{}
+    @editable
+    ToggleButton : button_device = button_device{}
+
+    var IsAtSide : logic = false
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        ToggleButton.InteractedWithEvent.Subscribe(OnToggle)
+
+    OnToggle(Agent : agent) : void =
+        if (IsAtSide?):
+            Box.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 0.0}, IdentityRotation()]
+        else:
+            Box.TeleportTo[vector3{X := 600.0, Y := 0.0, Z := 0.0}, IdentityRotation()]
+        set IsAtSide = not IsAtSide?</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="chapter" id="ch03">
+      <div class="chapter-eyebrow"><span class="chapter-num">03</span><span class="chapter-diff">ふつう</span></div>
+      <h2>なめらかに動かす(MoveToEase)</h2>
+      <p>
+        瞬間移動ではなく、時間をかけてなめらかに動かしたいときは<code>MoveToEase</code>を使います。
+        移動時間や速度変化(イージング)、そして「到着後どうするか」まで指定できる、より高機能な移動命令です。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — floating_platform_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">floating_platform_device := class(creative_device):
+    @editable
+    Platform : creative_prop = creative_prop{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        Platform.MoveToEase(
+            vector3{X := 0.0, Y := 0.0, Z := 400.0}, IdentityRotation(),
+            vector3{X := 1.0, Y := 1.0, Z := 1.0},
+            3.0,                          # 3秒かけて移動
+            move_to_ease_type.EaseInOut,  # ゆっくり加速→ゆっくり減速
+            animation_mode.PingPong)      # 到着したら自動で逆再生、を延々くり返す</code></pre>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>引数</th><th>役割</th></tr></thead>
+          <tbody>
+            <tr><td>Position / Rotation</td><td>どこへ、どの向きで到着するか</td></tr>
+            <tr><td>Scale</td><td>到着時の大きさ(拡大縮小もできる)</td></tr>
+            <tr><td>Duration</td><td>移動にかける秒数</td></tr>
+            <tr><td>EaseType</td><td>速度変化のクセ(<code>Linear</code> / <code>EaseIn</code> / <code>EaseOut</code> / <code>EaseInOut</code>など)</td></tr>
+            <tr><td>AnimationMode</td><td>到着後の挙動(<code>OneShot</code>=1回だけ、<code>PingPong</code>=往復、<code>Loop</code>=同じ動きをくり返す)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題 02</div>
+        <p class="exercise-q">
+          <code>animation_mode.PingPong</code>を<b><code>animation_mode.OneShot</code></b>に変え、移動時間を<b>1.5秒</b>、
+          イージングを<b><code>move_to_ease_type.EaseOut</code></b>に変更した、1回だけ動くエレベーターのコードを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">elevator_device := class(creative_device):
+    @editable
+    Platform : creative_prop = creative_prop{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        Platform.MoveToEase(
+            vector3{X := 0.0, Y := 0.0, Z := 400.0}, IdentityRotation(),
+            vector3{X := 1.0, Y := 1.0, Z := 1.0},
+            1.5,
+            move_to_ease_type.EaseOut,
+            animation_mode.OneShot)</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="chapter" id="ch04">
+      <div class="chapter-eyebrow"><span class="chapter-num">04</span><span class="chapter-diff">ふつう</span></div>
+      <h2>現在地を記録して呼び戻す</h2>
+      <p>
+        チェックポイントやリセット機能でよく使うのが、「今の姿勢(位置・回転)をまるごと記録しておき、あとで正確にそこへ戻す」パターンです。
+      </p>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">checkpoint_prop_device := class(creative_device):
+    @editable
+    Door : creative_prop = creative_prop{}
+    @editable
+    ResetButton : button_device = button_device{}
+
+    var SavedTransform : transform = transform{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        # 今の姿勢をまるごと記録しておく
+        set SavedTransform = Door.GetGlobalTransform()
+        ResetButton.InteractedWithEvent.Subscribe(OnReset)
+
+    OnReset(Agent : agent) : void =
+        # 記録しておいた姿勢に、ワンコマンドで正確に戻す
+        Door.SetGlobalTransform(SavedTransform)</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">💾</div>
+        <div class="callout-body">
+          <div class="callout-title">セーブ&ロードのミニ版</div>
+          <p>「今の状態をまるごと記録して、あとで復元する」という考え方は、<a href="advanced.html#ch11">上級編・第11章のトランザクション</a>で学ぶ「セーブ→挑戦→失敗したら自動ロード」の発想とよく似ています。UEFNのゲームでは、この小さな記録&復元パターンがいたるところで活躍します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section class="chapter" id="ch05">
+      <div class="chapter-eyebrow"><span class="chapter-num">05</span><span class="chapter-diff">応用</span></div>
+      <h2>応用: 複数の経由地点を自動巡回する</h2>
+      <p>
+        2点間の往復を超えて、3か所以上をぐるぐる巡回させたいときは<code>keyframed_movement_component</code>を使います。
+      </p>
+
+      <div class="analogy">
+        <div class="analogy-label">たとえ話でわかる キーフレームアニメーション</div>
+        <p>
+          パラパラ漫画(紙芝居)を思い出してください。1枚1枚の絵を「キーフレーム」として順番に並べておけば、
+          めくるスピードを調整するだけで複雑な動きも滑らかに再生できます。<code>keyframed_movement_component</code>は、
+          この「紙芝居めくり係」です。
+        </p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-block-title"><span class="code-dots"><span></span><span></span><span></span></span>verse — patrol_platform_device.verse</div>
+          <button class="copy-btn">📋 コピー</button>
+        </div>
+        <pre><code class="language-verse">using { /Verse.org/SceneGraph/KeyframedMovement }
+
+patrol_platform_device := class(creative_device):
+    # UEFNの詳細パネルで、プロップに追加した「Keyframed Movement」コンポーネントを割り当てる
+    @editable
+    Movement : keyframed_movement_component = keyframed_movement_component{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        Keyframes : []keyframed_movement_delta = array{
+            keyframed_movement_delta{                                     # 停留所1
+                Transform := transform{Translation := vector3{X := 0.0, Y := 0.0, Z := 0.0}},
+                Duration := 2.0, Easing := move_to_ease_type.EaseInOut
+            },
+            keyframed_movement_delta{                                     # 停留所2
+                Transform := transform{Translation := vector3{X := 500.0, Y := 0.0, Z := 300.0}},
+                Duration := 2.5, Easing := move_to_ease_type.EaseInOut
+            },
+            keyframed_movement_delta{                                     # 停留所3
+                Transform := transform{Translation := vector3{X := 500.0, Y := 500.0, Z := 300.0}},
+                Duration := 2.5, Easing := move_to_ease_type.EaseInOut
+            }
+        }
+        Movement.SetKeyframes(Keyframes)
+        Movement.Play()   # 停留所1→2→3の順に、自動でなめらかに巡回する</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">🛠️</div>
+        <div class="callout-body">
+          <div class="callout-title">この分野はアップデートが速い</div>
+          <p>Scene Graph関連のAPIはUEFNの中でも比較的新しく、細かいプロパティ名やコンポーネントの取得方法がバージョンごとに調整されることがあります。骨組みの考え方(キーフレーム配列を作って<code>SetKeyframes</code>→<code>Play</code>)は変わりませんが、実際にUEFNで書くときはVerseエディタのオートコンプリート(Ctrl+Space)で最新の候補を確認する習慣をつけましょう。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題 03</div>
+        <p class="exercise-q">
+          停留所を<b>4か所目(X:=0.0, Y:=500.0, Z:=300.0、Duration:=2.0)</b>まで増やし、四角形をぐるっと1周するルートにしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Keyframes : []keyframed_movement_delta = array{
+    keyframed_movement_delta{
+        Transform := transform{Translation := vector3{X := 0.0, Y := 0.0, Z := 0.0}},
+        Duration := 2.0, Easing := move_to_ease_type.EaseInOut
+    },
+    keyframed_movement_delta{
+        Transform := transform{Translation := vector3{X := 500.0, Y := 0.0, Z := 300.0}},
+        Duration := 2.5, Easing := move_to_ease_type.EaseInOut
+    },
+    keyframed_movement_delta{
+        Transform := transform{Translation := vector3{X := 500.0, Y := 500.0, Z := 300.0}},
+        Duration := 2.5, Easing := move_to_ease_type.EaseInOut
+    },
+    keyframed_movement_delta{                                        # 追加した4つ目の停留所
+        Transform := transform{Translation := vector3{X := 0.0, Y := 500.0, Z := 300.0}},
+        Duration := 2.0, Easing := move_to_ease_type.EaseInOut
+    }
+}
+Movement.SetKeyframes(Keyframes)
+Movement.Play()</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section class="chapter" id="ch06">
+      <div class="chapter-eyebrow"><span class="chapter-num">06</span><span class="chapter-diff">まとめ</span></div>
+      <h2>まとめ & 演習チャレンジ</h2>
+      <p>Scene Graph特別編は以上です。最後に総まとめとして、少し難しいチャレンジ問題に挑戦してみましょう。</p>
+
+      <div class="cheat-grid">
+        <div class="cheat-card">
+          <h5># 瞬間移動</h5>
+          <pre>Prop.TeleportTo[Pos, Rot]</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># なめらか移動</h5>
+          <pre>Prop.MoveToEase(Pos,Rot,Scale,
+  Duration, EaseType, AnimMode)</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 記録&復元</h5>
+          <pre>T := Prop.GetGlobalTransform()
+Prop.SetGlobalTransform(T)</pre>
+        </div>
+        <div class="cheat-card">
+          <h5># 自動巡回</h5>
+          <pre>Movement.SetKeyframes(Frames)
+Movement.Play()</pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 総合チャレンジ問題</div>
+        <p class="exercise-q">
+          ボタンを押すと、プロップが<b>「①現在地を記録 → ②MoveToEaseで3秒かけて上空へ移動 → ③もう一度ボタンを押すと元の位置へ戻る」</b>
+          という一連の動きをする<code>lift_device</code>を、これまでの章の知識を組み合わせて作ってみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 02章の「押すたびに切り替わるトグル」と、04章の「記録して呼び戻す」を組み合わせます。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse — lift_device.verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">lift_device := class(creative_device):
+    @editable
+    Lift : creative_prop = creative_prop{}
+    @editable
+    CallButton : button_device = button_device{}
+
+    var GroundTransform : transform = transform{}
+    var IsUp : logic = false
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        set GroundTransform = Lift.GetGlobalTransform()   # ①現在地を記録
+        CallButton.InteractedWithEvent.Subscribe(OnCall)
+
+    OnCall(Agent : agent) : void =
+        if (IsUp?):
+            # ③元の位置へなめらかに戻る
+            Lift.MoveToEase(
+                GroundTransform.Translation, GroundTransform.Rotation,
+                vector3{X := 1.0, Y := 1.0, Z := 1.0}, 3.0,
+                move_to_ease_type.EaseInOut, animation_mode.OneShot)
+        else:
+            # ②上空へなめらかに移動
+            UpPosition := GroundTransform.Translation + vector3{X := 0.0, Y := 0.0, Z := 500.0}
+            Lift.MoveToEase(
+                UpPosition, GroundTransform.Rotation,
+                vector3{X := 1.0, Y := 1.0, Z := 1.0}, 3.0,
+                move_to_ease_type.EaseInOut, animation_mode.OneShot)
+        set IsUp = not IsUp?</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🎉</div>
+        <div class="callout-body">
+          <div class="callout-title">お疲れさまでした!</div>
+          <p>これでScene Graphの基礎から応用までを一直線に学び終えました。もっと深く学びたい方は、並行処理やLive Variablesと組み合わせた実践例が載っている<a href="advanced.html#ch19">上級編・第19章</a>や、島内取引と組み合わせた<a href="advanced.html#ch22">集大成ミニゲーム(第22章)</a>もぜひ読んでみてください。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="chapter-pagenav">
+      <a href="index.html" class="pagenav-link">
+        <div class="pagenav-dir">← BACK</div>
+        <div class="pagenav-title">トップページへ戻る</div>
+      </a>
+      <a href="island-trading.html" class="pagenav-link next">
+        <div class="pagenav-dir">NEXT →</div>
+        <div class="pagenav-title">特別編: 島内取引を学ぶ</div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>内容はEpic Games公式「Book of Verse」およびUEFN公式ドキュメントを参考に、わかりやすく再構成したものです。</p>
+  <span class="footer-badge">Verse Lab · Personal Study Notes</span>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

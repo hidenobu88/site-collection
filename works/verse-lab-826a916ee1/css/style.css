@@ -389,6 +389,25 @@ tbody td code{white-space:nowrap;}
 .quiz-explain.is-visible{display:block;}
 .quiz-explain b{color:#fff;}
 
+/* ---------- 演習問題(exercise) ---------- */
+.exercise{
+  border-radius:var(--radius-lg);padding:20px 22px 22px;margin:22px 0 28px;
+  background:linear-gradient(155deg, rgba(74,222,128,0.09), rgba(74,222,128,0.02));
+  border:1px solid rgba(74,222,128,0.32);
+}
+.exercise-tag{
+  display:flex;align-items:center;gap:7px;
+  font-size:.72rem;font-weight:900;color:var(--green);
+  letter-spacing:.05em;margin-bottom:10px;text-transform:uppercase;
+}
+.exercise-q{font-weight:700;color:#fff;margin-bottom:6px;font-size:.95rem;line-height:1.8;}
+.exercise-q b{color:var(--green);}
+.exercise-hint{font-size:.85rem;color:var(--text-dim);margin-bottom:4px;}
+.exercise .disclosure{margin:14px 0 0;border-color:rgba(74,222,128,0.28);background:var(--bg-elevated);}
+.exercise .disclosure-btn{color:var(--green);}
+.exercise .disclosure-btn .d-icon{color:var(--green);}
+.exercise .code-block{margin:12px 0 0;}
+
 /* ---------- 折りたたみ(もっと詳しく) ---------- */
 .disclosure{
   border:1px solid var(--border);border-radius:var(--radius);margin:18px 0;overflow:hidden;
@@ -466,6 +485,7 @@ tbody td code{white-space:nowrap;}
   .analogy::before{left:12px;top:16px;}
   .code-block pre{padding:14px;font-size:.8rem;}
   .quiz{padding:18px 16px;}
+  .exercise{padding:16px 14px 18px;}
   .cheat-grid{grid-template-columns:1fr;}
   .level-chip{padding:7px 10px;font-size:.74rem;gap:0;}
   .level-nav{gap:4px;}
@@ -526,10 +546,37 @@ tbody td code{white-space:nowrap;}
   display:flex;align-items:center;gap:6px;
 }
 
-.feature-strip{max-width:1100px;margin:70px auto 0;padding:0 20px;}
-.feature-strip h2{text-align:center;font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:8px;}
-.feature-strip .sub{text-align:center;color:var(--text-dim);margin-bottom:32px;font-size:.95rem;}
-.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+/* ---------- クイックスタート(島内取引・シーングラフ) ---------- */
+.quickstart{max-width:1100px;margin:64px auto 0;padding:0 20px;}
+.quickstart h2{text-align:center;font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:8px;}
+.quickstart .sub{text-align:center;color:var(--text-dim);margin-bottom:32px;font-size:.95rem;}
+.quickstart-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+@media (max-width:760px){.quickstart-grid{grid-template-columns:1fr;}}
+.quickstart-card{
+  position:relative;overflow:hidden;border-radius:var(--radius-lg);
+  padding:30px 28px;border:1px solid var(--border-strong);
+  background:var(--bg-card);display:flex;flex-direction:column;gap:12px;
+  transition:all .2s ease;text-decoration:none;
+}
+.quickstart-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--border-strong);}
+.quickstart-card::before{content:"";position:absolute;inset:0;opacity:.6;pointer-events:none;}
+.quickstart-card.island::before{background:radial-gradient(520px 320px at 100% 0%, rgba(255,180,84,0.16), transparent 60%);}
+.quickstart-card.scene::before{background:radial-gradient(520px 320px at 100% 0%, rgba(63,217,234,0.16), transparent 60%);}
+.quickstart-icon{font-size:2.3rem;position:relative;z-index:1;}
+.quickstart-card h3{font-size:1.28rem;position:relative;z-index:1;}
+.quickstart-badge{
+  position:relative;z-index:1;display:inline-flex;align-self:flex-start;
+  font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:999px;
+  border:1px solid var(--border-strong);color:var(--text-dim);
+}
+.quickstart-desc{position:relative;z-index:1;color:var(--text-dim);font-size:.92rem;line-height:1.8;}
+.quickstart-topics{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+.quickstart-cta{
+  position:relative;z-index:1;margin-top:8px;font-weight:800;font-size:.94rem;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.quickstart-card.island .quickstart-cta{color:var(--orange);}
+.quickstart-card.scene .quickstart-cta{color:var(--cyan);}
 
 .private-note{
   max-width:900px;margin:60px auto 0;padding:18px 22px;border-radius:var(--radius);

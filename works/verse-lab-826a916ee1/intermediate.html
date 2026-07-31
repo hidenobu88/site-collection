@@ -162,6 +162,25 @@ else:
           <p>比較演算子は、この「決定コンテキスト」の中では「左の値を返すか、失敗するか」という2択の道具として働きます。エフェクトについては<a href="advanced.html#ch01">上級編・第1章</a>でさらに詳しく扱います。</p>
         </div></div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>&lt;decides&gt;</code>を使い、受け取ったintが<b>偶数のときだけ成功してその値を返す</b>関数<code>ValidateEven</code>を書いてみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 「Xを2で割った余りが0」は<code>Mod(X, 2) = 0</code>で判定できます。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">ValidateEven(X : int)&lt;decides&gt; : int =
+    Mod(X, 2) = 0    # 割り切れないとここで失敗
+    X                 # 成功したらXを返す</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 02 -->
@@ -217,6 +236,28 @@ Result := option{RiskyComputation[]}</code></pre>
         </div>
         <div class="quiz-explain">正解は<b>B</b>。<code>?</code>は「クエリ演算子」と呼ばれ、Optionalな福袋を開けて中身を取り出す(あるいは失敗する)操作に使います。</div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>?string</b>型の<b>Nickname</b>という変数を、中身入りの福袋(<code>option{"にゃんこ"}</code>)として作り、
+          <code>if</code>で開けて中身があれば「ニックネーム: 〇〇」、なければ「ニックネーム未設定」と表示してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Nickname : ?string = option{"にゃんこ"}
+
+if (Name := Nickname?):
+    Print("ニックネーム: {Name}")
+else:
+    Print("ニックネーム未設定")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 03 -->
@@ -253,6 +294,28 @@ else:
         すごいのは、2つ目のハードル(<code>GetPlayerScore[Player]</code>)が、1つ目のハードルで手に入れた<code>Player</code>という結果を
         そのまま使えるところです。ひとつの流れるような文章のように「検索して → その結果を使って検索して → その結果を判定する」と書けます。
       </p>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          マップ<code>Inventory : [string]int = map{"薬草" =&gt; 3}</code>から<b>"薬草"</b>の個数を取り出し、
+          <b>1個より多く持っていたら</b>「使える! 残りX個」と表示する<code>if</code>チェーンを書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Inventory : [string]int = map{"薬草" =&gt; 3}
+
+if (Count := Inventory["薬草"], Count &gt; 1):
+    Print("使える! 残り{Count}個")
+else:
+    Print("足りません")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 04 -->
@@ -289,6 +352,28 @@ for (ItemName : Inventory, IsWeapon[ItemName], Damage := GetDamage[ItemName], Da
         <div class="callout-body">
           <div class="callout-title">for は実は「値を作る式」でもある</div>
           <p><code>for</code>の結果を変数に代入すると、条件を通過した要素だけを集めた新しい配列が返ってきます。これは初級編の「すべては式」という考え方が、ここでも活きている良い例です。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>Scores := array{45, 82, 90, 58, 76}</code>から、<b>60点以上のスコアだけ</b>を集めた新しい配列を
+          <code>for</code>で作り、<b>PassingScores</b>という変数に入れて表示してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Scores := array{45, 82, 90, 58, 76}
+
+PassingScores := for (S : Scores, S &gt;= 60):
+    S
+
+Print("{PassingScores}")   # → (82, 90, 76)</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -331,6 +416,26 @@ FindPath(Start : location, End : location)&lt;decides&gt; : path =
             <tr><td><code>not</code></td><td>「不合格ではない」への言い換え</td><td>成功⇔失敗をひっくり返す</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>?string</code>型の<b>FavoriteColor</b>(中身なし、<code>false</code>)を用意し、<b>色が設定されていればそれを、
+          なければ"白"をデフォルトとして使う</b><code>DisplayColor</code>を<code>or</code>で作ってみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">FavoriteColor : ?string = false
+
+DisplayColor := FavoriteColor? or "白"
+Print("{DisplayColor}")   # → 白</code></pre>
+            </div>
+          </div></div>
+        </div>
       </div>
     </section>
 
@@ -390,6 +495,29 @@ Print(Original.Level)                     # → 5 (Originalは変化しない!)<
 IntWrapped    := wrapper(int){Value := 42}
 StringWrapped := wrapper(string){Value := "こんにちは"}</code></pre>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Name</b>(string)・<b>X</b>(float)・<b>Y</b>(float)を持つ<code>point</code>という構造体を定義し、
+          <code>point{Name := "スタート地点", X := 0.0, Y := 0.0}</code>を作ってフィールドを1つずつPrintしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">point := struct:
+    Name : string = ""
+    X : float = 0.0
+    Y : float = 0.0
+
+Start := point{Name := "スタート地点", X := 0.0, Y := 0.0}
+Print("{Start.Name}: ({Start.X}, {Start.Y})")</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 07 -->
@@ -436,6 +564,31 @@ DescribeWeapon(W : weapon_type) : string =
         <div class="callout-body">
           <div class="callout-title">型と値を混同しない</div>
           <p><code>weapon_type</code>自体は「型」で、<code>weapon_type.Sword</code>が実際の「値」です。「箱の設計図」と「箱の中身」くらい別物、と覚えておきましょう。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          将来増える可能性を考えて<code>enum&lt;open&gt;</code>で<b>potion_type</b>(<b>Health</b>, <b>Mana</b>)を定義し、
+          <code>case</code>式で「Health→体力回復」「Mana→魔力回復」「それ以外→未知のポーション」と説明する関数を書いてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">potion_type := enum&lt;open&gt;:
+    Health
+    Mana
+
+DescribePotion(P : potion_type) : string =
+    case (P):
+        potion_type.Health => "体力回復"
+        potion_type.Mana   => "魔力回復"
+        _                    => "未知のポーション"</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -510,6 +663,32 @@ derived := class(base):
         </div>
         <div class="quiz-explain">正解は<b>B</b>。クラスは「参照セマンティクス」なので、コピーしても中身は共有されたままです。これが構造体との一番の違いでしたね。</div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Name</b>(string)と可変の<b>Level</b>(int, 初期値1)を持つ<code>hero</code>クラスを作り、
+          <b>LevelUp()</b>というメソッドで<code>Level</code>を1増やせるようにしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">hero := class:
+    Name : string
+    var Level : int = 1
+
+    LevelUp() : void =
+        set Level += 1
+
+MyHero := hero{Name := "ゆうた"}
+MyHero.LevelUp()
+Print("{MyHero.Name} Lv.{MyHero.Level}")   # → ゆうた Lv.2</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 09 -->
@@ -565,6 +744,31 @@ barrel := class(damageable):
           <p>2つのインターフェースに同じ名前のメソッドがあるときは、<code>(インターフェース名:)メソッド名</code>のように「どちらの規格の話か」をはっきり書いて区別します。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Interact()</b>というメソッドを持つ<code>interactable</code>インターフェースを定義し、
+          それを実装した<code>chest</code>クラス(Interact()で「宝箱を開けた!」とPrint)を作ってみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">interactable := interface:
+    Interact() : void
+
+chest := class(interactable):
+    Interact&lt;override&gt;() : void =
+        Print("宝箱を開けた!")
+
+MyChest := chest{}
+MyChest.Interact()</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 10 -->
@@ -591,6 +795,31 @@ barrel := class(damageable):
         <div class="callout-body">
           <div class="callout-title">選び方の目安</div>
           <p>「これは2つあったら"別物"として扱いたい(例: 2人のプレイヤー)」なら<strong>class</strong>。「これは中身が同じなら"同じ値"として扱いたい(例: 同じ座標(3,4))」なら<strong>struct</strong>、と考えるとスムーズです。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          「敵1体1体を管理するenemy」と「HPバーの色(RGB値)を表すrgb_color」、それぞれstructとclassのどちらで作るべきか考え、
+          <b>enemy</b>はclass、<b>rgb_color</b>はstructとして、それぞれ最小限のフィールドで定義してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse"># 「同一性」が大事な敵キャラは class
+enemy := class:
+    var HP : int = 50
+
+# 「同じ値なら同じもの」でいい色は struct
+rgb_color := struct:
+    R : int = 255
+    G : int = 0
+    B : int = 0</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -622,6 +851,28 @@ Log("起動しました")                       # デフォルトのまま
 Log("警告です", ?Level := 2)              # Levelだけカスタム(チーズ増しのように)
 Log("危険!", ?Level := 3, ?Color := "red") # 複数項目カスタム</code></pre>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <b>Name</b>(必須の引数)と、名前付き引数<b>?Greeting</b>(デフォルト"こんにちは")を受け取り、
+          「{Greeting}、{Name}さん!」を返す<code>Welcome</code>関数を作り、デフォルトのままの呼び出しと、
+          <b>?Greeting := "おかえりなさい"</b>を指定した呼び出しの両方を試してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Welcome(Name : string, ?Greeting : string = "こんにちは") : string =
+    "{Greeting}、{Name}さん!"
+
+Print(Welcome("ゆうた"))                                # → こんにちは、ゆうたさん!
+Print(Welcome("みお", ?Greeting := "おかえりなさい"))    # → おかえりなさい、みおさん!</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 12 -->
@@ -650,6 +901,25 @@ Log("危険!", ?Level := 3, ?Color := "red") # 複数項目カスタム</code></
 
 X := 5
 Y := X.Double()          # → 10 (まるで元から備わっていた機能のように呼べる)</code></pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>string</code>型に、「<b>!!!</b>」を3つ末尾につけて強調する<code>Shout()</code>という拡張メソッドを追加し、
+          <code>"やったね".Shout()</code>を呼び出してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">(S : string).Shout() : string = S + "!!!"
+
+Print("やったね".Shout())   # → やったね!!!</code></pre>
+            </div>
+          </div></div>
+        </div>
       </div>
     </section>
 
@@ -690,6 +960,28 @@ Process(Value : float)  : string = "小数です: {Value}"</code></pre>
         <div class="callout-body">
           <div class="callout-title">where句で条件をつける</div>
           <p><code>where t : subtype(comparable)</code>のように書くと、「どんな型でもいいわけではなく、比較できる型限定」のように制限をかけられます。工具箱の中でも「ネジ回し系だけ」のように、使える道具の範囲を絞るイメージです。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>Identity</code>を参考に、受け取った値をそのまま配列に1つだけ入れて返すジェネリック関数<code>Wrap</code>を作り、
+          <code>Wrap(42)</code>と<code>Wrap("こんにちは")</code>の両方を試してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">Wrap(X : t where t : type) : []t = array{X}
+
+WrappedInt := Wrap(42)
+WrappedStr := Wrap("こんにちは")
+Print("{WrappedInt}")    # → (42)
+Print("{WrappedStr}")    # → (こんにちは)</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -740,6 +1032,33 @@ sports_car := class(car):
           <p>Verseでは「なんとなく自動で変換される」ことがありません。<code>int</code>から<code>float</code>への変換でさえ、<code>MyInt * 1.0</code>のように意図をはっきり示す必要があります。「思っていたのと違う値になっていた」という事故を防ぐためのルールです。</p>
         </div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>animal</code>クラスと、それを継承した<code>dog</code>クラスを作り、<b><code>animal</code>を引数に取る関数</b>に
+          <code>dog</code>のインスタンスを渡せることを確認してみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">animal := class:
+    Name : string = "生き物"
+
+dog := class(animal):
+    Breed : string = "柴犬"
+
+Describe(A : animal) : void =
+    Print("これは{A.Name}です")
+
+MyDog := dog{Name := "ポチ", Breed := "柴犬"}
+Describe(MyDog)   # OK -- dog は animal の仲間だから渡せる</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 15 -->
@@ -763,7 +1082,7 @@ sports_car := class(car):
           <tbody>
             <tr><td><code>public</code></td><td>玄関</td><td>どこからでもアクセス可能</td></tr>
             <tr><td><code>protected</code></td><td>家族専用リビング</td><td>自分自身と、継承した子クラスだけ</td></tr>
-            <tr><td><code>internal</code>(既定)</td><td>マンションの共用施設</td><td>同じモジューノの中だけ</td></tr>
+            <tr><td><code>internal</code>(既定)</td><td>マンションの共用施設</td><td>同じモジュールの中だけ</td></tr>
             <tr><td><code>private</code></td><td>自分の日記</td><td>定義した直後のスコープだけ</td></tr>
             <tr><td><code>scoped{...}</code></td><td>特定の友人だけに見せる合鍵</td><td>指定したモジュール同士だけ</td></tr>
           </tbody>
@@ -780,6 +1099,31 @@ sports_car := class(car):
 
     AddItem&lt;public&gt;(NewItem : item) : void =  # 玄関(誰でも呼べる)
         set Items += array{NewItem}</code></pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          「自分の日記」にあたる<code>&lt;private&gt;</code>な可変フィールド<b>Diary</b>(string)を持つ<code>student</code>クラスを作り、
+          外部から呼べる<code>&lt;public&gt;</code>な<code>WriteDiary(Text:string)</code>メソッドだけを使って書き込めるようにしてみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">student := class:
+    var Diary&lt;private&gt; : string = ""
+
+    WriteDiary&lt;public&gt;(Text : string) : void =
+        set Diary = Text
+
+Me := student{}
+Me.WriteDiary("今日はVerseを勉強した")   # OK -- public経由なのでアクセスできる
+# Me.Diary は private なので外からは直接読み書きできない</code></pre>
+            </div>
+          </div></div>
+        </div>
       </div>
     </section>
 
@@ -840,6 +1184,27 @@ for (P : MyBag.GetPotions()):
         <div class="callout-body">
           <div class="callout-title">設計のポイントを振り返る</div>
           <p><code>item</code>は「コピーされてよいカード」だから<strong>struct</strong>、<code>inventory</code>は「唯一無二の持ち物袋」だから<strong>class</strong>、将来アイテム種類が増える前提だから<code>item_category</code>は<strong>open</strong>な列挙型にしています。それぞれ、この章で学んだ「使い分けの感覚」がそのまま活きています。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>inventory</code>クラスに、<b>合計アイテム数</b>を返す<code>GetTotalCount()</code>メソッドを追加してみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 各アイテムの<code>Count</code>フィールドを、forでぐるっと合計します。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">GetTotalCount&lt;public&gt;()&lt;transacts&gt; : int =
+    var Total : int = 0
+    for (I : Items):
+        set Total += I.Count
+    Total</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -920,6 +1285,32 @@ OnRewardButtonPressed(Agent : agent) : void =
         <div class="callout-body">
           <div class="callout-title">エフェクトの気配を感じ取ろう</div>
           <p><code>TeleportTo</code>は実際には<code>&lt;decides&gt;&lt;reads&gt;&lt;writes&gt;</code>という複数のエフェクトを持つ関数です。「失敗するかもしれない(プレイスペースの外だと失敗)」「状態を読む」「状態を書き換える」という3つの性質が名前に表れています。エフェクトそのものの詳しい仕組みは<a href="advanced.html#ch01">上級編・第1章</a>で学びます。</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>warp_reward_device</code>を参考に、ボタンを押すと<b>アイテムは渡さず、Z:=1000.0の高さへワープさせるだけ</b>の
+          <code>sky_warp_device</code>を作ってみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">sky_warp_device := class(creative_device):
+    @editable
+    WarpButton : button_device = button_device{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        WarpButton.InteractedWithEvent.Subscribe(OnWarpButtonPressed)
+
+    OnWarpButtonPressed(Agent : agent) : void =
+        if (FortChar := Agent.GetFortCharacter[]):
+            if (FortChar.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 1000.0}, IdentityRotation()]) {}</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
     </section>
@@ -1022,6 +1413,32 @@ blink_prop_device := class(creative_device):
         </div>
         <div class="quiz-explain">正解は<b>B</b>。<code>OneShot</code>は1回だけ再生、<code>EaseInOut</code>はそもそもanimation_modeではなくeaseの種類でしたね。往復には<code>PingPong</code>が最適です。</div>
       </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 演習問題</div>
+        <p class="exercise-q">
+          <code>blink_prop_device</code>を参考に、<b>Z:=0.0とZ:=800.0の間</b>を瞬間移動でくり返し往復する
+          <code>tall_blink_device</code>を作ってみましょう。
+        </p>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">tall_blink_device := class(creative_device):
+    @editable
+    Box : creative_prop = creative_prop{}
+
+    OnBegin&lt;override&gt;()&lt;suspends&gt; : void =
+        loop:
+            Sleep(2.0)
+            Box.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 800.0}, IdentityRotation()]
+            Sleep(2.0)
+            Box.TeleportTo[vector3{X := 0.0, Y := 0.0, Z := 0.0}, IdentityRotation()]</code></pre>
+            </div>
+          </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- 19 -->
@@ -1063,6 +1480,50 @@ if (F := Agent.GetFortCharacter[]):
 Prop.MoveToEase(Pos,Rot,Scl,3.0,
   move_to_ease_type.EaseInOut,
   animation_mode.PingPong)</pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-tag">📝 総合チャレンジ問題</div>
+        <p class="exercise-q">
+          <b>weapon_type</b>(<code>enum&lt;open&gt;</code>: Sword, Bow)を持つ<code>weapon</code>という<b>struct</b>(Name, Type)と、
+          複数の<code>weapon</code>を<code>var</code>で保持する<code>armory</code>という<b>class</b>を作り、
+          <code>AddWeapon</code>メソッドで武器を追加、<code>CountByType</code>メソッドで指定した種類の武器数を数えてみましょう。
+        </p>
+        <div class="exercise-hint">ヒント: 06章のstruct、07章のenum、08章のclass、16章のインベントリ設計をすべて組み合わせます。</div>
+        <div class="disclosure">
+          <button class="disclosure-btn"><span>✅ 解答例を見る</span><span class="d-icon">+</span></button>
+          <div class="disclosure-body"><div class="disclosure-inner">
+            <div class="code-block">
+              <div class="code-block-head"><div class="code-block-title">verse</div><button class="copy-btn">📋 コピー</button></div>
+              <pre><code class="language-verse">weapon_type := enum&lt;open&gt;:
+    Sword
+    Bow
+
+weapon := struct:
+    Name : string = ""
+    Type : weapon_type = weapon_type.Sword
+
+armory := class:
+    var Weapons&lt;private&gt; : []weapon = array{}
+
+    AddWeapon&lt;public&gt;(NewWeapon : weapon) : void =
+        set Weapons += array{NewWeapon}
+
+    CountByType&lt;public&gt;(Target : weapon_type)&lt;transacts&gt; : int =
+        var Count : int = 0
+        for (W : Weapons, W.Type = Target):
+            set Count += 1
+        Count
+
+MyArmory := armory{}
+MyArmory.AddWeapon(weapon{Name := "鉄の剣", Type := weapon_type.Sword})
+MyArmory.AddWeapon(weapon{Name := "木の弓", Type := weapon_type.Bow})
+MyArmory.AddWeapon(weapon{Name := "銀の剣", Type := weapon_type.Sword})
+
+Print("{MyArmory.CountByType(weapon_type.Sword)}")   # → 2</code></pre>
+            </div>
+          </div></div>
         </div>
       </div>
 
